@@ -1,17 +1,15 @@
 #include <SFML/Graphics.hpp>
-#include<iostream>
 
 void setOriginAndReadjust(sf::Sprite &object, const sf::Vector2f &newOrigin)
 {
-	auto offset = newOrigin - object.getOrigin();
 	object.setOrigin(newOrigin);
-	object.move(offset);
+	object.move(newOrigin - object.getOrigin());
 	object.setPosition(400.0f, 400.0f);
 }
 
-void approachTheCircle(sf::Vector2f &hitCircleSize, sf::Sprite &approachCircle)
+void approachTheCircle(const sf::Sprite &hitCircle, sf::Sprite &approachCircle)
 {
-	if (approachCircle.getScale().x < hitCircleSize.x)
+	if (approachCircle.getScale().x < hitCircle.getScale().x)
 		approachCircle.setScale(2.0f, 2.0f);
 	else
 		approachCircle.setScale(approachCircle .getScale().x- 0.0003f, approachCircle.getScale().y - 0.0003f);
@@ -23,16 +21,27 @@ int main()
 
 	//Textures used==================================================================================
 	sf::Texture approachCircleTexture;
-	approachCircleTexture.loadFromFile("E:/visualproj/SFMLosuBootleg/skins/approachcircle.png");
 	approachCircleTexture.setSmooth(true);
 
 	sf::Texture number1Texture;
-	number1Texture.loadFromFile("E:/visualproj/SFMLosuBootleg/skins/score-1.png");
 	number1Texture.setSmooth(true);
 
 	sf::Texture hitCircleTexture;
-	hitCircleTexture.loadFromFile("E:/visualproj/SFMLosuBootleg/skins/hitcircle.png");
 	hitCircleTexture.setSmooth(true);
+
+#ifdef _WIN32
+	approachCircleTexture.loadFromFile("E:/visualproj/SFMLosuBootleg/skins/approachcircle.png");
+	number1Texture.loadFromFile("E:/visualproj/SFMLosuBootleg/skins/score-1.png");
+	hitCircleTexture.loadFromFile("E:/visualproj/SFMLosuBootleg/skins/hitcircle.png");
+#else
+#ifdef __linux__
+	approachCircleTexture.loadFromFile("/root/Documents/'SFMLosu!'/SFMLosu/skins/approachcircle.png");
+	number1Texture.loadFromFile("/ root / Documents / 'SFMLosu!' / SFMLosu / skins /score-1.png");
+	hitCircleTexture.loadFromFile("/ root / Documents / 'SFMLosu!' / SFMLosu / skins /hitcircle.png");
+#endif
+#endif
+
+
 	//================================================================================================
 
 	//Sprites used====================================================================================
@@ -42,7 +51,6 @@ int main()
 
 	sf::Sprite hitCircle;
 	hitCircle.setTexture(hitCircleTexture);
-	sf::Vector2f hitCircleSize = hitCircle.getScale();;
 
 	sf::Sprite number1;
 	number1.setTexture(number1Texture);
@@ -63,7 +71,7 @@ int main()
 
 		setOriginAndReadjust(hitCircle, { 64,64 });
 		setOriginAndReadjust(approachCircle, { 70,70 });
-		approachTheCircle( hitCircleSize, approachCircle);
+		approachTheCircle( hitCircle, approachCircle);
 
 		window.draw(number1);
 		window.draw(approachCircle);
