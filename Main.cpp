@@ -1,23 +1,33 @@
 #include <SFML/Graphics.hpp>
 #include<iostream>
 
+sf::Time deltaTime;
+sf::Clock runTime;
+bool shouldLerp = false;
+float timeStartedLerping;
+float lerpTime=0.450;
+
+void startLerp()
+{
+	timeStartedLerping = runTime.getElapsedTime().asSeconds();
+	shouldLerp = true;
+}
+
+float Lerp(sf::Vector2f start, sf::Vector2f end, float timeStartedLerping, float lerpTime)
+{
+	float timeSinceStarted = runTime.getElapsedTime().asSeconds() - timeStartedLerping;
+	float precentageComplete = timeSinceStarted / lerpTime;
+	std::cout << precentageComplete << std::endl;
+	float result = (start.x - end.x)*precentageComplete/0.225;
+	if (precentageComplete > 1) shouldLerp = false;
+	return result;
+}
+
 void setOriginAndReadjust(sf::Sprite &object, const sf::Vector2f &newOrigin)
 {
 	object.setOrigin(newOrigin);
 	object.move(newOrigin - object.getOrigin());
 	object.setPosition(400.0f, 400.0f);
-}
-
-void approachTheCircle(const sf::Sprite &hitCircle, sf::Sprite &approachCircle, sf::Clock &clock)
-{
-	if (approachCircle.getScale().x < hitCircle.getScale().x)
-	{
-		approachCircle.setScale(2.0f, 2.0f);
-		std::cout << clock.getElapsedTime().asMilliseconds()<<std::endl;
-		clock.restart();
-	}
-	else
-		approachCircle.setScale(approachCircle.getScale().x - 0.0003f, approachCircle.getScale().y - 0.0003f);
 }
 
 int main()
@@ -59,7 +69,13 @@ int main()
 
 	setOriginAndReadjust(hitCircle, { 64,64 });
 	setOriginAndReadjust(approachCircle, { 70,70 });
-	sf::Clock clock;
+
+	sf::Clock deltaClock;
+
+	sf::Vector2f startPos = approachCircle.getScale();
+	sf::Vector2f endPos = hitCircle.getScale();
+
+	startLerp();
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -71,12 +87,18 @@ int main()
 		//Render stuff to screen ====================================================
 		window.clear();
 
-		approachTheCircle(hitCircle, approachCircle,clock);
+		//if (timeStartedLerping ) shouldLerp = false;
 
+		if (shouldLerp)
+		{
+			approachCircle.setScale(approachCircle.getScale().x - Lerp(startPos,endPos,timeStartedLerping,lerpTime) *deltaTime.asSeconds(), approachCircle.getScale().x - Lerp(startPos, endPos, timeStartedLerping, lerpTime) *deltaTime.asSeconds());
+		}
+		
 		window.draw(approachCircle);
 		window.draw(hitCircle);
 
 		window.display();
+		deltaTime = deltaClock.restart();
 		//===============================================================================
 	}
 
