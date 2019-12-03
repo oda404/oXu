@@ -1,26 +1,12 @@
 #include <SFML/Graphics.hpp>
 #include<iostream>
 
-sf::Time deltaTime;
 sf::Clock runTime;
-bool shouldLerp = false;
-float timeStartedLerping;
-float lerpTime=0.450;
 
-void startLerp()
+void startLerp(bool &shouldLerp, float &timeStartedLerping)
 {
 	timeStartedLerping = runTime.getElapsedTime().asSeconds();
 	shouldLerp = true;
-}
-
-float Lerp(sf::Vector2f start, sf::Vector2f end, float timeStartedLerping, float lerpTime)
-{
-	float timeSinceStarted = runTime.getElapsedTime().asSeconds() - timeStartedLerping;
-	float precentageComplete = timeSinceStarted / lerpTime;
-	std::cout << precentageComplete << std::endl;
-	float result = (start.x - end.x)*precentageComplete/0.225;
-	if (precentageComplete > 1) shouldLerp = false;
-	return result;
 }
 
 void setOriginAndReadjust(sf::Sprite &object, const sf::Vector2f &newOrigin)
@@ -54,7 +40,6 @@ int main()
 #endif
 #endif
 
-
 	//================================================================================================
 
 	//Sprites used====================================================================================
@@ -70,12 +55,16 @@ int main()
 	setOriginAndReadjust(hitCircle, { 64,64 });
 	setOriginAndReadjust(approachCircle, { 70,70 });
 
+	//Other utilities=================================================================================
 	sf::Clock deltaClock;
+	sf::Time deltaTime;
+	bool shouldLerp = false;
+	float timeStartedLerping;
+	float x = approachCircle.getScale().x;
+	float timer = 0.0f;
+	//================================================================================================
 
-	sf::Vector2f startPos = approachCircle.getScale();
-	sf::Vector2f endPos = hitCircle.getScale();
-
-	startLerp();
+	startLerp(shouldLerp,timeStartedLerping);
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -87,11 +76,14 @@ int main()
 		//Render stuff to screen ====================================================
 		window.clear();
 
-		//if (timeStartedLerping ) shouldLerp = false;
-
-		if (shouldLerp)
+		if (approachCircle.getScale().x<=1.0f){ }
+		else
 		{
-			approachCircle.setScale(approachCircle.getScale().x - Lerp(startPos,endPos,timeStartedLerping,lerpTime) *deltaTime.asSeconds(), approachCircle.getScale().x - Lerp(startPos, endPos, timeStartedLerping, lerpTime) *deltaTime.asSeconds());
+			if (approachCircle.getScale().x <= hitCircle.getScale().x){ }
+			else
+				std::cout << runTime.getElapsedTime().asSeconds()-timeStartedLerping<<std::endl;
+			timer = 0.9f;
+			approachCircle.setScale(approachCircle.getScale().x - ((x - hitCircle.getScale().x)/timer)*deltaTime.asSeconds(), approachCircle.getScale().x - ((x - hitCircle.getScale().x)/timer)*deltaTime.asSeconds());
 		}
 		
 		window.draw(approachCircle);
