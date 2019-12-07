@@ -14,12 +14,12 @@ public:
 		this->hitCircle.setPosition(position);
 	}
 	
-	sf::Vector2f getHitCircleScale()
+	sf::Vector2f getHitCircleScale() const
 	{
 		return this->hitCircle.getScale();
 	}
 	
-	sf::Sprite getHitCircle()
+	sf::Sprite getHitCircle() const
 	{
 		return this->hitCircle;
 	}
