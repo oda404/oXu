@@ -1,2 +1,2 @@
 # osu!Bootleg
-osu!bootleg using the SFML library.
+osu! clone written in c++ using the SFML library.
