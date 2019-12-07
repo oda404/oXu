@@ -1,19 +1,18 @@
 #include <SFML/Graphics.hpp>
 
-#include"approachCircle.h"
-#include"hitCircle.h"
 #include"playField.h"
+#include"createCircle.h"
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1920,1080), "osu!",sf::Style::Fullscreen);
+	float osuPx;
+	sf::Vector2f screenSize = { 1920,1080 };
+	sf::RenderWindow window(sf::VideoMode(screenSize.x,screenSize.y), "osu!");
 	
 	sf::Clock runTime;
-
 	//Objects created=================================================================================
-	ApproachCirclesSprites approachCircle(0.800f, { 70,70 },{400.0f,400.0f},{2.0f,2.0f});
-	HitCircleSprites hitCircle({64,64},{400.0f,400.0f});
-	PlayField playField({ 1344.0f,1008.0f },1920,1080);
+	PlayField playField(screenSize,osuPx);
+	Circle circle({ 64,64 }, { 400.0f,400.0f }, 2.0f, { 70,70 },4.0f,osuPx);
 	//================================================================================================
 	
 	//Other utilities=================================================================================
@@ -31,18 +30,15 @@ int main()
 		}
 		//Render stuff to screen ====================================================
 		window.clear();
-
-		if (approachCircle.getApproachCircle().getScale().x > 1.0f)
-			approachCircle.approachTheCircle(deltaTime.asSeconds());
 		
 		window.draw(playField.getPlayField());
-		window.draw(approachCircle.getApproachCircle());
-		window.draw(hitCircle.getHitCircle());
+		//window.draw(circle.getApproachCircle());
+		window.draw(circle.getHitCircle());
 
 		window.display();
 		deltaTime = deltaClock.restart();
 		//===============================================================================
 	}
-
+	circle.clearCirclesFromMemory();
 	return 0;
 }

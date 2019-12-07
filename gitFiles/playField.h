@@ -3,13 +3,15 @@
 class PlayField
 {
 public:
-	PlayField(const sf::Vector2f &size,const int &screenWidth, const int &screenHeight)
+	PlayField(const sf::Vector2f &screenSize,float &osuPx)
 	{
-		playArea.setSize(size);
+		osuPx = screenSize.y / 480;
+		this->playArea.setSize({ osuPx * 512, osuPx * 384 });
+
 		playArea.setFillColor(sf::Color(122, 122, 122, 255));
 		playArea.setOrigin(playArea.getSize().x / 2.0f, playArea.getSize().y / 2.0f);
 		playArea.move(playArea.getSize() / 2.0f - playArea.getOrigin());
-		playArea.setPosition(screenWidth / 2.0f, screenHeight / 2.0f);
+		playArea.setPosition(screenSize.x/2,screenSize.y/2);
 	}
 
 	sf::RectangleShape getPlayField() const

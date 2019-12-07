@@ -9,7 +9,7 @@ private:
 	float approachSpeed;
 	
 public:
-	ApproachCirclesSprites(const float &approachSpeed,const sf::Vector2f &newOrigin,const sf::Vector2f &position,const sf::Vector2f &scale)
+	ApproachCirclesSprites(const float &approachSpeed, const sf::Vector2f &newOrigin, const sf::Vector2f &position, const sf::Vector2f &scale = { 2.0f,2.0f })
 	{
 		this->approachCircle.setTexture(approachCircleTexture);
 		this->approachCircle.setScale(scale);
