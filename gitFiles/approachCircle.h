@@ -1,7 +1,7 @@
 #pragma once
 #include"Texture.h"
 
-class ApproachCirclesSprites : Textures
+class ApproachCircle : Textures
 {
 private:
 	sf::Sprite approachCircle;
@@ -9,18 +9,19 @@ private:
 	float approachSpeed;
 	
 public:
-	ApproachCirclesSprites(const float &approachSpeed, const sf::Vector2f &newOrigin, const sf::Vector2f &position, const sf::Vector2f &scale = { 2.0f,2.0f })
+	ApproachCircle(const float &approachSpeed, const sf::Vector2f &position, const sf::Vector2f &scale)
 	{
 		this->approachCircle.setTexture(approachCircleTexture);
+
+		//Set the origin to center of the circle and recenter===================================================================
+		this->approachCircle.setOrigin((sf::Vector2f)approachCircleTexture.getSize() / 2.0f);
+		this->approachCircle.move((sf::Vector2f)approachCircleTexture.getSize() / 2.0f - this->approachCircle.getOrigin());
+		//======================================================================================================================
+		this->approachCircle.setPosition(position);
+
 		this->approachCircle.setScale(scale);
 		this->initalScale = this->approachCircle.getScale();
 		
-		//Set the origin to center of the circle, move the circle there======
-		this->approachCircle.setOrigin(newOrigin);
-		this->approachCircle.move(newOrigin - this->approachCircle.getOrigin());
-		//===================================================================
-		
-		this->approachCircle.setPosition(position);
 		this->approachSpeed = approachSpeed;
 	}
 	
@@ -29,11 +30,13 @@ public:
 		return this->approachCircle;
 	}
 	
-	void approachTheCircle(const float &dt)
+	void approachTheCircle(const float &dt, const sf::Vector2f &hitCircleSize)
 	{
-		sf::Vector2f a ={1.0f,1.0f};
-		sf::Vector2f AT = (((this->initalScale - a) / this->approachSpeed)*dt);
-		this->approachCircle.setScale(this->approachCircle.getScale() - AT);
+		if (approachCircle.getScale().x > hitCircleSize.x)
+		{
+			sf::Vector2f AT = (((this->initalScale - hitCircleSize) / this->approachSpeed)*dt);
+			this->approachCircle.setScale(this->approachCircle.getScale() - AT);
+		}
 	}
 
 };

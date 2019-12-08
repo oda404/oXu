@@ -1,18 +1,19 @@
 #include <SFML/Graphics.hpp>
 
 #include"playField.h"
-#include"createCircle.h"
+#include"hitCircle.h"
+
 
 int main()
 {
 	float osuPx;
-	sf::Vector2f screenSize = { 1920,1080 };
-	sf::RenderWindow window(sf::VideoMode(screenSize.x,screenSize.y), "osu!");
+	sf::Vector2i screenSize = { 1920,1080 };
+	sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "osu!",sf::Style::Fullscreen);
 	
 	sf::Clock runTime;
 	//Objects created=================================================================================
 	PlayField playField(screenSize,osuPx);
-	Circle circle({ 64,64 }, { 400.0f,400.0f }, 2.0f, { 70,70 },4.0f,osuPx);
+	HitCircle circle({ 500.0f,607.0f }, 4.0f, osuPx, 1.8f);
 	//================================================================================================
 	
 	//Other utilities=================================================================================
@@ -30,15 +31,16 @@ int main()
 		}
 		//Render stuff to screen ====================================================
 		window.clear();
-		
+
 		window.draw(playField.getPlayField());
-		//window.draw(circle.getApproachCircle());
-		window.draw(circle.getHitCircle());
+
+		circle.approachTheCircle(deltaTime.asSeconds());
+		circle.drawCircle(window);
 
 		window.display();
 		deltaTime = deltaClock.restart();
 		//===============================================================================
 	}
-	circle.clearCirclesFromMemory();
+	circle.clearApproachCircleFromMemory();
 	return 0;
 }
