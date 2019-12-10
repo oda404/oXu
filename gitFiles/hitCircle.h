@@ -5,7 +5,7 @@
 class HitCircle : Textures
 {
 public:
-	HitCircle(const sf::Vector2f &position, const float &CS,float const &osuPx, const float &approachSpeed)
+	HitCircle(const sf::Vector2f &position, const float &CS,float const &osuPx, const float &approachSpeed,const PlayField &playField)
 	{
 		this->hitCircle.setTexture(hitCircleTexture);
 
@@ -13,9 +13,10 @@ public:
 		this->hitCircle.setOrigin((sf::Vector2f)hitCircleTexture.getSize() / 2.0f);
 		this->hitCircle.move((sf::Vector2f)hitCircleTexture.getSize() / 2.0f - this->hitCircle.getOrigin());
 		//===================================================================
-		this->hitCircle.setPosition(position);
+		this->hitCircle.setPosition(playField.getPlayFieldStartPoint().x+position.x*osuPx, playField.getPlayFieldStartPoint().y + position.y*osuPx);
 
-		this->hitCircle.setScale(((109 - 9 * CS)*osuPx) / hitCircleTexture.getSize().x, ((109 - 9 * CS)*osuPx) / hitCircleTexture.getSize().y);
+		//alternative (109-9*CS) * osuPX / hitCircleTexture.getSize().x
+		this->hitCircle.setScale(((23.05f - (CS - 7.0f) * 4.4825f) * 2.0f * osuPx) / hitCircleTexture.getSize().x, ((23.05f - (CS - 7.0f) * 4.4825f) * 2.0f * osuPx) / hitCircleTexture.getSize().y);
 
 		this->approachCircle = new ApproachCircle(approachSpeed, hitCircle.getPosition(), hitCircle.getScale() * 1.5f*osuPx);
 	}

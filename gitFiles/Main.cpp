@@ -3,7 +3,6 @@
 #include"playField.h"
 #include"hitCircle.h"
 
-
 int main()
 {
 	float osuPx;
@@ -13,7 +12,7 @@ int main()
 	sf::Clock runTime;
 	//Objects created=================================================================================
 	PlayField playField(screenSize,osuPx);
-	HitCircle circle({ 500.0f,607.0f }, 4.0f, osuPx, 1.8f);
+	HitCircle circle({ 100.0f,100.0f }, 4.2f, osuPx, 1.8f, playField);
 	//================================================================================================
 	
 	//Other utilities=================================================================================
