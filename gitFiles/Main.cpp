@@ -3,7 +3,6 @@
 #include"playField.h"
 #include"hitCircle.h"
 //#include"beatMap.h"
-#include"slider.h"
 
 int main()
 {
@@ -13,10 +12,14 @@ int main()
 	sf::Clock runTime;
 	//Objects created=================================================================================
 	PlayField playField(screenSize);
-	HitCircle circle({ 65.0f,21.0f }, 4.2f, 1.8f, playField);
-	Slider slider({ 309.0f,311.0f }, 5.2f, 1.0f, playField, 'L', { 328.0f, 265.0f });
+	HitObject circle({ 65.0f,21.0f }, 4.2f, 1.8f, playField);
+	HitObject slider({ 0.0f,0.0f }, 4.2f, 1.8f, playField, 'L', { 328.0f, 265.0f });
 	//================================================================================================
 	
+	sf::RectangleShape rect;
+	rect.setPosition(slider.getPos());
+	rect.setSize({ 315 * 2.25,5 });
+
 	//Other utilities=================================================================================
 	sf::Clock deltaClock;
 	sf::Time deltaTime;
@@ -35,17 +38,19 @@ int main()
 
 		window.draw(playField.getPlayField());
 		
-		slider.getSliderStartPos().approachTheCircle(deltaTime.asSeconds());
-		slider.getSliderStartPos().drawCircle(window);
+		slider.approachTheCircle(deltaTime.asSeconds());
+		slider.drawCircle(window);
 		
 		circle.approachTheCircle(deltaTime.asSeconds());
 		circle.drawCircle(window);
+
+		window.draw(rect);
 
 		window.display();
 		deltaTime = deltaClock.restart();
 		//===============================================================================
 	}
-	slider.deleteSliderStartPoint();
+	slider.clearApproachCircleFromMemory();
 	circle.clearApproachCircleFromMemory();
 	return 0;
 }
