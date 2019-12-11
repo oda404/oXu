@@ -3,9 +3,9 @@
 class PlayField
 {
 public:
-	PlayField(const sf::Vector2i &screenSize,float &osuPx)
+	PlayField(const sf::Vector2i &screenSize)
 	{
-		osuPx = screenSize.y / 480.0f;
+		this->osuPx = screenSize.y / 480.0f;
 		this->playArea.setSize({ osuPx * 512, osuPx * 384 });
 
 		playArea.setFillColor(sf::Color(122, 122, 122, 255));
@@ -24,8 +24,14 @@ public:
 	{
 		return this->playFieldStartPoint;
 	}
+	
+	float getOsuPx() const
+	{
+		return this->osuPx;
+	}
 
 protected:
 	sf::RectangleShape playArea;
 	sf::Vector2f playFieldStartPoint;
+	float osuPx;
 };
