@@ -1,7 +1,9 @@
 #include <SFML/Graphics.hpp>
 
+#include<iostream>
+#include<cmath>
 #include"playField.h"
-#include"hitCircle.h"
+#include"hitObject.h"
 //#include"beatMap.h"
 
 int main()
@@ -13,12 +15,13 @@ int main()
 	//Objects created=================================================================================
 	PlayField playField(screenSize);
 	HitObject circle({ 65.0f,21.0f }, 4.2f, 1.8f, playField);
-	HitObject slider({ 0.0f,0.0f }, 4.2f, 1.8f, playField, 'L', { 328.0f, 265.0f });
+	HitObject slider({ 309.0f,311.0f }, 4.2f, 1.8f, playField, 'L', { 328.0f, 265.0f });
 	//================================================================================================
 	
 	sf::RectangleShape rect;
 	rect.setPosition(slider.getPos());
-	rect.setSize({ 315 * 2.25,5 });
+	rect.setSize({ 50 * 2.25,5 });
+	rect.setRotation(std::atan2(265 - 311, 328 - 309) * 180 / 3.1415f);
 
 	//Other utilities=================================================================================
 	sf::Clock deltaClock;
@@ -50,7 +53,5 @@ int main()
 		deltaTime = deltaClock.restart();
 		//===============================================================================
 	}
-	slider.clearApproachCircleFromMemory();
-	circle.clearApproachCircleFromMemory();
 	return 0;
 }
