@@ -42,13 +42,16 @@ int main()
 		window.draw(playField.getPlayField());
 		
 		slider.approachTheCircle(deltaTime.asSeconds());
+		slider.slideTheSlider(deltaTime.asSeconds());
 		slider.drawCircle(window);
+
 		
 		circle.approachTheCircle(deltaTime.asSeconds());
 		circle.drawCircle(window);
 
 		window.draw(rect);
-
+		
+		
 		window.display();
 		deltaTime = deltaClock.restart();
 		//===============================================================================

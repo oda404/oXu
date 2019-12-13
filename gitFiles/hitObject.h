@@ -69,6 +69,12 @@ public:
 		window.draw(getHitCircle());
 		window.draw(getApproachCircle());
 	}
+	void slideTheSlider(const float &dt)
+	{
+		sf::Vector2f a= {-19,46};
+		sf::Vector2f AT = ((a /1.0f*2.25f)*dt);
+		this->hitCircle.setPosition(this->hitCircle.getPosition() - AT);
+	}
 	//=====================================================================
 	
 private:
