@@ -7,6 +7,7 @@ private:
 	sf::Sprite approachCircle;
 	sf::Vector2f initalScale;
 	float approachSpeed;
+	bool doneApproacing = false;
 	
 public:
 	ApproachCircle(const float &approachSpeed, const sf::Vector2f &position, const sf::Vector2f &scale)
@@ -29,6 +30,11 @@ public:
 	{
 		return this->approachCircle;
 	}
+
+	bool getApproachState() const
+	{
+		return this->doneApproacing;
+	}
 	
 	void approachTheCircle(const float &dt, const sf::Vector2f &hitCircleSize)
 	{
@@ -37,6 +43,8 @@ public:
 			sf::Vector2f AT = (((this->initalScale - hitCircleSize) / this->approachSpeed)*dt);
 			this->approachCircle.setScale(this->approachCircle.getScale() - AT);
 		}
+		else
+			this->doneApproacing = true;
 	}
 
 };

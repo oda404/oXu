@@ -67,13 +67,17 @@ public:
 	void drawCircle(sf::RenderWindow &window) const
 	{
 		window.draw(getHitCircle());
-		window.draw(getApproachCircle());
+		if(!approachCircle->getApproachState())
+			window.draw(getApproachCircle());
 	}
-	void slideTheSlider(const float &dt)
+	void slideTheSlider(const float &slideSpeed ,const float &dt, PlayField &playField)
 	{
-		sf::Vector2f a= {-19,46};
-		sf::Vector2f AT = ((a /1.0f*2.25f)*dt);
-		this->hitCircle.setPosition(this->hitCircle.getPosition() - AT);
+		if (this->hitCircle.getPosition().x < playField.getPlayFieldStartPoint().x + 328.0f * playField.getOsuPx() && this->approachCircle->getApproachState())
+		{
+			sf::Vector2f a = { -19,46 };
+			sf::Vector2f AT = ((a/ slideSpeed* playField.getOsuPx())*dt);
+			this->hitCircle.setPosition(this->hitCircle.getPosition() - AT);
+		}
 	}
 	//=====================================================================
 	
