@@ -70,13 +70,32 @@ public:
 		if(!approachCircle->getApproachState())
 			window.draw(getApproachCircle());
 	}
-	void slideTheSlider(const float &slideSpeed ,const float &dt, PlayField &playField)
+	void moveOnStraightPath(const float &slideSpeed ,const float &dt, PlayField &playField)
 	{
 		if (this->hitCircle.getPosition().x < playField.getPlayFieldStartPoint().x + 328.0f * playField.getOsuPx() && this->approachCircle->getApproachState())
 		{
 			sf::Vector2f a = { -19,46 };
 			sf::Vector2f AT = ((a/ slideSpeed* playField.getOsuPx())*dt);
 			this->hitCircle.setPosition(this->hitCircle.getPosition() - AT);
+		}
+	}
+
+	void moveOnBezierCurve(PlayField &playField, const float &dt)
+	{
+		static sf::Vector2f pos0 = { playField.getPlayFieldStartPoint().x + 28 * playField.getOsuPx(),playField.getPlayFieldStartPoint().y + 27 * playField.getOsuPx() };
+		static sf::Vector2f pos1 = { playField.getPlayFieldStartPoint().x + 423 * playField.getOsuPx(),playField.getPlayFieldStartPoint().y + 70 * playField.getOsuPx() };
+		static sf::Vector2f pos2 = { playField.getPlayFieldStartPoint().x + 88 * playField.getOsuPx(),playField.getPlayFieldStartPoint().y + 153 * playField.getOsuPx() };
+		static sf::Vector2f pos3 = { playField.getPlayFieldStartPoint().x + 422 * playField.getOsuPx(),playField.getPlayFieldStartPoint().y + 152 * playField.getOsuPx() };
+
+		if (this->hitCircle.getPosition().x < 422.0f*playField.getOsuPx() +playField.getPlayFieldStartPoint().x  && this->approachCircle->getApproachState())
+		{
+			static float tParam = 0;
+			
+			tParam +=0.0001;
+			sf::Vector2f b = (std::pow(1 - (tParam + 0.0001f), 3) * pos0 + 3 * std::pow(1 - (tParam + 0.0001f), 2) *  (tParam + 0.0001f) * pos1 + 3 * (1 - (tParam + 0.0001f)) * std::pow((tParam + 0.0001f), 2) * pos2 + std::pow((tParam + 0.0001f), 3) * pos3) - (std::pow(1 - tParam, 3) * pos0 + 3 * std::pow(1 - tParam, 2) *  tParam * pos1 + 3 * (1 - tParam) * std::pow(tParam, 2) * pos2 + std::pow(tParam, 3) * pos3);
+			std::cout << b.x << "\n\n";
+			sf::Vector2f ass = (std::pow(1 - tParam, 3) * pos0 + 3 * std::pow(1 - tParam, 2) *  tParam * pos1 + 3 * (1 - tParam) * std::pow(tParam, 2) * pos2 + std::pow(tParam, 3) * pos3);
+			this->hitCircle.setPosition(ass);
 		}
 	}
 	//=====================================================================

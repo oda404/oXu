@@ -5,13 +5,6 @@
 #include"playField.h"
 #include"hitObject.h"
 
-float getPt(float n1, float n2, float perc)
-{
-	float diff = n2 - n1;
-
-	return n1 + (diff * perc);
-}
-
 int main()
 {
 	sf::Vector2i screenSize = { 1920,1080 };
@@ -38,7 +31,15 @@ int main()
 	sf::Time deltaTime;
 	//================================================================================================
 
-	
+	sf::Vector2f gizm;
+
+	sf::Vector2f pos0 = { 28,27 };
+	sf::Vector2f pos1 = { 423,70 };
+	sf::Vector2f pos2 = { 88,153 };
+	sf::Vector2f pos3 = { 422,152 };
+	float tParam = 0.0f;
+	float x = 5, y = 5;
+
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -53,25 +54,19 @@ int main()
 		window.draw(playField.getPlayField());
 
 		slider.approachTheCircle(deltaTime.asSeconds());
-		slider.slideTheSlider(1.0f, deltaTime.asSeconds(), playField);
+		slider.moveOnStraightPath(1.0f, deltaTime.asSeconds(), playField);
 		slider.drawCircle(window);
 
-		circle.approachTheCircle(deltaTime.asSeconds());
-		circle.drawCircle(window);
-
-		for( float i = 0 ; i < 1 ; i += 0.001 )
+		for (float t = 0; t < 1; t += 0.001f)
 		{
-			float xa = getPt( 98 , 285, i );
-			float ya = getPt(75, 67, i );
-			float xb = getPt(285, 370, i );
-			float yb = getPt(67, 192, i );
-
-			float x = getPt( xa , xb , i );
-			float y = getPt( ya , yb , i );
-
-			rect1.setPosition(x, y);
+			gizm = (std::pow(1 - t, 3) * pos0 + 3* std::pow(1-t,2) * t * pos1 + 3 * (1 - t) * std::pow(t,2) * pos2 + std::pow(t,3) * pos3)*playField.getOsuPx() ;
+			rect1.setPosition(playField.getPlayFieldStartPoint()+gizm);
 			window.draw(rect1);
 		}
+
+		circle.approachTheCircle(deltaTime.asSeconds());
+		circle.moveOnBezierCurve(playField, deltaTime.asSeconds());
+		circle.drawCircle(window);
 
 		window.draw(rect);
 		
