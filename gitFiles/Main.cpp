@@ -13,7 +13,7 @@ int main()
 	sf::Clock runTime;
 	//Objects created=================================================================================
 	PlayField playField(screenSize);
-	HitObject circle({ 65.0f,21.0f }, 4.2f, 1.8f, playField);
+	HitObject circle({ 70.0f,26.0f }, 4.0f, 1.8f, playField);
 	HitObject slider({ 309.0f,311.0f }, 5.2f, 1.8f, playField, 'L', { 328.0f, 265.0f });
 	
 	//================================================================================================
@@ -33,12 +33,10 @@ int main()
 
 	sf::Vector2f gizm;
 
-	sf::Vector2f pos0 = { 28,27 };
-	sf::Vector2f pos1 = { 423,70 };
-	sf::Vector2f pos2 = { 88,153 };
-	sf::Vector2f pos3 = { 422,152 };
-	float tParam = 0.0f;
-	float x = 5, y = 5;
+	sf::Vector2f pos0 = { 70,26 };
+	sf::Vector2f pos1 = { 461,37 };
+	sf::Vector2f pos2 = { 137,165 };
+	sf::Vector2f pos3 = { 429,147 };
 
 	while (window.isOpen())
 	{
@@ -67,8 +65,6 @@ int main()
 		circle.approachTheCircle(deltaTime.asSeconds());
 		circle.moveOnBezierCurve(playField, deltaTime.asSeconds());
 		circle.drawCircle(window);
-
-		window.draw(rect);
 		
 		window.display();
 		deltaTime = deltaClock.restart();
