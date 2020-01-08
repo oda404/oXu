@@ -1,18 +1,60 @@
 #pragma once
 #include<fstream>
 #include<string>
-#include<vector>
+#include<iostream>
+#include<sstream>
 
 class BeatMap
 {
 public:
-	BeatMap(const int &mapId=-1, const std::string &mapName="")
+	BeatMap(const int &mapId)
 	{
-		std::ifstream map;
-		std::string auxliaryString;
-		map.open("/root/Documents/SFMLosu!/SFMLosu/songs/461744 Imperial Circus Dead Decadence - Yomi yori Kikoyu, Koukoku no Tou to Honoo no Shoujo..osz/Imperial Circus Dead Decadence - Yomi yori Kikoyu, Koukoku no Tou to Honoo no Shoujo. (DoKito) [Kyouaku].osu");
-		
+		bool go = false;
+
+		std::string line;
+		std::ifstream file("E:/visualproj/SFMLosuBootleg/songs/829296 mafumafu - Inochi ni Kirawarete Iru/mafumafu - Inochi ni Kirawarete Iru. (KazuhikoRei) [Haruki's Easy].osu");
+		while (std::getline(file,line))
+		{
+			if (line == "[HitObjects]")
+			{
+				go = true;
+			}
+			if (go && line != "[HitObjects]")
+			{
+				std::string sX ="", sY ="";
+				int it = 0;
+				for (int i = 0; i < line.size(); i++)
+				{
+					if (line[i] != ',' && it == 0)
+					{
+						sX += line[i];
+					}
+					else if (line[i] != ',' && it < 2)
+					{
+						sY += line[i];
+					}
+					else if (line[i] == ',' && it >= 0 )
+					{
+						it++;
+					}
+				}
+				int iX,iY;
+				std::istringstream i1(sX);
+				std::istringstream i2(sY);
+				i1 >> iX;
+				i2 >> iY;
+
+				hitObjectPositions.push_back({ (float)iX , (float) iY });
+			}
+		}
+		file.close();
 	}
+
+	std::vector<sf::Vector2f> getHitObjectPositions() const
+	{
+		return this->hitObjectPositions;
+	}
+
 private:
-	
+	std::vector<sf::Vector2f> hitObjectPositions;
 };

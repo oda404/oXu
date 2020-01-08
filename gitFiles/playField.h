@@ -12,7 +12,7 @@ public:
 		playArea.setOrigin(playArea.getSize().x / 2.0f, playArea.getSize().y / 2.0f);
 		playArea.move(playArea.getSize() / 2.0f - playArea.getOrigin());
 		playArea.setPosition(screenSize.x/2.0f,screenSize.y/2.0f);
-		playFieldStartPoint = { this->playArea.getPosition().x - 256.0f*osuPx,this->playArea.getPosition().y - 192 * osuPx };
+		this->playFieldStartPoint = { this->playArea.getPosition().x - 256.0f*osuPx,this->playArea.getPosition().y - 192 * osuPx };
 	}
 
 	sf::RectangleShape getPlayField() const
