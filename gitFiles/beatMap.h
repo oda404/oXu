@@ -21,7 +21,7 @@ public:
 			}
 			if (go && line != "[HitObjects]")
 			{
-				std::string sX ="", sY ="";
+				std::string sX = "", sY = "", time = "";
 				int it = 0;
 				for (int i = 0; i < line.size(); i++)
 				{
@@ -29,22 +29,30 @@ public:
 					{
 						sX += line[i];
 					}
-					else if (line[i] != ',' && it < 2)
+					else if (line[i] != ',' && it == 1)
 					{
 						sY += line[i];
+					}
+					else if (line[i] != ',' && it == 2)
+					{
+						time += line[i];
 					}
 					else if (line[i] == ',' && it >= 0 )
 					{
 						it++;
 					}
 				}
-				int iX,iY;
+				int iX,iY,iTime;
+				std::istringstream t(time);
 				std::istringstream i1(sX);
 				std::istringstream i2(sY);
+
+				t >> iTime;
 				i1 >> iX;
 				i2 >> iY;
-
+				
 				hitObjectPositions.push_back({ (float)iX , (float) iY });
+				hitObjectSpawnTimes.push_back(iTime);
 			}
 		}
 		file.close();
@@ -55,6 +63,12 @@ public:
 		return this->hitObjectPositions;
 	}
 
+	std::vector<int> gethitObjectSpawnTimes() const
+	{
+		return this->hitObjectSpawnTimes;
+	}
+
 private:
 	std::vector<sf::Vector2f> hitObjectPositions;
+	std::vector<int> hitObjectSpawnTimes;
 };

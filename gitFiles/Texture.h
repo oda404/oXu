@@ -16,6 +16,7 @@ struct Textures
 #endif
 #endif
 	}
+
 protected:
 	sf::Texture approachCircleTexture;
 	sf::Texture hitCircleTexture;

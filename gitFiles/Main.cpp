@@ -14,31 +14,39 @@ int main()
 	sf::Clock runTime;
 	//Objects created=================================================================================
 	PlayField playField(screenSize);
+
+	sf::Texture t;
+	t.setSmooth(true);
+	t.loadFromFile("E:/visualproj/SFMLosuBootleg/skins/hitcircle.png");
+
+	sf::Sprite h;
+	h.setTexture(t);
+	h.setOrigin((sf::Vector2f)t.getSize() / 2.0f);
+	h.move((sf::Vector2f)t.getSize() / 2.0f - h.getOrigin());
+	h.setScale(((23.05f - (4.2f - 7.0f) * 4.4825f) * 2.0f * playField.getOsuPx()) / t.getSize().x, ((23.05f - (4.2f - 7.0f) * 4.4825f) * 2.0f * playField.getOsuPx()) / t.getSize().y);
+
+	std::vector<HitObject> objects;
+
 	BeatMap map(829296);
-	HitObject circle({ 66,50 },500, 2.5f, 1.8f, playField);
-	HitObject slider({ 100,180 },500, 2.5f, 1.8f, playField, 'L');
 	
+	for (int i = 0; i < map.getHitObjectPositions().size(); i++)
+	{
+		objects.push_back(HitObject(map.getHitObjectPositions()[i], map.gethitObjectSpawnTimes()[i], 4.2f, 0.450f, playField));
+		h.setPosition(playField.getPlayFieldStartPoint() + map.getHitObjectPositions()[i] * playField.getOsuPx());
+		objects[i].hitCircle = h;
+	}
 	//================================================================================================
-	std::cout << map.getHitObjectPositions()[0].x;
+	
 	//rect.setRotation(std::atan2(265.0f - 311.0f, 328.0f - 309.0f) * 180.0f / 3.1415f);
 
 	//Other utilities=================================================================================
 	sf::Clock deltaClock;
 	sf::Time deltaTime;
 	//================================================================================================
-
-	sf::Vector2f pos0 = { 66,50 };
-	sf::Vector2f pos1 = { 63,330 };
-	sf::Vector2f pos2 = { 171,50 };
-	sf::Vector2f pos3 = { 214,351 };
-	sf::Vector2f pos4 = { 300,24 };
-	sf::Vector2f pos5 = { 338,354 };
-	sf::Vector2f pos6 = { 438,151 };
-
-	std::vector<sf::Vector2f> positions = {pos0, pos1,pos2,pos3,pos4,pos5,pos6};
 	
 	while (window.isOpen())
 	{
+		static sf::Clock mapTime;
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
@@ -50,14 +58,14 @@ int main()
 
 		window.draw(playField.getPlayField());
 
-		slider.approachTheCircle(deltaTime.asSeconds());
-		//slider.moveOnStraightPath((80.0f / (0.8f * 100.0f) * 300.0f)/1000.0f, deltaTime.asSeconds(), playField);
-		slider.drawCircle(window);
-		
-		circle.approachTheCircle(deltaTime.asSeconds());
-		//circle.drawBezierCurve(positions,playField,window);
-		circle.moveOnBezierCurve(playField, deltaTime.asSeconds(),positions,500,window);
-		circle.drawCircle(window);
+		for (int i = 0; i < objects.size(); i++)
+		{
+			if (mapTime.getElapsedTime().asMilliseconds() >= objects[i].getSpawnTime() && !objects[i].getDrawingState())
+			{
+				objects[i].drawCircle(window);
+				objects[i].approachTheCircle(deltaTime.asSeconds());
+			}
+		}
 		
 		window.display();
 		deltaTime = deltaClock.restart();
