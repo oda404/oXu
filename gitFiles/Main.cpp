@@ -5,6 +5,7 @@
 #include"hitObject.h"
 #include"beatMap.h"
 #include<vector>
+#include<iostream>
 
 int main()
 {
@@ -17,7 +18,7 @@ int main()
 
 	sf::Texture t;
 	t.setSmooth(true);
-	t.loadFromFile("E:/visualproj/SFMLosuBootleg/skins/hitcircle.png");
+	t.loadFromFile("/root/Documents/osuBootleg/skins/hitcircle.png");
 
 	sf::Sprite h;
 	h.setTexture(t);
@@ -31,7 +32,7 @@ int main()
 	
 	for (int i = 0; i < map.getHitObjectPositions().size(); i++)
 	{
-		objects.push_back(HitObject(map.getHitObjectPositions()[i], map.gethitObjectSpawnTimes()[i], 4.2f, 0.450f, playField));
+		objects.push_back(HitObject(map.getHitObjectPositions()[i], map.gethitObjectSpawnTimes()[i], 4.2f, 1.440f, playField));
 		h.setPosition(playField.getPlayFieldStartPoint() + map.getHitObjectPositions()[i] * playField.getOsuPx());
 		objects[i].hitCircle = h;
 	}
@@ -65,6 +66,11 @@ int main()
 				objects[i].drawCircle(window);
 				objects[i].approachTheCircle(deltaTime.asSeconds());
 			}
+			else if(objects[i].getDrawingState())
+			{
+				objects.erase(objects.begin() + i);
+			}
+			
 		}
 		
 		window.display();

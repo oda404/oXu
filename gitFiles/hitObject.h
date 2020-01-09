@@ -1,6 +1,7 @@
 #pragma once
 #include"Texture.h"
 #include"approachCircle.h"
+#include<math.h>
 
 class HitObject : Textures
 {
@@ -141,21 +142,21 @@ public:
 			{
 				if (i == positions.size() - 1)
 				{
-					gizm += positions[i] * std::pow(t, i);
+					gizm += positions[i] * static_cast<float>(std::pow(t, i));
 				}
 				else if (i > 0)
 				{
-					gizm += std::pow(1 - t, power) * positions[i] * (getPascalTriangleRow(positions)[i - 1] * std::pow(t, i));
+					gizm += static_cast<float>(std::pow(1 - t, power)) * positions[i] * (getPascalTriangleRow(positions)[i - 1] * static_cast<float>(std::pow(t, i)));
 
 				}
 				else
-					gizm += std::pow(1 - t, power) * positions[i];
+					gizm += static_cast<float>(std::pow(1 - t, power)) * positions[i];
 				power--;
 			}
 			power = positions.size() - 1;
 			gizm *= playField.getOsuPx();
 
-			rect.setPosition(playField.getPlayFieldStartPoint()+gizm);
+			rect.setPosition(playField.getPlayFieldStartPoint() + gizm);
 			window.draw(rect);
 		}
 	}
@@ -167,11 +168,11 @@ public:
 		for (int i = 0; i < listOfControlPoints.size(); i++)
 		{
 			if (i == listOfControlPoints.size() - 1)
-				bezierPoint += listOfControlPoints[i] * std::pow(tParam - offset, i);
+				bezierPoint += listOfControlPoints[i] * static_cast<float>(std::pow(tParam - offset, i));
 			else if (i > 0)
-				bezierPoint += std::pow(1 - (tParam - offset), power) * listOfControlPoints[i] * (getPascalTriangleRow(listOfControlPoints)[i - 1] * std::pow(tParam - offset, i));
+				bezierPoint += static_cast<float>(std::pow(1 - (tParam - offset), power)) * listOfControlPoints[i] * (getPascalTriangleRow(listOfControlPoints)[i - 1] * static_cast<float>(std::pow(tParam - offset, i)));
 			else
-				bezierPoint += std::pow(1 - (tParam - offset), power) * listOfControlPoints[i];
+				bezierPoint += static_cast<float>(std::pow(1 - (tParam - offset), power)) * listOfControlPoints[i];
 			power--;
 		}
 		return bezierPoint;
@@ -207,16 +208,6 @@ public:
 			tParamCap = tParam;
 			tParam = 0.0f;
 			shouldCalculateCap = false;
-		}
-		
-		for (int i = 0; i < curvePoints.size(); i++)
-		{
-			sf::RectangleShape r;
-			r.setSize({ 4,4 });
-			r.setFillColor(sf::Color(0, 0, 0));
-			r.setPosition(playField.getPlayFieldStartPoint() + calculateBezierPoint(curvePoints[i], positions) *playField.getOsuPx());
-
-			window.draw(r);
 		}
 
 		static sf::Clock sliderElapsedTime;

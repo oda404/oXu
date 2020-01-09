@@ -1,7 +1,6 @@
 #pragma once
 #include<fstream>
 #include<string>
-#include<iostream>
 #include<sstream>
 
 class BeatMap
@@ -12,9 +11,10 @@ public:
 		bool go = false;
 
 		std::string line;
-		std::ifstream file("E:/visualproj/SFMLosuBootleg/songs/829296 mafumafu - Inochi ni Kirawarete Iru/mafumafu - Inochi ni Kirawarete Iru. (KazuhikoRei) [Haruki's Easy].osu");
+		std::ifstream file("/root/Documents/osuBootleg/songs/829296 mafumafu - Inochi ni Kirawarete Iru/mafumafu - Inochi ni Kirawarete Iru. (KazuhikoRei) [Haruki's Easy].osu");
 		while (std::getline(file,line))
 		{
+			line.erase(line.end()-1);
 			if (line == "[HitObjects]")
 			{
 				go = true;
