@@ -1,22 +1,21 @@
 #pragma once
 #include"Texture.h"
-#include"approachCircle.h"
+
+#ifdef __linux__
 #include<math.h>
+#endif
 
 class HitObject : Textures
 {
-
-public:
-	sf::Sprite hitCircle;
 private:
-	std::unique_ptr<ApproachCircle> approachCircle;
+	sf::Sprite hitCircle;
 	long spawnTime;
 	bool alreadyDrawing = false;
 
 public:
 	HitObject(const sf::Vector2f &position,const long &spawnTime, const float &CS, const float &approachSpeed, const PlayField &playField)
 	{
-		this->hitCircle.setTexture(approachCircleTexture);
+		this->hitCircle.setTexture(hitCircleTexture);
 
 		//Set the origin to center of the circle, and recenter ==============
 		this->hitCircle.setOrigin((sf::Vector2f)hitCircleTexture.getSize() / 2.0f);
@@ -29,7 +28,6 @@ public:
 		//alternative (109-9*CS) * osuPX / hitCircleTexture.getSize().x
 		this->hitCircle.setScale(((23.05f - (CS - 7.0f) * 4.4825f) * 2.0f * playField.getOsuPx()) / hitCircleTexture.getSize().x, ((23.05f - (CS - 7.0f) * 4.4825f) * 2.0f * playField.getOsuPx()) / hitCircleTexture.getSize().y);
 
-		this->approachCircle = std::make_unique<ApproachCircle>(approachSpeed, hitCircle.getPosition(), hitCircle.getScale() * 1.5f*playField.getOsuPx());
 	}
 	//Getters===============================================================
 	sf::Vector2f getHitCircleScale() const
@@ -40,16 +38,6 @@ public:
 	sf::Sprite getHitCircle() const
 	{
 		return this->hitCircle;
-	}
-
-	sf::Sprite getApproachCircle() const
-	{
-		return this->approachCircle->getApproachCircle();
-	}
-
-	ApproachCircle getAP()
-	{
-		return *this->approachCircle;
 	}
 
 	sf::Vector2f getPos() const
@@ -74,27 +62,14 @@ public:
 	}
 
 	//Utilities=============================================================
-	void approachTheCircle(const float &dt) const
-	{
-		this->approachCircle->approachTheCircle(dt, getHitCircleScale());
-	}
 
 	void setPos(const sf::Vector2f &vect,const PlayField &pl)
 	{
 		this->hitCircle.setPosition(pl.getPlayFieldStartPoint() + vect);
 	}
-
-	void drawCircle(sf::RenderWindow &window)
-	{
-		window.draw(this->hitCircle);
-		if (!approachCircle->getApproachState())
-			window.draw(getApproachCircle());
-		else
-			this->alreadyDrawing = true;
-	}
 	void moveOnStraightPath(const float &slideSpeed, const float &dt,const PlayField &playField)
 	{
-		if (this->hitCircle.getPosition().x < playField.getPlayFieldStartPoint().x + 106.0f * playField.getOsuPx() && this->approachCircle->getApproachState())
+		if (this->hitCircle.getPosition().x < playField.getPlayFieldStartPoint().x + 106.0f * playField.getOsuPx())
 		{
 			sf::Vector2f a = { -6,80 };
 			sf::Vector2f AT = ((a / slideSpeed * playField.getOsuPx()) * dt);
@@ -138,7 +113,7 @@ public:
 		{
 			sf::Vector2f gizm = { 0,0 };
 			int power = positions.size() - 1;
-			for (int i = 0; i < positions.size(); i++)
+			for (unsigned int i = 0; i < positions.size(); i++)
 			{
 				if (i == positions.size() - 1)
 				{
@@ -165,7 +140,7 @@ public:
 	{
 		sf::Vector2f bezierPoint;
 		int power = listOfControlPoints.size() - 1;
-		for (int i = 0; i < listOfControlPoints.size(); i++)
+		for (unsigned int i = 0; i < listOfControlPoints.size(); i++)
 		{
 			if (i == listOfControlPoints.size() - 1)
 				bezierPoint += listOfControlPoints[i] * static_cast<float>(std::pow(tParam - offset, i));
@@ -211,10 +186,10 @@ public:
 		}
 
 		static sf::Clock sliderElapsedTime;
-		if (!this->approachCircle->getApproachState())
+		if (true /* if the approach circle isn't done approacing */)
 			sliderElapsedTime.restart();
 
-		if (sliderElapsedTime.getElapsedTime().asSeconds() <= sliderTime && this->approachCircle->getApproachState())
+		if (sliderElapsedTime.getElapsedTime().asSeconds() <= sliderTime /* && the approach circle is done approaching */)
 		{
 			static sf::Clock segmentTime;
 			static uint8_t currentSegment = 1;

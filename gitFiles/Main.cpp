@@ -2,40 +2,24 @@
 #include <SFML/Audio.hpp>
 
 #include"playField.h"
-#include"hitObject.h"
 #include"beatMap.h"
+#include"hitObjectLoader.h"
+
 #include<vector>
-#include<iostream>
 
 int main()
 {
 	sf::Vector2i screenSize = { 1920,1080 };
-	sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "osu!",sf::Style::Fullscreen);
+	sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "osu!");
 	
 	sf::Clock runTime;
 	//Objects created=================================================================================
 	PlayField playField(screenSize);
 
-	sf::Texture t;
-	t.setSmooth(true);
-	t.loadFromFile("/root/Documents/osuBootleg/skins/hitcircle.png");
-
-	sf::Sprite h;
-	h.setTexture(t);
-	h.setOrigin((sf::Vector2f)t.getSize() / 2.0f);
-	h.move((sf::Vector2f)t.getSize() / 2.0f - h.getOrigin());
-	h.setScale(((23.05f - (4.2f - 7.0f) * 4.4825f) * 2.0f * playField.getOsuPx()) / t.getSize().x, ((23.05f - (4.2f - 7.0f) * 4.4825f) * 2.0f * playField.getOsuPx()) / t.getSize().y);
-
-	std::vector<HitObject> objects;
+	HitObjectLoader aw;
 
 	BeatMap map(829296);
-	
-	for (int i = 0; i < map.getHitObjectPositions().size(); i++)
-	{
-		objects.push_back(HitObject(map.getHitObjectPositions()[i], map.gethitObjectSpawnTimes()[i], 4.2f, 1.440f, playField));
-		h.setPosition(playField.getPlayFieldStartPoint() + map.getHitObjectPositions()[i] * playField.getOsuPx());
-		objects[i].hitCircle = h;
-	}
+	aw.createHitObjects(map, playField);
 	//================================================================================================
 	
 	//rect.setRotation(std::atan2(265.0f - 311.0f, 328.0f - 309.0f) * 180.0f / 3.1415f);
@@ -59,18 +43,14 @@ int main()
 
 		window.draw(playField.getPlayField());
 
-		for (int i = 0; i < objects.size(); i++)
+		for (unsigned int i = 0; i < aw.hitCircleVector.size(); i++)
 		{
-			if (mapTime.getElapsedTime().asMilliseconds() >= objects[i].getSpawnTime() && !objects[i].getDrawingState())
+			if (mapTime.getElapsedTime().asMilliseconds() >= aw.hitCircleVector[i]->getSpawnTime() && !aw.approachCircleVector[i]->getApproachState())
 			{
-				objects[i].drawCircle(window);
-				objects[i].approachTheCircle(deltaTime.asSeconds());
+				window.draw(aw.approachCircleVector[i]->getApproachCircle());
+				window.draw(aw.hitCircleVector[i]->getHitCircle());
+				aw.approachCircleVector[i]->approachTheCircle(deltaTime.asSeconds(),aw.hitCircleVector[i]->getHitCircleScale());
 			}
-			else if(objects[i].getDrawingState())
-			{
-				objects.erase(objects.begin() + i);
-			}
-			
 		}
 		
 		window.display();

@@ -46,5 +46,4 @@ public:
 		else
 			this->doneApproacing = true;
 	}
-
 };
