@@ -11,7 +11,8 @@ int main()
 {
 	sf::Vector2i screenSize = { 1920,1080 };
 	sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "osu!");
-	
+	window.setFramerateLimit(480);
+
 	sf::Clock runTime;
 	//Objects created=================================================================================
 	PlayField playField(screenSize);
@@ -41,7 +42,7 @@ int main()
 		//Render stuff to screen ====================================================
 		window.clear();
 
-		window.draw(playField.getPlayField());
+		//window.draw(playField.getPlayField());
 
 		for (unsigned int i = 0; i < aw.hitCircleVector.size(); i++)
 		{

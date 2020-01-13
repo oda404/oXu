@@ -31,6 +31,7 @@ public:
 				for (unsigned int i = 0; i < line.size(); i++)
 				{
 					static bool curvePointsGo = false;
+					static std::vector<sf::Vector2f> positions;
 
 					if (line[i] != ',' && it == 0)
 					{
@@ -59,9 +60,17 @@ public:
 						}
 						else if(curvePointsGo)
 						{
+							bool yDoneReading = false;
+							float iCX, iCY;
+							std::istringstream cX, cY;
+
 							if (line[i] == ':')
 							{
-								
+								cX = std::istringstream(sCX);
+								cX >> iCX;
+
+								//x
+
 								curveYCoordsRead = true;
 							}
 							else if (line[i] == '|' && line[i - 1] != 'L' && line[i - 1] != 'P' && line[i - 1] != 'B')
@@ -75,6 +84,24 @@ public:
 								sCX += line[i];
 							else if(curveYCoordsRead && line[i] != ':')
 								sCY += line[i];
+
+							if (line[i + 1] == '|' || line[i + 1] == ',')
+							{
+								cY = std::istringstream(sCY);
+								cY >> iCY;
+								yDoneReading = true;
+								//y
+							}
+
+							if (yDoneReading)
+							{
+								positions.push_back({ iCX, iCY });
+								if (line[i + 1] == ',')
+								{
+									hitObjectsCurvePointsPositions.push_back(positions);
+									positions.clear();
+								}
+							}
 						}
 					}
 					else if (line[i] == ',')
@@ -97,10 +124,10 @@ public:
 				hitObjectsSpawnTimes.push_back(iTime);
 			}
 		}
-		
 		file.close();
 	}
 
+	//Getters=======================================================
 	std::vector<sf::Vector2f> getHitObjectPositions() const
 	{
 		return this->hitObjectsPositions;
@@ -110,6 +137,12 @@ public:
 	{
 		return this->hitObjectsSpawnTimes;
 	}
+
+	std::vector<char> getHitObjectCurveType() const
+	{
+		return this->hitObjectsCurveType;
+	}
+	//=============================================================
 
 private:
 	std::vector<sf::Vector2f> hitObjectsPositions;
