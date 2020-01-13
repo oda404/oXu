@@ -30,7 +30,7 @@ public:
 		return this->osuPx;
 	}
 
-protected:
+private:
 	sf::RectangleShape playArea;
 	sf::Vector2f playFieldStartPoint;
 	float osuPx;

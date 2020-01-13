@@ -1,7 +1,6 @@
 #pragma once
-#include"Texture.h"
 
-class ApproachCircle : Textures
+class ApproachCircle 
 {
 private:
 	sf::Sprite approachCircle;
@@ -10,7 +9,7 @@ private:
 	bool doneApproacing = false;
 	
 public:
-	ApproachCircle(const float &approachSpeed, const sf::Vector2f &position, const sf::Vector2f &scale)
+	ApproachCircle(const float &approachSpeed, const sf::Vector2f &position, const sf::Vector2f &scale, sf::Texture &approachCircleTexture)
 	{
 		this->approachCircle.setTexture(approachCircleTexture);
 

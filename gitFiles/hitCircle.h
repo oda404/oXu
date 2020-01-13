@@ -1,11 +1,7 @@
 #pragma once
-#include"Texture.h"
-
-#ifdef __linux__
 #include<math.h>
-#endif
 
-class HitCircle : Textures
+class HitCircle
 {
 private:
 	sf::Sprite hitCircle;
@@ -13,7 +9,7 @@ private:
 	char curveType;
 
 public:
-	HitCircle(const sf::Vector2f &position, const long &spawnTime, const float &CS, const float &approachSpeed, const char &curveType, const PlayField &playField)
+	HitCircle(const sf::Vector2f &position, const long &spawnTime, const float &CS, const float &approachSpeed, const char &curveType, const PlayField &playField, sf::Texture &hitCircleTexture)
 	{
 		this->hitCircle.setTexture(hitCircleTexture);
 
