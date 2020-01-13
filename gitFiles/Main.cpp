@@ -11,7 +11,7 @@ int main()
 {
 	sf::Vector2i screenSize = { 1920,1080 };
 	sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "osu!");
-	window.setFramerateLimit(60);
+	window.setFramerateLimit(480);
 
 	PlayField playField(screenSize);
 
@@ -37,7 +37,7 @@ int main()
 		//Render stuff to screen ====================================================
 		window.clear();
 
-		for (unsigned int i = 0; i < aw.hitCircleVector.size(); i++)
+		for (unsigned int i = 0; i < aw.hitCircleVector.size() - (aw.hitCircleVector.size() - 10); i++)
 		{
 			if (mapTime.getElapsedTime().asMilliseconds() >= aw.hitCircleVector[i]->getSpawnTime() && !aw.approachCircleVector[i]->getApproachState())
 			{
