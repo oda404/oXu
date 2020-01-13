@@ -29,6 +29,7 @@ public:
 	{
 		return this->osuPx;
 	}
+//comment
 private:
 	sf::RectangleShape playArea;
 	sf::Vector2f playFieldStartPoint;
