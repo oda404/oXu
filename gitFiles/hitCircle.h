@@ -1,15 +1,29 @@
 #pragma once
+#include"approachCircle.h"
 #include<math.h>
 
 class HitCircle
 {
 private:
 	sf::Sprite hitCircle;
+	std::vector<sf::Vector2f> sliderCurvePointsPositions;
+	float sliderLength;
 	long spawnTime;
 	char curveType;
+	bool doneSliding = false;
 
 public:
-	HitCircle(const sf::Vector2f &position, const long &spawnTime, const float &CS, const float &approachSpeed, const char &curveType, const PlayField &playField, sf::Texture &hitCircleTexture)
+	HitCircle(
+	const sf::Vector2f &position, 
+	const long &spawnTime,
+	const float &CS, 
+	const float &approachSpeed,
+	const char &curveType,
+	const PlayField &playField,
+	const sf::Texture &hitCircleTexture,
+	const std::vector<sf::Vector2f> &sliderCurvePointsPositions = {{0,0}},
+	const float &sliderLength = 0 // 0 if the hit object is not a slider
+	)
 	{
 		this->hitCircle.setTexture(hitCircleTexture);
 
@@ -19,13 +33,22 @@ public:
 		//===================================================================
 		this->spawnTime = spawnTime;
 		this->curveType = curveType;
+		if(curveType == 'N')
+			this->doneSliding = true;
+
+		if(sliderLength != 0)
+			this->sliderLength = sliderLength;
+
+		if(sliderCurvePointsPositions[0].x != 0)
+			this->sliderCurvePointsPositions = sliderCurvePointsPositions;
+
 
 		this->hitCircle.setPosition(playField.getPlayFieldStartPoint().x + position.x*playField.getOsuPx(), playField.getPlayFieldStartPoint().y + position.y*playField.getOsuPx());
 
-		//alternative (109-9*CS) * osuPX / hitCircleTexture.getSize().x
 		this->hitCircle.setScale(((23.05f - (CS - 7.0f) * 4.4825f) * 2.0f * playField.getOsuPx()) / hitCircleTexture.getSize().x, ((23.05f - (CS - 7.0f) * 4.4825f) * 2.0f * playField.getOsuPx()) / hitCircleTexture.getSize().y);
 
 	}
+
 	//Getters===============================================================
 	sf::Vector2f getHitCircleScale() const
 	{
@@ -45,6 +68,11 @@ public:
 	long getSpawnTime() const
 	{
 		return this->spawnTime;
+	}
+
+	bool isDoneSliding() const
+	{
+		return this->doneSliding;
 	}
 	//======================================================================
 
@@ -140,7 +168,7 @@ public:
 		return bezierPoint;
 	}
 
-	void moveOnBezierCurve(const PlayField &playField, const float &dt,const std::vector<sf::Vector2f> &positions,const float &length,sf::RenderWindow &window)
+	void moveOnBezierCurve(const PlayField &playField, const float &dt,ApproachCircle &approachCircle)
 	{
 		static bool shouldCalculateCap = true;
 		static float tParamCap;
@@ -154,11 +182,11 @@ public:
 			bool firstPoint = true;
 			float tParam = 0;
 
-			while (arcLength < length)
+			while (arcLength < sliderLength)
 			{
-				arcLength += std::sqrt(std::pow((calculateBezierPoint(tParam,positions) - calculateBezierPoint(tParam, positions,0.0001f)).x,2) + std::pow((calculateBezierPoint(tParam, positions) - calculateBezierPoint(tParam, positions,0.0001f)).y, 2)) ;
+				arcLength += std::sqrt(std::pow((calculateBezierPoint(tParam,sliderCurvePointsPositions) - calculateBezierPoint(tParam, sliderCurvePointsPositions,0.0001f)).x,2) + std::pow((calculateBezierPoint(tParam, sliderCurvePointsPositions) - calculateBezierPoint(tParam, sliderCurvePointsPositions,0.0001f)).y, 2)) ;
 
-				if (arcLength >= length / (length / 10) * it || firstPoint)
+				if (arcLength >= sliderLength / (sliderLength/ 10) * it || firstPoint)
 				{
 					curvePoints.push_back(tParam);
 					it++;
@@ -171,20 +199,20 @@ public:
 			tParam = 0.0f;
 			shouldCalculateCap = false;
 		}
-
+		//a
 		static sf::Clock sliderElapsedTime;
-		if (true /* if the approach circle isn't done approacing */)
+		if (!approachCircle.getApproachState())
 			sliderElapsedTime.restart();
 
-		if (sliderElapsedTime.getElapsedTime().asSeconds() <= sliderTime /* && the approach circle is done approaching */)
+		if (sliderElapsedTime.getElapsedTime().asSeconds() <= sliderTime && approachCircle.getApproachState())
 		{
 			static sf::Clock segmentTime;
 			static uint8_t currentSegment = 1;
 
-			if (segmentTime.getElapsedTime().asSeconds() <= sliderTime / (length / 10))
+			if (segmentTime.getElapsedTime().asSeconds() <= sliderTime / (sliderLength / 10))
 			{
-				sf::Vector2f distanceBetweenPoints = calculateBezierPoint(curvePoints[currentSegment], positions) - calculateBezierPoint(curvePoints[currentSegment - 1], positions);
-				sf::Vector2f AT = ((distanceBetweenPoints / (sliderTime / (length / 10)) * playField.getOsuPx()) * dt);
+				sf::Vector2f distanceBetweenPoints = calculateBezierPoint(curvePoints[currentSegment], sliderCurvePointsPositions) - calculateBezierPoint(curvePoints[currentSegment - 1], sliderCurvePointsPositions);
+				sf::Vector2f AT = ((distanceBetweenPoints / (sliderTime / (sliderLength / 10)) * playField.getOsuPx()) * dt);
 				this->hitCircle.setPosition(this->hitCircle.getPosition() + AT);
 			}
 			else if(currentSegment + 1 != curvePoints.size())
@@ -193,6 +221,8 @@ public:
 				segmentTime.restart();
 			}
 		}
+		else if(sliderElapsedTime.getElapsedTime().asSeconds() > sliderTime)
+			doneSliding = true;
 	}
 	//=====================================================================
 };

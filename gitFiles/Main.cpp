@@ -38,19 +38,37 @@ int main()
 		//Render stuff to screen ====================================================
 		window.clear();
 
-		for (unsigned int i = 0; i < aw.hitCircleVector.size() - (aw.hitCircleVector.size() - 10); i++) // look 10 hit objects into the future
+		for (unsigned int i = 0; i < aw.hitCircleVector.size() - (aw.hitCircleVector.size() - 20); i++)
 		{
-			if (mapTime.getElapsedTime().asMilliseconds() >= aw.hitCircleVector[i]->getSpawnTime() && !aw.approachCircleVector[i]->getApproachState())
+			if ((mapTime.getElapsedTime().asMilliseconds() >= aw.hitCircleVector[i].getSpawnTime() && !aw.approachCircleVector[i].getApproachState()) || !aw.hitCircleVector[i].isDoneSliding())
 			{
-				window.draw(aw.approachCircleVector[i]->getApproachCircle());
-				window.draw(aw.hitCircleVector[i]->getHitCircle());
-				aw.approachCircleVector[i]->approachTheCircle(deltaTime.asSeconds(),aw.hitCircleVector[i]->getHitCircleScale());
+				if(map.getHitObjectCurveType()[i] == 'N')
+				{
+					window.draw(aw.approachCircleVector[i].getApproachCircle());
+					window.draw(aw.hitCircleVector[i].getHitCircle());
+					aw.approachCircleVector[i].approachTheCircle(deltaTime.asSeconds(),aw.hitCircleVector[i].getHitCircleScale());
+				}
+				else if(map.getHitObjectCurveType()[i] == 'B')
+				{
+					window.draw(aw.hitCircleVector[i].getHitCircle());
+					if(!aw.approachCircleVector[i].getApproachState())
+					{
+						aw.approachCircleVector[i].approachTheCircle(deltaTime.asSeconds(),aw.hitCircleVector[i].getHitCircleScale());
+						window.draw(aw.approachCircleVector[i].getApproachCircle());
+					}
+					else 
+					{
+						aw.hitCircleVector[i].moveOnBezierCurve(playField,deltaTime.asSeconds(),aw.approachCircleVector[i]);
+					}
+				}
 				
 				if(i > 0)
-					if(aw.approachCircleVector[i - 1]->getApproachState())
+					if(aw.approachCircleVector[i - 1].getApproachState() && aw.hitCircleVector[i - 1].isDoneSliding()) 
 					{
-						aw.approachCircleVector.erase(aw.approachCircleVector.begin() + (i-1));
-						aw.hitCircleVector.erase(aw.hitCircleVector.begin() + (i-1));
+						aw.approachCircleVector.erase(aw.approachCircleVector.begin() + 0);
+						aw.hitCircleVector.erase(aw.hitCircleVector.begin() + 0);
+						map.eraseFirstCurveTypeFromVector();
+
 					}
 			}
 		}
