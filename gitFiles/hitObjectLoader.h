@@ -1,6 +1,7 @@
 #pragma once
 #include"hitCircle.h"
 #include"approachCircle.h"
+#include"slider.h"
 #include<memory>
 
 class HitObjectLoader
@@ -23,8 +24,12 @@ public:
 	{
 		for (unsigned int i = 0; i < beatMap.getHitObjectPositions().size(); i++)
 		{
-			hitCircleVector.push_back(std::make_shared<HitCircle>(beatMap.getHitObjectPositions()[i], beatMap.gethitObjectSpawnTimes()[i], 4.2f, 0.450f, beatMap.getHitObjectCurveType()[i], playField,hitCircleTexture));
-			approachCircleVector.push_back(std::make_shared<ApproachCircle>(0.450f,hitCircleVector[i]->getPos(), hitCircleVector[i]->getHitCircleScale() * 1.5f * playField.getOsuPx(),approachCircleTexture));
+			if(beatMap.getHitObjectCurveType()[i] != 'N')
+			{
+				//sliderVector.push_back(Slider());
+			}
+			hitCircleVector.push_back(HitCircle(beatMap.getHitObjectPositions()[i], beatMap.gethitObjectSpawnTimes()[i], 4.2f, 0.450f, playField,hitCircleTexture));
+			approachCircleVector.push_back(ApproachCircle(0.450f,hitCircleVector[i].getPos(), hitCircleVector[i].getHitCircleScale() * 1.5f * playField.getOsuPx(),approachCircleTexture));
 		}
 	}
 
@@ -32,6 +37,7 @@ private:
 	sf::Texture hitCircleTexture;
 	sf::Texture approachCircleTexture;
 public:
-	std::vector<std::shared_ptr<HitCircle>> hitCircleVector;
-	std::vector<std::shared_ptr<ApproachCircle>> approachCircleVector;
+	std::vector<HitCircle> hitCircleVector;
+	std::vector<ApproachCircle> approachCircleVector;
+	std::vector<Slider> sliderVector;
 };
