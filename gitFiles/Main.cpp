@@ -24,6 +24,7 @@ int main()
 
 	sf::Clock deltaClock;
 	sf::Time deltaTime;
+	int deletedObj = 0;
 	
 	while (window.isOpen())
 	{
@@ -37,13 +38,14 @@ int main()
 		//Render stuff to screen ====================================================
 		window.clear();
 
-		for (unsigned int i = 0; i < aw.hitCircleVector.size() - (aw.hitCircleVector.size() - 10); i++)
+		for (unsigned int i = 0; i < aw.hitCircleVector.size() - (aw.hitCircleVector.size() - 10); i++) // look 10 hit objects into the future
 		{
 			if (mapTime.getElapsedTime().asMilliseconds() >= aw.hitCircleVector[i]->getSpawnTime() && !aw.approachCircleVector[i]->getApproachState())
 			{
 				window.draw(aw.approachCircleVector[i]->getApproachCircle());
 				window.draw(aw.hitCircleVector[i]->getHitCircle());
 				aw.approachCircleVector[i]->approachTheCircle(deltaTime.asSeconds(),aw.hitCircleVector[i]->getHitCircleScale());
+				
 				if(i > 0)
 					if(aw.approachCircleVector[i - 1]->getApproachState())
 					{

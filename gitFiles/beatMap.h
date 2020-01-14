@@ -28,7 +28,7 @@ public:
 			}
 			if (go && line != "[HitObjects]")
 			{
-				std::string sX = "", sY = "", time = "", sCX="",sCY="";
+				std::string sX = "", sY = "", time = "", sCX="",sCY="", sSlides="", sLength="";
 				int it = 0;
 				bool curveTypeCheck = true, curveYCoordsRead = false;
 
@@ -108,24 +108,40 @@ public:
 							}
 						}
 					}
+					else if (line[i] != ',' && it == 6)
+					{
+						sSlides += line[i];
+					}
+					else if(line[i] != ',' && it == 7)
+					{
+						sLength += line[i];
+					}
 					else if (line[i] == ',')
 					{
 						curvePointsGo = false;
 						it++;
 					}
 				}
-				
-				int iX,iY,iTime;
+				int iX,iY,iTime,iSlides = 0,iLength=0;
+
 				std::istringstream t(time);
 				std::istringstream i1(sX);
 				std::istringstream i2(sY);
+				std::istringstream isSlides(sSlides);
+				std::istringstream isLength(sLength);
 
+				if(sSlides != "")
+					isSlides >> iSlides;
+				if(sLength !="")
+					isLength >> iLength;
 				t >> iTime;
 				i1 >> iX;
 				i2 >> iY;
 				
 				hitObjectsPositions.push_back({ (float)iX , (float) iY });
 				hitObjectsSpawnTimes.push_back(iTime);
+				numberOfSliderSlides.push_back(iSlides);
+				sliderLengths.push_back(iLength);
 			}
 		}
 		file.close();
@@ -146,11 +162,18 @@ public:
 	{
 		return this->hitObjectsCurveType;
 	}
+
+	char get(int i )
+	{
+		return hitObjectsCurveType[i];
+	}
 	//=============================================================
 
 private:
 	std::vector<sf::Vector2f> hitObjectsPositions;
 	std::vector<int> hitObjectsSpawnTimes;
+	std::vector<int> numberOfSliderSlides;
+	std::vector<float> sliderLengths;
 	std::vector<std::vector<sf::Vector2f>> hitObjectsCurvePointsPositions;
 	std::vector<char> hitObjectsCurveType;
 };
