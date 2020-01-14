@@ -12,7 +12,7 @@ public:
 		bool go = false;
 		
 		std::string line;
-#ifdef WIN32
+#ifdef _WIN32
 		std::ifstream file("E:/visualproj/SFMLosuBootleg/songs/829296 mafumafu - Inochi ni Kirawarete Iru/mafumafu - Inochi ni Kirawarete Iru. (KazuhikoRei) [Haruki's Easy].osu");
 #else
 		std::ifstream file("/root/Documents/osuBootleg/songs/829296 mafumafu - Inochi ni Kirawarete Iru/mafumafu - Inochi ni Kirawarete Iru. (KazuhikoRei) [Haruki's Easy].osu");
