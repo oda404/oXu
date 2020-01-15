@@ -23,6 +23,8 @@ public:
 		this->initalScale = this->approachCircle.getScale();
 		
 		this->approachSpeed = approachSpeed;
+		this->doneApproacing =false;
+
 	}
 	
 	sf::Sprite getApproachCircle() const
