@@ -37,19 +37,24 @@ int main()
 		//Render stuff to screen ====================================================
 		window.clear();
 
-		for (unsigned int i = 0; i < aw.hitCircleVector.size() - (aw.hitCircleVector.size() - 10); i++) // look 10 hit objects into the future
+		for (unsigned int i = 0; i < aw.hitCircleVector.size() - (aw.hitCircleVector.size() - 20); i++) // look 10 hit objects into the future
 		{
 			if (mapTime.getElapsedTime().asMilliseconds() >= aw.hitCircleVector[i].getSpawnTime() && !aw.approachCircleVector[i].getApproachState())
 			{
-				window.draw(aw.approachCircleVector[i].getApproachCircle());
-				window.draw(aw.hitCircleVector[i].getHitCircle());
-				aw.approachCircleVector[i].approachTheCircle(deltaTime.asSeconds(),aw.hitCircleVector[i].getHitCircleScale());
+				if(map.getHitObjectCurveType()[i] == 'N')
+				{
+					window.draw(aw.approachCircleVector[i].getApproachCircle());
+					window.draw(aw.hitCircleVector[i].getHitCircle());
+					aw.approachCircleVector[i].approachTheCircle(deltaTime.asSeconds(),aw.hitCircleVector[i].getHitCircleScale());
+				}
 				
 				if(i > 0)
 					if(aw.approachCircleVector[i - 1].getApproachState())
 					{
-						aw.approachCircleVector.erase(aw.approachCircleVector.begin() + (i-1));
-						aw.hitCircleVector.erase(aw.hitCircleVector.begin() + (i-1));
+						aw.approachCircleVector.erase(aw.approachCircleVector.begin() + 0);
+						aw.hitCircleVector.erase(aw.hitCircleVector.begin() + 0);
+						map.eraseType();
+
 					}
 			}
 		}

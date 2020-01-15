@@ -24,12 +24,11 @@ public:
 	{
 		for (unsigned int i = 0; i < beatMap.getHitObjectPositions().size(); i++)
 		{
-			if(beatMap.getHitObjectCurveType()[i] != 'N')
-			{
-				//sliderVector.push_back(Slider());
-			}
+			
 			hitCircleVector.push_back(HitCircle(beatMap.getHitObjectPositions()[i], beatMap.gethitObjectSpawnTimes()[i], 4.2f, 0.450f, playField,hitCircleTexture));
 			approachCircleVector.push_back(ApproachCircle(0.450f,hitCircleVector[i].getPos(), hitCircleVector[i].getHitCircleScale() * 1.5f * playField.getOsuPx(),approachCircleTexture));
+			
+			
 		}
 	}
 

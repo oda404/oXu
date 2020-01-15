@@ -163,10 +163,26 @@ public:
 		return this->hitObjectsCurveType;
 	}
 
-	char get(int i )
+	std::vector<std::vector<sf::Vector2f>> getSliderPointsCoord() const
 	{
-		return hitObjectsCurveType[i];
+		return hitObjectsCurvePointsPositions;
 	}
+
+	std::vector<int> getSlides() const
+	{
+		return numberOfSliderSlides;
+	}
+
+	std::vector<float> getSliderLength() const
+	{
+		return sliderLengths;
+	}
+
+	void eraseType()
+	{
+		hitObjectsCurveType.erase(hitObjectsCurveType.begin() + 0);
+	}
+
 	//=============================================================
 
 private:

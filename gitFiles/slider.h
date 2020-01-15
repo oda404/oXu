@@ -109,27 +109,26 @@ void drawBezierCurve(const std::vector<sf::Vector2f> &positions,const PlayField 
     }
 }
 
-sf::Vector2f calculateBezierPoint(const float &tParam, const std::vector<sf::Vector2f> &listOfControlPoints, const float &offset = 0.0f)
+sf::Vector2f calculateBezierPoint(const float &tParam, const float &offset = 0.0f)
 {
     sf::Vector2f bezierPoint;
-    int power = listOfControlPoints.size() - 1;
-    for (unsigned int i = 0; i < listOfControlPoints.size(); i++)
+    int power = sliderPointsCooords.size() - 1;
+    for (unsigned int i = 0; i < sliderPointsCooords.size(); i++)
     {
-        if (i == listOfControlPoints.size() - 1)
-            bezierPoint += listOfControlPoints[i] * static_cast<float>(std::pow(tParam - offset, i));
+        if (i == sliderPointsCooords.size() - 1)
+            bezierPoint += sliderPointsCooords[i] * static_cast<float>(std::pow(tParam - offset, i));
         else if (i > 0)
-            bezierPoint += static_cast<float>(std::pow(1 - (tParam - offset), power)) * listOfControlPoints[i] * (getPascalTriangleRow(listOfControlPoints)[i - 1] * static_cast<float>(std::pow(tParam - offset, i)));
+            bezierPoint += static_cast<float>(std::pow(1 - (tParam - offset), power)) * sliderPointsCooords[i] * (getPascalTriangleRow(sliderPointsCooords)[i - 1] * static_cast<float>(std::pow(tParam - offset, i)));
         else
-            bezierPoint += static_cast<float>(std::pow(1 - (tParam - offset), power)) * listOfControlPoints[i];
+            bezierPoint += static_cast<float>(std::pow(1 - (tParam - offset), power)) * sliderPointsCooords[i];
         power--;
     }
     return bezierPoint;
 }
 
-void moveOnBezierCurve(const PlayField &playField, const float &dt,const std::vector<sf::Vector2f> &positions,const float &length,sf::RenderWindow &window)
+void moveOnBezierCurve(const PlayField &playField, const float &dt, sf::RenderWindow &window)
 	{
 		static bool shouldCalculateCap = true;
-		static float tParamCap;
 		static std::vector<float> curvePoints;
 		float sliderTime = 2.0f;
 
@@ -140,11 +139,11 @@ void moveOnBezierCurve(const PlayField &playField, const float &dt,const std::ve
 			bool firstPoint = true;
 			float tParam = 0;
 
-			while (arcLength < length)
+			while (arcLength < sliderLength)
 			{
-				arcLength += std::sqrt(std::pow((calculateBezierPoint(tParam,positions) - calculateBezierPoint(tParam, positions,0.0001f)).x,2) + std::pow((calculateBezierPoint(tParam, positions) - calculateBezierPoint(tParam, positions,0.0001f)).y, 2)) ;
+				arcLength += std::sqrt(std::pow((calculateBezierPoint(tParam) - calculateBezierPoint(tParam,0.0001f)).x,2) + std::pow((calculateBezierPoint(tParam) - calculateBezierPoint(tParam,0.0001f)).y, 2)) ;
 
-				if (arcLength >= length / (length / 10) * it || firstPoint)
+				if (arcLength >= sliderLength / (sliderLength / 10) * it || firstPoint)
 				{
 					curvePoints.push_back(tParam);
 					it++;
@@ -152,9 +151,6 @@ void moveOnBezierCurve(const PlayField &playField, const float &dt,const std::ve
 				}
 				tParam += 0.0001f;
 			}
-			
-			tParamCap = tParam;
-			tParam = 0.0f;
 			shouldCalculateCap = false;
 		}
 
@@ -167,10 +163,10 @@ void moveOnBezierCurve(const PlayField &playField, const float &dt,const std::ve
 			static sf::Clock segmentTime;
 			static uint8_t currentSegment = 1;
 
-			if (segmentTime.getElapsedTime().asSeconds() <= sliderTime / (length / 10))
+			if (segmentTime.getElapsedTime().asSeconds() <= sliderTime / (sliderLength / 10))
 			{
-				sf::Vector2f distanceBetweenPoints = calculateBezierPoint(curvePoints[currentSegment], positions) - calculateBezierPoint(curvePoints[currentSegment - 1], positions);
-				sf::Vector2f AT = ((distanceBetweenPoints / (sliderTime / (length / 10)) * playField.getOsuPx()) * dt);
+				sf::Vector2f distanceBetweenPoints = calculateBezierPoint(curvePoints[currentSegment]) - calculateBezierPoint(curvePoints[currentSegment - 1]);
+				sf::Vector2f AT = ((distanceBetweenPoints / (sliderTime / (sliderLength / 10)) * playField.getOsuPx()) * dt);
 				this->hitCircle.setPosition(this->hitCircle.getPosition() + AT);
 			}
 			else if(currentSegment + 1 != curvePoints.size())
@@ -179,5 +175,25 @@ void moveOnBezierCurve(const PlayField &playField, const float &dt,const std::ve
 				segmentTime.restart();
 			}
 		}
+	}
+
+    sf::Vector2f getHitCircleScale() const
+	{
+		return this->hitCircle.getScale();
+	}
+
+	sf::Sprite getHitCircle() const
+	{
+		return this->hitCircle;
+	}
+
+	sf::Vector2f getPos() const
+	{
+		return this->hitCircle.getPosition();
+	}
+
+	long getSpawnTime() const
+	{
+		return this->spawnTime;
 	}
 };
