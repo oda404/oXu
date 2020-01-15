@@ -1,11 +1,8 @@
 #include <SFML/Graphics.hpp>
 
 #include"playField.h"
-#include"beatMap.h"
+#include"beatMapParser.h"
 #include"hitObjectLoader.h"
-
-#include<vector>
-#include<iostream>
 
 int main()
 {
@@ -15,7 +12,7 @@ int main()
 
 	PlayField playField(screenSize);
 
-	BeatMap map;
+	BeatMapParser map;
 
 	HitObjectLoader aw;
 	aw.createHitObjects(map, playField);
@@ -37,7 +34,7 @@ int main()
 		//Render stuff to screen ====================================================
 		window.clear();
 
-		for (int i = 0; i < aw.hitCircleVector.size() - (aw.hitCircleVector.size() - 10); i++) // look 10 hit objects into the future
+		for (unsigned int i = 0; i < aw.hitCircleVector.size() - (aw.hitCircleVector.size() - 10); i++)
 		{
 			if (mapTime.getElapsedTime().asMilliseconds() >= aw.hitCircleVector[i].getSpawnTime() && !aw.approachCircleVector[i].getApproachState())
 			{
@@ -45,7 +42,7 @@ int main()
 				window.draw(aw.hitCircleVector[i].getHitCircle());
 				aw.approachCircleVector[i].approachTheCircle(deltaTime.asSeconds(),aw.hitCircleVector[i].getHitCircleScale());
 
-				if(i > 0)
+				if(i > 0 )
 					if(aw.approachCircleVector[i - 1].getApproachState())
 					{
 						aw.approachCircleVector.erase(aw.approachCircleVector.begin() + 0);

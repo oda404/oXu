@@ -2,7 +2,6 @@
 #include"hitCircle.h"
 #include"approachCircle.h"
 #include"slider.h"
-#include<memory>
 
 class HitObjectLoader
 {
@@ -20,16 +19,15 @@ public:
 #endif
 	}
 
-	void createHitObjects(BeatMap &beatMap, PlayField &playField)
+	void createHitObjects(BeatMapParser &beatMap, PlayField &playField)
 	{
 		for (unsigned int i = 0; i < beatMap.getHitObjectPositions().size(); i++)
 		{
-			
 			hitCircleVector.push_back(HitCircle(beatMap.getHitObjectPositions()[i], beatMap.gethitObjectSpawnTimes()[i], 4.2f, 0.450f, playField,hitCircleTexture));
 			approachCircleVector.push_back(ApproachCircle(0.450f,hitCircleVector[i].getPos(), hitCircleVector[i].getHitCircleScale() * 1.5f * playField.getOsuPx(),approachCircleTexture));
-			
-			
 		}
+
+		// another for?
 	}
 
 private:
