@@ -19,6 +19,8 @@ int main()
 	
 	//rect.setRotation(std::atan2(265.0f - 311.0f, 328.0f - 309.0f) * 180.0f / 3.1415f);
 
+	
+
 	sf::Clock deltaClock;
 	sf::Time deltaTime;
 	
@@ -49,6 +51,22 @@ int main()
 						aw.hitCircleVector.erase(aw.hitCircleVector.begin() + 0);
 					}
 			}
+		}
+
+		for(unsigned int i = 0; i < aw.sliderVector.size(); i++)
+		{
+			if (mapTime.getElapsedTime().asMilliseconds() >= aw.sliderVector[i].getSpawnTime() && !aw.sliderApproachCircles[i].getApproachState())
+			{
+				window.draw(aw.sliderVector[i].getHitCircle());
+				window.draw(aw.sliderApproachCircles[i].getApproachCircle());
+				aw.sliderApproachCircles[i].approachTheCircle(deltaTime.asSeconds(), aw.sliderVector[i].getHitCircleScale());
+			}
+			else if(aw.sliderApproachCircles[i].getApproachState())
+			{
+				window.draw(aw.sliderVector[i].getHitCircle());
+				aw.sliderVector[i].moveOnStraightPath(deltaTime.asSeconds(), playField,aw.sliderApproachCircles[i]);
+			}
+			
 		}
 		
 		window.display();

@@ -177,6 +177,17 @@ public:
 		return this->hitCirclesSpawnTimes;
 	}
 
+
+	std::vector<int> getSlidersSpawnTimes()
+	{
+		return slidersSpawnTimes;
+	}
+
+	std::vector<sf::Vector2f> getSlidersPositions ()
+	{
+		return slidersPositions;
+	}
+
 	std::vector<char> getHitObjectCurveType() const
 	{
 		return this->curveType;
@@ -196,6 +207,8 @@ public:
 	{
 		return sliderLengths;
 	}
+
+
 
 	//=============================================================
 

@@ -8,7 +8,7 @@ private:
 	long spawnTime;
 
 public:
-	HitCircle(const sf::Vector2f &position, const long &spawnTime, const float &CS, const float &approachSpeed, const PlayField &playField, sf::Texture &hitCircleTexture)
+	HitCircle(const sf::Vector2f &position, const long &spawnTime, const float &CS, const PlayField &playField, sf::Texture &hitCircleTexture)
 	{
 		this->hitCircle.setTexture(hitCircleTexture);
 

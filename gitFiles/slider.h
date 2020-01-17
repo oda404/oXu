@@ -5,26 +5,33 @@ class Slider
 private:
     sf::Sprite hitCircle;
 	long spawnTime;
-    std::vector<sf::Vector2f> sliderPointsCooords;
+    std::vector<sf::Vector2f> sliderPointsCoords;
+    sf::Vector2f initialPosition;
     int slides;
     float sliderLength;
     char sliderType;
+    bool sliding = false;
 
 public:
 
     Slider(
     const sf::Vector2f &position,
     const long &spawnTime, 
-    const float &CS, 
-    const float &approachSpeed,
-    const std::vector<sf::Vector2f> sliderPointsCoords,
-    const int slides,
-    const float sliderLength,
-    const char sliderType, 
+    const float &CS,
+    const std::vector<sf::Vector2f> &sliderPointsCoords,
+    const int &slides,
+    const float &sliderLength,
+    const char &sliderType, 
     const PlayField &playField, 
     const sf::Texture &hitCircleTexture
     )
 	{
+        this->sliderPointsCoords = sliderPointsCoords;
+        this->slides = slides;
+        this->sliderLength = sliderLength;
+        this->sliderType = sliderType;
+        this->initialPosition = position;
+
 		this->hitCircle.setTexture(hitCircleTexture);
 
 		//Set the origin to center of the circle, and recenter ==============
@@ -40,13 +47,22 @@ public:
 
 	}
 
-    void moveOnStraightPath(const float &slideSpeed, const float &dt,const PlayField &playField)
+    void moveOnStraightPath(const float &dt,const PlayField &playField, ApproachCircle &approachCircle)
 	{
-		if (this->hitCircle.getPosition().x < playField.getPlayFieldStartPoint().x + 106.0f * playField.getOsuPx())
+		if (approachCircle.getApproachState())
 		{
-			sf::Vector2f a = { -6,80 };
-			sf::Vector2f AT = ((a / slideSpeed * playField.getOsuPx()) * dt);
-			this->hitCircle.setPosition(this->hitCircle.getPosition() + AT);                                                                           
+            static sf::Clock cl;
+            sf::Vector2f distance = {sliderPointsCoords[0] - initialPosition};
+
+            //the problem is that the Clock remains in memory with the same value even for other objects
+            //the clock needs to be reset when working with another object somehow
+
+            if(cl.getElapsedTime().asSeconds() <= 0.100f)
+            {
+                sf::Vector2f AT = ((distance / 0.100f * playField.getOsuPx()) * dt);
+                this->hitCircle.setPosition(this->hitCircle.getPosition() + AT);
+            } 
+                                                                               
 		}
 	}
 
@@ -78,59 +94,59 @@ public:
         return row;
     }
 
-void drawBezierCurve(const std::vector<sf::Vector2f> &positions,const PlayField &playField,sf::RenderWindow &window)
-{
-    sf::RectangleShape rect;
-    rect.setSize({ 2,2 });
-    for (float t = 0; t < 1; t += 0.001f)
+    void drawBezierCurve(const std::vector<sf::Vector2f> &positions,const PlayField &playField,sf::RenderWindow &window)
     {
-        sf::Vector2f gizm = { 0,0 };
-        int power = positions.size() - 1;
-        for (unsigned int i = 0; i < positions.size(); i++)
+        sf::RectangleShape rect;
+        rect.setSize({ 2,2 });
+        for (float t = 0; t < 1; t += 0.001f)
         {
-            if (i == positions.size() - 1)
+            sf::Vector2f gizm = { 0,0 };
+            int power = positions.size() - 1;
+            for (unsigned int i = 0; i < positions.size(); i++)
             {
-                gizm += positions[i] * static_cast<float>(std::pow(t, i));
-            }
-            else if (i > 0)
-            {
-                gizm += static_cast<float>(std::pow(1 - t, power)) * positions[i] * (getPascalTriangleRow(positions)[i - 1] * static_cast<float>(std::pow(t, i)));
+                if (i == positions.size() - 1)
+                {
+                    gizm += positions[i] * static_cast<float>(std::pow(t, i));
+                }
+                else if (i > 0)
+                {
+                    gizm += static_cast<float>(std::pow(1 - t, power)) * positions[i] * (getPascalTriangleRow(positions)[i - 1] * static_cast<float>(std::pow(t, i)));
 
+                }
+                else
+                    gizm += static_cast<float>(std::pow(1 - t, power)) * positions[i];
+                power--;
             }
+            power = positions.size() - 1;
+            gizm *= playField.getOsuPx();
+
+            rect.setPosition(playField.getPlayFieldStartPoint() + gizm);
+            window.draw(rect);
+        }
+    }
+
+    sf::Vector2f calculateBezierPoint(const float &tParam, const float &offset = 0.0f)
+    {
+        sf::Vector2f bezierPoint;
+        int power = sliderPointsCoords.size() - 1;
+        for (unsigned int i = 0; i < sliderPointsCoords.size(); i++)
+        {
+            if (i == sliderPointsCoords.size() - 1)
+                bezierPoint += sliderPointsCoords[i] * static_cast<float>(std::pow(tParam - offset, i));
+            else if (i > 0)
+                bezierPoint += static_cast<float>(std::pow(1 - (tParam - offset), power)) * sliderPointsCoords[i] * (getPascalTriangleRow(sliderPointsCoords)[i - 1] * static_cast<float>(std::pow(tParam - offset, i)));
             else
-                gizm += static_cast<float>(std::pow(1 - t, power)) * positions[i];
+                bezierPoint += static_cast<float>(std::pow(1 - (tParam - offset), power)) * sliderPointsCoords[i];
             power--;
         }
-        power = positions.size() - 1;
-        gizm *= playField.getOsuPx();
-
-        rect.setPosition(playField.getPlayFieldStartPoint() + gizm);
-        window.draw(rect);
+        return bezierPoint;
     }
-}
 
-sf::Vector2f calculateBezierPoint(const float &tParam, const float &offset = 0.0f)
-{
-    sf::Vector2f bezierPoint;
-    int power = sliderPointsCooords.size() - 1;
-    for (unsigned int i = 0; i < sliderPointsCooords.size(); i++)
-    {
-        if (i == sliderPointsCooords.size() - 1)
-            bezierPoint += sliderPointsCooords[i] * static_cast<float>(std::pow(tParam - offset, i));
-        else if (i > 0)
-            bezierPoint += static_cast<float>(std::pow(1 - (tParam - offset), power)) * sliderPointsCooords[i] * (getPascalTriangleRow(sliderPointsCooords)[i - 1] * static_cast<float>(std::pow(tParam - offset, i)));
-        else
-            bezierPoint += static_cast<float>(std::pow(1 - (tParam - offset), power)) * sliderPointsCooords[i];
-        power--;
-    }
-    return bezierPoint;
-}
-
-void moveOnBezierCurve(const PlayField &playField, const float &dt, sf::RenderWindow &window)
+void moveOnBezierCurve(const PlayField &playField, const float &dt, ApproachCircle &approachCircle)
 	{
 		static bool shouldCalculateCap = true;
 		static std::vector<float> curvePoints;
-		float sliderTime = 2.0f;
+		float sliderTime = 0.500f;
 
 		if (shouldCalculateCap)
 		{
@@ -140,7 +156,7 @@ void moveOnBezierCurve(const PlayField &playField, const float &dt, sf::RenderWi
 			float tParam = 0;
 
 			while (arcLength < sliderLength)
-			{
+			{                
 				arcLength += std::sqrt(std::pow((calculateBezierPoint(tParam) - calculateBezierPoint(tParam,0.0001f)).x,2) + std::pow((calculateBezierPoint(tParam) - calculateBezierPoint(tParam,0.0001f)).y, 2)) ;
 
 				if (arcLength >= sliderLength / (sliderLength / 10) * it || firstPoint)
@@ -155,10 +171,10 @@ void moveOnBezierCurve(const PlayField &playField, const float &dt, sf::RenderWi
 		}
 
 		static sf::Clock sliderElapsedTime;
-		if (true /* if the approach circle isn't done approacing */)
+		if (!approachCircle.getApproachState())
 			sliderElapsedTime.restart();
 
-		if (sliderElapsedTime.getElapsedTime().asSeconds() <= sliderTime /* && the approach circle is done approaching */)
+		if (sliderElapsedTime.getElapsedTime().asSeconds() <= sliderTime && approachCircle.getApproachState())
 		{
 			static sf::Clock segmentTime;
 			static uint8_t currentSegment = 1;
@@ -196,4 +212,9 @@ void moveOnBezierCurve(const PlayField &playField, const float &dt, sf::RenderWi
 	{
 		return this->spawnTime;
 	}
+
+    bool isSliding() const
+    {
+        return sliding;
+    }
 };
