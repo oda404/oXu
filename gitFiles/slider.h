@@ -10,7 +10,6 @@ private:
     int slides;
     float sliderLength;
     char sliderType;
-    bool sliding = false;
 
 public:
 
@@ -212,9 +211,4 @@ void moveOnBezierCurve(const PlayField &playField, const float &dt, ApproachCirc
 	{
 		return this->spawnTime;
 	}
-
-    bool isSliding() const
-    {
-        return sliding;
-    }
 };
