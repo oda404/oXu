@@ -65,6 +65,12 @@ int main()
 			{
 				window.draw(aw.sliderVector[i].getHitCircle());
 				aw.sliderVector[i].moveOnStraightPath(deltaTime.asSeconds(), playField,aw.sliderApproachCircles[i]);
+
+				if(aw.sliderVector[i].getSlides() == 0)
+				{
+					aw.sliderVector.erase(aw.sliderVector.begin() + i);
+					aw.sliderApproachCircles.erase(aw.sliderApproachCircles.begin() + i);
+				}
 			}
 			
 		}

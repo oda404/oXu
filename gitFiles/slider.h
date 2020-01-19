@@ -50,17 +50,21 @@ public:
 	{
 		if (approachCircle.getApproachState())
 		{
-            static sf::Clock cl;
             sf::Vector2f distance = {sliderPointsCoords[0] - initialPosition};
 
-            //the problem is that the Clock remains in memory with the same value even for other objects
-            //the clock needs to be reset when working with another object somehow
-
-            if(cl.getElapsedTime().asSeconds() <= 0.100f)
+            if( std::round(((this->hitCircle.getPosition() - playField.getPlayFieldStartPoint() )/playField.getOsuPx()).x) != sliderPointsCoords[0].x && slides > 0 )
             {
-                sf::Vector2f AT = ((distance / 0.100f * playField.getOsuPx()) * dt);
+                sf::Vector2f AT = ((distance / 0.200f * playField.getOsuPx()) * dt);
                 this->hitCircle.setPosition(this->hitCircle.getPosition() + AT);
-            } 
+            }
+            else
+            {
+                sf::Vector2f aux = sliderPointsCoords[0];
+                sliderPointsCoords[0] = initialPosition;
+                initialPosition = aux;
+
+                this->slides = this->slides - 1;
+            }
                                                                                
 		}
 	}
@@ -211,4 +215,9 @@ void moveOnBezierCurve(const PlayField &playField, const float &dt, ApproachCirc
 	{
 		return this->spawnTime;
 	}
+
+    int getSlides() const
+    {
+        return slides;
+    }
 };
