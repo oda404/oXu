@@ -37,7 +37,7 @@ public:
 				beatMap.getSliderPointsCoord()[i],
 				beatMap.getSlides()[i],
 				beatMap.getSliderLength()[i],
-				'B',
+				beatMap.getHitObjectCurveType()[i],
 				playField,
 				hitCircleTexture
 			));

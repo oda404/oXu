@@ -4,6 +4,8 @@
 #include"beatMapParser.h"
 #include"hitObjectLoader.h"
 
+#include<iostream>
+
 int main()
 {
 	sf::Vector2i screenSize = { 1920,1080 };
@@ -18,8 +20,6 @@ int main()
 	aw.createHitObjects(map, playField);
 	
 	//rect.setRotation(std::atan2(265.0f - 311.0f, 328.0f - 309.0f) * 180.0f / 3.1415f);
-
-	
 
 	sf::Clock deltaClock;
 	sf::Time deltaTime;
@@ -55,22 +55,29 @@ int main()
 
 		for(unsigned int i = 0; i < aw.sliderVector.size(); i++)
 		{
-			if (mapTime.getElapsedTime().asMilliseconds() >= aw.sliderVector[i].getSpawnTime() && !aw.sliderApproachCircles[i].getApproachState())
+			if(aw.sliderVector[i].getSliderType() == 'L')
 			{
-				window.draw(aw.sliderVector[i].getHitCircle());
-				window.draw(aw.sliderApproachCircles[i].getApproachCircle());
-				aw.sliderApproachCircles[i].approachTheCircle(deltaTime.asSeconds(), aw.sliderVector[i].getHitCircleScale());
-			}
-			else if(aw.sliderApproachCircles[i].getApproachState())
-			{
-				window.draw(aw.sliderVector[i].getHitCircle());
-				aw.sliderVector[i].moveOnStraightPath(deltaTime.asSeconds(),0.300f ,playField,aw.sliderApproachCircles[i]);
-
-				if(aw.sliderVector[i].getSlides() == 0)
+				if (mapTime.getElapsedTime().asMilliseconds() >= aw.sliderVector[i].getSpawnTime() && !aw.sliderApproachCircles[i].getApproachState())
 				{
-					aw.sliderVector.erase(aw.sliderVector.begin() + i);
-					aw.sliderApproachCircles.erase(aw.sliderApproachCircles.begin() + i);
+					window.draw(aw.sliderVector[i].getHitCircle());
+					window.draw(aw.sliderApproachCircles[i].getApproachCircle());
+					aw.sliderApproachCircles[i].approachTheCircle(deltaTime.asSeconds(), aw.sliderVector[i].getHitCircleScale());
 				}
+				else if(aw.sliderApproachCircles[i].getApproachState())
+				{
+					window.draw(aw.sliderVector[i].getHitCircle());
+					aw.sliderVector[i].moveOnStraightPath(deltaTime.asSeconds(),0.300f ,playField,aw.sliderApproachCircles[i]);
+
+					if(aw.sliderVector[i].getSlides() == 0)
+					{
+						aw.sliderVector.erase(aw.sliderVector.begin() + i);
+						aw.sliderApproachCircles.erase(aw.sliderApproachCircles.begin() + i);
+					}
+				}
+			}
+			else if (aw.sliderVector[i].getSliderType() == 'B')
+			{
+
 			}
 			
 		}

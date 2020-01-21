@@ -277,4 +277,9 @@ public:
     {
         return slides;
     }
+
+    char getSliderType() const
+    {
+        return sliderType;
+    }
 };

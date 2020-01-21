@@ -3,6 +3,7 @@
 #include<string>
 #include<sstream>
 #include<array>
+#include<iostream>
 
 class BeatMapParser
 {
@@ -61,7 +62,7 @@ public:
 						}
 						else if(curveTypeCheck)
 						{
-							curveType.push_back('N');
+							//curveType.push_back('N');
 							curveTypeCheck = false;
 						}
 						else if(curvePointsGo)
