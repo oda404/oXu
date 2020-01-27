@@ -1,48 +1,51 @@
 #pragma once
 #include<math.h>
 
-class HitCircle
+namespace oxu
 {
-private:
-	sf::Sprite hitCircle;
-	long spawnTime;
-
-public:
-	HitCircle(const sf::Vector2f &position, const long &spawnTime, const float &CS, const PlayField &playField, sf::Texture &hitCircleTexture)
+	class HitCircle
 	{
-		this->hitCircle.setTexture(hitCircleTexture);
+	private:
+		sf::Sprite hitCircle;
+		long spawnTime;
 
-		//Set the origin to center of the circle, and recenter ==============
-		this->hitCircle.setOrigin((sf::Vector2f)hitCircleTexture.getSize() / 2.0f);
-		this->hitCircle.move((sf::Vector2f)hitCircleTexture.getSize() / 2.0f - this->hitCircle.getOrigin());
-		//===================================================================
-		this->spawnTime = spawnTime;
+	public:
+		HitCircle(const sf::Vector2f &position, const long &spawnTime, const float &CS, const PlayField &playField,const sf::Texture &hitCircleTexture)
+		{
+			this->hitCircle.setTexture(hitCircleTexture);
 
-		this->hitCircle.setPosition(playField.getPlayFieldStartPoint().x + position.x*playField.getOsuPx(), playField.getPlayFieldStartPoint().y + position.y*playField.getOsuPx());
+			//Set the origin to center of the circle, and recenter ==============
+			this->hitCircle.setOrigin((sf::Vector2f)hitCircleTexture.getSize() / 2.0f);
+			this->hitCircle.move((sf::Vector2f)hitCircleTexture.getSize() / 2.0f - this->hitCircle.getOrigin());
+			//===================================================================
+			this->spawnTime = spawnTime;
 
-		//alternative (109-9*CS) * osuPX / hitCircleTexture.getSize().x
-		this->hitCircle.setScale(((23.05f - (CS - 7.0f) * 4.4825f) * 2.0f * playField.getOsuPx()) / hitCircleTexture.getSize().x, ((23.05f - (CS - 7.0f) * 4.4825f) * 2.0f * playField.getOsuPx()) / hitCircleTexture.getSize().y);
+			this->hitCircle.setPosition(playField.getPlayFieldStartPoint().x + position.x*playField.getOsuPx(), playField.getPlayFieldStartPoint().y + position.y*playField.getOsuPx());
 
-	}
-	//Getters===============================================================
-	sf::Vector2f getHitCircleScale() const
-	{
-		return this->hitCircle.getScale();
-	}
+			//alternative (109-9*CS) * osuPX / hitCircleTexture.getSize().x
+			this->hitCircle.setScale(((23.05f - (CS - 7.0f) * 4.4825f) * 2.0f * playField.getOsuPx()) / hitCircleTexture.getSize().x, ((23.05f - (CS - 7.0f) * 4.4825f) * 2.0f * playField.getOsuPx()) / hitCircleTexture.getSize().y);
 
-	sf::Sprite getHitCircle() const
-	{
-		return this->hitCircle;
-	}
+		}
+		//Getters===============================================================
+		sf::Vector2f getHitCircleScale() const
+		{
+			return this->hitCircle.getScale();
+		}
 
-	sf::Vector2f getPos() const
-	{
-		return this->hitCircle.getPosition();
-	}
+		sf::Sprite getHitCircle() const
+		{
+			return this->hitCircle;
+		}
 
-	long getSpawnTime() const
-	{
-		return this->spawnTime;
-	}
-	//======================================================================
-};
+		sf::Vector2f getPos() const
+		{
+			return this->hitCircle.getPosition();
+		}
+
+		long getSpawnTime() const
+		{
+			return this->spawnTime;
+		}
+		//======================================================================
+	};
+}
