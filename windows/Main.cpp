@@ -1,0 +1,63 @@
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+#include"3rdParty/bass.h"
+
+#include"oxuGameComponents/playField.h"
+#include"oxuGameHandlers/beatMapParser.h"
+#include"oxuGameHandlers/hitObjectLoader.h"
+#include"oxuGameHandlers/graphicsHandler.hpp"
+
+int main()
+{
+	sf::Vector2i screenSize = { 1920,1080 };
+	sf::RenderWindow window(sf::VideoMode(screenSize.x, screenSize.y), "oXu");
+	window.setFramerateLimit(120);
+
+	oxu::PlayField playField(screenSize);
+
+	oxu::GraphicsHandler graph;
+	graph.setCursor(window);
+
+	oxu::BeatMapParser map;
+
+	oxu::HitObjectLoader aw;
+	aw.createHitObjects(map, playField);
+	
+	BASS_Init(-1, 44100, 0, 0, NULL);
+	BASS_SetVolume(0.1f);
+
+	HSTREAM streamHandle = BASS_StreamCreateFile(FALSE, "yomi.mp3", 0, 0, 0);
+	
+	BASS_ChannelPlay(streamHandle, FALSE);
+
+
+	//rect.setRotation(std::atan2(265.0f - 311.0f, 328.0f - 309.0f) * 180.0f / 3.1415f);
+
+	sf::Clock deltaClock;
+	sf::Time deltaTime;
+
+	while (window.isOpen())
+	{
+		deltaTime = deltaClock.restart();
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window.close();
+		}
+		
+		window.clear();
+	#ifdef __linux__
+		graph.drawCursor(window);
+	#endif
+		//graph.drawHitCircles(aw, m.getPlayingOffset().asMilliseconds(), deltaTime.asSeconds(), window);
+		//graph.drawSliders(aw, m.getPlayingOffset().asMilliseconds(), deltaTime.asSeconds(), playField, window);
+
+		window.display();
+
+	}
+
+	BASS_Free();
+
+	return 0;
+}
