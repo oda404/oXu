@@ -18,8 +18,10 @@ namespace oxu
     public:
         void drawHitCircles(HitObjectLoader &hitObjects, const sf::Int32 &mapElapsedTime, const float &dt, sf::RenderWindow &window)
         {
-            if(mapElapsedTime >= hitObjects.hitCircleVector[hitCircleIt].getSpawnTime())
-                hitCircleIt++;
+			if (mapElapsedTime >= hitObjects.hitCircleVector[hitCircleIt].getSpawnTime())
+			{
+				hitCircleIt++;
+			}
 
             for(unsigned int i = hitCircleCap; i < hitCircleIt; i++)
             {

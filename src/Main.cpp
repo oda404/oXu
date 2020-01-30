@@ -1,11 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include"3rdParty/bass.h"
 
 #include"oxuGameComponents/playField.h"
 #include"oxuGameHandlers/beatMapParser.h"
 #include"oxuGameHandlers/hitObjectLoader.h"
 #include"oxuGameHandlers/graphicsHandler.hpp"
+#include"oxuGameHandlers/soundHandler.h"
 
 int main()
 {
@@ -22,18 +22,17 @@ int main()
 
 	oxu::HitObjectLoader aw;
 	aw.createHitObjects(map, playField);
-	
-	BASS_Init(-1, 44100, 0, 0, NULL);
-	BASS_SetVolume(0.1f);
 
-	HSTREAM streamHandle = BASS_StreamCreateFile(FALSE, "yomi.mp3", 0, 0, 0);
-	
-	BASS_ChannelPlay(streamHandle, FALSE);
+	oxu::SoundHandler soundHandler;
+	soundHandler.loadAudioFile("yomi.mp3");
+	soundHandler.setAudioVolume(0.01f);
+	soundHandler.playAudio();
 
 	//rect.setRotation(std::atan2(265.0f - 311.0f, 328.0f - 309.0f) * 180.0f / 3.1415f);
 
 	sf::Clock deltaClock;
 	sf::Time deltaTime;
+
 
 	while (window.isOpen())
 	{
@@ -44,19 +43,20 @@ int main()
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
-		
+
 		window.clear();
 	#ifdef __linux__
 		graph.drawCursor(window);
 	#endif
-		//graph.drawHitCircles(aw, m.getPlayingOffset().asMilliseconds(), deltaTime.asSeconds(), window);
-		//graph.drawSliders(aw, m.getPlayingOffset().asMilliseconds(), deltaTime.asSeconds(), playField, window);
+	
+		//graph.drawHitCircles(aw, mapTime.getElapsedTime().asMilliseconds(), deltaTime.asSeconds(), window);
+		//graph.drawSliders(aw, mapTime.getElapsedTime().asMilliseconds(), deltaTime.asSeconds(), playField, window);
 
 		window.display();
 
 	}
 
-	BASS_Free();
+	soundHandler.freeAudio();
 
 	return 0;
 }

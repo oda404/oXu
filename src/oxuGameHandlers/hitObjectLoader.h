@@ -25,7 +25,7 @@ namespace oxu
 		{
 			for (unsigned int i = 0; i < beatMap.getHitObjectPositions().size(); i++)
 			{
-				hitCircleVector.push_back(HitCircle(beatMap.getHitObjectPositions()[i], beatMap.gethitObjectSpawnTimes()[i], 2.5f, playField, hitCircleTexture));
+				hitCircleVector.push_back(HitCircle(beatMap.getHitObjectPositions()[i], beatMap.gethitObjectSpawnTimes()[i], 4.2f, playField, hitCircleTexture));
 				approachCircleVector.push_back(ApproachCircle(0.450f, hitCircleVector[i].getPos(), hitCircleVector[i].getHitCircleScale() * 1.5f * playField.getOsuPx(), approachCircleTexture));
 			}
 
@@ -34,7 +34,7 @@ namespace oxu
 				sliderVector.push_back(Slider(
 					beatMap.getSlidersPositions()[i],
 					beatMap.getSlidersSpawnTimes()[i],
-					2.5f,
+					4.2f,
 					beatMap.getSliderPointsCoord()[i],
 					beatMap.getSlides()[i],
 					beatMap.getSliderLength()[i],
