@@ -2,6 +2,7 @@
 #include"../oxuGameComponents/hitCircle.h"
 #include"../oxuGameComponents/approachCircle.h"
 #include"../oxuGameComponents/slider.h"
+#include"beatMapParser.h"
 
 namespace oxu
 {
@@ -45,6 +46,7 @@ namespace oxu
 
 				sliderApproachCircles.push_back(ApproachCircle(0.450f, sliderVector[i].getPos(), sliderVector[i].getHitCircleScale() * 1.5f * playField.getOsuPx(), approachCircleTexture));
 			}
+			beatMap.del();
 		}
 
 	private:

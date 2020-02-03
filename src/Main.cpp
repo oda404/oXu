@@ -15,9 +15,6 @@ int main()
 
 	oxu::PlayField playField(screenSize);
 
-	oxu::GraphicsHandler graph;
-	graph.setCursor(window);
-
 	oxu::BeatMapParser map;
 
 	oxu::HitObjectLoader aw;
@@ -25,13 +22,18 @@ int main()
 
 	oxu::SoundHandler soundHandler;
 	soundHandler.loadAudioFile("yomi.mp3");
-	soundHandler.setAudioVolume(0.01f);
+	soundHandler.setAudioVolume(0.3f);
 	soundHandler.playAudio();
+
+	oxu::GraphicsHandler graph(&aw, &soundHandler, &playField);
+	graph.setCursor(window);
 
 	//rect.setRotation(std::atan2(265.0f - 311.0f, 328.0f - 309.0f) * 180.0f / 3.1415f);
 
 	sf::Clock deltaClock;
 	sf::Time deltaTime;
+
+	oxu::SceneManager sc(&graph);
 
 
 	while (window.isOpen())
@@ -48,9 +50,8 @@ int main()
 	#ifdef __linux__
 		graph.drawCursor(window);
 	#endif
-	
-		//graph.drawHitCircles(aw, mapTime.getElapsedTime().asMilliseconds(), deltaTime.asSeconds(), window);
-		//graph.drawSliders(aw, mapTime.getElapsedTime().asMilliseconds(), deltaTime.asSeconds(), playField, window);
+
+		sc.handleCurrentScene(window,deltaTime.asSeconds());
 
 		window.display();
 

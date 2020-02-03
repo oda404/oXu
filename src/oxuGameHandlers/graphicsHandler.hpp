@@ -1,9 +1,12 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include<vector>
+#include<functional>
 
 #include "hitObjectLoader.h"
 #include "../oxuGameComponents/playField.h"
 #include "../3rdParty/StandardCursor.hpp"
+#include"soundHandler.h"
 
 namespace oxu
 {
@@ -15,57 +18,75 @@ namespace oxu
         uint16_t hitCircleIt = 0;
         unsigned int hitCircleCap = 0;
 
+        HitObjectLoader *hitObjects;
+        SoundHandler *mapSound;
+        PlayField *playField;
+
+        std::vector<std::function<void (sf::RenderWindow &window, const float &dt)>> Handlers;
+
+
     public:
-        void drawHitCircles(HitObjectLoader &hitObjects, const sf::Int32 &mapElapsedTime, const float &dt, sf::RenderWindow &window)
+        GraphicsHandler(HitObjectLoader *hitObjPtr, SoundHandler *soundPtr, PlayField *playFieldPtr):
+        playField(playFieldPtr), mapSound(soundPtr), hitObjects(hitObjPtr)
         {
-			if (mapElapsedTime >= hitObjects.hitCircleVector[hitCircleIt].getSpawnTime())
+            Handlers.push_back([this](sf::RenderWindow &window, const float &dt) -> void { return this->drawHitCircles(window, dt); });
+        }
+
+        void handleGraphics(sf::RenderWindow &window, const float &dt, const std::uint8_t & sceneID)
+        {
+            Handlers[sceneID](window,dt);
+        }
+
+        void drawHitCircles(sf::RenderWindow &window, const float &dt)
+        {
+			if (mapSound->getAudioPlayingOffset() >= hitObjects->hitCircleVector[hitCircleIt].getSpawnTime())
 			{
 				hitCircleIt++;
 			}
 
             for(unsigned int i = hitCircleCap; i < hitCircleIt; i++)
             {
-                if(!hitObjects.approachCircleVector[i].getApproachState())
+                if(!hitObjects->approachCircleVector[i].getApproachState())
                 {
-                    window.draw(hitObjects.approachCircleVector[i].getApproachCircle());
-                    window.draw(hitObjects.hitCircleVector[i].getHitCircle());
-                    hitObjects.approachCircleVector[i].approachTheCircle(dt, hitObjects.hitCircleVector[i].getHitCircleScale());
+                    window.draw(hitObjects->approachCircleVector[i].getApproachCircle());
+                    window.draw(hitObjects->hitCircleVector[i].getHitCircle());
+                    hitObjects->approachCircleVector[i].approachTheCircle(dt, hitObjects->hitCircleVector[i].getHitCircleScale());
                 }
                 else
                     hitCircleCap++;
             }
         }
 
-        void drawSliders(HitObjectLoader &hitObjects, const sf::Int32 &mapElapsedTime, const float &dt, PlayField &playField, sf::RenderWindow &window)
+        void drawSliders(const float &dt,sf::RenderWindow &window)
         {
-            for (unsigned int i = 0; i < hitObjects.sliderVector.size(); i++)
+            for (unsigned int i = 0; i < hitObjects->sliderVector.size(); i++)
             {
-                if (hitObjects.sliderVector[i].getSliderType() == 'L')
+                if (hitObjects->sliderVector[i].getSliderType() == 'L')
                 {
-                    if (mapElapsedTime >= hitObjects.sliderVector[i].getSpawnTime() && !hitObjects.sliderApproachCircles[i].getApproachState())
+                    if (mapSound->getAudioPlayingOffset() >= hitObjects->sliderVector[i].getSpawnTime() && !hitObjects->sliderApproachCircles[i].getApproachState())
                     {
-                        window.draw(hitObjects.sliderVector[i].getHitCircle());
-                        window.draw(hitObjects.sliderApproachCircles[i].getApproachCircle());
-                        hitObjects.sliderApproachCircles[i].approachTheCircle(dt, hitObjects.sliderVector[i].getHitCircleScale());
+                        window.draw(hitObjects->sliderVector[i].getHitCircle());
+                        window.draw(hitObjects->sliderApproachCircles[i].getApproachCircle());
+                        hitObjects->sliderApproachCircles[i].approachTheCircle(dt, hitObjects->sliderVector[i].getHitCircleScale());
                     }
-                    else if (hitObjects.sliderApproachCircles[i].getApproachState())
+                    else if (hitObjects->sliderApproachCircles[i].getApproachState())
                     {
-                        window.draw(hitObjects.sliderVector[i].getHitCircle());
-                        hitObjects.sliderVector[i].moveOnStraightSlider(dt, 0.300f, playField, hitObjects.sliderApproachCircles[i]);
+                        window.draw(hitObjects->sliderVector[i].getHitCircle());
+                        hitObjects->sliderVector[i].moveOnStraightSlider(dt, 0.300f, *playField, hitObjects->sliderApproachCircles[i]);
                     }
                 }
-                else if (hitObjects.sliderVector[i].getSliderType() == 'B')
+                else if (hitObjects->sliderVector[i].getSliderType() == 'B')
                 {
-                    if (mapElapsedTime >= hitObjects.sliderVector[i].getSpawnTime() && !hitObjects.sliderApproachCircles[i].getApproachState())
+                    if (mapSound->getAudioPlayingOffset() >= hitObjects->sliderVector[i].getSpawnTime() && !hitObjects->sliderApproachCircles[i].getApproachState())
                     {
-                        window.draw(hitObjects.sliderVector[i].getHitCircle());
-                        window.draw(hitObjects.sliderApproachCircles[i].getApproachCircle());
-                        hitObjects.sliderApproachCircles[i].approachTheCircle(dt, hitObjects.sliderVector[i].getHitCircleScale());
+                        window.draw(hitObjects->sliderVector[i].getHitCircle());
+                        window.draw(hitObjects->sliderApproachCircles[i].getApproachCircle());
+                        hitObjects->sliderApproachCircles[i].approachTheCircle(dt, hitObjects->sliderVector[i].getHitCircleScale());
                     }
-                    else if (hitObjects.sliderApproachCircles[i].getApproachState())
+                    else if (hitObjects->sliderApproachCircles[i].getApproachState())
                     {
-                        window.draw(hitObjects.sliderVector[i].getHitCircle());
-                        hitObjects.sliderVector[i].moveOnBezierSlider(0.1f, playField,dt ,hitObjects.sliderApproachCircles[i],window);
+                        window.draw(hitObjects->sliderVector[i].getHitCircle());
+                        hitObjects->sliderVector[i].moveOnBezierSlider(0.1f, *playField,dt ,hitObjects->sliderApproachCircles[i],window);
                     }
                 }
             }          

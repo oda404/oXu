@@ -3,21 +3,24 @@
 #include<vector>
 
 #include"button.h"
+#include"../oxuGameHandlers/graphicsHandler.hpp"
 
-class SceneManager
+namespace oxu
 {
-public:
-    SceneManager()
+    class SceneManager
     {
+    private:
+        GraphicsHandler *graphicsHandler;
+        std::uint8_t currentScene;
 
-    }
-};
+    public:
+        SceneManager(GraphicsHandler *graphicsHandlerPtr):
+        graphicsHandler(graphicsHandlerPtr), currentScene(0) { }
 
-class Scene
-{
-private:
+        void handleCurrentScene(sf::RenderWindow &window, const float &dt)
+        {
+            graphicsHandler->handleGraphics(window, dt, currentScene);
+        }
 
-
-public:
-    
-};
+    };
+}

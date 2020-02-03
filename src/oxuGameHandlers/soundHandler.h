@@ -13,7 +13,7 @@ namespace oxu
 		SoundHandler()
 		{
 			BASS_Init(-1, 44100, 0, 0, NULL);
-			BASS_SetVolume(0.1f);
+			BASS_SetVolume(0.3f);
 		}
 
 		void setAudioVolume(const float &volume)
@@ -35,6 +35,11 @@ namespace oxu
 		void freeAudio()
 		{
 			BASS_Free();
+		}
+
+		sf::Int32 getAudioPlayingOffset()
+		{
+			return audioPlayingOffset.getElapsedTime().asMilliseconds();
 		}
 
 	};
