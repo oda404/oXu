@@ -42,5 +42,10 @@ namespace oxu
 			return audioPlayingOffset.getElapsedTime().asMilliseconds();
 		}
 
+		void handleSound(const std::uint8_t &sceneID)
+		{
+
+		}
+
 	};
 }

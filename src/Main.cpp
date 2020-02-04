@@ -33,7 +33,7 @@ int main()
 	sf::Clock deltaClock;
 	sf::Time deltaTime;
 
-	oxu::SceneManager sc(&graph);
+	oxu::SceneManager sc(&graph, &soundHandler);
 
 
 	while (window.isOpen())
@@ -46,7 +46,7 @@ int main()
 				window.close();
 		}
 
-		window.clear();
+		window.clear(sf::Color(50,50,50,1));
 	#ifdef __linux__
 		graph.drawCursor(window);
 	#endif

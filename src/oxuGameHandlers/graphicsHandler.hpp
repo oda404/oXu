@@ -22,19 +22,39 @@ namespace oxu
         SoundHandler *mapSound;
         PlayField *playField;
 
-        std::vector<std::function<void (sf::RenderWindow &window, const float &dt)>> Handlers;
+        std::vector<std::vector<std::function<void (sf::RenderWindow &window, const float &dt)>>> sceneGraphicsHandlers;
 
 
     public:
         GraphicsHandler(HitObjectLoader *hitObjPtr, SoundHandler *soundPtr, PlayField *playFieldPtr):
         playField(playFieldPtr), mapSound(soundPtr), hitObjects(hitObjPtr)
         {
-            Handlers.push_back([this](sf::RenderWindow &window, const float &dt) -> void { return this->drawHitCircles(window, dt); });
+            std::vector<std::function<void(sf::RenderWindow &window, const float &dt)>> aux;
+            //add main menu graphics handlers @ index 0===========================================================================
+            aux.push_back([this](sf::RenderWindow &window, const float &dt) -> void { return this->drawMainMenu(window, dt); });
+
+            sceneGraphicsHandlers.push_back(aux);
+
+            aux.clear();
+            //====================================================================================================================
+
+            //add game graphics handlers @ index 1==================================================================================
+
+            aux.push_back([this](sf::RenderWindow &window, const float &dt) -> void { return this->drawHitCircles(window, dt); });
+
+            sceneGraphicsHandlers.push_back(aux);
+
+            aux.clear();
+            //======================================================================================================================
+
         }
 
         void handleGraphics(sf::RenderWindow &window, const float &dt, const std::uint8_t & sceneID)
         {
-            Handlers[sceneID](window,dt);
+            for(auto handler: sceneGraphicsHandlers[sceneID])
+            {
+                handler(window,dt);
+            }
         }
 
         void drawHitCircles(sf::RenderWindow &window, const float &dt)
@@ -115,5 +135,32 @@ namespace oxu
             window.draw(cursorSprite);
         }
     #endif
+
+        void drawMainMenu(sf::RenderWindow &window, const float &dt)
+        {
+            static sf::Texture oLogo;
+            static sf::Texture xLogo;
+            static sf::Texture uLogo;
+            oLogo.loadFromFile("/root/Documents/osuBootleg/textures/O.png");
+            xLogo.loadFromFile("/root/Documents/osuBootleg/textures/X.png");
+            uLogo.loadFromFile("/root/Documents/osuBootleg/textures/U.png");
+
+            sf::Sprite o;
+            sf::Sprite x;
+            sf::Sprite u;
+
+            o.setTexture(oLogo);
+            x.setTexture(xLogo);
+            u.setTexture(uLogo);
+
+            o.setPosition(710,340);
+            x.setPosition(860,340);
+            u.setPosition(1010,340);
+
+            window.draw(o);
+            window.draw(x);
+            window.draw(u);
+        }
+
     };
 }
