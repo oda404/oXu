@@ -17,24 +17,18 @@ namespace oxu
     {
     private:
         sf::Vector2f buttonPos;
+        sf::Vector2f buttonSize;
         std::uint8_t buttonAction;
-        std::uint8_t buttonScene;
     public:
-        Button(const sf::Vector2f &pos, std::uint8_t action, std::uint8_t scene = 0):
-        buttonPos(pos), buttonAction(action), buttonScene(scene)
+        Button(sf::Vector2f buttonPos, sf::Vector2f buttonSize, std::uint8_t buttonAction):
+        buttonPos(buttonPos), buttonSize(buttonSize), buttonAction(buttonAction)
         {
-
+            
         }
 
-        void pressButton()
+        void drawB(sf::RenderWindow &window)
         {
-            if(buttonAction == 0 && buttonScene!= 0)
-            {
-                if(buttonScene == 2)
-                {
 
-                }
-            }
         }
 
     };

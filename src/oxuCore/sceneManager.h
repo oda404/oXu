@@ -2,9 +2,9 @@
 #include<SFML/Graphics.hpp>
 #include<vector>
 
-#include"button.h"
 #include"../oxuGameHandlers/graphicsHandler.hpp"
 #include"../oxuGameHandlers/soundHandler.h"
+#include"button.h"
 
 namespace oxu
 {
@@ -14,15 +14,31 @@ namespace oxu
         GraphicsHandler *graphicsHandler;
         SoundHandler *soundHandler;
         std::uint8_t currentScene;
+        std::vector<std::vector<Button>> buttons;
 
     public:
         SceneManager(GraphicsHandler *graphicsHandlerPtr, SoundHandler *soundHandlerPtr):
-        graphicsHandler(graphicsHandlerPtr), soundHandler(soundHandlerPtr), currentScene(0) { }
+        graphicsHandler(graphicsHandlerPtr), soundHandler(soundHandlerPtr), currentScene(0)
+        {
+            std::vector<Button> aux;
+            aux.emplace_back(sf::Vector2f({0,0}),sf::Vector2f({1920,1080}),Action::ChangeScene);
+
+            buttons.push_back(aux);
+            aux.clear();
+        }
 
         void handleCurrentScene(sf::RenderWindow &window, const float &dt)
         {
             graphicsHandler->handleGraphics(window, dt, currentScene);
             soundHandler->handleSound(currentScene);
+
+            for(auto button: buttons[0])
+            {
+                if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+                {
+                    currentScene = 1;
+                }
+            }
         }
 
     };

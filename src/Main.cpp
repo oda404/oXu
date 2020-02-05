@@ -21,9 +21,6 @@ int main()
 	aw.createHitObjects(map, playField);
 
 	oxu::SoundHandler soundHandler;
-	soundHandler.loadAudioFile("yomi.mp3");
-	soundHandler.setAudioVolume(0.3f);
-	soundHandler.playAudio();
 
 	oxu::GraphicsHandler graph(&aw, &soundHandler, &playField);
 	graph.setCursor(window);
@@ -56,8 +53,6 @@ int main()
 		window.display();
 
 	}
-
-	soundHandler.freeAudio();
 
 	return 0;
 }
