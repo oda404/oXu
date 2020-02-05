@@ -34,6 +34,7 @@ namespace oxu
 
 		void freeAudio()
 		{
+			BASS_StreamFree(streamHandle);
 			BASS_Free();
 		}
 
