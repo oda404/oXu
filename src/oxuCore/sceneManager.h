@@ -34,10 +34,7 @@ namespace oxu
 
             for(auto button: buttons[0])
             {
-                if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
-                {
-                    currentScene = 1;
-                }
+                button.handleButton(currentScene);
             }
         }
 

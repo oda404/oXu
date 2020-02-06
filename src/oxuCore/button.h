@@ -26,9 +26,12 @@ namespace oxu
             
         }
 
-        void drawB(sf::RenderWindow &window)
+        void handleButton(std::uint8_t &sceneID)
         {
-
+            if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && sceneID == 0)
+            {
+                sceneID++;
+            }
         }
 
     };

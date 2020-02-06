@@ -43,7 +43,7 @@ int main()
 				window.close();
 		}
 
-		window.clear(sf::Color(25,25,25,1));
+		window.clear(sf::Color(255,255,255,1));
 
 		sc.handleCurrentScene(window,deltaTime.asSeconds());
 
