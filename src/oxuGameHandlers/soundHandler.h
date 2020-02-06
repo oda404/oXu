@@ -2,13 +2,15 @@
 #include<SFML/Graphics.hpp>
 #include"../3rdParty/bass.h"
 
+#include<memory>
+
 namespace oxu
 {
 	class SoundHandler
 	{
 	private:
 		HSTREAM streamHandle;
-		sf::Clock audioPlayingOffset;
+		std::shared_ptr<sf::Clock> audioPlayingOffset;
 	public:
 		SoundHandler()
 		{
@@ -29,7 +31,7 @@ namespace oxu
 		void playAudio()
 		{
 			BASS_ChannelPlay(streamHandle, FALSE);
-			audioPlayingOffset.restart();
+			audioPlayingOffset = std::make_shared<sf::Clock>();
 		}
 
 		void freeAudio()
@@ -40,11 +42,13 @@ namespace oxu
 
 		sf::Int32 getAudioPlayingOffset()
 		{
-			return audioPlayingOffset.getElapsedTime().asMilliseconds();
+			return audioPlayingOffset->getElapsedTime().asMilliseconds();
 		}
 
 		void handleSound(const std::uint8_t &sceneID)
 		{
+			static bool go = true;
+
 			switch(sceneID)
 			{
 				case 0:
@@ -52,7 +56,12 @@ namespace oxu
 					break;
 
 				case 1:
-					
+					if(go)
+					{
+						loadAudioFile("yomi.mp3");
+						playAudio();
+						go= false;
+					}
 					break;
 			}
 		}

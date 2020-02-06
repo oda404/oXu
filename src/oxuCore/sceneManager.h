@@ -29,8 +29,8 @@ namespace oxu
 
         void handleCurrentScene(sf::RenderWindow &window, const float &dt)
         {
-            graphicsHandler->handleGraphics(window, dt, currentScene);
             soundHandler->handleSound(currentScene);
+            graphicsHandler->handleGraphics(window, dt, currentScene);
 
             for(auto button: buttons[0])
             {

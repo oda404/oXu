@@ -43,12 +43,13 @@ int main()
 				window.close();
 		}
 
-		window.clear(sf::Color(50,50,50,1));
-	#ifdef __linux__
-		graph.drawCursor(window);
-	#endif
+		window.clear(sf::Color(25,25,25,1));
 
 		sc.handleCurrentScene(window,deltaTime.asSeconds());
+
+		#ifdef __linux__
+		graph.drawCursor(window);
+		#endif
 
 		window.display();
 

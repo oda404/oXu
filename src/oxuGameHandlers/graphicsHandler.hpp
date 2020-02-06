@@ -160,6 +160,17 @@ namespace oxu
             window.draw(o);
             window.draw(x);
             window.draw(u);
+
+            static sf::Font f;
+            f.loadFromFile("/root/Documents/osuBootleg/textures/coolvetica.ttf");
+
+            static sf::Text text("Click anywhere to continue!",f);
+            text.setFillColor(sf::Color::Black);
+            text.setCharacterSize(35);
+            text.setPosition(725,750);
+
+            window.draw(text);
+
         }
 
     };
