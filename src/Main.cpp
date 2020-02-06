@@ -15,14 +15,9 @@ int main()
 
 	oxu::PlayField playField(screenSize);
 
-	oxu::BeatMapParser map;
-
-	oxu::HitObjectLoader aw;
-	aw.createHitObjects(map, playField);
-
 	oxu::SoundHandler soundHandler;
 
-	oxu::GraphicsHandler graph(&aw, &soundHandler, &playField);
+	oxu::GraphicsHandler graph(nullptr, &soundHandler, &playField);
 	graph.setCursor(window);
 
 	//rect.setRotation(std::atan2(265.0f - 311.0f, 328.0f - 309.0f) * 180.0f / 3.1415f);
@@ -30,7 +25,7 @@ int main()
 	sf::Clock deltaClock;
 	sf::Time deltaTime;
 
-	oxu::SceneManager sc(&graph, &soundHandler);
+	oxu::SceneManager sc(&graph, &soundHandler, &playField);
 
 
 	while (window.isOpen())
@@ -43,7 +38,7 @@ int main()
 				window.close();
 		}
 
-		window.clear(sf::Color(255,255,255,1));
+		window.clear(sf::Color(100,100,100,1));
 
 		sc.handleCurrentScene(window,deltaTime.asSeconds());
 
