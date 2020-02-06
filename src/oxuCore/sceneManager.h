@@ -33,20 +33,27 @@ namespace oxu
 
         void handleCurrentScene(sf::RenderWindow &window, const float &dt)
         {
+            static bool go = true;
             soundHandler->handleSound(currentScene);
             graphicsHandler->handleGraphics(window, dt, currentScene);
 
             for(auto button: buttons[0])
             {
                 button.handleButton(currentScene);
+                if(currentScene == 1 && go)
+                {
+                    loadBeatMap();
+                    go = false;
+                }
             }
         }
 
         void loadBeatMap()
         {
             BeatMapParser parser;
-            HitObjectLoader loader;
+            static HitObjectLoader loader;
             loader.createHitObjects(parser, *playField);
+            graphicsHandler->loadHitObjects(loader);
         }
 
     };

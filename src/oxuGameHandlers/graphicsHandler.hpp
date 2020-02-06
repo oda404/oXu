@@ -49,6 +49,11 @@ namespace oxu
 
         }
 
+        void loadHitObjects(HitObjectLoader hitObjectsObj)
+        {
+            hitObjects = new HitObjectLoader(hitObjectsObj);
+        }
+
         void handleGraphics(sf::RenderWindow &window, const float &dt, const std::uint8_t & sceneID)
         {
             for(auto handler: sceneGraphicsHandlers[sceneID])

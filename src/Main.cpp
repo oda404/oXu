@@ -1,8 +1,6 @@
 #include <SFML/Graphics.hpp>
 
 #include"oxuGameComponents/playField.h"
-#include"oxuGameHandlers/beatMapParser.h"
-#include"oxuGameHandlers/hitObjectLoader.h"
 #include"oxuGameHandlers/graphicsHandler.hpp"
 #include"oxuGameHandlers/soundHandler.h"
 #include"oxuCore/sceneManager.h"
