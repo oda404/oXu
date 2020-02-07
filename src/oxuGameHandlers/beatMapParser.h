@@ -60,7 +60,7 @@ namespace oxu
 						{
 							if ((line[i] == 'P' || line[i] == 'B' || line[i] == 'L') && curveTypeCheck)
 							{
-								curveType->push_back(line[i]);
+								curveType.push_back(line[i]);
 								curvePointsGo = true;
 								curveTypeCheck = false;
 								isSlider = true;
@@ -121,7 +121,7 @@ namespace oxu
 									positions.push_back({ iCX, iCY });
 									if (line[i + 1] == ',')
 									{
-										curvePointsCoords->push_back(positions);
+										curvePointsCoords.push_back(positions);
 										positions.clear();
 									}
 								}
@@ -154,8 +154,8 @@ namespace oxu
 						i1 >> iX;
 						i2 >> iY;
 
-						hitCirclesPositions->push_back({ (float)iX , (float)iY });
-						hitCirclesSpawnTimes->push_back(iTime);
+						hitCirclesPositions.push_back({ (float)iX , (float)iY });
+						hitCirclesSpawnTimes.push_back(iTime);
 					}
 					else
 					{
@@ -173,10 +173,10 @@ namespace oxu
 						isSlides >> iSlides;
 						isLength >> iLength;
 
-						slidersPositions->push_back({ (float)iX , (float)iY });
-						slidersSpawnTimes->push_back(iTime);
-						nOfSlides->push_back(iSlides);
-						sliderLengths->push_back(iLength);
+						slidersPositions.push_back({ (float)iX , (float)iY });
+						slidersSpawnTimes.push_back(iTime);
+						nOfSlides.push_back(iSlides);
+						sliderLengths.push_back(iLength);
 					}
 				}
 			}
@@ -186,71 +186,59 @@ namespace oxu
 		//Getters=======================================================
 		std::vector<sf::Vector2f> getHitObjectPositions() const
 		{
-			return (*this->hitCirclesPositions);
+			return hitCirclesPositions;
 		}
 
 		std::vector<int> gethitObjectSpawnTimes() const
 		{
-			return (*this->hitCirclesSpawnTimes);
+			return hitCirclesSpawnTimes;
 		}
 
 
 		std::vector<int> getSlidersSpawnTimes()
 		{
-			return (*slidersSpawnTimes);
+			return slidersSpawnTimes;
 		}
 
 		std::vector<sf::Vector2f> getSlidersPositions()
 		{
-			return *slidersPositions;
+			return slidersPositions;
 		}
 
 		std::vector<char> getHitObjectCurveType() const
 		{
-			return *curveType;
+			return curveType;
 		}
 
 		std::vector<std::vector<sf::Vector2f>> getSliderPointsCoord() const
 		{
-			return *curvePointsCoords;
+			return curvePointsCoords;
 		}
 
 		std::vector<int> getSlides() const
 		{
-			return *nOfSlides;
+			return nOfSlides;
 		}
 
 		std::vector<int> getSliderLength() const
 		{
-			return *sliderLengths;
-		}
-
-		void del()
-		{
-			delete hitCirclesPositions;
-			delete hitCirclesSpawnTimes;
-			delete curvePointsCoords;
-			delete slidersPositions;
-			delete curveType;
-			delete nOfSlides;
-			delete slidersSpawnTimes;
-			delete sliderLengths;
+			return sliderLengths;
 		}
 
 		//=============================================================
 
 	private:
 		//info about the map's hit circles===================================
-		std::vector<sf::Vector2f> *hitCirclesPositions = new std::vector<sf::Vector2f>();
-		std::vector<int> *hitCirclesSpawnTimes = new std::vector<int>();
+		std::vector<sf::Vector2f> hitCirclesPositions;
+		std::vector<int> hitCirclesSpawnTimes;
 		//===================================================================
 		//info about the map's sliders========================================
-		std::vector<std::vector<sf::Vector2f>> *curvePointsCoords = new std::vector<std::vector<sf::Vector2f>>();
-		std::vector<sf::Vector2f> *slidersPositions = new std::vector<sf::Vector2f>();
-		std::vector<char> *curveType = new std::vector<char>();
-		std::vector<int> *slidersSpawnTimes = new std::vector<int>();
-		std::vector<int> *nOfSlides = new std::vector<int>();
-		std::vector<int> *sliderLengths = new std::vector<int>();
+		std::vector<std::vector<sf::Vector2f>> curvePointsCoords;
+		std::vector<sf::Vector2f> slidersPositions;
+		std::vector<char> curveType;
+		std::vector<int> slidersSpawnTimes; 
+		std::vector<int> nOfSlides;
+		std::vector<int> sliderLengths;
 		//===================================================================
 	};
 }

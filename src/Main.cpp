@@ -40,9 +40,9 @@ int main()
 
 		sc.handleCurrentScene(window,deltaTime.asSeconds());
 
-		#ifdef __linux__
+	#ifdef __linux__
 		graph.drawCursor(window);
-		#endif
+	#endif
 
 		window.display();
 

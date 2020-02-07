@@ -1,9 +1,21 @@
 #pragma once
+#include<SFML/Graphics.hpp>
+
+#include"hitObjectLoader.h"
 
 namespace oxu
 {
-    void ass()
+    class InputHandler
     {
+    public:
+        InputHandler()
+        {
 
-    }
+        }
+
+        void handleInput()
+        {
+            
+        }
+    };
 }

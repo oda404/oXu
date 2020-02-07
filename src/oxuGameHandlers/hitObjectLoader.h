@@ -46,7 +46,6 @@ namespace oxu
 
 				sliderApproachCircles.push_back(ApproachCircle(0.450f, sliderVector[i].getPos(), sliderVector[i].getHitCircleScale() * 1.5f * playField.getOsuPx(), approachCircleTexture));
 			}
-			beatMap.del();
 		}
 
 	private:

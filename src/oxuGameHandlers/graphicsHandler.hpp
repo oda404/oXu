@@ -52,6 +52,7 @@ namespace oxu
         void loadHitObjects(HitObjectLoader hitObjectsObj)
         {
             hitObjects = new HitObjectLoader(hitObjectsObj);
+            //delete heap allocation
         }
 
         void handleGraphics(sf::RenderWindow &window, const float &dt, const std::uint8_t & sceneID)
@@ -170,11 +171,16 @@ namespace oxu
             f.loadFromFile("/root/Documents/osuBootleg/textures/coolvetica.ttf");
 
             static sf::Text text("Click anywhere to continue!",f);
-            text.setFillColor(sf::Color::Black);
+            text.setFillColor(sf::Color(0,0,0, 122));
             text.setCharacterSize(35);
             text.setPosition(725,750);
 
             window.draw(text);
+
+        }
+
+        void drawSongSelectMenu()
+        {
 
         }
 
