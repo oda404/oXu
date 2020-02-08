@@ -1,8 +1,6 @@
 #include <SFML/Graphics.hpp>
 
 #include"oxuGameComponents/playField.h"
-#include"oxuGameHandlers/graphicsHandler.hpp"
-#include"oxuGameHandlers/soundHandler.h"
 #include"oxuCore/sceneManager.h"
 
 int main()
@@ -13,18 +11,12 @@ int main()
 
 	oxu::PlayField playField(screenSize);
 
-	oxu::SoundHandler soundHandler;
-
-	oxu::GraphicsHandler graph(nullptr, &soundHandler, &playField);
-	graph.setCursor(window);
-
 	//rect.setRotation(std::atan2(265.0f - 311.0f, 328.0f - 309.0f) * 180.0f / 3.1415f);
 
 	sf::Clock deltaClock;
 	sf::Time deltaTime;
 
-	oxu::SceneManager sc(&graph, &soundHandler, &playField);
-
+	oxu::SceneManager sc(&playField);
 
 	while (window.isOpen())
 	{
@@ -36,16 +28,11 @@ int main()
 				window.close();
 		}
 
-		window.clear(sf::Color(100,100,100,1));
+		window.clear(sf::Color(100,100,100,255));
 
-		sc.handleCurrentScene(window,deltaTime.asSeconds());
-
-	#ifdef __linux__
-		graph.drawCursor(window);
-	#endif
+		sc.handleCurrentScene(window, deltaTime.asSeconds());
 
 		window.display();
-
 	}
 
 	return 0;

@@ -15,7 +15,7 @@ namespace oxu
 		SoundHandler()
 		{
 			BASS_Init(-1, 44100, 0, 0, NULL);
-			BASS_SetVolume(0.0f);
+			BASS_SetVolume(0.2f);
 		}
 
 		void setAudioVolume(const float &volume)

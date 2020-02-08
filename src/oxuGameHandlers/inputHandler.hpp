@@ -2,20 +2,25 @@
 #include<SFML/Graphics.hpp>
 
 #include"hitObjectLoader.h"
+#include"../oxuCore/button.h"
 
 namespace oxu
 {
     class InputHandler
     {
     public:
-        InputHandler()
-        {
+        InputHandler(const InputHandler&) = delete;
 
-        }
+        static InputHandler& Get() { return s_InputHandler; }
 
-        void handleInput()
+        void handleInput(std::vector<Button> *buttons = nullptr, HitObjectLoader *hitObjects = nullptr)
         {
             
         }
+
+    private:
+        InputHandler() { }
+
+        static InputHandler s_InputHandler;
     };
 }

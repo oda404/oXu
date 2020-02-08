@@ -19,15 +19,14 @@ namespace oxu
         unsigned int hitCircleCap = 0;
 
         HitObjectLoader *hitObjects;
-        SoundHandler *mapSound;
+        SoundHandler *mapSound; 
         PlayField *playField;
 
         std::vector<std::vector<std::function<void (sf::RenderWindow &window, const float &dt)>>> sceneGraphicsHandlers;
 
 
     public:
-        GraphicsHandler(HitObjectLoader *hitObjPtr, SoundHandler *soundPtr, PlayField *playFieldPtr):
-        playField(playFieldPtr), mapSound(soundPtr), hitObjects(hitObjPtr)
+        GraphicsHandler()
         {
             std::vector<std::function<void(sf::RenderWindow &window, const float &dt)>> aux;
             //add main menu graphics handlers @ index 0===========================================================================
@@ -49,9 +48,11 @@ namespace oxu
 
         }
 
-        void loadHitObjects(HitObjectLoader hitObjectsObj)
+        void loadInfo(HitObjectLoader *hitObjectsObj, SoundHandler *soundPtr, PlayField *playFieldPtr)
         {
-            hitObjects = new HitObjectLoader(hitObjectsObj);
+            hitObjects = hitObjectsObj;
+            mapSound = soundPtr;
+            playField = playFieldPtr;
             //delete heap allocation
         }
 
@@ -70,7 +71,7 @@ namespace oxu
 				hitCircleIt++;
 			}
 
-            for(unsigned int i = hitCircleCap; i < hitCircleIt; i++)
+            for(unsigned int i = hitCircleIt; i > hitCircleCap; i--)
             {
                 if(!hitObjects->approachCircleVector[i].getApproachState())
                 {
