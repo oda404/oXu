@@ -148,9 +148,15 @@ namespace oxu
             static sf::Texture oLogo;
             static sf::Texture xLogo;
             static sf::Texture uLogo;
+#ifdef __linux__
             oLogo.loadFromFile("/root/Documents/osuBootleg/textures/O.png");
             xLogo.loadFromFile("/root/Documents/osuBootleg/textures/X.png");
             uLogo.loadFromFile("/root/Documents/osuBootleg/textures/U.png");
+#else
+			oLogo.loadFromFile("E:/visualproj/SFMLosuBootleg/textures/O.png");
+			xLogo.loadFromFile("E:/visualproj/SFMLosuBootleg/textures/X.png");
+			uLogo.loadFromFile("E:/visualproj/SFMLosuBootleg/textures/U.png");
+#endif
 
             sf::Sprite o;
             sf::Sprite x;
@@ -169,7 +175,11 @@ namespace oxu
             window.draw(u);
 
             static sf::Font f;
+#ifdef __linux__
             f.loadFromFile("/root/Documents/osuBootleg/textures/coolvetica.ttf");
+#else
+			f.loadFromFile("E:/visualproj/SFMLosuBootleg/textures/coolvetica.ttf");
+#endif
 
             static sf::Text text("Click anywhere to continue!",f);
             text.setFillColor(sf::Color(0,0,0, 122));
