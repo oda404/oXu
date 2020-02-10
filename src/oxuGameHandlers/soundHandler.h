@@ -4,6 +4,8 @@
 
 #include<memory>
 
+#include<iostream>
+
 namespace oxu
 {
 	class SoundHandler
@@ -11,10 +13,12 @@ namespace oxu
 	private:
 		HSTREAM streamHandle;
 		std::shared_ptr<sf::Clock> audioPlayingOffset;
+		float initialVolume;
 	public:
 		SoundHandler()
 		{
 			BASS_Init(-1, 44100, 0, 0, NULL);
+			initialVolume = BASS_GetVolume();
 			BASS_SetVolume(0.2f);
 		}
 

@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include<SFML/Audio.hpp>
 #include<vector>
 #include<functional>
 
@@ -24,10 +25,18 @@ namespace oxu
 
         std::vector<std::vector<std::function<void (sf::RenderWindow &window, const float &dt)>>> sceneGraphicsHandlers;
 
+        sf::SoundBuffer buffer;
+        sf::Sound sound;
 
     public:
         GraphicsHandler()
         {
+            //
+            buffer.loadFromFile("/root/Documents/osuBootleg/src/soft-hitnormal.wav");
+            sound.setBuffer(buffer);
+            sound.setVolume(50);
+            //
+
             std::vector<std::function<void(sf::RenderWindow &window, const float &dt)>> aux;
             //add main menu graphics handlers @ index 0===========================================================================
             aux.push_back([this](sf::RenderWindow &window, const float &dt) -> void { return this->drawMainMenu(window, dt); });
@@ -53,7 +62,6 @@ namespace oxu
             hitObjects = hitObjectsObj;
             mapSound = soundPtr;
             playField = playFieldPtr;
-            //delete heap allocation
         }
 
         void handleGraphics(sf::RenderWindow &window, const float &dt, const std::uint8_t & sceneID)
@@ -66,7 +74,8 @@ namespace oxu
 
         void drawHitCircles(sf::RenderWindow &window, const float &dt)
         {
-			if (mapSound->getAudioPlayingOffset() >= hitObjects->hitCircleVector[hitCircleIt].getSpawnTime())
+
+			if (mapSound->getAudioPlayingOffset() >= hitObjects->hitCircleVector[hitCircleIt].getSpawnTime() - 450)
 			{
 				hitCircleIt++;
 			}
@@ -74,17 +83,31 @@ namespace oxu
             for(unsigned int i = hitCircleIt; i > hitCircleCap; i--)
             {
                 if(!hitObjects->approachCircleVector[i].getApproachState())
-                {
-                    window.draw(hitObjects->approachCircleVector[i].getApproachCircle());
-                    window.draw(hitObjects->hitCircleVector[i].getHitCircle());
+                {   
+                    hitObjects->hitCircleVector[i].fadeCircleIn(dt);
+                    hitObjects->approachCircleVector[i].fadeCircleIn(dt);                  
                     hitObjects->approachCircleVector[i].approachTheCircle(dt, hitObjects->hitCircleVector[i].getHitCircleScale());
+                    window.draw(hitObjects->approachCircleVector[i].getApproachCircle());
+                    window.draw(hitObjects->hitCircleVector[i].getHitCircle());    
                 }
                 else
-                    hitCircleCap++;
+                {
+                    if(hitObjects->hitCircleVector[i].getA())
+                        sound.play();
+
+                    if(!hitObjects->hitCircleVector[i].fadeCircleOut(dt))
+                    {
+                        hitObjects->approachCircleVector[i].fadeCircleOut(dt);
+                        window.draw(hitObjects->approachCircleVector[i].getApproachCircle());
+                        window.draw(hitObjects->hitCircleVector[i].getHitCircle());
+                    }
+                    else
+                        hitCircleCap++;
+                }
             }
         }
 
-        void drawSliders(const float &dt,sf::RenderWindow &window)
+        void drawSliders(sf::RenderWindow &window, const float &dt)
         {
             for (unsigned int i = 0; i < hitObjects->sliderVector.size(); i++)
             {
@@ -102,7 +125,7 @@ namespace oxu
                         hitObjects->sliderVector[i].moveOnStraightSlider(dt, 0.300f, *playField, hitObjects->sliderApproachCircles[i]);
                     }
                 }
-                else if (hitObjects->sliderVector[i].getSliderType() == 'B')
+                else if (hitObjects->sliderVector[i].getSliderType() == 'C')
                 {
                     if (mapSound->getAudioPlayingOffset() >= hitObjects->sliderVector[i].getSpawnTime() && !hitObjects->sliderApproachCircles[i].getApproachState())
                     {

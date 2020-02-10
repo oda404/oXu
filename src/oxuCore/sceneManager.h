@@ -38,6 +38,12 @@ namespace oxu
         void handleCurrentScene(sf::RenderWindow &window, const float &dt)
         {
             static bool go = true;
+
+            if(currentScene == 1)
+                window.clear();
+            else
+                 window.clear(sf::Color(100,100,100,255));
+                 
             soundHandler.handleSound(currentScene);
             graphicsHandler.handleGraphics(window, dt, currentScene);
             //InputHandler::Get().handleInput(&buttons[currentScene], );
@@ -51,6 +57,8 @@ namespace oxu
                     go = false;
                 }
             }
+
+            window.display();
         }
 
         void loadBeatMap()

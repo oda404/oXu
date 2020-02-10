@@ -10,10 +10,13 @@ namespace oxu
 		sf::Sprite hitCircle;
 		long spawnTime;
 
+		bool a = true;
+
 	public:
 		HitCircle(const sf::Vector2f &position, const long &spawnTime, const float &CS, const PlayField &playField,const sf::Texture &hitCircleTexture)
 		{
 			this->hitCircle.setTexture(hitCircleTexture);
+			hitCircle.setColor(sf::Color(hitCircle.getColor().r,hitCircle.getColor().g, hitCircle.getColor().b, 0));
 
 			//Set the origin to center of the circle, and recenter ==============
 			this->hitCircle.setOrigin((sf::Vector2f)hitCircleTexture.getSize() / 2.0f);
@@ -27,6 +30,19 @@ namespace oxu
 			this->hitCircle.setScale(((23.05f - (CS - 7.0f) * 4.4825f) * 2.0f * playField.getOsuPx()) / hitCircleTexture.getSize().x, ((23.05f - (CS - 7.0f) * 4.4825f) * 2.0f * playField.getOsuPx()) / hitCircleTexture.getSize().y);
 
 		}
+
+		bool getA()
+		{
+			if(a)
+			{
+				a =false;
+				return true;
+			}
+			else
+				return false;
+			
+		}
+
 		//Getters===============================================================
 		sf::Vector2f getHitCircleScale() const
 		{
@@ -48,5 +64,22 @@ namespace oxu
 			return this->spawnTime;
 		}
 		//======================================================================
+
+		void fadeCircleIn(const float &dt)
+		{
+			if(hitCircle.getColor().a + 1020 *dt < 255)
+				hitCircle.setColor(sf::Color(hitCircle.getColor().r,hitCircle.getColor().g, hitCircle.getColor().b, hitCircle.getColor().a + 1020 *dt));
+		}
+
+		bool fadeCircleOut(const float &dt)
+		{
+			if(hitCircle.getColor().a - 2550 * dt > 0)
+			{
+				hitCircle.setColor(sf::Color(hitCircle.getColor().r,hitCircle.getColor().g, hitCircle.getColor().b, hitCircle.getColor().a - 2550 *dt));
+				return false;
+			}
+			else
+				return true;
+		}
 	};
 }
