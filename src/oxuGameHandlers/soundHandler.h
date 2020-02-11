@@ -1,5 +1,6 @@
 #pragma once
 #include<SFML/Graphics.hpp>
+#include<SFML/Audio.hpp>
 #include"../3rdParty/bass.h"
 
 #include<memory>
@@ -14,6 +15,7 @@ namespace oxu
 		HSTREAM streamHandle;
 		std::shared_ptr<sf::Clock> audioPlayingOffset;
 		float initialVolume;
+
 	public:
 		SoundHandler()
 		{

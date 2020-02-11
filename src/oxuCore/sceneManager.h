@@ -1,6 +1,7 @@
 #pragma once
 #include<SFML/Graphics.hpp>
 #include<vector>
+#include<future>
 
 #include"../oxuGameHandlers/graphicsHandler.hpp"
 #include"../oxuGameHandlers/soundHandler.h"
@@ -20,53 +21,19 @@ namespace oxu
         GraphicsHandler graphicsHandler;
         SoundHandler soundHandler;
         HitObjectLoader hitObjects;
+        InputHandler inputHandler;
         
         std::uint8_t currentScene;
         std::vector<std::vector<Button>> buttons;
 
+        std::vector<std::future<void>> f;
+
     public:
-        SceneManager(PlayField *playFieldPtr):
-        playField(playFieldPtr) , currentScene(0)
-        {
-            std::vector<Button> aux;
-            aux.emplace_back(sf::Vector2f({0,0}),sf::Vector2f({1920,1080}), 1);
+        SceneManager(sf::RenderWindow *window, PlayField *playFieldPtr);
 
-            buttons.push_back(aux);
-            aux.clear();
-        }
+        void handleCurrentScene(sf::RenderWindow &window, const float &dt);
 
-        void handleCurrentScene(sf::RenderWindow &window, const float &dt)
-        {
-            static bool go = true;
-
-            if(currentScene == 1)
-                window.clear();
-            else
-                 window.clear(sf::Color(100,100,100,255));
-                 
-            soundHandler.handleSound(currentScene);
-            graphicsHandler.handleGraphics(window, dt, currentScene);
-            //InputHandler::Get().handleInput(&buttons[currentScene], );
-
-            for(auto button: buttons[0])
-            {
-                button.handleButton(currentScene);
-                if(currentScene == 1 && go)
-                {
-                    loadBeatMap();
-                    go = false;
-                }
-            }
-
-            window.display();
-        }
-
-        void loadBeatMap()
-        {
-            BeatMapParser parser;
-            hitObjects.createHitObjects(parser, *playField);
-            graphicsHandler.loadInfo(&hitObjects, &soundHandler, playField);
-        }
+        void loadBeatMap();
 
     };
 }

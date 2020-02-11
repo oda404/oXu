@@ -1,4 +1,5 @@
 #pragma once
+#include"../oxuGameComponents/playField.h"
 #include<math.h>
 
 
@@ -9,8 +10,6 @@ namespace oxu
 	private:
 		sf::Sprite hitCircle;
 		long spawnTime;
-
-		bool a = true;
 
 	public:
 		HitCircle(const sf::Vector2f &position, const long &spawnTime, const float &CS, const PlayField &playField,const sf::Texture &hitCircleTexture)
@@ -29,18 +28,6 @@ namespace oxu
 			//alternative (109-9*CS) * osuPX / hitCircleTexture.getSize().x
 			this->hitCircle.setScale(((23.05f - (CS - 7.0f) * 4.4825f) * 2.0f * playField.getOsuPx()) / hitCircleTexture.getSize().x, ((23.05f - (CS - 7.0f) * 4.4825f) * 2.0f * playField.getOsuPx()) / hitCircleTexture.getSize().y);
 
-		}
-
-		bool getA()
-		{
-			if(a)
-			{
-				a =false;
-				return true;
-			}
-			else
-				return false;
-			
 		}
 
 		//Getters===============================================================

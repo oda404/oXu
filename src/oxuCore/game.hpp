@@ -1,7 +1,9 @@
 #pragma once
 #include<SFML/Graphics.hpp>
+#include<SFML/Network.hpp>
 #include<memory>
 
+#include"../oxuGameComponents/playField.h"
 #include"sceneManager.h"
 
 namespace oxu
@@ -9,36 +11,19 @@ namespace oxu
     class Game
     {
     private:
+
         sf::Vector2i screenSize = { 1920,1080 };
-        sf::RenderWindow window;
+        std::shared_ptr<sf::RenderWindow> window;
+        std::shared_ptr<PlayField> playField;
+        std::shared_ptr<SceneManager> sceneManager;
+
+        sf::Clock deltaClock;
+	    sf::Time deltaTime;
 
     public:
-        Game()
-        {
-            window.create(sf::VideoMode(screenSize.x, screenSize.y), "oXu");
-        }
+        Game();
 
-        void run()
-        {
-            sf::Clock deltaClock;
-            sf::Time deltaTime;
-
-            while (window.isOpen())
-            {
-                sf::Event event;
-                while (window.pollEvent(event))
-                {
-                    if (event.type == sf::Event::Closed)
-                        window.close();
-                }
-
-                deltaTime = deltaClock.restart();
-                window.clear();
-
-                window.display();
-
-            }
-        }
+        void run();
 
     };
 }

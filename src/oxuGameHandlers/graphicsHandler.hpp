@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include<SFML/Audio.hpp>
 #include<vector>
 #include<functional>
 
@@ -25,18 +24,9 @@ namespace oxu
 
         std::vector<std::vector<std::function<void (sf::RenderWindow &window, const float &dt)>>> sceneGraphicsHandlers;
 
-        sf::SoundBuffer buffer;
-        sf::Sound sound;
-
     public:
         GraphicsHandler()
         {
-            //
-            buffer.loadFromFile("/root/Documents/osuBootleg/src/soft-hitnormal.wav");
-            sound.setBuffer(buffer);
-            sound.setVolume(50);
-            //
-
             std::vector<std::function<void(sf::RenderWindow &window, const float &dt)>> aux;
             //add main menu graphics handlers @ index 0===========================================================================
             aux.push_back([this](sf::RenderWindow &window, const float &dt) -> void { return this->drawMainMenu(window, dt); });
@@ -92,9 +82,6 @@ namespace oxu
                 }
                 else
                 {
-                    if(hitObjects->hitCircleVector[i].getA())
-                        sound.play();
-
                     if(!hitObjects->hitCircleVector[i].fadeCircleOut(dt))
                     {
                         hitObjects->approachCircleVector[i].fadeCircleOut(dt);
@@ -142,7 +129,7 @@ namespace oxu
             }          
         }
 
-        void setCursor(sf::RenderWindow &window)
+        void setCursor(sf::RenderWindow *window)
         {
         #ifdef _WIN32
             sf::Image im;
@@ -152,7 +139,7 @@ namespace oxu
             curs.loadFromPixels(ptr, { 108,108 }, { 54,54 });
             window.setMouseCursor(curs);
         #else
-            window.setMouseCursorVisible(false);
+            window->setMouseCursorVisible(false);
             cursorTexture.loadFromFile("/root/Documents/osuBootleg/skins/cursor.png");
             cursorSprite.setTexture(cursorTexture);
         #endif
