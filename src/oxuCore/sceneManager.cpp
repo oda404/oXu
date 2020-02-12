@@ -1,20 +1,20 @@
 #include"sceneManager.h"
 
-
 oxu::SceneManager::SceneManager(sf::RenderWindow *window, PlayField *playFieldPtr):
 playField(playFieldPtr) , currentScene(0)
 {
     graphicsHandler.setCursor(window);
 
-    //create buttons for every scene
+    //============  create buttons for every scene  ==================
     std::vector<Button> aux;
     aux.emplace_back(sf::Vector2f({0,0}),sf::Vector2f({1920,1080}), 1);
 
     buttons.push_back(aux);
     aux.clear();
-    //================================
-    //inputHandler.init(window);
-    
+    //================================================================
+
+    thread = std::make_shared<std::thread>(inputHandler.init, window);
+    // join on program exit
 }
 
 void oxu::SceneManager::handleCurrentScene(sf::RenderWindow &window, const float &dt)
