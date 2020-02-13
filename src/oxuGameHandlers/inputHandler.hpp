@@ -2,7 +2,6 @@
 #include<SFML/Graphics.hpp>
 
 #include"hitObjectLoader.h"
-#include"../oxuCore/button.h"
 
 namespace oxu
 {
@@ -14,9 +13,16 @@ namespace oxu
 
         InputHandler() { }
  
-        static void init(sf::RenderWindow *window/*std::vector<Button> *buttons, HitObjectLoader *hitObjects*/)
+        void handleInput()
         {  
-            
+            if(sf::Keyboard::isKeyPressed(sf::Keyboard::X))
+            {
+                
+            }
+            else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+            {
+
+            }
         }
     };
 }

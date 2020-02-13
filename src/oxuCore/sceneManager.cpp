@@ -12,9 +12,6 @@ playField(playFieldPtr) , currentScene(0)
     buttons.push_back(aux);
     aux.clear();
     //================================================================
-
-    thread = std::make_shared<std::thread>(inputHandler.init, window);
-    // join on program exit
 }
 
 void oxu::SceneManager::handleCurrentScene(sf::RenderWindow &window, const float &dt)
@@ -33,6 +30,7 @@ void oxu::SceneManager::handleCurrentScene(sf::RenderWindow &window, const float
     //================  Actual scene handling  ==================
     soundHandler.handleSound(currentScene);
     graphicsHandler.handleGraphics(window, dt, currentScene);
+    inputHandler.handleInput();
     //===========================================================
 
     for(auto button: buttons[0])

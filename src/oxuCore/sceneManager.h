@@ -1,7 +1,6 @@
 #pragma once
 #include<SFML/Graphics.hpp>
 #include<vector>
-#include<thread>
 
 #include"../oxuGameHandlers/graphicsHandler.hpp"
 #include"../oxuGameHandlers/soundHandler.h"
@@ -25,8 +24,6 @@ namespace oxu
         
         std::uint8_t currentScene;
         std::vector<std::vector<Button>> buttons;
-
-        std::shared_ptr<std::thread> thread;
 
     public:
         SceneManager(sf::RenderWindow *window, PlayField *playFieldPtr);
