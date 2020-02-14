@@ -5,7 +5,7 @@
 #include"../oxuGameHandlers/graphicsHandler.hpp"
 #include"../oxuGameHandlers/soundHandler.h"
 #include"../oxuGameHandlers/beatMapParser.h"
-#include"../oxuGameHandlers/hitObjectLoader.h"
+#include"../oxuGameHandlers/hitObjectManager.h"
 #include"../oxuGameComponents/playField.h"
 #include"../oxuGameHandlers/inputHandler.hpp"
 #include"button.h"
@@ -19,7 +19,7 @@ namespace oxu
 
         GraphicsHandler graphicsHandler;
         SoundHandler soundHandler;
-        HitObjectLoader hitObjects;
+        HitObjectManager hitObjects;
         InputHandler inputHandler;
         
         std::uint8_t currentScene;

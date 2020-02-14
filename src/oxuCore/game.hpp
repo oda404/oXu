@@ -11,7 +11,6 @@ namespace oxu
     class Game
     {
     private:
-
         sf::Vector2i screenSize = { 1920,1080 };
         std::shared_ptr<sf::RenderWindow> window;
         std::shared_ptr<PlayField> playField;

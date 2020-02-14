@@ -6,10 +6,10 @@
 
 namespace oxu
 {
-	class HitObjectLoader
+	class HitObjectManager
 	{
 	public:
-		HitObjectLoader()
+		HitObjectManager()
 		{
 			hitCircleTexture.setSmooth(true);
 			approachCircleTexture.setSmooth(true);
@@ -48,14 +48,29 @@ namespace oxu
 			}
 		}
 
+		HitCircle *getHitCircleByIndex(const uint16_t index) { return &hitCircleVector[index]; }
+
+		ApproachCircle *getApproachCircleByIndex(const uint16_t index) { return &approachCircleVector[index]; }
+
+		void incrementHitCircleIt() { ++hitCircleIt; }
+
+		void incrementHitCircleCap() { ++hitCircleCap; }
+
+		uint16_t getHitCircleIt() const { return hitCircleIt; }
+
+		uint16_t getHitCircleCap() const { return hitCircleCap; }
+
 	private:
 		sf::Texture hitCircleTexture;
 		sf::Texture approachCircleTexture;
-	public:
+
+		uint16_t hitCircleIt = 0, hitCircleCap = 0;
+
 		std::vector<HitCircle> hitCircleVector;
 		std::vector<ApproachCircle> approachCircleVector;
 
 		std::vector<Slider> sliderVector;
 		std::vector<ApproachCircle> sliderApproachCircles;
+
 	};
 }

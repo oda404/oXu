@@ -30,7 +30,7 @@ void oxu::SceneManager::handleCurrentScene(sf::RenderWindow &window, const float
     //================  Actual scene handling  ==================
     soundHandler.handleSound(currentScene);
     graphicsHandler.handleGraphics(window, dt, currentScene);
-    inputHandler.handleInput();
+    inputHandler.handleInput(hitObjects);
     //===========================================================
 
     for(auto button: buttons[0])

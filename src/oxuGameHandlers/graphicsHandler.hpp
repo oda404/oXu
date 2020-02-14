@@ -3,7 +3,7 @@
 #include<vector>
 #include<functional>
 
-#include "hitObjectLoader.h"
+#include "hitObjectManager.h"
 #include "../oxuGameComponents/playField.h"
 #include "../3rdParty/StandardCursor.hpp"
 #include"soundHandler.h"
@@ -15,10 +15,8 @@ namespace oxu
     private:
         sf::Texture cursorTexture;
         sf::Sprite cursorSprite;
-        uint16_t hitCircleIt = 0;
-        unsigned int hitCircleCap = 0;
 
-        HitObjectLoader *hitObjects;
+        HitObjectManager *hitObjects;
         SoundHandler *mapSound; 
         PlayField *playField;
 
@@ -47,7 +45,7 @@ namespace oxu
 
         }
 
-        void loadInfo(HitObjectLoader *hitObjectsObj, SoundHandler *soundPtr, PlayField *playFieldPtr)
+        void loadInfo(HitObjectManager *hitObjectsObj, SoundHandler *soundPtr, PlayField *playFieldPtr)
         {
             hitObjects = hitObjectsObj;
             mapSound = soundPtr;
@@ -64,37 +62,36 @@ namespace oxu
 
         void drawHitCircles(sf::RenderWindow &window, const float &dt)
         {
+			if (mapSound->getAudioPlayingOffset() >= hitObjects->getHitCircleByIndex(hitObjects->getHitCircleIt())->getSpawnTime() - 450)
+				hitObjects->incrementHitCircleIt();
 
-			if (mapSound->getAudioPlayingOffset() >= hitObjects->hitCircleVector[hitCircleIt].getSpawnTime() - 450)
-			{
-				hitCircleIt++;
-			}
-
-            for(unsigned int i = hitCircleIt; i > hitCircleCap; i--)
+            for(unsigned int i = hitObjects->getHitCircleIt(); i > hitObjects->getHitCircleCap(); --i)
             {
-                if(!hitObjects->approachCircleVector[i].getApproachState())
+                if(!hitObjects->getApproachCircleByIndex(i)->getApproachState())
                 {   
-                    hitObjects->hitCircleVector[i].fadeCircleIn(dt);
-                    hitObjects->approachCircleVector[i].fadeCircleIn(dt);                  
-                    hitObjects->approachCircleVector[i].approachTheCircle(dt, hitObjects->hitCircleVector[i].getHitCircleScale());
-                    window.draw(hitObjects->approachCircleVector[i].getApproachCircle());
-                    window.draw(hitObjects->hitCircleVector[i].getHitCircle());    
+                    hitObjects->getHitCircleByIndex(i)->fadeCircleIn(dt);
+                    hitObjects->getApproachCircleByIndex(i)->fadeCircleIn(dt);                  
+                    hitObjects->getApproachCircleByIndex(i)->approachTheCircle(dt, hitObjects->getHitCircleByIndex(i)->getHitCircleScale());
+
+                    window.draw(hitObjects->getApproachCircleByIndex(i)->getApproachCircle());
+                    window.draw(hitObjects->getHitCircleByIndex(i)->getHitCircle());    
                 }
                 else
                 {
-                    if(!hitObjects->hitCircleVector[i].fadeCircleOut(dt))
+                    if(!hitObjects->getHitCircleByIndex(i)->fadeCircleOut(dt))
                     {
-                        hitObjects->approachCircleVector[i].fadeCircleOut(dt);
-                        window.draw(hitObjects->approachCircleVector[i].getApproachCircle());
-                        window.draw(hitObjects->hitCircleVector[i].getHitCircle());
+                        hitObjects->getApproachCircleByIndex(i)->fadeCircleOut(dt);
+                        
+                        window.draw(hitObjects->getApproachCircleByIndex(i)->getApproachCircle());
+                        window.draw(hitObjects->getHitCircleByIndex(i)->getHitCircle());
                     }
                     else
-                        hitCircleCap++;
+                        hitObjects->incrementHitCircleCap();
                 }
             }
         }
 
-        void drawSliders(sf::RenderWindow &window, const float &dt)
+        /*void drawSliders(sf::RenderWindow &window, const float &dt)
         {
             for (unsigned int i = 0; i < hitObjects->sliderVector.size(); i++)
             {
@@ -127,7 +124,7 @@ namespace oxu
                     }
                 }
             }          
-        }
+        }*/
 
         void setCursor(sf::RenderWindow *window)
         {
