@@ -1,7 +1,6 @@
 #pragma once
 #include<SFML/Graphics.hpp>
 #include<SFML/Audio.hpp>
-#include<iostream>
 
 #include"hitObjectManager.h"
 
@@ -21,12 +20,15 @@ namespace oxu
             sound.setVolume(20);
         }
  
-        void handleInput(HitObjectManager &hitObj)
+        void handleInput(HitObjectManager &hitObj, sf::RenderWindow &window)
         {  
 
             if(sf::Keyboard::isKeyPressed(sf::Keyboard::X))
             {
-                
+                for(unsigned int i = hitObj.getHitCircleIt(); i > hitObj.getHitCircleCap(); --i)
+                {
+                    hitObj.get(i);
+                }
             }
             else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
             {

@@ -11,6 +11,8 @@ namespace oxu
 		sf::Sprite hitCircle;
 		long spawnTime;
 
+		unsigned int scale;
+
 	public:
 		HitCircle(const sf::Vector2f &position, const long &spawnTime, const float &CS, const PlayField &playField,const sf::Texture &hitCircleTexture)
 		{
@@ -27,10 +29,16 @@ namespace oxu
 
 			//alternative (109-9*CS) * osuPX / hitCircleTexture.getSize().x
 			this->hitCircle.setScale(((23.05f - (CS - 7.0f) * 4.4825f) * 2.0f * playField.getOsuPx()) / hitCircleTexture.getSize().x, ((23.05f - (CS - 7.0f) * 4.4825f) * 2.0f * playField.getOsuPx()) / hitCircleTexture.getSize().y);
-
+			scale = hitCircleTexture.getSize().x;
 		}
 
 		//Getters===============================================================
+
+		float getPixelScale()
+		{
+			return hitCircle.getScale().x * scale;
+		}
+
 		sf::Vector2f getHitCircleScale() const
 		{
 			return this->hitCircle.getScale();

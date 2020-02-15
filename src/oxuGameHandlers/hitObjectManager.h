@@ -3,6 +3,7 @@
 #include"../oxuGameComponents/approachCircle.h"
 #include"../oxuGameComponents/slider.h"
 #include"beatMapParser.h"
+#include<iostream>
 
 namespace oxu
 {
@@ -59,6 +60,11 @@ namespace oxu
 		uint16_t getHitCircleIt() const { return hitCircleIt; }
 
 		uint16_t getHitCircleCap() const { return hitCircleCap; }
+
+		void get(int index)
+		{
+			std::cout<< hitCircleVector[index].getPixelScale()<<std::endl;
+		}
 
 	private:
 		sf::Texture hitCircleTexture;
