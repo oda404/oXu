@@ -9,30 +9,42 @@ namespace oxu
     class InputHandler
     {
     private:
-        sf::SoundBuffer buffer;
-        sf::Sound sound;
+        sf::Keyboard kb;
+        
     public:
 
         InputHandler()
         {
-            buffer.loadFromFile("/root/Documents/osuBootleg/src/soft-hitnormal.wav");
-            sound.setBuffer(buffer);
-            sound.setVolume(20);
+
         }
  
-        void handleInput(HitObjectManager &hitObj, sf::RenderWindow &window)
+        void handleInput(HitObjectManager &hitObj, sf::RenderWindow &window, SoundHandler &soundH)
         {  
-
-            if(sf::Keyboard::isKeyPressed(sf::Keyboard::X))
+            if(kb.isKeyPressed(sf::Keyboard::X))
             {
                 for(unsigned int i = hitObj.getHitCircleIt(); i > hitObj.getHitCircleCap(); --i)
                 {
-                    hitObj.get(i);
+                    if( sf::Mouse::getPosition().x >= hitObj.getHitCircleByIndex(i)->getPos().x - hitObj.getHitCircleSize() / 2 &&
+                        sf::Mouse::getPosition().x <= hitObj.getHitCircleByIndex(i)->getPos().x + hitObj.getHitCircleSize() / 2 &&
+                        sf::Mouse::getPosition().y >= hitObj.getHitCircleByIndex(i)->getPos().y - hitObj.getHitCircleSize() / 2 &&
+                        sf::Mouse::getPosition().y <= hitObj.getHitCircleByIndex(i)->getPos().y + hitObj.getHitCircleSize() / 2 )
+                    {
+                       
+                    }
                 }
             }
-            else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+            else if(kb.isKeyPressed(sf::Keyboard::Z))
             {
-
+                for(unsigned int i = hitObj.getHitCircleIt(); i > hitObj.getHitCircleCap(); --i)
+                {
+                    if( sf::Mouse::getPosition().x >= hitObj.getHitCircleByIndex(i)->getPos().x - hitObj.getHitCircleSize() / 2 &&
+                        sf::Mouse::getPosition().x <= hitObj.getHitCircleByIndex(i)->getPos().x + hitObj.getHitCircleSize() / 2 &&
+                        sf::Mouse::getPosition().y >= hitObj.getHitCircleByIndex(i)->getPos().y - hitObj.getHitCircleSize() / 2 &&
+                        sf::Mouse::getPosition().y <= hitObj.getHitCircleByIndex(i)->getPos().y + hitObj.getHitCircleSize() / 2 )
+                    {
+                        
+                    }
+                }
             }
         }
     };

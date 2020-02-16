@@ -3,7 +3,6 @@
 #include"../oxuGameComponents/approachCircle.h"
 #include"../oxuGameComponents/slider.h"
 #include"beatMapParser.h"
-#include<iostream>
 
 namespace oxu
 {
@@ -28,7 +27,7 @@ namespace oxu
 			for (unsigned int i = 0; i < beatMap.getHitObjectPositions().size(); i++)
 			{
 				hitCircleVector.push_back(HitCircle(beatMap.getHitObjectPositions()[i], beatMap.gethitObjectSpawnTimes()[i], 4.2f, playField, hitCircleTexture));
-				approachCircleVector.push_back(ApproachCircle(0.450f, hitCircleVector[i].getPos(), hitCircleVector[i].getHitCircleScale() * 1.5f * playField.getOsuPx(), approachCircleTexture));
+				approachCircleVector.push_back(ApproachCircle(0.450f, hitCircleVector[i].getPos(), hitCircleVector[i].getHitCircleScale(), approachCircleTexture, playField));
 			}
 
 			for (unsigned int i = 0; i < beatMap.getSlidersPositions().size(); i++)
@@ -45,7 +44,7 @@ namespace oxu
 					hitCircleTexture
 				));
 
-				sliderApproachCircles.push_back(ApproachCircle(0.450f, sliderVector[i].getPos(), sliderVector[i].getHitCircleScale() * 1.5f * playField.getOsuPx(), approachCircleTexture));
+				sliderApproachCircles.push_back(ApproachCircle(0.450f, sliderVector[i].getPos(), sliderVector[i].getHitCircleScale() * playField.getOsuPx(), approachCircleTexture, playField));
 			}
 		}
 
@@ -61,10 +60,7 @@ namespace oxu
 
 		uint16_t getHitCircleCap() const { return hitCircleCap; }
 
-		void get(int index)
-		{
-			std::cout<< hitCircleVector[index].getPixelScale()<<std::endl;
-		}
+		float getHitCircleSize() { return hitCircleVector[0].getHitCircleScaleInPixels(); }
 
 	private:
 		sf::Texture hitCircleTexture;

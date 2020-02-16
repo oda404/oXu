@@ -296,8 +296,6 @@ namespace oxu
 					moveFromAToB(a, b, sliderTime, dt, playField);
 				}
 			}
-
-			//!!!the problem is i dont move on straight paths correctly!!!
 		}
 
 		sf::Vector2f getHitCircleScale() const

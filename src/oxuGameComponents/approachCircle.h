@@ -1,4 +1,5 @@
 #pragma once
+#include"playField.h"
 
 namespace oxu
 {
@@ -6,12 +7,13 @@ namespace oxu
 	{
 	private:
 		sf::Sprite approachCircle;
-		sf::Vector2f initalScale;
+		sf::Vector2f initialScale;
+		sf::Vector2f hitCircleSize;
 		float approachSpeed;
 		bool doneApproacing = false;
 
 	public:
-		ApproachCircle(const float &approachSpeed, const sf::Vector2f &position, const sf::Vector2f &scale, sf::Texture &approachCircleTexture)
+		ApproachCircle(const float &approachSpeed, const sf::Vector2f &position,sf::Vector2f scale, sf::Texture &approachCircleTexture, const PlayField &playField)
 		{
 			this->approachCircle.setTexture(approachCircleTexture);
 			approachCircle.setColor(sf::Color(approachCircle.getColor().r,approachCircle.getColor().g, approachCircle.getColor().b, 0));
@@ -22,11 +24,15 @@ namespace oxu
 			//======================================================================================================================
 			this->approachCircle.setPosition(position);
 
-			this->approachCircle.setScale(scale);
-			this->initalScale = this->approachCircle.getScale();
+			hitCircleSize = scale;
+			//approach circle scale is 1.5 times the hit circle size times the oxuPx
+			scale *= playField.getOsuPx() * 1.5f;
+			approachCircle.setScale(scale);
+			initialScale = scale;
 
 			this->approachSpeed = approachSpeed;
 			this->doneApproacing = false;
+
 
 		}
 
@@ -40,11 +46,11 @@ namespace oxu
 			return this->doneApproacing;
 		}
 
-		void approachTheCircle(const float &dt, const sf::Vector2f &hitCircleSize)
+		void approachTheCircle(const float &dt)
 		{
 			if (approachCircle.getScale().x > hitCircleSize.x)
 			{
-				sf::Vector2f AT = (((this->initalScale - hitCircleSize) / this->approachSpeed)*dt);
+				sf::Vector2f AT = (((this->initialScale - hitCircleSize) / this->approachSpeed)*dt);
 				this->approachCircle.setScale(this->approachCircle.getScale() - AT);
 			}
 			else
@@ -60,9 +66,7 @@ namespace oxu
 		void fadeCircleOut(const float &dt)
 		{
 			if(approachCircle.getColor().a - 4080 * dt > 0)
-			{
 				approachCircle.setColor(sf::Color(approachCircle.getColor().r,approachCircle.getColor().g, approachCircle.getColor().b, approachCircle.getColor().a - 4080 *dt));
-			}
 		}
 	};
 }

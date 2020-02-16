@@ -68,10 +68,11 @@ namespace oxu
             for(unsigned int i = hitObjects->getHitCircleIt(); i > hitObjects->getHitCircleCap(); --i)
             {
                 if(!hitObjects->getApproachCircleByIndex(i)->getApproachState())
-                {   
+                {
                     hitObjects->getHitCircleByIndex(i)->fadeCircleIn(dt);
-                    hitObjects->getApproachCircleByIndex(i)->fadeCircleIn(dt);                  
-                    hitObjects->getApproachCircleByIndex(i)->approachTheCircle(dt, hitObjects->getHitCircleByIndex(i)->getHitCircleScale());
+                    hitObjects->getApproachCircleByIndex(i)->fadeCircleIn(dt);           
+                           
+                    hitObjects->getApproachCircleByIndex(i)->approachTheCircle(dt);
 
                     window.draw(hitObjects->getApproachCircleByIndex(i)->getApproachCircle());
                     window.draw(hitObjects->getHitCircleByIndex(i)->getHitCircle());    
