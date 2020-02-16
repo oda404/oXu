@@ -52,17 +52,15 @@ namespace oxu
             playField = playFieldPtr;
         }
 
-        void handleGraphics(sf::RenderWindow &window, const float &dt, const std::uint8_t & sceneID)
+        void handleGraphics(sf::RenderWindow &window, const float &dt, const std::uint8_t &sceneID)
         {
             for(auto handler: sceneGraphicsHandlers[sceneID])
-            {
                 handler(window,dt);
-            }
         }
 
         void drawHitCircles(sf::RenderWindow &window, const float &dt)
         {
-			if (mapSound->getAudioPlayingOffset() >= hitObjects->getHitCircleByIndex(hitObjects->getHitCircleIt())->getSpawnTime() - 450)
+			if (mapSound->getAudioPlayingOffset() >= hitObjects->getHitCircleByIndex(hitObjects->getHitCircleIt())->getSpawnTime() - hitObjects->getApproachCircleByIndex(0)->getApproachSpeedAsMs())
 				hitObjects->incrementHitCircleIt();
 
             for(unsigned int i = hitObjects->getHitCircleIt(); i > hitObjects->getHitCircleCap(); --i)
@@ -72,7 +70,7 @@ namespace oxu
                     hitObjects->getHitCircleByIndex(i)->fadeCircleIn(dt);
                     hitObjects->getApproachCircleByIndex(i)->fadeCircleIn(dt);           
                            
-                    hitObjects->getApproachCircleByIndex(i)->approachTheCircle(dt);
+                    hitObjects->getApproachCircleByIndex(i)->approachTheCircle(dt, hitObjects->getHitCircleByIndex(i)->getHitCircleScale());
 
                     window.draw(hitObjects->getApproachCircleByIndex(i)->getApproachCircle());
                     window.draw(hitObjects->getHitCircleByIndex(i)->getHitCircle());    
@@ -137,7 +135,7 @@ namespace oxu
             curs.loadFromPixels(ptr, { 108,108 }, { 54,54 });
             window.setMouseCursor(curs);
         #else
-            window->setMouseCursorVisible(false);
+            //window->setMouseCursorVisible(false);
             cursorTexture.loadFromFile("/root/Documents/osuBootleg/skins/cursor.png");
             cursorSprite.setTexture(cursorTexture);
         #endif
@@ -146,8 +144,8 @@ namespace oxu
     #ifdef __linux__
         void drawCursor(sf::RenderWindow &window)
         {
-            cursorSprite.setPosition(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
-            window.draw(cursorSprite);
+            //cursorSprite.setPosition(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
+            //window.draw(cursorSprite);
         }
     #endif
 

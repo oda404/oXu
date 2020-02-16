@@ -8,12 +8,11 @@ namespace oxu
 	private:
 		sf::Sprite approachCircle;
 		sf::Vector2f initialScale;
-		sf::Vector2f hitCircleSize;
 		float approachSpeed;
 		bool doneApproacing = false;
 
 	public:
-		ApproachCircle(const float &approachSpeed, const sf::Vector2f &position,sf::Vector2f scale, sf::Texture &approachCircleTexture, const PlayField &playField)
+		ApproachCircle(const float &approachSpeed, const sf::Vector2f &position,sf::Vector2f scale, sf::Texture &approachCircleTexture)
 		{
 			this->approachCircle.setTexture(approachCircleTexture);
 			approachCircle.setColor(sf::Color(approachCircle.getColor().r,approachCircle.getColor().g, approachCircle.getColor().b, 0));
@@ -24,9 +23,6 @@ namespace oxu
 			//======================================================================================================================
 			this->approachCircle.setPosition(position);
 
-			hitCircleSize = scale;
-			//approach circle scale is 1.5 times the hit circle size times the oxuPx
-			scale *= playField.getOsuPx() * 1.5f;
 			approachCircle.setScale(scale);
 			initialScale = scale;
 
@@ -46,7 +42,9 @@ namespace oxu
 			return this->doneApproacing;
 		}
 
-		void approachTheCircle(const float &dt)
+		float getApproachSpeedAsMs() const { return approachSpeed * 1000; }
+
+		void approachTheCircle(const float &dt, const sf::Vector2f &hitCircleSize)
 		{
 			if (approachCircle.getScale().x > hitCircleSize.x)
 			{

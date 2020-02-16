@@ -3,7 +3,7 @@
 oxu::Game::Game()
 {
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(screenSize.x, screenSize.y), "oXu");
-    window->setFramerateLimit(120);
+    window->setFramerateLimit(60);
 
     playField = std::make_shared<PlayField>(screenSize);
 
@@ -12,9 +12,11 @@ oxu::Game::Game()
 
 void oxu::Game::run()
 {
+
     while (window->isOpen())
 	{
 		deltaTime = deltaClock.restart();
+
 		sf::Event event;
 		while (window->pollEvent(event))
 		{
