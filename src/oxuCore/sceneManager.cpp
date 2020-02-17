@@ -3,7 +3,9 @@
 oxu::SceneManager::SceneManager(sf::RenderWindow *window, PlayField *playFieldPtr):
 playField(playFieldPtr) , currentScene(0)
 {
-    graphicsHandler.setCursor(window);
+    graphicsHandler = std::make_shared<GraphicsHandler>(&inputHandler);
+    
+    graphicsHandler->setCursor(window);
 
     //============  create buttons for every scene  ==================
     std::vector<Button> aux;
@@ -24,7 +26,7 @@ void oxu::SceneManager::handleCurrentScene(sf::RenderWindow &window, const float
             window.clear(sf::Color(100,100,100,255));
             
 #ifdef __linux__
-    graphicsHandler.drawCursor(window);
+    graphicsHandler->drawCursor(window);
 #endif
     
     //================  Actual scene handling  ==================
@@ -36,7 +38,7 @@ void oxu::SceneManager::handleCurrentScene(sf::RenderWindow &window, const float
 
     inputHandler.handleInput(hitObjects,window,soundHandler);
 
-    graphicsHandler.handleGraphics(window, dt, currentScene);
+    graphicsHandler->handleGraphics(window, dt, currentScene);
 
     inputHandler.handleInput(hitObjects,window,soundHandler);
     //===========================================================
@@ -58,5 +60,5 @@ void oxu::SceneManager::loadBeatMap()
 {
     BeatMapParser parser;
     hitObjects.createHitObjects(parser, *playField);
-    graphicsHandler.loadInfo(&hitObjects, &soundHandler, playField);
+    graphicsHandler->loadInfo(&hitObjects, &soundHandler, playField);
 }

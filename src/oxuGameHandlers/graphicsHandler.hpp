@@ -7,6 +7,7 @@
 #include "../oxuGameComponents/playField.h"
 #include "../3rdParty/StandardCursor.hpp"
 #include"soundHandler.h"
+#include"inputHandler.hpp"
 
 namespace oxu
 {
@@ -19,11 +20,14 @@ namespace oxu
         HitObjectManager *hitObjects;
         SoundHandler *mapSound; 
         PlayField *playField;
+        InputHandler *inputHandler;
+        
 
         std::vector<std::vector<std::function<void (sf::RenderWindow &window, const float &dt)>>> sceneGraphicsHandlers;
 
     public:
-        GraphicsHandler()
+        GraphicsHandler(InputHandler *inputHandler):
+        inputHandler(inputHandler)
         {
             std::vector<std::function<void(sf::RenderWindow &window, const float &dt)>> aux;
             //add main menu graphics handlers @ index 0===========================================================================
@@ -37,6 +41,7 @@ namespace oxu
             //add game graphics handlers @ index 1==================================================================================
 
             aux.push_back([this](sf::RenderWindow &window, const float &dt) -> void { return this->drawHitCircles(window, dt); });
+            aux.push_back([this](sf::RenderWindow &window, const float &dt) -> void { return this->drawInputSquares(window, dt); });
 
             sceneGraphicsHandlers.push_back(aux);
 
@@ -88,6 +93,28 @@ namespace oxu
                         hitObjects->incrementHitCircleCap();
                 }
             }
+        }
+
+        void drawInputSquares(sf::RenderWindow &window, const float &dt)
+        {
+            sf::RectangleShape rec(sf::Vector2f({80,80}));
+            rec.setPosition({1840,420});
+            rec.setFillColor(sf::Color::White);
+            rec.setFillColor(sf::Color(rec.getFillColor().r, rec.getFillColor().g, rec.getFillColor().b, 60));
+
+            sf::RectangleShape rec1(sf::Vector2f({80,80}));
+            rec1.setPosition({1840,540});
+            rec1.setFillColor(sf::Color::White);
+            rec1.setFillColor(sf::Color(rec.getFillColor().r, rec.getFillColor().g, rec.getFillColor().b, 60));
+
+            if(inputHandler->getXKeyState())
+                rec.setFillColor(sf::Color(rec.getFillColor().r, rec.getFillColor().g, rec.getFillColor().b, 125));
+
+            if(inputHandler->getZKeyState())
+                rec1.setFillColor(sf::Color(rec.getFillColor().r, rec.getFillColor().g, rec.getFillColor().b, 125));
+            
+            window.draw(rec1);
+            window.draw(rec);
         }
 
         /*void drawSliders(sf::RenderWindow &window, const float &dt)

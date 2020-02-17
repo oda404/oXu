@@ -11,7 +11,7 @@ namespace oxu
     private:
         sf::Keyboard kb;
         sf::Vector2i mousePos;
-        bool f = true;
+        bool xState = false, zState = false;
 
         float getApproachCirclePercentage(const float &spawnTime, const float &approachSpeed, const float &playingOffset) const
         {
@@ -20,11 +20,16 @@ namespace oxu
         
     public:
         InputHandler() { }
- 
+
+        bool getXKeyState() const { return xState; }
+
+        bool getZKeyState() const { return zState; }
+
         void handleInput(HitObjectManager &hitObj, sf::RenderWindow &window, SoundHandler &soundH)
         {   
             if(kb.isKeyPressed(sf::Keyboard::X))
             {
+                xState = true;
                 mousePos = sf::Mouse::getPosition(window);
                 for(unsigned int i = hitObj.getHitCircleIt(); i > hitObj.getHitCircleCap(); --i)
                 {
@@ -37,15 +42,19 @@ namespace oxu
                         {
                             if(getApproachCirclePercentage(hitObj.getHitCircleByIndex(i)->getSpawnTime(), hitObj.getApproachCircleByIndex(i)->getApproachSpeedAsMs(), soundH.getAudioPlayingOffset()) > 90)
                             {
-                                //90 is a percentage
+                                
                                 hitObj.getHitCircleByIndex(i)->click();
                             }
                         }
                     }
                 }
             }
+            else
+                xState = false;
+            
             if(kb.isKeyPressed(sf::Keyboard::Z))
             {
+                zState = true;
                 mousePos = sf::Mouse::getPosition(window);
                 for(unsigned int i = hitObj.getHitCircleIt(); i > hitObj.getHitCircleCap(); --i)
                 {
@@ -64,7 +73,11 @@ namespace oxu
                         }
                     }
                 }
+
             }
+            else
+                zState = false;
+            
         }
     };
 }

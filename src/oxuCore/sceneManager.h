@@ -17,10 +17,10 @@ namespace oxu
     private:
         PlayField *playField;
 
-        GraphicsHandler graphicsHandler;
+        InputHandler inputHandler;
+        std::shared_ptr<GraphicsHandler> graphicsHandler;
         SoundHandler soundHandler;
         HitObjectManager hitObjects;
-        InputHandler inputHandler;
         
         std::uint8_t currentScene;
         std::vector<std::vector<Button>> buttons;
