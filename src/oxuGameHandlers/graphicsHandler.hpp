@@ -124,13 +124,13 @@ namespace oxu
 
         void drawInputSquares(sf::RenderWindow &window, const float &dt)
         {
-            sf::RectangleShape rec(sf::Vector2f({80,80}));
-            rec.setPosition({1840,420});
+            sf::RectangleShape rec(sf::Vector2f({60,60}));
+            rec.setPosition({1860,420});
             rec.setFillColor(sf::Color::White);
             rec.setFillColor(sf::Color(rec.getFillColor().r, rec.getFillColor().g, rec.getFillColor().b, 60));
 
-            sf::RectangleShape rec1(sf::Vector2f({80,80}));
-            rec1.setPosition({1840,540});
+            sf::RectangleShape rec1(sf::Vector2f({60,60}));
+            rec1.setPosition({1860,540});
             rec1.setFillColor(sf::Color::White);
             rec1.setFillColor(sf::Color(rec.getFillColor().r, rec.getFillColor().g, rec.getFillColor().b, 60));
 
@@ -154,9 +154,21 @@ namespace oxu
         {
             if(bar1.getSize().x > 0)
             {
-                bar1.setSize({bar1.getSize().x - 450 *dt, bar1.getSize().y});
-                bar2.setSize({bar2.getSize().x + 450 *dt, bar2.getSize().y});
+                bar1.setSize({bar1.getSize().x - 400 *dt, bar1.getSize().y});
+                bar2.setSize({bar2.getSize().x + 400 *dt, bar2.getSize().y});
             }
+            static int hits = inputHandler->getCombo();
+
+            if(inputHandler->getCombo() > hits)
+            {
+                if(bar1.getSize().x < 960)
+                {
+                    bar1.setSize({bar1.getSize().x + 50, bar1.getSize().y});
+                    bar2.setSize({bar2.getSize().x - 50 , bar2.getSize().y});
+                }
+            }
+
+            hits = inputHandler->getCombo();
 
             window.draw(bar2);
             window.draw(bar1);
