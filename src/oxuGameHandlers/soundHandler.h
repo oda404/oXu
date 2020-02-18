@@ -43,10 +43,10 @@ namespace oxu
 		void freeAudio()
 		{
 			BASS_StreamFree(streamHandle);
-			BASS_Free();
+			BASS_Free(); // fix
 		}
 
-		sf::Int32 getAudioPlayingOffset()
+		sf::Int32 getAudioPlayingOffset() const
 		{
 			return audioPlayingOffset->getElapsedTime().asMilliseconds();
 		}

@@ -1,6 +1,7 @@
 #pragma once
 #include<SFML/Graphics.hpp>
-#include<SFML/Audio.hpp>
+#include<vector>
+#include<functional>
 
 #include"hitObjectManager.h"
 
@@ -11,8 +12,14 @@ namespace oxu
     private:
         sf::Keyboard kb;
         sf::Vector2i mousePos;
+
+        HitObjectManager *hitObjManager;
+        SoundHandler *soundHandler;
+
         bool xState = false, zState = false;
-        int combo = 0;
+        int combo = 0, pendingObj = 0;
+
+        std::vector<std::function<void(sf::RenderWindow &window)>> sceneInputHandlers;
 
         float getApproachCirclePercentage(const float &spawnTime, const float &approachSpeed, const float &playingOffset) const
         {
@@ -20,7 +27,15 @@ namespace oxu
         }
         
     public:
-        InputHandler() { }
+        InputHandler(HitObjectManager *hitObjManagerPtr, SoundHandler *soundHandlerPtr):
+        hitObjManager(hitObjManagerPtr), soundHandler(soundHandlerPtr)
+        {
+            //==========  main menu input handlers ====================
+            sceneInputHandlers.push_back([this](sf::RenderWindow &window) -> void { return this->handleButtons(window); });
+
+            //========== game input handler ==========================
+            sceneInputHandlers.push_back([this](sf::RenderWindow &window) -> void { return this->handleHitObjects(window); });
+        }
 
         bool getXKeyState() const { return xState; }
 
@@ -28,61 +43,54 @@ namespace oxu
 
         int getCombo() const { return combo; }
 
-        void handleInput(HitObjectManager &hitObj, sf::RenderWindow &window, SoundHandler &soundH)
+        void handleInput(sf::RenderWindow &window, std::uint8_t &sceneID)
         {   
+            sceneInputHandlers[sceneID](window);
+        }
+
+        void handleButtons(sf::RenderWindow &window)
+        {
+
+        }
+
+        void handleHitObjects(sf::RenderWindow &window)
+        {
             if(kb.isKeyPressed(sf::Keyboard::X))
             {
-                std::cout<<soundH.getAudioPlayingOffset()<<std::endl;
                 xState = true;
-                mousePos = sf::Mouse::getPosition(window);
-                for(unsigned int i = hitObj.getHitCircleCap(); i <= hitObj.getHitCircleIt(); ++i)
+
+                int ACPerc = getApproachCirclePercentage(hitObjManager->getHitCircleByIndex(pendingObj)->getSpawnTime(), 450, soundHandler->getAudioPlayingOffset());
+
+                if(ACPerc > 90 && ACPerc <= 100 )
                 {
-                    if(hitObj.getHitCircleByIndex(i)->canBeClicked())
-                    {
-                        if( mousePos.x >= hitObj.getHitCircleByIndex(i)->getPos().x - hitObj.getHitCircleSize() / 2 &&
-                            mousePos.x <= hitObj.getHitCircleByIndex(i)->getPos().x + hitObj.getHitCircleSize() / 2 &&
-                            mousePos.y >= hitObj.getHitCircleByIndex(i)->getPos().y - hitObj.getHitCircleSize() / 2 &&
-                            mousePos.y <= hitObj.getHitCircleByIndex(i)->getPos().y + hitObj.getHitCircleSize() / 2 )
-                        {
-                             if(getApproachCirclePercentage(hitObj.getHitCircleByIndex(i)->getSpawnTime(), 450, soundH.getAudioPlayingOffset()) > 90 &&
-                            getApproachCirclePercentage(hitObj.getHitCircleByIndex(i)->getSpawnTime(), 450, soundH.getAudioPlayingOffset()) <= 100 )
-                            {
-                                ++combo;
-                                hitObj.getHitCircleByIndex(i)->click();
-                            }
-                        }
-                    }
-                }
+                    ++combo;
+                    ++pendingObj;
+                }          
             }
             else
                 xState = false;
 
-            if(kb.isKeyPressed(sf::Keyboard::Z))
+            /*if(kb.isKeyPressed(sf::Keyboard::Z))
             {
                 zState = true;
                 mousePos = sf::Mouse::getPosition(window);
-                for(unsigned int i = hitObj.getHitCircleIt(); i > hitObj.getHitCircleCap(); --i)
+
+                int ACPerc = getApproachCirclePercentage(hitObjManager->getHitCircleByIndex(pendingObj)->getSpawnTime(), 450, soundHandler->getAudioPlayingOffset());
+
+                if(ACPerc > 90 && ACPerc <= 100 )
                 {
-                    if(hitObj.getHitCircleByIndex(i)->canBeClicked())
-                    {
-                        if( mousePos.x >= hitObj.getHitCircleByIndex(i)->getPos().x - hitObj.getHitCircleSize() / 2 &&
-                            mousePos.x <= hitObj.getHitCircleByIndex(i)->getPos().x + hitObj.getHitCircleSize() / 2 &&
-                            mousePos.y >= hitObj.getHitCircleByIndex(i)->getPos().y - hitObj.getHitCircleSize() / 2 &&
-                            mousePos.y <= hitObj.getHitCircleByIndex(i)->getPos().y + hitObj.getHitCircleSize() / 2 )
-                        {
-                            if(getApproachCirclePercentage(hitObj.getHitCircleByIndex(i)->getSpawnTime(), 450, soundH.getAudioPlayingOffset()) > 90 &&
-                            getApproachCirclePercentage(hitObj.getHitCircleByIndex(i)->getSpawnTime(), 450, soundH.getAudioPlayingOffset()) <= 100 )
-                            {
-                                ++combo;
-                                hitObj.getHitCircleByIndex(i)->click();
-                            }
-                        }
-                    }
+                    ++combo;
+                    ++pendingObj;
                 }
             }
             else
-                zState = false;
-            
-        }
+                zState = false;*/
+
+            if(getApproachCirclePercentage(hitObjManager->getHitCircleByIndex(pendingObj)->getSpawnTime(), 450, soundHandler->getAudioPlayingOffset()) > 100)
+            {
+                combo = 0;
+                ++pendingObj;
+            }
+        } 
     };
 }

@@ -109,7 +109,15 @@ namespace oxu
                 }
                 else
                 {
-                    hitObjects->incrementHitCircleCap();
+                    if(!hitObjects->getHitCircleByIndex(i)->fadeCircleOut(dt))
+                    {
+                        hitObjects->getApproachCircleByIndex(i)->fadeCircleOut(dt);
+                        
+                        window.draw(hitObjects->getApproachCircleByIndex(i)->getApproachCircle());
+                        window.draw(hitObjects->getHitCircleByIndex(i)->getHitCircle());   
+                    }
+                    else
+                        hitObjects->incrementHitCircleCap();
                 }
             }
         }

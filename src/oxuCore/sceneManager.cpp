@@ -3,7 +3,8 @@
 oxu::SceneManager::SceneManager(sf::RenderWindow *window, PlayField *playFieldPtr):
 playField(playFieldPtr) , currentScene(0)
 {
-    graphicsHandler = std::make_shared<GraphicsHandler>(&inputHandler);
+    inputHandler = std::make_shared<InputHandler>(&hitObjects, &soundHandler);
+    graphicsHandler = std::make_shared<GraphicsHandler>(inputHandler.get());
     
     graphicsHandler->setCursor(window);
 
@@ -32,15 +33,14 @@ void oxu::SceneManager::handleCurrentScene(sf::RenderWindow &window, const float
     //================  Actual scene handling  ==================
     /*inputHandler gets called between every other handler so
     it gets the most accurate results*/
-    //inputHandler.handleInput(hitObjects,window,soundHandler);
 
     soundHandler.handleSound(currentScene);
 
-    inputHandler.handleInput(hitObjects,window,soundHandler);
+    inputHandler->handleInput(window, currentScene);
 
     graphicsHandler->handleGraphics(window, dt, currentScene);
 
-    inputHandler.handleInput(hitObjects,window,soundHandler);
+    inputHandler->handleInput(window, currentScene);
     //===========================================================
 
     for(auto button: buttons[0])

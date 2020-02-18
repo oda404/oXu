@@ -1,6 +1,8 @@
 #pragma once
 #include<SFML/Graphics.hpp>
+#include<thread>
 #include<vector>
+#include<memory>
 
 #include"../oxuGameHandlers/graphicsHandler.hpp"
 #include"../oxuGameHandlers/soundHandler.h"
@@ -17,7 +19,7 @@ namespace oxu
     private:
         PlayField *playField;
 
-        InputHandler inputHandler;
+        std::shared_ptr<InputHandler> inputHandler;
         std::shared_ptr<GraphicsHandler> graphicsHandler;
         SoundHandler soundHandler;
         HitObjectManager hitObjects;
