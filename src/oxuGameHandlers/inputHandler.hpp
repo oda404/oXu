@@ -12,6 +12,7 @@ namespace oxu
         sf::Keyboard kb;
         sf::Vector2i mousePos;
         bool xState = false, zState = false;
+        int combo = 0;
 
         float getApproachCirclePercentage(const float &spawnTime, const float &approachSpeed, const float &playingOffset) const
         {
@@ -25,13 +26,16 @@ namespace oxu
 
         bool getZKeyState() const { return zState; }
 
+        int getCombo() const { return combo; }
+
         void handleInput(HitObjectManager &hitObj, sf::RenderWindow &window, SoundHandler &soundH)
         {   
             if(kb.isKeyPressed(sf::Keyboard::X))
             {
+                std::cout<<soundH.getAudioPlayingOffset()<<std::endl;
                 xState = true;
                 mousePos = sf::Mouse::getPosition(window);
-                for(unsigned int i = hitObj.getHitCircleIt(); i > hitObj.getHitCircleCap(); --i)
+                for(unsigned int i = hitObj.getHitCircleCap(); i <= hitObj.getHitCircleIt(); ++i)
                 {
                     if(hitObj.getHitCircleByIndex(i)->canBeClicked())
                     {
@@ -40,9 +44,10 @@ namespace oxu
                             mousePos.y >= hitObj.getHitCircleByIndex(i)->getPos().y - hitObj.getHitCircleSize() / 2 &&
                             mousePos.y <= hitObj.getHitCircleByIndex(i)->getPos().y + hitObj.getHitCircleSize() / 2 )
                         {
-                            if(getApproachCirclePercentage(hitObj.getHitCircleByIndex(i)->getSpawnTime(), hitObj.getApproachCircleByIndex(i)->getApproachSpeedAsMs(), soundH.getAudioPlayingOffset()) > 90)
+                             if(getApproachCirclePercentage(hitObj.getHitCircleByIndex(i)->getSpawnTime(), 450, soundH.getAudioPlayingOffset()) > 90 &&
+                            getApproachCirclePercentage(hitObj.getHitCircleByIndex(i)->getSpawnTime(), 450, soundH.getAudioPlayingOffset()) <= 100 )
                             {
-                                
+                                ++combo;
                                 hitObj.getHitCircleByIndex(i)->click();
                             }
                         }
@@ -51,7 +56,7 @@ namespace oxu
             }
             else
                 xState = false;
-            
+
             if(kb.isKeyPressed(sf::Keyboard::Z))
             {
                 zState = true;
@@ -65,15 +70,15 @@ namespace oxu
                             mousePos.y >= hitObj.getHitCircleByIndex(i)->getPos().y - hitObj.getHitCircleSize() / 2 &&
                             mousePos.y <= hitObj.getHitCircleByIndex(i)->getPos().y + hitObj.getHitCircleSize() / 2 )
                         {
-                            if(getApproachCirclePercentage(hitObj.getHitCircleByIndex(i)->getSpawnTime(), hitObj.getApproachCircleByIndex(i)->getApproachSpeedAsMs(), soundH.getAudioPlayingOffset()) > 90)
+                            if(getApproachCirclePercentage(hitObj.getHitCircleByIndex(i)->getSpawnTime(), 450, soundH.getAudioPlayingOffset()) > 90 &&
+                            getApproachCirclePercentage(hitObj.getHitCircleByIndex(i)->getSpawnTime(), 450, soundH.getAudioPlayingOffset()) <= 100 )
                             {
-                                //90 is a percentage
+                                ++combo;
                                 hitObj.getHitCircleByIndex(i)->click();
                             }
                         }
                     }
                 }
-
             }
             else
                 zState = false;

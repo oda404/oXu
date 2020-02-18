@@ -21,6 +21,12 @@ namespace oxu
         SoundHandler *mapSound; 
         PlayField *playField;
         InputHandler *inputHandler;
+
+        sf::Font font;
+        sf::Text comboString;
+        sf::RectangleShape bar1;
+
+        sf::RectangleShape bar2;
         
 
         std::vector<std::vector<std::function<void (sf::RenderWindow &window, const float &dt)>>> sceneGraphicsHandlers;
@@ -29,6 +35,25 @@ namespace oxu
         GraphicsHandler(InputHandler *inputHandler):
         inputHandler(inputHandler)
         {
+            //=====================  font and combo text  =================================
+#ifdef __linux__
+            font.loadFromFile("/root/Documents/osuBootleg/textures/coolvetica.ttf");
+#else
+			font.loadFromFile("E:/visualproj/SFMLosuBootleg/textures/coolvetica.ttf"); 
+#endif
+            comboString.setFont(font);
+            comboString.setFillColor(sf::Color(255,255,255, 255));
+            comboString.setCharacterSize(90);
+            comboString.setPosition(35,940); 
+            //===============================================================================
+            bar1.setSize({960,20});
+            bar2.setSize({-960,20});
+            bar1.setPosition(960,1060);
+            bar1.setFillColor(sf::Color::White);
+            bar2.setPosition(960,1060);
+            bar2.setFillColor(sf::Color::White);
+
+
             std::vector<std::function<void(sf::RenderWindow &window, const float &dt)>> aux;
             //add main menu graphics handlers @ index 0===========================================================================
             aux.push_back([this](sf::RenderWindow &window, const float &dt) -> void { return this->drawMainMenu(window, dt); });
@@ -42,6 +67,8 @@ namespace oxu
 
             aux.push_back([this](sf::RenderWindow &window, const float &dt) -> void { return this->drawHitCircles(window, dt); });
             aux.push_back([this](sf::RenderWindow &window, const float &dt) -> void { return this->drawInputSquares(window, dt); });
+            aux.push_back([this](sf::RenderWindow &window, const float &dt) -> void { return this->drawCombo(window, dt); });
+            aux.push_back([this](sf::RenderWindow &window, const float &dt) -> void { return this->drawHealthBar(window, dt); });
 
             sceneGraphicsHandlers.push_back(aux);
 
@@ -82,15 +109,7 @@ namespace oxu
                 }
                 else
                 {
-                    if(!hitObjects->getHitCircleByIndex(i)->fadeCircleOut(dt))
-                    {
-                        hitObjects->getApproachCircleByIndex(i)->fadeCircleOut(dt);
-                        
-                        window.draw(hitObjects->getApproachCircleByIndex(i)->getApproachCircle());
-                        window.draw(hitObjects->getHitCircleByIndex(i)->getHitCircle());
-                    }
-                    else
-                        hitObjects->incrementHitCircleCap();
+                    hitObjects->incrementHitCircleCap();
                 }
             }
         }
@@ -115,6 +134,24 @@ namespace oxu
             
             window.draw(rec1);
             window.draw(rec);
+        }
+
+        void drawCombo(sf::RenderWindow &window, const float &dt)
+        {
+            comboString.setString(std::to_string(inputHandler->getCombo()) + " X");
+            window.draw(comboString);
+        }
+
+        void drawHealthBar(sf::RenderWindow &window, const float &dt)
+        {
+            if(bar1.getSize().x > 0)
+            {
+                bar1.setSize({bar1.getSize().x - 450 *dt, bar1.getSize().y});
+                bar2.setSize({bar2.getSize().x + 450 *dt, bar2.getSize().y});
+            }
+
+            window.draw(bar2);
+            window.draw(bar1);
         }
 
         /*void drawSliders(sf::RenderWindow &window, const float &dt)
@@ -207,14 +244,7 @@ namespace oxu
             window.draw(x);
             window.draw(u);
 
-            static sf::Font f;
-#ifdef __linux__
-            f.loadFromFile("/root/Documents/osuBootleg/textures/coolvetica.ttf");
-#else
-			f.loadFromFile("E:/visualproj/SFMLosuBootleg/textures/coolvetica.ttf");
-#endif
-
-            static sf::Text text("Click anywhere to continue!",f);
+            static sf::Text text("Click anywhere to continue!",font);
             text.setFillColor(sf::Color(0,0,0, 122));
             text.setCharacterSize(35);
             text.setPosition(725,750);

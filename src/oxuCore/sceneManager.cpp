@@ -32,7 +32,7 @@ void oxu::SceneManager::handleCurrentScene(sf::RenderWindow &window, const float
     //================  Actual scene handling  ==================
     /*inputHandler gets called between every other handler so
     it gets the most accurate results*/
-    inputHandler.handleInput(hitObjects,window,soundHandler);
+    //inputHandler.handleInput(hitObjects,window,soundHandler);
 
     soundHandler.handleSound(currentScene);
 

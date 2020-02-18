@@ -3,7 +3,7 @@
 oxu::Game::Game()
 {
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(screenSize.x, screenSize.y), "oXu");
-    window->setFramerateLimit(60);
+    window->setFramerateLimit(120);
 
     playField = std::make_shared<PlayField>(screenSize);
 
