@@ -17,18 +17,18 @@ namespace oxu
     class SceneManager
     {
     private:
-        PlayField *playField;
-
+        
+        std::shared_ptr<PlayField> playField;
         std::shared_ptr<InputHandler> inputHandler;
         std::shared_ptr<GraphicsHandler> graphicsHandler;
         SoundHandler soundHandler;
         HitObjectManager hitObjects;
         
-        std::uint8_t currentScene;
+        std::uint8_t currentScene = 0;
         std::vector<std::vector<Button>> buttons;
 
     public:
-        SceneManager(sf::RenderWindow *window, PlayField *playFieldPtr);
+        SceneManager(sf::RenderWindow *window);
 
         void handleCurrentScene(sf::RenderWindow &window, const float &dt);
 

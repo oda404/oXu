@@ -5,7 +5,7 @@ namespace oxu
 	class PlayField
 	{
 	public:
-		PlayField(const sf::Vector2i &screenSize)
+		PlayField(const sf::Vector2u screenSize)
 		{
 			this->osuPx = screenSize.y / 480.0f;
 			this->playArea.setSize({ osuPx * 512, osuPx * 384 });

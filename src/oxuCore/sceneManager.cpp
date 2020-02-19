@@ -1,9 +1,11 @@
 #include"sceneManager.h"
 
-oxu::SceneManager::SceneManager(sf::RenderWindow *window, PlayField *playFieldPtr):
-playField(playFieldPtr) , currentScene(0)
+oxu::SceneManager::SceneManager(sf::RenderWindow *window)
 {
+    playField =  std::make_shared<PlayField>(window->getSize());
+
     inputHandler = std::make_shared<InputHandler>(&hitObjects, &soundHandler);
+
     graphicsHandler = std::make_shared<GraphicsHandler>(inputHandler.get());
     
     graphicsHandler->setCursor(window);
@@ -59,6 +61,6 @@ void oxu::SceneManager::handleCurrentScene(sf::RenderWindow &window, const float
 void oxu::SceneManager::loadBeatMap()
 {
     BeatMapParser parser;
-    hitObjects.createHitObjects(parser, *playField);
-    graphicsHandler->loadInfo(&hitObjects, &soundHandler, playField);
+    hitObjects.createHitObjects(parser, *playField.get());
+    graphicsHandler->loadInfo(&hitObjects, &soundHandler, playField.get());
 }

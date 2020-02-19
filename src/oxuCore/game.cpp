@@ -2,12 +2,10 @@
 
 oxu::Game::Game()
 {
-    window = std::make_shared<sf::RenderWindow>(sf::VideoMode(screenSize.x, screenSize.y), "oXu", sf::Style::Fullscreen);
+    window = std::make_shared<sf::RenderWindow>(sf::VideoMode(screenSize.x, screenSize.y), "oXu");
     window->setFramerateLimit(120);
 
-    playField = std::make_shared<PlayField>(screenSize);
-
-    sceneManager = std::make_shared<SceneManager>(window.get(), playField.get());
+    sceneManager = std::make_shared<SceneManager>(window.get());
 }
 
 void oxu::Game::run()
