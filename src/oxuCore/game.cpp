@@ -5,12 +5,18 @@ oxu::Game::Game()
     window = std::make_shared<sf::RenderWindow>(sf::VideoMode(screenSize.x, screenSize.y), "oXu");
     window->setFramerateLimit(120);
 
-    sceneManager = std::make_shared<SceneManager>(window.get());
+	playField =  std::make_shared<PlayField>(window->getSize());
+
+    hitObjects = std::make_shared<HitObjectManager>(playField.get());
+
+    inputHandler = std::make_shared<InputHandler>(hitObjects.get(), &soundHandler);
+
+    graphicsHandler = std::make_shared<GraphicsHandler>(inputHandler.get(), hitObjects.get(), &soundHandler, playField.get());
+    graphicsHandler->setCursor(window.get());
 }
 
 void oxu::Game::run()
 {
-
     while (window->isOpen())
 	{
 		deltaTime = deltaClock.restart();
@@ -22,6 +28,23 @@ void oxu::Game::run()
 				window->close();
 		}
 
-		sceneManager->handleCurrentScene(*window, deltaTime.asSeconds());
+		if(currentScene == 1)
+			window->clear();
+		else
+			window->clear(sf::Color(100,100,100,255));
+				
+	#ifdef __linux__
+		graphicsHandler->drawCursor(*window.get());
+	#endif
+		
+		//================  Actual scene handling  ==================
+		soundHandler.handleSound(currentScene);
+
+		graphicsHandler->handleGraphics(*window.get(), deltaTime.asSeconds(), currentScene);
+
+		inputHandler->handleInput(*window.get(), currentScene);
+		//===========================================================
+
+		window->display();
 	}
 }

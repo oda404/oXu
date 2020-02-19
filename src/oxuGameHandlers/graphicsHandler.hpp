@@ -32,8 +32,8 @@ namespace oxu
         std::vector<std::vector<std::function<void (sf::RenderWindow &window, const float &dt)>>> sceneGraphicsHandlers;
 
     public:
-        GraphicsHandler(InputHandler *inputHandler):
-        inputHandler(inputHandler)
+        GraphicsHandler(InputHandler *inputHandler, HitObjectManager *hitObjPtr, SoundHandler *soundHandlerPtr, PlayField *playFieldPtr):
+        inputHandler(inputHandler), hitObjects(hitObjPtr),  mapSound(soundHandlerPtr), playField(playFieldPtr)
         {
             //=====================  font and combo text  =================================
 #ifdef __linux__
@@ -75,13 +75,6 @@ namespace oxu
             aux.clear();
             //======================================================================================================================
 
-        }
-
-        void loadInfo(HitObjectManager *hitObjectsObj, SoundHandler *soundPtr, PlayField *playFieldPtr)
-        {
-            hitObjects = hitObjectsObj;
-            mapSound = soundPtr;
-            playField = playFieldPtr;
         }
 
         void handleGraphics(sf::RenderWindow &window, const float &dt, const std::uint8_t &sceneID)
@@ -270,11 +263,6 @@ namespace oxu
             text.setPosition(725,750);
 
             window.draw(text);
-
-        }
-
-        void drawSongSelectMenu()
-        {
 
         }
 

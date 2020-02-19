@@ -9,7 +9,8 @@ namespace oxu
 	class HitObjectManager
 	{
 	public:
-		HitObjectManager()
+		HitObjectManager(PlayField *playFieldPtr):
+		playField(playFieldPtr)
 		{
 			hitCircleTexture.setSmooth(true);
 			approachCircleTexture.setSmooth(true);
@@ -22,12 +23,12 @@ namespace oxu
 #endif
 		}
 
-		void createHitObjects(BeatMapParser &beatMap, PlayField &playField)
+		void createHitObjects(BeatMapParser &beatMap)
 		{
 			for (unsigned int i = 0; i < beatMap.getHitObjectPositions().size(); i++)
 			{
-				hitCircleVector.push_back(HitCircle(beatMap.getHitObjectPositions()[i], beatMap.gethitObjectSpawnTimes()[i], 4.2f, playField, hitCircleTexture));
-				approachCircleVector.push_back(ApproachCircle(0.450f, hitCircleVector[i].getPos(), hitCircleVector[i].getHitCircleScale() * playField.getOsuPx() * 1.5f, approachCircleTexture));
+				hitCircleVector.push_back(HitCircle(beatMap.getHitObjectPositions()[i], beatMap.gethitObjectSpawnTimes()[i], 4.2f, *playField, hitCircleTexture));
+				approachCircleVector.push_back(ApproachCircle(0.450f, hitCircleVector[i].getPos(), hitCircleVector[i].getHitCircleScale() * playField->getOsuPx() * 1.5f, approachCircleTexture));
 			}
 
 			for (unsigned int i = 0; i < beatMap.getSlidersPositions().size(); i++)
@@ -40,11 +41,11 @@ namespace oxu
 					beatMap.getSlides()[i],
 					beatMap.getSliderLength()[i],
 					beatMap.getHitObjectCurveType()[i],
-					playField,
+					*playField,
 					hitCircleTexture
 				));
 
-				sliderApproachCircles.push_back(ApproachCircle(0.450f, sliderVector[i].getPos(), sliderVector[i].getHitCircleScale() * playField.getOsuPx() * 1.5f, approachCircleTexture));
+				sliderApproachCircles.push_back(ApproachCircle(0.450f, sliderVector[i].getPos(), sliderVector[i].getHitCircleScale() * playField->getOsuPx() * 1.5f, approachCircleTexture));
 			}
 		}
 
@@ -74,5 +75,6 @@ namespace oxu
 		std::vector<Slider> sliderVector;
 		std::vector<ApproachCircle> sliderApproachCircles;
 
+		PlayField *playField;
 	};
 }

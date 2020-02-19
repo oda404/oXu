@@ -19,7 +19,7 @@ namespace oxu
         bool xState = false, zState = false;
         int combo = 0, pendingObj = 0;
 
-        std::vector<std::function<void(sf::RenderWindow &window)>> sceneInputHandlers;
+        std::vector<std::function<void(sf::RenderWindow &window, std::uint8_t &currentScene)>> sceneInputHandlers;
 
         float getApproachCirclePercentage(const float &spawnTime, const float &approachSpeed, const float &playingOffset) const
         {
@@ -31,10 +31,10 @@ namespace oxu
         hitObjManager(hitObjManagerPtr), soundHandler(soundHandlerPtr)
         {
             //==========  main menu input handlers ====================
-            sceneInputHandlers.push_back([this](sf::RenderWindow &window) -> void { return this->handleButtons(window); });
+            sceneInputHandlers.push_back([this](sf::RenderWindow &window, std::uint8_t &currentScene) -> void { return this->handleMainMenu(window, currentScene); });
 
             //========== game input handler ==========================
-            sceneInputHandlers.push_back([this](sf::RenderWindow &window) -> void { return this->handleHitObjects(window); });
+            sceneInputHandlers.push_back([this](sf::RenderWindow &window, std::uint8_t &currentScene) -> void { return this->handleHitObjects(window, currentScene); });
         }
 
         bool getXKeyState() const { return xState; }
@@ -45,15 +45,20 @@ namespace oxu
 
         void handleInput(sf::RenderWindow &window, std::uint8_t &sceneID)
         {   
-            sceneInputHandlers[sceneID](window);
+            sceneInputHandlers[sceneID](window, sceneID);
         }
 
-        void handleButtons(sf::RenderWindow &window)
+        void handleMainMenu(sf::RenderWindow &window, std::uint8_t &currentScene)
         {
-
+            if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            {
+                BeatMapParser parser;
+                hitObjManager->createHitObjects(parser);
+                ++currentScene;
+            }
         }
 
-        void handleHitObjects(sf::RenderWindow &window)
+        void handleHitObjects(sf::RenderWindow &window, std::uint8_t &currentScene)
         {
             if(kb.isKeyPressed(sf::Keyboard::X))
             {
@@ -69,22 +74,6 @@ namespace oxu
             }
             else
                 xState = false;
-
-            /*if(kb.isKeyPressed(sf::Keyboard::Z))
-            {
-                zState = true;
-                mousePos = sf::Mouse::getPosition(window);
-
-                int ACPerc = getApproachCirclePercentage(hitObjManager->getHitCircleByIndex(pendingObj)->getSpawnTime(), 450, soundHandler->getAudioPlayingOffset());
-
-                if(ACPerc > 90 && ACPerc <= 100 )
-                {
-                    ++combo;
-                    ++pendingObj;
-                }
-            }
-            else
-                zState = false;*/
 
             if(getApproachCirclePercentage(hitObjManager->getHitCircleByIndex(pendingObj)->getSpawnTime(), 450, soundHandler->getAudioPlayingOffset()) > 100)
             {
