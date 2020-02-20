@@ -31,10 +31,10 @@ namespace oxu
         hitObjManager(hitObjManagerPtr), soundHandler(soundHandlerPtr)
         {
             //==========  main menu input handlers ====================
-            sceneInputHandlers.push_back([this](sf::RenderWindow &window, std::uint8_t &currentScene) -> void { return this->handleMainMenu(window, currentScene); });
+            sceneInputHandlers.push_back([this](sf::RenderWindow &window, std::uint8_t &currentScene) -> void { return this->handleMainMenuInput(window, currentScene); });
 
             //========== game input handler ==========================
-            sceneInputHandlers.push_back([this](sf::RenderWindow &window, std::uint8_t &currentScene) -> void { return this->handleHitObjects(window, currentScene); });
+            sceneInputHandlers.push_back([this](sf::RenderWindow &window, std::uint8_t &currentScene) -> void { return this->handleHitObjectsInput(window, currentScene); });
         }
 
         bool getXKeyState() const { return xState; }
@@ -48,7 +48,7 @@ namespace oxu
             sceneInputHandlers[sceneID](window, sceneID);
         }
 
-        void handleMainMenu(sf::RenderWindow &window, std::uint8_t &currentScene)
+        void handleMainMenuInput(sf::RenderWindow &window, std::uint8_t &currentScene)
         {
             if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
             {
@@ -58,7 +58,7 @@ namespace oxu
             }
         }
 
-        void handleHitObjects(sf::RenderWindow &window, std::uint8_t &currentScene)
+        void handleHitObjectsInput(sf::RenderWindow &window, std::uint8_t &currentScene)
         {
             if(kb.isKeyPressed(sf::Keyboard::X))
             {

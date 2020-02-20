@@ -24,8 +24,17 @@ void oxu::Game::run()
 		sf::Event event;
 		while (window->pollEvent(event))
 		{
-			if (event.type == sf::Event::Closed)
+			switch(event.type)
+			{
+			case sf::Event::Closed:
+				soundHandler.setVolumeToDefault();
+				soundHandler.freeAudio();
 				window->close();
+				break;
+
+			default:
+				break;
+			}
 		}
 
 		if(currentScene == 1)
