@@ -1,11 +1,10 @@
 #pragma once
 #include<SFML/Graphics.hpp>
-#include<SFML/Audio.hpp>
 #include"../3rdParty/bass.h"
 
 #include<memory>
-
-#include<iostream>
+#include<vector>
+#include<functional>
 
 namespace oxu
 {
@@ -16,12 +15,24 @@ namespace oxu
 		std::shared_ptr<sf::Clock> audioPlayingOffset;
 		float initialVolume;
 
+		std::vector<std::function<void(const void *fileName)>> sceneSoundHandlers;
 	public:
 		SoundHandler()
 		{
 			BASS_Init(-1, 44100, 0, 0, NULL);
 			initialVolume = BASS_GetVolume();
 			BASS_SetVolume(0.2f);
+
+			//=================================== sound handler for the main menu ===============================================
+			sceneSoundHandlers.push_back([this](const void *fileName) -> void { return this->handleMainMenuSound(fileName); });
+
+			//=================================== sound handler for the game =====================================================
+			sceneSoundHandlers.push_back([this](const void *fileName) -> void { return this->handleGameSound(fileName); });
+		}
+
+		void setVolumeToDefault()
+		{
+			BASS_SetVolume(initialVolume);
 		}
 
 		void setAudioVolume(const float &volume)
@@ -43,7 +54,7 @@ namespace oxu
 		void freeAudio()
 		{
 			BASS_StreamFree(streamHandle);
-			BASS_Free(); // fix
+			BASS_Free();
 		}
 
 		sf::Int32 getAudioPlayingOffset() const
@@ -51,25 +62,26 @@ namespace oxu
 			return audioPlayingOffset->getElapsedTime().asMilliseconds();
 		}
 
+		void handleMainMenuSound(const void *fileName)
+		{
+			//empty for now
+		}
+
+		void handleGameSound(const void *fileName)
+		{
+			static bool play = true;
+
+			if(play)
+			{
+				loadAudioFile(fileName);
+				playAudio();
+				play = false;
+			}
+		}
+
 		void handleSound(const std::uint8_t &sceneID)
 		{
-			static bool go = true;
-
-			switch(sceneID)
-			{
-				case 0:
-					
-					break;
-
-				case 1:
-					if(go)
-					{
-						loadAudioFile("yomi.mp3");
-						playAudio();
-						go= false;
-					}
-					break;
-			}
+			sceneSoundHandlers[sceneID]("yomi.mp3");
 		}
 
 	};
