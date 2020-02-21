@@ -2,7 +2,7 @@
 #include"../oxuGameComponents/hitCircle.h"
 #include"../oxuGameComponents/approachCircle.h"
 #include"../oxuGameComponents/slider.h"
-#include"beatMapParser.h"
+#include"mapManager.hpp"
 
 namespace oxu
 {
@@ -23,7 +23,7 @@ namespace oxu
 #endif
 		}
 
-		void createHitObjects(BeatMapParser &beatMap)
+		void createHitObjects(MapManager &beatMap)
 		{
 			for (unsigned int i = 0; i < beatMap.getHitObjectPositions().size(); i++)
 			{

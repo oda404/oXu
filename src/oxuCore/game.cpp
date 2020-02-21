@@ -9,7 +9,7 @@ oxu::Game::Game()
 
     hitObjects = std::make_shared<HitObjectManager>(playField.get());
 
-    inputHandler = std::make_shared<InputHandler>(hitObjects.get(), &soundHandler);
+    inputHandler = std::make_shared<InputHandler>(hitObjects.get(), &soundHandler, &mapManager);
 
     graphicsHandler = std::make_shared<GraphicsHandler>(inputHandler.get(), hitObjects.get(), &soundHandler, playField.get(), &mapManager);
     graphicsHandler->setCursor(window.get());

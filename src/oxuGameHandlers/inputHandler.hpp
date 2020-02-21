@@ -15,6 +15,7 @@ namespace oxu
 
         HitObjectManager *hitObjManager;
         SoundHandler *soundHandler;
+        MapManager *mapManager;
 
         bool xState = false, zState = false, mousePressed = false;
         int combo = 0, pendingObj = 0;
@@ -27,8 +28,8 @@ namespace oxu
         }
         
     public:
-        InputHandler(HitObjectManager *hitObjManagerPtr, SoundHandler *soundHandlerPtr):
-        hitObjManager(hitObjManagerPtr), soundHandler(soundHandlerPtr)
+        InputHandler(HitObjectManager *hitObjManagerPtr, SoundHandler *soundHandlerPtr, MapManager *mapManagerPtr):
+        hitObjManager(hitObjManagerPtr), soundHandler(soundHandlerPtr), mapManager(mapManagerPtr)
         {
             //==========  main menu input handlers ====================
             sceneInputHandlers.push_back([this](sf::RenderWindow &window, std::uint8_t &currentScene) -> void { return this->handleMainMenuInput(window, currentScene); });
@@ -66,8 +67,8 @@ namespace oxu
         {
             if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && !mousePressed)
             {
-                BeatMapParser parser;
-                hitObjManager->createHitObjects(parser);
+                mapManager->loadHitObjects();
+                hitObjManager->createHitObjects(*mapManager);
                 
                 mousePressed = true;
                 ++currentScene;

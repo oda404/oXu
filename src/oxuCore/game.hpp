@@ -4,7 +4,6 @@
 
 #include"../oxuGameHandlers/graphicsHandler.hpp"
 #include"../oxuGameHandlers/soundHandler.h"
-#include"../oxuGameHandlers/beatMapParser.h"
 #include"../oxuGameHandlers/hitObjectManager.h"
 #include"../oxuGameComponents/playField.h"
 #include"../oxuGameHandlers/inputHandler.hpp"
