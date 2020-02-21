@@ -16,7 +16,7 @@ namespace oxu
         HitObjectManager *hitObjManager;
         SoundHandler *soundHandler;
 
-        bool xState = false, zState = false;
+        bool xState = false, zState = false, mousePressed = false;
         int combo = 0, pendingObj = 0;
 
         std::vector<std::function<void(sf::RenderWindow &window, std::uint8_t &currentScene)>> sceneInputHandlers;
@@ -32,6 +32,9 @@ namespace oxu
         {
             //==========  main menu input handlers ====================
             sceneInputHandlers.push_back([this](sf::RenderWindow &window, std::uint8_t &currentScene) -> void { return this->handleMainMenuInput(window, currentScene); });
+
+            //========== song select input handler ====================
+            sceneInputHandlers.push_back([this](sf::RenderWindow &window, std::uint8_t &currentScene) -> void { return this->handleSongSelectInput(window, currentScene); });
 
             //========== game input handler ==========================
             sceneInputHandlers.push_back([this](sf::RenderWindow &window, std::uint8_t &currentScene) -> void { return this->handleHitObjectsInput(window, currentScene); });
@@ -50,12 +53,27 @@ namespace oxu
 
         void handleMainMenuInput(sf::RenderWindow &window, std::uint8_t &currentScene)
         {
-            if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && !mousePressed)
+            {
+                mousePressed = true;
+                ++currentScene;
+            }
+            else if(!sf::Mouse::isButtonPressed(sf::Mouse::Left))
+                mousePressed = false;
+        }
+
+        void handleSongSelectInput(sf::RenderWindow &window, std::uint8_t &currentScene)
+        {
+            if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && !mousePressed)
             {
                 BeatMapParser parser;
                 hitObjManager->createHitObjects(parser);
+                
+                mousePressed = true;
                 ++currentScene;
             }
+            else if(!sf::Mouse::isButtonPressed(sf::Mouse::Left))
+                mousePressed = false;
         }
 
         void handleHitObjectsInput(sf::RenderWindow &window, std::uint8_t &currentScene)

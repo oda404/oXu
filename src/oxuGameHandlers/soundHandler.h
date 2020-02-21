@@ -26,6 +26,9 @@ namespace oxu
 			//=================================== sound handler for the main menu ===============================================
 			sceneSoundHandlers.push_back([this](const void *fileName) -> void { return this->handleMainMenuSound(fileName); });
 
+			//=================================== sound handler for the song select menu ========================================
+			sceneSoundHandlers.push_back([this](const void *fileName) -> void { return this->handleSongSelectMenuSound(fileName); });
+
 			//=================================== sound handler for the game =====================================================
 			sceneSoundHandlers.push_back([this](const void *fileName) -> void { return this->handleGameSound(fileName); });
 		}
@@ -65,6 +68,11 @@ namespace oxu
 		void handleMainMenuSound(const void *fileName)
 		{
 			//empty for now
+		}
+
+		void handleSongSelectMenuSound(const void *fileName)
+		{
+			//emtpy for now
 		}
 
 		void handleGameSound(const void *fileName)

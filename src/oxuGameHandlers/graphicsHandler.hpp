@@ -6,6 +6,7 @@
 #include "hitObjectManager.h"
 #include "../oxuGameComponents/playField.h"
 #include "../3rdParty/StandardCursor.hpp"
+#include"../oxuGameHandlers/mapManager.hpp"
 #include"soundHandler.h"
 #include"inputHandler.hpp"
 
@@ -21,19 +22,19 @@ namespace oxu
         SoundHandler *mapSound; 
         PlayField *playField;
         InputHandler *inputHandler;
+        MapManager *mapManager;
 
         sf::Font font;
         sf::Text comboString;
-        sf::RectangleShape bar1;
-
-        sf::RectangleShape bar2;
+        sf::RectangleShape xButton;
+        sf::RectangleShape zButton;
         
 
         std::vector<std::vector<std::function<void (sf::RenderWindow &window, const float &dt)>>> sceneGraphicsHandlers;
 
     public:
-        GraphicsHandler(InputHandler *inputHandler, HitObjectManager *hitObjPtr, SoundHandler *soundHandlerPtr, PlayField *playFieldPtr):
-        inputHandler(inputHandler), hitObjects(hitObjPtr),  mapSound(soundHandlerPtr), playField(playFieldPtr)
+        GraphicsHandler(InputHandler *inputHandler, HitObjectManager *hitObjPtr, SoundHandler *soundHandlerPtr, PlayField *playFieldPtr, MapManager *mapManagerPtr):
+        inputHandler(inputHandler), hitObjects(hitObjPtr),  mapSound(soundHandlerPtr), playField(playFieldPtr), mapManager(mapManagerPtr)
         {
             //=====================  font and combo text  =================================
 #ifdef __linux__
@@ -46,12 +47,12 @@ namespace oxu
             comboString.setCharacterSize(90);
             comboString.setPosition(35,940); 
             //===============================================================================
-            bar1.setSize({960,20});
-            bar2.setSize({-960,20});
-            bar1.setPosition(960,1060);
-            bar1.setFillColor(sf::Color::White);
-            bar2.setPosition(960,1060);
-            bar2.setFillColor(sf::Color::White);
+            xButton.setSize({960,20});
+            zButton.setSize({-960,20});
+            xButton.setPosition(960,1060);
+            xButton.setFillColor(sf::Color::White);
+            zButton.setPosition(960,1060);
+            zButton.setFillColor(sf::Color::White);
 
 
             std::vector<std::function<void(sf::RenderWindow &window, const float &dt)>> aux;
@@ -63,7 +64,16 @@ namespace oxu
             aux.clear();
             //====================================================================================================================
 
-            //add game graphics handlers @ index 1==================================================================================
+            // add song select graphics handlers @ index 1========================================================================
+
+            aux.push_back([this](sf::RenderWindow &window, const float &dt) -> void { return this->drawSongSelectMenu(window, dt); });
+
+            sceneGraphicsHandlers.push_back(aux);
+
+            aux.clear();
+            //====================================================================================================================
+
+            //add game graphics handlers @ index 2==================================================================================
 
             aux.push_back([this](sf::RenderWindow &window, const float &dt) -> void { return this->drawHitCircles(window, dt); });
             aux.push_back([this](sf::RenderWindow &window, const float &dt) -> void { return this->drawInputSquares(window, dt); });
@@ -145,26 +155,26 @@ namespace oxu
 
         void drawHealthBar(sf::RenderWindow &window, const float &dt)
         {
-            if(bar1.getSize().x > 0)
+            if(xButton.getSize().x > 0)
             {
-                bar1.setSize({bar1.getSize().x - 400 *dt, bar1.getSize().y});
-                bar2.setSize({bar2.getSize().x + 400 *dt, bar2.getSize().y});
+                xButton.setSize({xButton.getSize().x - 400 *dt, xButton.getSize().y});
+                zButton.setSize({zButton.getSize().x + 400 *dt, zButton.getSize().y});
             }
             static int hits = inputHandler->getCombo();
 
             if(inputHandler->getCombo() > hits)
             {
-                if(bar1.getSize().x < 960)
+                if(xButton.getSize().x < 960)
                 {
-                    bar1.setSize({bar1.getSize().x + 50, bar1.getSize().y});
-                    bar2.setSize({bar2.getSize().x - 50 , bar2.getSize().y});
+                    xButton.setSize({xButton.getSize().x + 50, xButton.getSize().y});
+                    zButton.setSize({zButton.getSize().x - 50 , zButton.getSize().y});
                 }
             }
 
             hits = inputHandler->getCombo();
 
-            window.draw(bar2);
-            window.draw(bar1);
+            window.draw(zButton);
+            window.draw(xButton);
         }
 
         /*void drawSliders(sf::RenderWindow &window, const float &dt)
@@ -258,12 +268,54 @@ namespace oxu
             window.draw(u);
 
             static sf::Text text("Click anywhere to continue!",font);
+            text.setString("Click anywhere to continue!");
             text.setFillColor(sf::Color(0,0,0, 122));
             text.setCharacterSize(35);
             text.setPosition(725,750);
 
             window.draw(text);
 
+            text.setPosition(30,30);
+            text.setString("oXu has loaded " + mapManager->getNumberOfMaps() + " beat maps!");
+
+            window.draw(text);
+        }
+
+        void drawSongSelectMenu(sf::RenderWindow &window, const float &dt)
+        {
+            static sf::RectangleShape songRect({700,150});
+            songRect.setOutlineColor(sf::Color(0,0,0,170));
+            songRect.setOutlineThickness(5);
+            songRect.setFillColor(sf::Color(0,0,0, 125));
+            songRect.setPosition({1920 - 700, 400});
+
+            static sf::Text info(mapManager->getMapMetaData(0)[0], font);
+            info.setString(mapManager->getMapMetaData(0)[0]);
+            info.setCharacterSize(45);
+            info.setPosition(songRect.getPosition().x + 20, songRect.getPosition().y + 10);
+            info.setFillColor(sf::Color::Black);
+            //song name
+            window.draw(info);
+
+            info.setString(mapManager->getMapMetaData(0)[2]);
+            info.setPosition(songRect.getPosition().x + 20, songRect.getPosition().y + 50);
+            info.setCharacterSize(30);
+            //song author
+            window.draw(info);
+
+            info.setString(", mapped by " + mapManager->getMapMetaData(0)[4]);
+            info.setPosition(info.getPosition().x + 130, songRect.getPosition().y + 50);
+            info.setCharacterSize(30);
+            //mapper's name
+            window.draw(info);
+
+            info.setString("[" + mapManager->getMapMetaData(0)[5] + "]");
+            info.setPosition(songRect.getPosition().x + 20, songRect.getPosition().y + 75);
+            info.setCharacterSize(30);
+            //version
+            window.draw(info);
+
+            window.draw(songRect);
         }
 
     };

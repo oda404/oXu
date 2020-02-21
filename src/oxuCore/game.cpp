@@ -11,7 +11,7 @@ oxu::Game::Game()
 
     inputHandler = std::make_shared<InputHandler>(hitObjects.get(), &soundHandler);
 
-    graphicsHandler = std::make_shared<GraphicsHandler>(inputHandler.get(), hitObjects.get(), &soundHandler, playField.get());
+    graphicsHandler = std::make_shared<GraphicsHandler>(inputHandler.get(), hitObjects.get(), &soundHandler, playField.get(), &mapManager);
     graphicsHandler->setCursor(window.get());
 }
 
@@ -37,7 +37,7 @@ void oxu::Game::run()
 			}
 		}
 
-		if(currentScene == 1)
+		if(currentScene == 2)
 			window->clear();
 		else
 			window->clear(sf::Color(100,100,100,255));

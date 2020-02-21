@@ -8,6 +8,7 @@
 #include"../oxuGameHandlers/hitObjectManager.h"
 #include"../oxuGameComponents/playField.h"
 #include"../oxuGameHandlers/inputHandler.hpp"
+#include"../oxuGameHandlers/mapManager.hpp"
 
 namespace oxu
 {
@@ -22,6 +23,7 @@ namespace oxu
         std::shared_ptr<GraphicsHandler> graphicsHandler;
         SoundHandler soundHandler;
         std::shared_ptr<HitObjectManager> hitObjects;
+        MapManager mapManager;
 
         std::uint8_t currentScene = 0;
 
