@@ -9,6 +9,7 @@
 #include"../oxuGameHandlers/mapManager.hpp"
 #include"soundHandler.h"
 #include"inputHandler.hpp"
+#include"../oxuGameComponents/mapSelectButton.hpp"
 
 namespace oxu
 {
@@ -24,6 +25,8 @@ namespace oxu
         InputHandler *inputHandler;
         MapManager *mapManager;
 
+        std::vector<MapSelectButton> *mapSelectButtons;
+
         sf::Font font;
         sf::Text comboString;
         sf::RectangleShape xButton;
@@ -33,8 +36,8 @@ namespace oxu
         std::vector<std::vector<std::function<void (sf::RenderWindow &window, const float &dt)>>> sceneGraphicsHandlers;
 
     public:
-        GraphicsHandler(InputHandler *inputHandler, HitObjectManager *hitObjPtr, SoundHandler *soundHandlerPtr, PlayField *playFieldPtr, MapManager *mapManagerPtr):
-        inputHandler(inputHandler), hitObjects(hitObjPtr),  mapSound(soundHandlerPtr), playField(playFieldPtr), mapManager(mapManagerPtr)
+        GraphicsHandler(InputHandler *inputHandler, HitObjectManager *hitObjPtr, SoundHandler *soundHandlerPtr, PlayField *playFieldPtr, MapManager *mapManagerPtr, std::vector<MapSelectButton> *buttonsPtr):
+        inputHandler(inputHandler), hitObjects(hitObjPtr),  mapSound(soundHandlerPtr), playField(playFieldPtr), mapManager(mapManagerPtr), mapSelectButtons(buttonsPtr)
         {
             //=====================  font and combo text  =================================
 #ifdef __linux__
@@ -283,6 +286,12 @@ namespace oxu
 
         void drawSongSelectMenu(sf::RenderWindow &window, const float &dt)
         {
+
+            for(auto button: *mapSelectButtons)
+            {
+                //button.drawButton(window, &font);
+            }
+
             static sf::RectangleShape songRect({700,150});
             songRect.setOutlineColor(sf::Color(0,0,0,170));
             songRect.setOutlineThickness(5);

@@ -65,7 +65,7 @@ namespace oxu
 
         void handleSongSelectInput(sf::RenderWindow &window, std::uint8_t &currentScene)
         {
-            if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && !mousePressed)
+            if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && !mousePressed) 
             {
                 mapManager->loadHitObjects();
                 hitObjManager->createHitObjects(*mapManager);

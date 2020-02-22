@@ -5,12 +5,15 @@
 #include<sstream>
 #include<fstream>
 #include<boost/filesystem.hpp>
+#include<iostream>
+#include"../oxuGameComponents/mapSelectButton.hpp"
 
 class MapManager
 {
 private:
     std::vector<boost::filesystem::directory_entry> pathToMaps;
-    int numberOfMaps = 0;
+
+    std::vector<MapSelectButton> *mapSelectionButtons;
 
     //info about the map's hit circles===================================
     std::vector<sf::Vector2f> hitCirclesPositions;
@@ -26,7 +29,8 @@ private:
     //===================================================================
 
 public:
-    MapManager()
+    MapManager(std::vector<MapSelectButton> *buttonsPtr):
+    mapSelectionButtons(buttonsPtr)
     {
         enumerateMaps();
     }
@@ -39,17 +43,16 @@ public:
             {
                 if(boost::filesystem::extension(y) == ".osu")
                 {
+                    mapSelectionButtons->emplace_back(boost::filesystem::canonical(y).string());
                     pathToMaps.push_back(y);
-                    ++numberOfMaps;
                 }
             }
         }
-        std::vector<std::string> getMapInfo;
     }
 
-    std::string getNumberOfMaps() const { return std::to_string(numberOfMaps); }
+    std::string getNumberOfMaps() const { return std::to_string(pathToMaps.size()); }
 
-    std::vector<std::string> getMapMetaData(const int mapNumber) const
+    std::vector<std::string> getMapMetaData(const int mapNumber/*switch to using the direct path*/) const
     {
         std::ifstream map(boost::filesystem::canonical(pathToMaps[mapNumber]).string());
         std::vector<std::string> metaData;
