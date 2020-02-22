@@ -43,7 +43,7 @@ public:
             {
                 if(boost::filesystem::extension(y) == ".osu")
                 {
-                    mapSelectionButtons->emplace_back(boost::filesystem::canonical(y).string());
+                    mapSelectionButtons->emplace_back(boost::filesystem::canonical(y).string(), getMapMetaData(boost::filesystem::canonical(y).string()));
                     pathToMaps.push_back(y);
                 }
             }
@@ -52,9 +52,9 @@ public:
 
     std::string getNumberOfMaps() const { return std::to_string(pathToMaps.size()); }
 
-    std::vector<std::string> getMapMetaData(const int mapNumber/*switch to using the direct path*/) const
+    std::vector<std::string> getMapMetaData(std::string mapPath) const
     {
-        std::ifstream map(boost::filesystem::canonical(pathToMaps[mapNumber]).string());
+        std::ifstream map(boost::filesystem::canonical(mapPath).string());
         std::vector<std::string> metaData;
         std::string line;
         bool go = false;

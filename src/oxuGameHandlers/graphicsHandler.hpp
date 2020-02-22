@@ -286,10 +286,10 @@ namespace oxu
 
         void drawSongSelectMenu(sf::RenderWindow &window, const float &dt)
         {
-
-            for(auto button: *mapSelectButtons)
+            
+            for(auto b: *mapSelectButtons)
             {
-                //button.drawButton(window, &font);
+                b.drawButton(window);
             }
 
             static sf::RectangleShape songRect({700,150});
@@ -297,32 +297,6 @@ namespace oxu
             songRect.setOutlineThickness(5);
             songRect.setFillColor(sf::Color(0,0,0, 125));
             songRect.setPosition({1920 - 700, 400});
-
-            static sf::Text info(mapManager->getMapMetaData(0)[0], font);
-            info.setString(mapManager->getMapMetaData(0)[0]);
-            info.setCharacterSize(45);
-            info.setPosition(songRect.getPosition().x + 20, songRect.getPosition().y + 10);
-            info.setFillColor(sf::Color::Black);
-            //song name
-            window.draw(info);
-
-            info.setString(mapManager->getMapMetaData(0)[2]);
-            info.setPosition(songRect.getPosition().x + 20, songRect.getPosition().y + 50);
-            info.setCharacterSize(30);
-            //song author
-            window.draw(info);
-
-            info.setString(", mapped by " + mapManager->getMapMetaData(0)[4]);
-            info.setPosition(info.getPosition().x + 130, songRect.getPosition().y + 50);
-            info.setCharacterSize(30);
-            //mapper's name
-            window.draw(info);
-
-            info.setString("[" + mapManager->getMapMetaData(0)[5] + "]");
-            info.setPosition(songRect.getPosition().x + 20, songRect.getPosition().y + 75);
-            info.setCharacterSize(30);
-            //version
-            window.draw(info);
 
             window.draw(songRect);
         }
