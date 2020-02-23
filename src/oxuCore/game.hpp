@@ -11,6 +11,8 @@
 #include"../oxuGameHandlers/mapManager.hpp"
 #include"../oxuGameComponents/mapSelectButton.hpp"
 
+#include<iostream>
+
 namespace oxu
 {
     class Game

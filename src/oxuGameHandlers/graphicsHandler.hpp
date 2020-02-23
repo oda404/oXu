@@ -279,26 +279,17 @@ namespace oxu
             window.draw(text);
 
             text.setPosition(30,30);
-            text.setString("oXu has loaded " + mapManager->getNumberOfMaps() + " beat maps!");
+            text.setString("oXu has loaded " + std::to_string(mapManager->getNumberOfMaps()) + " beat maps!");
 
             window.draw(text);
         }
 
         void drawSongSelectMenu(sf::RenderWindow &window, const float &dt)
         {
-            
             for(auto b: *mapSelectButtons)
             {
                 b.drawButton(window);
             }
-
-            static sf::RectangleShape songRect({700,150});
-            songRect.setOutlineColor(sf::Color(0,0,0,170));
-            songRect.setOutlineThickness(5);
-            songRect.setFillColor(sf::Color(0,0,0, 125));
-            songRect.setPosition({1920 - 700, 400});
-
-            window.draw(songRect);
         }
 
     };

@@ -5,13 +5,11 @@
 #include<sstream>
 #include<fstream>
 #include<boost/filesystem.hpp>
-#include<iostream>
 #include"../oxuGameComponents/mapSelectButton.hpp"
 
 class MapManager
 {
 private:
-    std::vector<boost::filesystem::directory_entry> pathToMaps;
 
     std::vector<MapSelectButton> *mapSelectionButtons;
 
@@ -44,17 +42,17 @@ public:
                 if(boost::filesystem::extension(y) == ".osu")
                 {
                     mapSelectionButtons->emplace_back(boost::filesystem::canonical(y).string(), getMapMetaData(boost::filesystem::canonical(y).string()));
-                    pathToMaps.push_back(y);
                 }
             }
         }
+        mapSelectionButtons[0][0].arrangeButtons(*mapSelectionButtons);
     }
 
-    std::string getNumberOfMaps() const { return std::to_string(pathToMaps.size()); }
+    int getNumberOfMaps() const { return mapSelectionButtons->size(); }
 
     std::vector<std::string> getMapMetaData(std::string mapPath) const
     {
-        std::ifstream map(boost::filesystem::canonical(mapPath).string());
+        std::ifstream map(mapPath);
         std::vector<std::string> metaData;
         std::string line;
         bool go = false;

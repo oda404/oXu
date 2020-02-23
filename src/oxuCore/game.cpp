@@ -34,6 +34,10 @@ void oxu::Game::run()
 				window->close();
 				break;
 
+			case sf::Event::MouseWheelScrolled:
+				std::cout<<event.mouseWheelScroll.delta<<std::endl;
+				break;
+
 			default:
 				break;
 			}
