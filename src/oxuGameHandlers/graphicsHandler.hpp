@@ -291,6 +291,5 @@ namespace oxu
                 b.drawButton(window);
             }
         }
-
     };
 }

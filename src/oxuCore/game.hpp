@@ -29,7 +29,6 @@ namespace oxu
         std::shared_ptr<HitObjectManager> hitObjects;
         std::shared_ptr<MapManager> mapManager;
 
-
         std::uint8_t currentScene = 0;
 
         sf::Clock deltaClock;

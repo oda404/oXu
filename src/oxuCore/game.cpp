@@ -11,7 +11,7 @@ oxu::Game::Game()
 
 	mapManager = std::make_shared<MapManager>(&mapSelectionButtons);
 
-    inputHandler = std::make_shared<InputHandler>(hitObjects.get(), &soundHandler, mapManager.get());
+    inputHandler = std::make_shared<InputHandler>(hitObjects.get(), &soundHandler, mapManager.get(), &mapSelectionButtons);
 
     graphicsHandler = std::make_shared<GraphicsHandler>(inputHandler.get(), hitObjects.get(), &soundHandler, playField.get(), mapManager.get(), &mapSelectionButtons);
     graphicsHandler->setCursor(window.get());
@@ -35,9 +35,10 @@ void oxu::Game::run()
 				break;
 
 			case sf::Event::MouseWheelScrolled:
-				std::cout<<event.mouseWheelScroll.delta<<std::endl;
+				if(currentScene == 1)
+					mapSelectionButtons[0].scrollButtons(mapSelectionButtons, event.mouseWheelScroll.delta);
 				break;
-
+				
 			default:
 				break;
 			}

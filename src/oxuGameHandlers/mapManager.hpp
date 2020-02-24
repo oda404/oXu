@@ -78,15 +78,15 @@ public:
         return metaData;
     }
 
-    void loadHitObjects()
+    void loadHitObjects(std::string &path)
     {
         bool go = false;
 
         std::string line;
 #ifdef _WIN32
-        std::ifstream file("E:/visualproj/SFMLosuBootleg/songs/829296 mafumafu - Inochi ni Kirawarete Iru/mafumafu - Inochi ni Kirawarete Iru. (KazuhikoRei) [Haruki's Easy].osu");
+        std::ifstream file(path);
 #else
-        std::ifstream file("/root/Documents/osuBootleg/songs/829296 mafumafu - Inochi ni Kirawarete Iru/mafumafu - Inochi ni Kirawarete Iru. (KazuhikoRei) [Haruki's Easy].osu");
+        std::ifstream file(path);
 #endif
         while (std::getline(file, line))
         {
