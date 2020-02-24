@@ -23,7 +23,7 @@ public:
         mapRect.setFillColor(sf::Color(0,0,0, 125));
         mapRect.setPosition({1920 - 700, 50});
 
-        f.loadFromFile("/root/Documents/osuBootleg/textures/coolvetica.ttf");
+        f.loadFromFile("../textures/coolvetica.ttf");
 
         infoStrings.push_back(metaData[0]); //title
         infoStrings.push_back(metaData[2]); //artist
@@ -85,6 +85,32 @@ public:
     sf::Vector2f getPosition() const { return mapRect.getPosition(); }
 
     std::string &getMapPath() { return mapPath; }
+
+    std::string getSongPath()
+    {
+        std::ifstream map(mapPath);
+        std::string line;
+        bool go = false;
+
+        while(std::getline(map,line))
+        {
+        #ifdef __linux__
+            line.erase(line.end() - 1);
+        #endif
+            if(line == "[General]")
+            {
+                go = true;
+            }
+            else if(go && line !="[General]")
+            {
+                map.close();
+                return mapPath.substr(0, mapPath.find_last_of('/') + 1) + line.substr(line.find_last_of(':') + 2);
+            }
+        }
+
+        map.close();
+        return "null";
+    }
 
     void arrangeButtons(std::vector<MapSelectButton> &buttons)
     {

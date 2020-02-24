@@ -22,15 +22,6 @@ namespace oxu
 			BASS_Init(-1, 44100, 0, 0, NULL);
 			initialVolume = BASS_GetVolume();
 			BASS_SetVolume(0.2f);
-
-			//=================================== sound handler for the main menu ===============================================
-			sceneSoundHandlers.push_back([this](const void *fileName) -> void { return this->handleMainMenuSound(fileName); });
-
-			//=================================== sound handler for the song select menu ========================================
-			sceneSoundHandlers.push_back([this](const void *fileName) -> void { return this->handleSongSelectMenuSound(fileName); });
-
-			//=================================== sound handler for the game =====================================================
-			sceneSoundHandlers.push_back([this](const void *fileName) -> void { return this->handleGameSound(fileName); });
 		}
 
 		void setVolumeToDefault()
@@ -64,33 +55,5 @@ namespace oxu
 		{
 			return audioPlayingOffset->getElapsedTime().asMilliseconds();
 		}
-
-		void handleMainMenuSound(const void *fileName)
-		{
-			//empty for now
-		}
-
-		void handleSongSelectMenuSound(const void *fileName)
-		{
-			//emtpy for now
-		}
-
-		void handleGameSound(const void *fileName)
-		{
-			static bool play = true;
-
-			if(play)
-			{
-				loadAudioFile(fileName);
-				playAudio();
-				play = false;
-			}
-		}
-
-		void handleSound(const std::uint8_t &sceneID)
-		{
-			sceneSoundHandlers[sceneID]("yomi.mp3");
-		}
-
 	};
 }

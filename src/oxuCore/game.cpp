@@ -38,6 +38,9 @@ void oxu::Game::run()
 				if(currentScene == 1)
 					mapSelectionButtons[0].scrollButtons(mapSelectionButtons, event.mouseWheelScroll.delta);
 				break;
+			
+			case sf::Event::MouseButtonPressed:
+				break;
 				
 			default:
 				break;
@@ -54,8 +57,6 @@ void oxu::Game::run()
 	#endif
 		
 		//================  Actual scene handling  ==================
-		soundHandler.handleSound(currentScene);
-
 		graphicsHandler->handleGraphics(*window.get(), deltaTime.asSeconds(), currentScene);
 
 		inputHandler->handleInput(*window.get(), currentScene);

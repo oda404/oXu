@@ -41,7 +41,7 @@ namespace oxu
         {
             //=====================  font and combo text  =================================
 #ifdef __linux__
-            font.loadFromFile("/root/Documents/osuBootleg/textures/coolvetica.ttf");
+            font.loadFromFile("../textures/coolvetica.ttf");
 #else
 			font.loadFromFile("E:/visualproj/SFMLosuBootleg/textures/coolvetica.ttf"); 
 #endif

@@ -73,6 +73,8 @@ namespace oxu
                 {
                     mapManager->loadHitObjects(button.getMapPath());
                     hitObjManager->createHitObjects(*mapManager);
+                    soundHandler->loadAudioFile(button.getSongPath().c_str());
+                    soundHandler->playAudio();
 
                     mousePressed = true;
                     ++currentScene;
@@ -86,6 +88,7 @@ namespace oxu
         {
             if(kb.isKeyPressed(sf::Keyboard::X))
             {
+                
                 xState = true;
 
                 int ACPerc = getApproachCirclePercentage(hitObjManager->getHitCircleByIndex(pendingObj)->getSpawnTime(), 450, soundHandler->getAudioPlayingOffset());

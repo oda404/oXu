@@ -15,8 +15,8 @@ namespace oxu
 			hitCircleTexture.setSmooth(true);
 			approachCircleTexture.setSmooth(true);
 #ifdef __linux__
-			approachCircleTexture.loadFromFile("/root/Documents/osuBootleg/skins/approachcircle.png");
-			hitCircleTexture.loadFromFile("/root/Documents/osuBootleg/skins/hitcircle.png");
+			approachCircleTexture.loadFromFile("../skins/approachcircle.png");
+			hitCircleTexture.loadFromFile("../skins/hitcircle.png");
 #else
 			approachCircleTexture.loadFromFile("E:/visualproj/SFMLosuBootleg/skins/approachcircle.png");
 			hitCircleTexture.loadFromFile("E:/visualproj/SFMLosuBootleg/skins/hitcircle.png");
