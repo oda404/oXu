@@ -4,7 +4,6 @@
 
 #include<memory>
 #include<vector>
-#include<functional>
 
 namespace oxu
 {
@@ -54,6 +53,11 @@ namespace oxu
 		sf::Int32 getAudioPlayingOffset() const
 		{
 			return audioPlayingOffset->getElapsedTime().asMilliseconds();
+		}
+
+		static void scrollVolume(const float &delta)
+		{
+			BASS_SetVolume(BASS_GetVolume() + delta / 100);
 		}
 	};
 }

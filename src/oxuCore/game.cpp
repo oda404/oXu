@@ -15,10 +15,13 @@ oxu::Game::Game()
 
     graphicsHandler = std::make_shared<GraphicsHandler>(inputHandler.get(), hitObjects.get(), &soundHandler, playField.get(), mapManager.get(), &mapSelectionButtons);
     graphicsHandler->setCursor(window.get());
+
 }
 
 void oxu::Game::run()
 {
+	std::vector<std::future<void>> futures;
+
     while (window->isOpen())
 	{
 		deltaTime = deltaClock.restart();
@@ -37,9 +40,12 @@ void oxu::Game::run()
 			case sf::Event::MouseWheelScrolled:
 				if(currentScene == 1)
 					mapSelectionButtons[0].scrollButtons(mapSelectionButtons, event.mouseWheelScroll.delta);
+				else if(currentScene == 2)
+					futures.push_back(std::async(std::launch::async, soundHandler.scrollVolume, event.mouseWheelScroll.delta));
 				break;
 			
-			case sf::Event::MouseButtonPressed:
+			case sf::Event::KeyPressed:
+				inputHandler->handleInput(*window, currentScene);
 				break;
 				
 			default:
@@ -51,17 +57,15 @@ void oxu::Game::run()
 			window->clear();
 		else
 			window->clear(sf::Color(100,100,100,255));
-				
-	#ifdef __linux__
-		graphicsHandler->drawCursor(*window.get());
-	#endif
-		
+
 		//================  Actual scene handling  ==================
 		graphicsHandler->handleGraphics(*window.get(), deltaTime.asSeconds(), currentScene);
 
 		inputHandler->handleInput(*window.get(), currentScene);
 		//===========================================================
-
+	#ifdef __linux__
+		graphicsHandler->drawCursor(window.get(), static_cast<sf::Vector2f>(sf::Mouse::getPosition(*window)));
+	#endif
 		window->display();
 	}
 }

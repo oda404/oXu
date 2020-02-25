@@ -2,6 +2,7 @@
 #include<SFML/Graphics.hpp>
 #include<memory>
 #include<vector>
+#include<future>
 
 #include"../oxuGameHandlers/graphicsHandler.hpp"
 #include"../oxuGameHandlers/soundHandler.h"
@@ -10,8 +11,6 @@
 #include"../oxuGameHandlers/inputHandler.hpp"
 #include"../oxuGameHandlers/mapManager.hpp"
 #include"../oxuGameComponents/mapSelectButton.hpp"
-
-#include<iostream>
 
 namespace oxu
 {

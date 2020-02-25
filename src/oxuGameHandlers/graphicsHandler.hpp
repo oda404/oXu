@@ -5,7 +5,6 @@
 
 #include "hitObjectManager.h"
 #include "../oxuGameComponents/playField.h"
-#include "../3rdParty/StandardCursor.hpp"
 #include"../oxuGameHandlers/mapManager.hpp"
 #include"soundHandler.h"
 #include"inputHandler.hpp"
@@ -16,8 +15,6 @@ namespace oxu
     class GraphicsHandler
     {
     private:
-        sf::Texture cursorTexture;
-        sf::Sprite cursorSprite;
 
         HitObjectManager *hitObjects;
         SoundHandler *mapSound; 
@@ -31,7 +28,11 @@ namespace oxu
         sf::Text comboString;
         sf::RectangleShape xButton;
         sf::RectangleShape zButton;
-        
+
+        sf::Texture cursorTexture;
+        sf::Texture cursorTrailTexture;
+        std::vector<sf::Vector2f> cursorTrailVector;
+        std::shared_ptr<sf::Sprite> cursorSprite;
 
         std::vector<std::vector<std::function<void (sf::RenderWindow &window, const float &dt)>>> sceneGraphicsHandlers;
 
@@ -217,25 +218,35 @@ namespace oxu
 
         void setCursor(sf::RenderWindow *window)
         {
-        #ifdef _WIN32
-            sf::Image im;
-            im.loadFromFile("E:/visualproj/SFMLosuBootleg/skins/cursor.png");
-            const sf::Uint8 *ptr = im.getPixelsPtr();
-            sf::Cursor curs;
-            curs.loadFromPixels(ptr, { 108,108 }, { 54,54 });
-            window.setMouseCursor(curs);
-        #else
-            //window->setMouseCursorVisible(false);
-            cursorTexture.loadFromFile("/root/Documents/osuBootleg/skins/cursor.png");
-            cursorSprite.setTexture(cursorTexture);
-        #endif
+            window->setMouseCursorVisible(false);
+            cursorTexture.loadFromFile("../skins/cursor.png");
+            cursorSprite = std::make_shared<sf::Sprite>(cursorTexture);
+            cursorSprite->setOrigin(static_cast<sf::Vector2f>(cursorTexture.getSize()) / 2.0f);
+            cursorTrailTexture.loadFromFile("../skins/cursortrail.png");
         }
 
     #ifdef __linux__
-        void drawCursor(sf::RenderWindow &window)
+        void drawCursor(sf::RenderWindow *window, sf::Vector2f mousePos)
         {
-            //cursorSprite.setPosition(static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
-            //window.draw(cursorSprite);
+            if(cursorTrailVector.size() < 20)
+            {
+                cursorTrailVector.push_back(mousePos);
+                cursorTrailVector.push_back(mousePos);
+            }
+            else
+                cursorTrailVector.erase(cursorTrailVector.begin());
+            
+            for(auto &pos: cursorTrailVector)
+            {
+                sf::Sprite trail(cursorTrailTexture);
+                trail.setOrigin(static_cast<sf::Vector2f>(cursorTrailTexture.getSize()) / 2.0f);
+                trail.setPosition(pos);
+
+                window->draw(trail);
+            }
+
+            cursorSprite->setPosition(mousePos);
+            window->draw(*cursorSprite);
         }
     #endif
 
