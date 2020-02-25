@@ -47,6 +47,10 @@ void oxu::Game::run()
 			case sf::Event::KeyPressed:
 				inputHandler->handleInput(*window, currentScene);
 				break;
+
+			case sf::Event::MouseMoved:
+
+				break;
 				
 			default:
 				break;

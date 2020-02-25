@@ -72,7 +72,7 @@ namespace oxu
                 if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && button.checkClick(sf::Mouse::getPosition(window)) && !mousePressed)
                 {
                     mapManager->loadHitObjects(button.getMapPath());
-                    hitObjManager->createHitObjects(*mapManager);
+                    hitObjManager->createHitObjects(*mapManager, mapManager->getMapDifficulty(button.getMapPath()));
                     soundHandler->loadAudioFile(button.getSongPath().c_str());
                     soundHandler->playAudio();
 
@@ -88,12 +88,11 @@ namespace oxu
         {
             if(kb.isKeyPressed(sf::Keyboard::X))
             {
-                
                 xState = true;
 
                 int ACPerc = getApproachCirclePercentage(hitObjManager->getHitCircleByIndex(pendingObj)->getSpawnTime(), 450, soundHandler->getAudioPlayingOffset());
 
-                if(ACPerc > 90 && ACPerc <= 100 )
+                if(ACPerc > 90 && ACPerc <= 100)
                 {
                     ++combo;
                     ++pendingObj;

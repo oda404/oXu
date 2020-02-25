@@ -74,8 +74,37 @@ public:
                 metaData.push_back(line.substr(line.find_first_of(':') + 1));
             }
         }
-        
+        map.close();
         return metaData;
+    }
+
+    std::vector<std::string> getMapDifficulty(std::string mapPath)
+    {
+        std::ifstream map(mapPath);
+        std::string line;
+        std::vector<std::string> difficulty;
+        bool go = false;
+
+        while(std::getline(map,line))
+        {
+        #ifdef __linux__
+            line.erase(line.end() - 1);
+        #endif
+            if(line == "[Difficulty]")
+            {
+                go = true;
+            }
+            
+            if((int)line[0] == 0 && go)
+                break;
+            else if(go && line!="[Difficulty]")
+            {
+                difficulty.push_back(line.substr(line.find_first_of(':') + 1));
+            }
+        }
+
+        map.close();
+        return difficulty;
     }
 
     void loadHitObjects(std::string &path)

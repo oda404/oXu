@@ -23,12 +23,21 @@ namespace oxu
 #endif
 		}
 
-		void createHitObjects(MapManager &beatMap)
+		void createHitObjects(MapManager &beatMap, std::vector<std::string> mapDifficulty)
 		{
+			float AR;
+
+			/* calculate the approach rate in seconds from the map's AR */
+			if(std::stoi(mapDifficulty[3]) <= 5)
+				AR = 1800 - std::stoi(mapDifficulty[3]) * 120;
+			else if(std::stoi(mapDifficulty[3]) > 5)
+				AR = 1200 - (std::stoi(mapDifficulty[3]) - 5) * 150;
+			AR /= 1000;
+
 			for (unsigned int i = 0; i < beatMap.getHitObjectPositions().size(); i++)
 			{
-				hitCircleVector.push_back(HitCircle(beatMap.getHitObjectPositions()[i], beatMap.gethitObjectSpawnTimes()[i], 4.2f, *playField, hitCircleTexture));
-				approachCircleVector.push_back(ApproachCircle(0.450f, hitCircleVector[i].getPos(), hitCircleVector[i].getHitCircleScale() * playField->getOsuPx() * 1.5f, approachCircleTexture));
+				hitCircleVector.push_back(HitCircle(beatMap.getHitObjectPositions()[i], beatMap.gethitObjectSpawnTimes()[i], std::stof(mapDifficulty[1]), *playField, hitCircleTexture));
+				approachCircleVector.push_back(ApproachCircle(AR, hitCircleVector[i].getPos(), hitCircleVector[i].getHitCircleScale() * playField->getOsuPx() * 1.5f, approachCircleTexture));
 			}
 
 			for (unsigned int i = 0; i < beatMap.getSlidersPositions().size(); i++)
@@ -36,7 +45,7 @@ namespace oxu
 				sliderVector.push_back(Slider(
 					beatMap.getSlidersPositions()[i],
 					beatMap.getSlidersSpawnTimes()[i],
-					4.2f,
+					std::stof(mapDifficulty[1]), //circle size
 					beatMap.getSliderPointsCoord()[i],
 					beatMap.getSlides()[i],
 					beatMap.getSliderLength()[i],
@@ -45,7 +54,7 @@ namespace oxu
 					hitCircleTexture
 				));
 
-				sliderApproachCircles.push_back(ApproachCircle(0.450f, sliderVector[i].getPos(), sliderVector[i].getHitCircleScale() * playField->getOsuPx() * 1.5f, approachCircleTexture));
+				sliderApproachCircles.push_back(ApproachCircle(AR, sliderVector[i].getPos(), sliderVector[i].getHitCircleScale() * playField->getOsuPx() * 1.5f, approachCircleTexture));
 			}
 		}
 
