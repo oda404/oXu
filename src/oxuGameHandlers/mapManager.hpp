@@ -28,10 +28,7 @@ private:
 
 public:
     MapManager(std::vector<MapSelectButton> *buttonsPtr):
-    mapSelectionButtons(buttonsPtr)
-    {
-        enumerateMaps();
-    }
+    mapSelectionButtons(buttonsPtr) { enumerateMaps(); }
 
     void enumerateMaps()
     {
@@ -112,16 +109,14 @@ public:
         bool go = false;
 
         std::string line;
-#ifdef _WIN32
+
         std::ifstream file(path);
-#else
-        std::ifstream file(path);
-#endif
+
         while (std::getline(file, line))
         {
-#ifdef __linux__
+        #ifdef __linux__
             line.erase(line.end() - 1);
-#endif
+        #endif
             if (line == "[HitObjects]")
             {
                 go = true;
@@ -172,7 +167,6 @@ public:
                         }
                         else if (curveTypeCheck)
                         {
-                            //curveType.push_back('N');
                             curveTypeCheck = false;
                         }
                         else if (curvePointsGo)
@@ -185,8 +179,6 @@ public:
                             {
                                 cX = std::istringstream(sCX);
                                 cX >> iCX;
-
-                                //x
 
                                 curveYCoordsRead = true;
                             }
@@ -277,45 +269,56 @@ public:
         file.close();
     }
 
-		//Getters=======================================================
-		std::vector<sf::Vector2f> getHitObjectPositions() const
-		{
-			return hitCirclesPositions;
-		}
+    std::vector<sf::Vector2f> getHitObjectPositions() const
+    {
+        return hitCirclesPositions;
+    }
 
-		std::vector<int> gethitObjectSpawnTimes() const
-		{
-			return hitCirclesSpawnTimes;
-		}
+    std::vector<int> gethitObjectSpawnTimes() const
+    {
+        return hitCirclesSpawnTimes;
+    }
 
 
-		std::vector<int> getSlidersSpawnTimes()
-		{
-			return slidersSpawnTimes;
-		}
+    std::vector<int> getSlidersSpawnTimes()
+    {
+        return slidersSpawnTimes;
+    }
 
-		std::vector<sf::Vector2f> getSlidersPositions()
-		{
-			return slidersPositions;
-		}
+    std::vector<sf::Vector2f> getSlidersPositions()
+    {
+        return slidersPositions;
+    }
 
-		std::vector<char> getHitObjectCurveType() const
-		{
-			return curveType;
-		}
+    std::vector<char> getHitObjectCurveType() const
+    {
+        return curveType;
+    }
 
-		std::vector<std::vector<sf::Vector2f>> getSliderPointsCoord() const
-		{
-			return curvePointsCoords;
-		}
+    std::vector<std::vector<sf::Vector2f>> getSliderPointsCoord() const
+    {
+        return curvePointsCoords;
+    }
 
-		std::vector<int> getSlides() const
-		{
-			return nOfSlides;
-		}
+    std::vector<int> getSlides() const
+    {
+        return nOfSlides;
+    }
 
-		std::vector<int> getSliderLength() const
-		{
-			return sliderLengths;
-		}
+    std::vector<int> getSliderLength() const
+    {
+        return sliderLengths;
+    }
+
+    void clearMapInfo()
+    {
+        hitCirclesPositions.clear();
+        hitCirclesSpawnTimes.clear();
+        curvePointsCoords.clear();
+        slidersPositions.clear();
+        curveType.clear();
+        slidersSpawnTimes.clear();
+        nOfSlides.clear();
+        sliderLengths.clear();
+    }
 };

@@ -99,16 +99,16 @@ namespace oxu
 
         void drawHitCircles(sf::RenderWindow &window, const float &dt)
         {
-			if (mapSound->getAudioPlayingOffset() >= hitObjects->getHitCircleByIndex(hitObjects->getHitCircleIt())->getSpawnTime() - hitObjects->getApproachCircleByIndex(0)->getApproachSpeedAsMs())
-				hitObjects->incrementHitCircleIt();
+            if (mapSound->getAudioPlayingOffset() >= hitObjects->getHitCircleByIndex(hitObjects->getHitCircleIt() + 1)->getSpawnTime() - hitObjects->getApproachCircleByIndex(0)->getApproachSpeedAsMs())
+                hitObjects->incrementHitCircleIt();
 
-            for(unsigned int i = hitObjects->getHitCircleIt(); i > hitObjects->getHitCircleCap(); --i)
+            for(int i = hitObjects->getHitCircleIt(); i >= hitObjects->getHitCircleCap(); --i)
             {
                 if(!hitObjects->getApproachCircleByIndex(i)->getApproachState())
                 {
                     hitObjects->getHitCircleByIndex(i)->fadeCircleIn(dt);
                     hitObjects->getApproachCircleByIndex(i)->fadeCircleIn(dt);           
-                           
+                        
                     hitObjects->getApproachCircleByIndex(i)->approachTheCircle(dt, hitObjects->getHitCircleByIndex(i)->getHitCircleScale());
 
                     window.draw(hitObjects->getApproachCircleByIndex(i)->getApproachCircle());
@@ -153,7 +153,7 @@ namespace oxu
 
         void drawCombo(sf::RenderWindow &window, const float &dt)
         {
-            comboString.setString(std::to_string(inputHandler->getCombo()) + " X");
+            comboString.setString(std::to_string(inputHandler->getCombo()) + " x");
             window.draw(comboString);
         }
 
@@ -181,48 +181,15 @@ namespace oxu
             window.draw(xButton);
         }
 
-        /*void drawSliders(sf::RenderWindow &window, const float &dt)
-        {
-            for (unsigned int i = 0; i < hitObjects->sliderVector.size(); i++)
-            {
-                if (hitObjects->sliderVector[i].getSliderType() == 'L')
-                {
-                    if (mapSound->getAudioPlayingOffset() >= hitObjects->sliderVector[i].getSpawnTime() && !hitObjects->sliderApproachCircles[i].getApproachState())
-                    {
-                        window.draw(hitObjects->sliderVector[i].getHitCircle());
-                        window.draw(hitObjects->sliderApproachCircles[i].getApproachCircle());
-                        hitObjects->sliderApproachCircles[i].approachTheCircle(dt, hitObjects->sliderVector[i].getHitCircleScale());
-                    }
-                    else if (hitObjects->sliderApproachCircles[i].getApproachState())
-                    {
-                        window.draw(hitObjects->sliderVector[i].getHitCircle());
-                        hitObjects->sliderVector[i].moveOnStraightSlider(dt, 0.300f, *playField, hitObjects->sliderApproachCircles[i]);
-                    }
-                }
-                else if (hitObjects->sliderVector[i].getSliderType() == 'C')
-                {
-                    if (mapSound->getAudioPlayingOffset() >= hitObjects->sliderVector[i].getSpawnTime() && !hitObjects->sliderApproachCircles[i].getApproachState())
-                    {
-                        window.draw(hitObjects->sliderVector[i].getHitCircle());
-                        window.draw(hitObjects->sliderApproachCircles[i].getApproachCircle());
-                        hitObjects->sliderApproachCircles[i].approachTheCircle(dt, hitObjects->sliderVector[i].getHitCircleScale());
-                    }
-                    else if (hitObjects->sliderApproachCircles[i].getApproachState())
-                    {
-                        window.draw(hitObjects->sliderVector[i].getHitCircle());
-                        hitObjects->sliderVector[i].moveOnBezierSlider(0.1f, *playField,dt ,hitObjects->sliderApproachCircles[i],window);
-                    }
-                }
-            }          
-        }*/
-
         void setCursor(sf::RenderWindow *window)
         {
+        #ifdef __linux__
             window->setMouseCursorVisible(false);
             cursorTexture.loadFromFile("../skins/cursor.png");
             cursorSprite = std::make_shared<sf::Sprite>(cursorTexture);
             cursorSprite->setOrigin(static_cast<sf::Vector2f>(cursorTexture.getSize()) / 2.0f);
             cursorTrailTexture.loadFromFile("../skins/cursortrail.png");
+        #endif
         }
 
     #ifdef __linux__
@@ -252,35 +219,6 @@ namespace oxu
 
         void drawMainMenu(sf::RenderWindow &window, const float &dt)
         {
-            static sf::Texture oLogo;
-            static sf::Texture xLogo;
-            static sf::Texture uLogo;
-#ifdef __linux__
-            oLogo.loadFromFile("/root/Documents/osuBootleg/textures/O.png");
-            xLogo.loadFromFile("/root/Documents/osuBootleg/textures/X.png");
-            uLogo.loadFromFile("/root/Documents/osuBootleg/textures/U.png");
-#else
-			oLogo.loadFromFile("E:/visualproj/SFMLosuBootleg/textures/O.png");
-			xLogo.loadFromFile("E:/visualproj/SFMLosuBootleg/textures/X.png");
-			uLogo.loadFromFile("E:/visualproj/SFMLosuBootleg/textures/U.png");
-#endif
-
-            sf::Sprite o;
-            sf::Sprite x;
-            sf::Sprite u;
-
-            o.setTexture(oLogo);
-            x.setTexture(xLogo);
-            u.setTexture(uLogo);
-
-            o.setPosition(710,340);
-            x.setPosition(860,340);
-            u.setPosition(1010,340);
-
-            window.draw(o);
-            window.draw(x);
-            window.draw(u);
-
             static sf::Text text("Click anywhere to continue!",font);
             text.setString("Click anywhere to continue!");
             text.setFillColor(sf::Color(0,0,0, 122));
@@ -297,7 +235,7 @@ namespace oxu
 
         void drawSongSelectMenu(sf::RenderWindow &window, const float &dt)
         {
-            for(auto b: *mapSelectButtons)
+            for(MapSelectButton &b: *mapSelectButtons)
             {
                 b.drawButton(window);
             }

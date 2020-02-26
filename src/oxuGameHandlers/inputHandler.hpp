@@ -73,6 +73,7 @@ namespace oxu
                 {
                     mapManager->loadHitObjects(button.getMapPath());
                     hitObjManager->createHitObjects(*mapManager, mapManager->getMapDifficulty(button.getMapPath()));
+                    mapManager->clearMapInfo();
                     soundHandler->loadAudioFile(button.getSongPath().c_str());
                     soundHandler->playAudio();
 
@@ -86,26 +87,33 @@ namespace oxu
 
         void handleHitObjectsInput(sf::RenderWindow &window, std::uint8_t &currentScene)
         {
-            if(kb.isKeyPressed(sf::Keyboard::X))
-            {
-                xState = true;
-
-                int ACPerc = getApproachCirclePercentage(hitObjManager->getHitCircleByIndex(pendingObj)->getSpawnTime(), 450, soundHandler->getAudioPlayingOffset());
-
-                if(ACPerc > 90 && ACPerc <= 100)
-                {
-                    ++combo;
-                    ++pendingObj;
-                }          
-            }
-            else
-                xState = false;
-
-            if(getApproachCirclePercentage(hitObjManager->getHitCircleByIndex(pendingObj)->getSpawnTime(), 450, soundHandler->getAudioPlayingOffset()) > 100)
+            if(getApproachCirclePercentage(hitObjManager->getHitCircleByIndex(pendingObj)->getSpawnTime(), hitObjManager->getApproachCircleByIndex(0)->getApproachSpeedAsMs(), soundHandler->getAudioPlayingOffset()) > 100)
             {
                 combo = 0;
                 ++pendingObj;
             }
+
+            if(kb.isKeyPressed(sf::Keyboard::X))
+            {
+                xState = true;
+
+                int ACPerc = getApproachCirclePercentage(hitObjManager->getHitCircleByIndex(pendingObj)->getSpawnTime(), hitObjManager->getApproachCircleByIndex(0)->getApproachSpeedAsMs(), soundHandler->getAudioPlayingOffset());
+
+                if(ACPerc >= 90 && ACPerc <= 100)
+                {
+                    sf::Vector2i mousePos = sf::Mouse::getPosition();
+                    sf::Vector2f circlePos = hitObjManager->getHitCircleByIndex(pendingObj)->getPos();
+                    float circleHalfScale = hitObjManager->getHitCircleSize() / 2;
+                    if(mousePos.x <= circlePos.x + circleHalfScale && mousePos.x >= circlePos.x - circleHalfScale &&
+                        mousePos.y <= circlePos.y + circleHalfScale && mousePos.y >= circlePos.y - circleHalfScale)
+                    {
+                        ++combo;
+                        ++pendingObj;
+                    }
+                }          
+            }
+            else
+                xState = false;
         } 
     };
 }

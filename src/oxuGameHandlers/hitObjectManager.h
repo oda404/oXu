@@ -27,20 +27,20 @@ namespace oxu
 		{
 			float AR;
 
-			/* calculate the approach rate in seconds from the map's AR */
+			/* calculate the approach rate in seconds from the map's AR value */
 			if(std::stoi(mapDifficulty[3]) <= 5)
 				AR = 1800 - std::stoi(mapDifficulty[3]) * 120;
 			else if(std::stoi(mapDifficulty[3]) > 5)
 				AR = 1200 - (std::stoi(mapDifficulty[3]) - 5) * 150;
 			AR /= 1000;
 
-			for (unsigned int i = 0; i < beatMap.getHitObjectPositions().size(); i++)
+			for (unsigned int i = 0; i < beatMap.getHitObjectPositions().size(); ++i)
 			{
 				hitCircleVector.push_back(HitCircle(beatMap.getHitObjectPositions()[i], beatMap.gethitObjectSpawnTimes()[i], std::stof(mapDifficulty[1]), *playField, hitCircleTexture));
 				approachCircleVector.push_back(ApproachCircle(AR, hitCircleVector[i].getPos(), hitCircleVector[i].getHitCircleScale() * playField->getOsuPx() * 1.5f, approachCircleTexture));
 			}
 
-			for (unsigned int i = 0; i < beatMap.getSlidersPositions().size(); i++)
+			for (unsigned int i = 0; i < beatMap.getSlidersPositions().size(); ++i)
 			{
 				sliderVector.push_back(Slider(
 					beatMap.getSlidersPositions()[i],
@@ -66,9 +66,9 @@ namespace oxu
 
 		void incrementHitCircleCap() { ++hitCircleCap; }
 
-		uint16_t getHitCircleIt() const { return hitCircleIt; }
+		int16_t getHitCircleIt() const { return hitCircleIt; }
 
-		uint16_t getHitCircleCap() const { return hitCircleCap; }
+		int16_t getHitCircleCap() const { return hitCircleCap; }
 
 		float getHitCircleSize() { return hitCircleVector[0].getHitCircleScaleInPixels(); }
 
@@ -76,7 +76,7 @@ namespace oxu
 		sf::Texture hitCircleTexture;
 		sf::Texture approachCircleTexture;
 
-		uint16_t hitCircleIt = 0, hitCircleCap = 0;
+		int16_t hitCircleIt = -1, hitCircleCap = 0;
 
 		std::vector<HitCircle> hitCircleVector;
 		std::vector<ApproachCircle> approachCircleVector;
