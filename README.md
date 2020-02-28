@@ -14,3 +14,4 @@ Currently the game is only available on Linux (64-bit).
   - make<br>
   <b>This will create a new file named "oXu!". To run this file type ./oXu!</b><br>
   <b>The game does not come with any beatmaps so you will need to add your own.</b>
+  
