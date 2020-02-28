@@ -1,3 +1,6 @@
+// Copyright (c) Olaru Alexandru <olarualexandru404@gmail.com>
+// Licensed under the MIT license found in the LICENSE file in the root of this repository.
+
 #include"approachCircle.hpp"
 
 oxu::ApproachCircle::ApproachCircle(const float &approachSpeed, const sf::Vector2f &position, const sf::Vector2f &scale, const sf::Texture &approachCircleTexture):

@@ -1,3 +1,6 @@
+// Copyright (c) Olaru Alexandru <olarualexandru404@gmail.com>
+// Licensed under the MIT license found in the LICENSE file in the root of this repository.
+
 #pragma once
 #include<SFML/Graphics.hpp>
 #include<vector>
@@ -6,7 +9,6 @@
 #include"../oxuGameComponents/playField.hpp"
 #include"../oxuGameComponents/hitCircle.hpp"
 #include"../oxuGameComponents/approachCircle.hpp"
-#include"../oxuGameComponents/slider.h"
 
 namespace oxu
 {
@@ -22,8 +24,8 @@ namespace oxu
 		std::vector<HitCircle> hitCircleVector;
 		std::vector<ApproachCircle> approachCircleVector;
 
-		std::vector<Slider> sliderVector;
-		std::vector<ApproachCircle> sliderApproachCircles;
+		//std::vector<Slider> sliderVector;
+		//std::vector<ApproachCircle> sliderApproachCircles;
 
 		PlayField *playField;
 		

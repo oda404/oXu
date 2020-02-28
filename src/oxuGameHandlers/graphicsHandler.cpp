@@ -1,39 +1,22 @@
+// Copyright (c) Olaru Alexandru <olarualexandru404@gmail.com>
+// Licensed under the MIT license found in the LICENSE file in the root of this repository.
+
 #include"graphicsHandler.hpp"
-
-void oxu::GraphicsHandler::drawPendingObjectScoring(sf::RenderWindow &window, const float &dt)
-{
-    for(std::tuple<sf::Vector2f, uint8_t, uint8_t> &info: *inputHandler->getPendingObjScoring())
-    {
-        if(std::get<2>(info) - 400 * dt > 0)
-        {
-            sf::Sprite s(hitScoreTextures[std::get<1>(info)]);
-            s.setOrigin(hitScoreTextures[std::get<1>(info)].getSize().x / 2, hitScoreTextures[std::get<1>(info)].getSize().y / 2);
-            s.setPosition(std::get<0>(info));
-            sf::Color c = s.getColor();
-            std::get<2>(info) -= 400 * dt;
-            s.setColor(sf::Color(c.r, c.g, c.b, std::get<2>(info)));
-
-            window.draw(s);
-        }
-        else
-            inputHandler->getPendingObjScoring()->erase(inputHandler->getPendingObjScoring()->begin());
-    }
-}
 
 oxu::GraphicsHandler::GraphicsHandler(InputHandler *inputHandler, HitObjectManager *hitObjPtr, SoundHandler *soundHandlerPtr, PlayField *playFieldPtr, MapManager *mapManagerPtr, std::vector<MapSelectButton> *buttonsPtr):
 inputHandler(inputHandler), hitObjects(hitObjPtr),  mapSound(soundHandlerPtr), playField(playFieldPtr), mapManager(mapManagerPtr), mapSelectButtons(buttonsPtr)
 {
     sf::Texture t;
-    t.loadFromFile("../skins/hit0.png");
+    t.loadFromFile("skins/hit0.png");
     hitScoreTextures.push_back(t);
-    t.loadFromFile("../skins/hit50.png");
+    t.loadFromFile("skins/hit50.png");
     hitScoreTextures.push_back(t);
-    t.loadFromFile("../skins/hit100.png");
+    t.loadFromFile("skins/hit100.png");
     hitScoreTextures.push_back(t);
 
     //=====================  font and combo text  =================================
 #ifdef __linux__
-    font.loadFromFile("../textures/coolvetica.ttf");
+    font.loadFromFile("resources/coolvetica.ttf");
 #else
     font.loadFromFile("E:/visualproj/SFMLosuBootleg/textures/coolvetica.ttf"); 
 #endif
@@ -80,6 +63,26 @@ inputHandler(inputHandler), hitObjects(hitObjPtr),  mapSound(soundHandlerPtr), p
 
     aux.clear();
     //======================================================================================================================
+}
+
+void oxu::GraphicsHandler::drawPendingObjectScoring(sf::RenderWindow &window, const float &dt)
+{
+    for(std::tuple<sf::Vector2f, uint8_t, uint8_t> &info: *inputHandler->getPendingObjScoring())
+    {
+        if(std::get<2>(info) - 400 * dt > 0)
+        {
+            sf::Sprite s(hitScoreTextures[std::get<1>(info)]);
+            s.setOrigin(hitScoreTextures[std::get<1>(info)].getSize().x / 2, hitScoreTextures[std::get<1>(info)].getSize().y / 2);
+            s.setPosition(std::get<0>(info));
+            sf::Color c = s.getColor();
+            std::get<2>(info) -= 400 * dt;
+            s.setColor(sf::Color(c.r, c.g, c.b, std::get<2>(info)));
+
+            window.draw(s);
+        }
+        else
+            inputHandler->getPendingObjScoring()->erase(inputHandler->getPendingObjScoring()->begin());
+    }
 }
 
 void oxu::GraphicsHandler::handleGraphics(sf::RenderWindow &window, const float &dt, const std::uint8_t &sceneID)
@@ -165,10 +168,10 @@ void oxu::GraphicsHandler::setCursor(sf::RenderWindow *window)
 {
 #ifdef __linux__
     window->setMouseCursorVisible(false);
-    cursorTexture.loadFromFile("../skins/cursor.png");
+    cursorTexture.loadFromFile("skins/cursor.png");
     cursorSprite = std::make_shared<sf::Sprite>(cursorTexture);
     cursorSprite->setOrigin(static_cast<sf::Vector2f>(cursorTexture.getSize()) / 2.0f);
-    cursorTrailTexture.loadFromFile("../skins/cursortrail.png");
+    cursorTrailTexture.loadFromFile("skins/cursortrail.png");
 #endif
 }
 
@@ -235,8 +238,20 @@ void oxu::GraphicsHandler::drawMainMenu(sf::RenderWindow &window, const float &d
 
 void oxu::GraphicsHandler::drawSongSelectMenu(sf::RenderWindow &window, const float &dt)
 {
-    for(MapSelectButton &b: *mapSelectButtons)
+    if(mapSelectButtons->size() > 0)
+        for(MapSelectButton &b: *mapSelectButtons)
+        {
+            b.drawButton(window);
+        }
+    else
     {
-        b.drawButton(window);
+        sf::Text t404("No beatmaps were found in the songs folder :(", font);
+        t404.setCharacterSize(28);
+        t404.setOrigin(t404.getLocalBounds().width / 2.0f, t404.getLocalBounds().height / 2.0f);
+        t404.setPosition(1600, 500);
+        t404.setFillColor(sf::Color::White);
+
+        window.draw(t404);
     }
+    
 }

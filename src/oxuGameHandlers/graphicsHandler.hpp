@@ -1,8 +1,12 @@
+// Copyright (c) Olaru Alexandru <olarualexandru404@gmail.com>
+// Licensed under the MIT license found in the LICENSE file in the root of this repository.
+
 #pragma once
 #include <SFML/Graphics.hpp>
 #include<vector>
 #include<functional>
 #include<tuple>
+#include<iostream>
 
 #include "hitObjectManager.hpp"
 #include "../oxuGameComponents/playField.hpp"

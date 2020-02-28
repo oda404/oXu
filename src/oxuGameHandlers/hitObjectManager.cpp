@@ -1,3 +1,6 @@
+// Copyright (c) Olaru Alexandru <olarualexandru404@gmail.com>
+// Licensed under the MIT license found in the LICENSE file in the root of this repository.
+
 #include"hitObjectManager.hpp"
 
 oxu::HitObjectManager::HitObjectManager(PlayField *playFieldPtr):
@@ -7,9 +10,9 @@ playField(playFieldPtr)
     approachCircleTexture.setSmooth(true);
     hitCircleOverlayTexture.setSmooth(true);
 #ifdef __linux__
-    approachCircleTexture.loadFromFile("../skins/approachcircle.png");
-    hitCircleTexture.loadFromFile("../skins/hitcircle.png");
-    hitCircleOverlayTexture.loadFromFile("../skins/hitcircleoverlay.png");
+    approachCircleTexture.loadFromFile("skins/approachcircle.png");
+    hitCircleTexture.loadFromFile("skins/hitcircle.png");
+    hitCircleOverlayTexture.loadFromFile("skins/hitcircleoverlay.png");
 #else
     approachCircleTexture.loadFromFile("E:/visualproj/SFMLosuBootleg/skins/approachcircle.png");
     hitCircleTexture.loadFromFile("E:/visualproj/SFMLosuBootleg/skins/hitcircle.png");
@@ -30,10 +33,10 @@ void oxu::HitObjectManager::createHitObjects(MapManager &beatMap, std::vector<st
     for (unsigned int i = 0; i < beatMap.getHitObjectPositions().size(); ++i)
     {
         hitCircleVector.push_back(HitCircle(beatMap.getHitObjectPositions()[i], beatMap.gethitObjectSpawnTimes()[i], std::stof(mapDifficulty[1]), *playField, hitCircleTexture, hitCircleOverlayTexture));
-        approachCircleVector.push_back(ApproachCircle(AR, hitCircleVector[i].getPos(), hitCircleVector[i].getHitCircleScale() * playField->getOsuPx() * 1.5f, approachCircleTexture));
+        approachCircleVector.push_back(ApproachCircle(AR, hitCircleVector[i].getPos(), hitCircleVector[i].getHitCircleScale() * playField->getOxuPx() * 1.5f, approachCircleTexture));
     }
 
-    for (unsigned int i = 0; i < beatMap.getSlidersPositions().size(); ++i)
+    /*for (unsigned int i = 0; i < beatMap.getSlidersPositions().size(); ++i)
     {
         sliderVector.push_back(Slider(
             beatMap.getSlidersPositions()[i],
@@ -47,8 +50,8 @@ void oxu::HitObjectManager::createHitObjects(MapManager &beatMap, std::vector<st
             hitCircleTexture
         ));
 
-        sliderApproachCircles.push_back(ApproachCircle(AR, sliderVector[i].getPos(), sliderVector[i].getHitCircleScale() * playField->getOsuPx() * 1.5f, approachCircleTexture));
-    }
+        sliderApproachCircles.push_back(ApproachCircle(AR, sliderVector[i].getPos(), sliderVector[i].getHitCircleScale() * playField->getOxuPx() * 1.5f, approachCircleTexture));
+    }*/
 }
 
 oxu::HitCircle *oxu::HitObjectManager::getHitCircleByIndex(const uint16_t index) { return &hitCircleVector[index]; }

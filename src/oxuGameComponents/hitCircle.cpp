@@ -1,3 +1,6 @@
+// Copyright (c) Olaru Alexandru <olarualexandru404@gmail.com>
+// Licensed under the MIT license found in the LICENSE file in the root of this repository.
+
 #include"hitCircle.hpp"
 
 oxu::HitCircle::HitCircle(const sf::Vector2f &position, const long &spawnTime, const float &CS, const PlayField &playField,const sf::Texture &hitCircleTexture, const sf::Texture &hitCircleOverlayTexture):
@@ -12,11 +15,10 @@ spawnTime(spawnTime), TextureSize(hitCircleTexture.getSize().x)
     hitCircle.setOrigin((sf::Vector2f)hitCircleTexture.getSize() / 2.0f);
     hitCircleOverlay.setOrigin(hitCircle.getOrigin());
 
-    hitCircle.setPosition(playField.getPlayFieldStartPoint().x + position.x*playField.getOsuPx(), playField.getPlayFieldStartPoint().y + position.y*playField.getOsuPx());
+    hitCircle.setPosition(playField.getPlayFieldStartPoint().x + position.x*playField.getOxuPx(), playField.getPlayFieldStartPoint().y + position.y*playField.getOxuPx());
     hitCircleOverlay.setPosition(hitCircle.getPosition());
 
-    //alternative (109-9*CS) * osuPX / hitCircleTexture.getSize().x
-    hitCircle.setScale(((23.05f - (CS - 7.0f) * 4.4825f) * 2.0f * playField.getOsuPx()) / hitCircleTexture.getSize().x, ((23.05f - (CS - 7.0f) * 4.4825f) * 2.0f * playField.getOsuPx()) / hitCircleTexture.getSize().y);
+    hitCircle.setScale(((23.05f - (CS - 7.0f) * 4.4825f) * 2.0f * playField.getOxuPx()) / hitCircleTexture.getSize().x, ((23.05f - (CS - 7.0f) * 4.4825f) * 2.0f * playField.getOxuPx()) / hitCircleTexture.getSize().y);
     hitCircleOverlay.setScale(hitCircle.getScale());
 }
 

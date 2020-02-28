@@ -1,3 +1,6 @@
+// Copyright (c) Olaru Alexandru <olarualexandru404@gmail.com>
+// Licensed under the MIT license found in the LICENSE file in the root of this repository.
+
 #pragma once
 #include<SFML/Graphics.hpp>
 
@@ -8,7 +11,7 @@ namespace oxu
 	private:
 		sf::RectangleShape playArea;
 		sf::Vector2f playFieldStartPoint;
-		float osuPx;
+		float oxuPx;
 		
 	public:
 		PlayField(const sf::Vector2u &screenSize);
@@ -17,6 +20,6 @@ namespace oxu
 
 		sf::Vector2f getPlayFieldStartPoint() const;
 
-		float getOsuPx() const;
+		float getOxuPx() const;
 	};
 }

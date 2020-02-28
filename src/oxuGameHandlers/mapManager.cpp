@@ -1,3 +1,6 @@
+// Copyright (c) Olaru Alexandru <olarualexandru404@gmail.com>
+// Licensed under the MIT license found in the LICENSE file in the root of this repository.
+
 #include"mapManager.hpp"
 
 oxu::MapManager::MapManager(std::vector<MapSelectButton> *buttonsPtr):
@@ -5,7 +8,7 @@ mapSelectionButtons(buttonsPtr) { enumerateMaps(); }
 
 void oxu::MapManager::enumerateMaps()
 {
-    for (boost::filesystem::directory_entry& x : boost::filesystem::directory_iterator("../songs/"))
+    for (boost::filesystem::directory_entry& x : boost::filesystem::directory_iterator("songs/"))
     {
         for (boost::filesystem::directory_entry& y : boost::filesystem::directory_iterator(x))
         {
@@ -15,7 +18,8 @@ void oxu::MapManager::enumerateMaps()
             }
         }
     }
-    mapSelectionButtons[0][0].arrangeButtons(*mapSelectionButtons);
+    if(mapSelectionButtons->size() > 0)
+        mapSelectionButtons[0][0].arrangeButtons(*mapSelectionButtons);
 }
 
 std::vector<std::string> oxu::MapManager::getMapMetaData(std::string mapPath) const

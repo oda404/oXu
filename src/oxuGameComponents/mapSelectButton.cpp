@@ -1,3 +1,6 @@
+// Copyright (c) Olaru Alexandru <olarualexandru404@gmail.com>
+// Licensed under the MIT license found in the LICENSE file in the root of this repository.
+
 #include"mapSelectButton.hpp"
 
 oxu::MapSelectButton::MapSelectButton(const std::string &mapPath, const std::vector<std::string> metaData):
@@ -9,7 +12,7 @@ mapPath(mapPath)
     mapRect.setFillColor(sf::Color(0,0,0, 125));
     mapRect.setPosition({1920 - 700, 50});
 
-    f.loadFromFile("../textures/coolvetica.ttf");
+    f.loadFromFile("resources/coolvetica.ttf");
 
     infoStrings.push_back(metaData[0]); //title
     infoStrings.push_back(metaData[2]); //artist
