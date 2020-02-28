@@ -2,7 +2,8 @@
 
 oxu::Game::Game()
 {
-    window = std::make_shared<sf::RenderWindow>(sf::VideoMode(screenSize.x, screenSize.y), "oXu");
+    window = std::make_shared<sf::RenderWindow>(sf::VideoMode(screenSize.x, screenSize.y), "oXu", sf::Style::Titlebar | sf::Style::Close);
+	window->setPosition({0,0});
     window->setFramerateLimit(120);
 
 	playField =  std::make_shared<PlayField>(window->getSize());
@@ -41,15 +42,11 @@ void oxu::Game::run()
 				if(currentScene == 1)
 					mapSelectionButtons[0].scrollButtons(mapSelectionButtons, event.mouseWheelScroll.delta);
 				else if(currentScene == 2)
-					futures.push_back(std::async(std::launch::async, soundHandler.scrollVolume, event.mouseWheelScroll.delta));
+					futures.push_back(std::async(std::launch::async, soundHandler.scrollVolume, event.mouseWheelScroll.delta)); //*
 				break;
 			
 			case sf::Event::KeyPressed:
 				inputHandler->handleInput(*window, currentScene);
-				break;
-
-			case sf::Event::MouseMoved:
-
 				break;
 				
 			default:
@@ -57,19 +54,12 @@ void oxu::Game::run()
 			}
 		}
 
-		if(currentScene == 2)
-			window->clear();
-		else
-			window->clear(sf::Color(100,100,100,255));
+		window->clear();
 
-		//================  Actual scene handling  ==================
 		graphicsHandler->handleGraphics(*window.get(), deltaTime.asSeconds(), currentScene);
 
 		inputHandler->handleInput(*window.get(), currentScene);
-		//===========================================================
-	#ifdef __linux__
-		graphicsHandler->drawCursor(window.get(), static_cast<sf::Vector2f>(sf::Mouse::getPosition(*window)));
-	#endif
+
 		window->display();
 	}
 }

@@ -2,8 +2,10 @@
 #include<SFML/Graphics.hpp>
 #include<vector>
 #include<functional>
+#include<tuple>
 
-#include"hitObjectManager.h"
+#include"hitObjectManager.hpp"
+#include"soundHandler.hpp"
 
 namespace oxu
 {
@@ -22,98 +24,35 @@ namespace oxu
         bool xState = false, zState = false, mousePressed = false;
         int combo = 0, pendingObj = 0;
 
+        uint32_t score = 0; //score consists of the scoring of every hit circle added together for now
+
         std::vector<std::function<void(sf::RenderWindow &window, std::uint8_t &currentScene)>> sceneInputHandlers;
 
-        float getApproachCirclePercentage(const float &spawnTime, const float &approachSpeed, const float &playingOffset) const
-        {
-            return 100 - (spawnTime - playingOffset) * 100 / approachSpeed;
-        }
+        std::vector<std::tuple<sf::Vector2f, uint8_t, uint8_t>> pendingObjScoring;
+
+        float getApproachCirclePercentage(const float &spawnTime, const float &approachSpeed, const float &playingOffset) const;
+
+        void hitObjectScoring(const int /* switch to float */ &ACPerc, const sf::Vector2f &objPos);
+
+        void handleMainMenuInput(sf::RenderWindow &window, std::uint8_t &currentScene);
+
+        void handleSongSelectInput(sf::RenderWindow &window, std::uint8_t &currentScene);
+
+        void handleHitObjectsInput(sf::RenderWindow &window, std::uint8_t &currentScene);
         
     public:
-        InputHandler(HitObjectManager *hitObjManagerPtr, SoundHandler *soundHandlerPtr, MapManager *mapManagerPtr, std::vector<MapSelectButton> *mapSelectButtons):
-        hitObjManager(hitObjManagerPtr), soundHandler(soundHandlerPtr), mapManager(mapManagerPtr), mapSelectButtons(mapSelectButtons)
-        {
-            //==========  main menu input handlers ====================
-            sceneInputHandlers.push_back([this](sf::RenderWindow &window, std::uint8_t &currentScene) -> void { return this->handleMainMenuInput(window, currentScene); });
+        InputHandler(HitObjectManager *hitObjManagerPtr, SoundHandler *soundHandlerPtr, MapManager *mapManagerPtr, std::vector<MapSelectButton> *mapSelectButtons);
 
-            //========== song select input handler ====================
-            sceneInputHandlers.push_back([this](sf::RenderWindow &window, std::uint8_t &currentScene) -> void { return this->handleSongSelectInput(window, currentScene); });
+        bool getXKeyState() const;
 
-            //========== game input handler ==========================
-            sceneInputHandlers.push_back([this](sf::RenderWindow &window, std::uint8_t &currentScene) -> void { return this->handleHitObjectsInput(window, currentScene); });
-        }
+        bool getZKeyState() const;
 
-        bool getXKeyState() const { return xState; }
+        int getCombo() const;
 
-        bool getZKeyState() const { return zState; }
+        uint32_t *getScore();
 
-        int getCombo() const { return combo; }
+        std::vector<std::tuple<sf::Vector2f, uint8_t, uint8_t>> *getPendingObjScoring();
 
-        void handleInput(sf::RenderWindow &window, std::uint8_t &sceneID)
-        {   
-            sceneInputHandlers[sceneID](window, sceneID);
-        }
-
-        void handleMainMenuInput(sf::RenderWindow &window, std::uint8_t &currentScene)
-        {
-            if(sf::Mouse::isButtonPressed(sf::Mouse::Left) && !mousePressed)
-            {
-                mousePressed = true;
-                ++currentScene;
-            }
-            else if(!sf::Mouse::isButtonPressed(sf::Mouse::Left))
-                mousePressed = false;
-        }
-
-        void handleSongSelectInput(sf::RenderWindow &window, std::uint8_t &currentScene)
-        {
-            for(auto &button: *mapSelectButtons)
-            {
-                if(sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && button.checkClick(sf::Mouse::getPosition(window)) && !mousePressed)
-                {
-                    mapManager->loadHitObjects(button.getMapPath());
-                    hitObjManager->createHitObjects(*mapManager, mapManager->getMapDifficulty(button.getMapPath()));
-                    mapManager->clearMapInfo();
-                    soundHandler->loadAudioFile(button.getSongPath().c_str());
-                    soundHandler->playAudio();
-
-                    mousePressed = true;
-                    ++currentScene;
-                }
-                else
-                    mousePressed = false;
-            }
-        }
-
-        void handleHitObjectsInput(sf::RenderWindow &window, std::uint8_t &currentScene)
-        {
-            if(getApproachCirclePercentage(hitObjManager->getHitCircleByIndex(pendingObj)->getSpawnTime(), hitObjManager->getApproachCircleByIndex(0)->getApproachSpeedAsMs(), soundHandler->getAudioPlayingOffset()) > 100)
-            {
-                combo = 0;
-                ++pendingObj;
-            }
-
-            if(kb.isKeyPressed(sf::Keyboard::X))
-            {
-                xState = true;
-
-                int ACPerc = getApproachCirclePercentage(hitObjManager->getHitCircleByIndex(pendingObj)->getSpawnTime(), hitObjManager->getApproachCircleByIndex(0)->getApproachSpeedAsMs(), soundHandler->getAudioPlayingOffset());
-
-                if(ACPerc >= 90 && ACPerc <= 100)
-                {
-                    sf::Vector2i mousePos = sf::Mouse::getPosition();
-                    sf::Vector2f circlePos = hitObjManager->getHitCircleByIndex(pendingObj)->getPos();
-                    float circleHalfScale = hitObjManager->getHitCircleSize() / 2;
-                    if(mousePos.x <= circlePos.x + circleHalfScale && mousePos.x >= circlePos.x - circleHalfScale &&
-                        mousePos.y <= circlePos.y + circleHalfScale && mousePos.y >= circlePos.y - circleHalfScale)
-                    {
-                        ++combo;
-                        ++pendingObj;
-                    }
-                }          
-            }
-            else
-                xState = false;
-        } 
+        void handleInput(sf::RenderWindow &window, std::uint8_t &sceneID);
     };
 }

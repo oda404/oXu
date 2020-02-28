@@ -5,12 +5,13 @@
 #include<future>
 
 #include"../oxuGameHandlers/graphicsHandler.hpp"
-#include"../oxuGameHandlers/soundHandler.h"
-#include"../oxuGameHandlers/hitObjectManager.h"
-#include"../oxuGameComponents/playField.h"
+#include"../oxuGameHandlers/soundHandler.hpp"
+#include"../oxuGameHandlers/hitObjectManager.hpp"
+#include"../oxuGameComponents/playField.hpp"
 #include"../oxuGameHandlers/inputHandler.hpp"
 #include"../oxuGameHandlers/mapManager.hpp"
 #include"../oxuGameComponents/mapSelectButton.hpp"
+//#include"WyGMoGnEfRnhqEunHbYR01001011001011010010.hpp"
 
 namespace oxu
 {
@@ -22,8 +23,8 @@ namespace oxu
         
         std::vector<MapSelectButton> mapSelectionButtons;
         std::shared_ptr<PlayField> playField;
-        std::shared_ptr<InputHandler> inputHandler;
         std::shared_ptr<GraphicsHandler> graphicsHandler;
+        std::shared_ptr<InputHandler> inputHandler;
         SoundHandler soundHandler;
         std::shared_ptr<HitObjectManager> hitObjects;
         std::shared_ptr<MapManager> mapManager;
