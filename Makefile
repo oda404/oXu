@@ -1,7 +1,10 @@
 
-output: main.o game.o approachCircle.o hitCircle.o mapSelectButton.o playField.o graphicsHandler.o hitObjectManager.o inputHandler.o mapManager.o soundHandler.o
+release: main.o game.o approachCircle.o hitCircle.o mapSelectButton.o playField.o graphicsHandler.o hitObjectManager.o inputHandler.o mapManager.o soundHandler.o
 	g++ main.o game.o approachCircle.o hitCircle.o mapSelectButton.o playField.o graphicsHandler.o hitObjectManager.o inputHandler.o mapManager.o soundHandler.o -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network -lpthread -lboost_system -lboost_filesystem -L./3rdPartyDependencies -lbass -o oXu!
 	rm *.o
+
+debug: main.o game.o approachCircle.o hitCircle.o mapSelectButton.o playField.o graphicsHandler.o hitObjectManager.o inputHandler.o mapManager.o soundHandler.o
+	g++ main.o game.o approachCircle.o hitCircle.o mapSelectButton.o playField.o graphicsHandler.o hitObjectManager.o inputHandler.o mapManager.o soundHandler.o -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network -lpthread -lboost_system -lboost_filesystem -L./3rdPartyDependencies -lbass -o oXu!
 
 main.o: src/main.cpp
 	g++ -c  src/main.cpp
