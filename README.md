@@ -9,6 +9,7 @@ Currently the game is only available on Linux (64-bit).
   - cd oXu<br>
   
 <b>Building the source code</b>
+  - chmod +x dependencies.sh
   - sudo ./dependencies.sh
   - make<br>
   <b>This will create a new file named "oXu!". To run this file type ./oXu!</b><br>
