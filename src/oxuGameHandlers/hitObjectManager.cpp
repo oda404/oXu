@@ -58,6 +58,8 @@ oxu::HitCircle *oxu::HitObjectManager::getHitCircleByIndex(const uint16_t index)
 
 oxu::ApproachCircle *oxu::HitObjectManager::getApproachCircleByIndex(const uint16_t index) { return &approachCircleVector[index]; }
 
+int oxu::HitObjectManager::getHitCircleVectorSize() const { return hitCircleVector.size(); }
+
 void oxu::HitObjectManager::incrementHitCircleIt() { ++hitCircleIt; }
 
 void oxu::HitObjectManager::incrementHitCircleCap() { ++hitCircleCap; }

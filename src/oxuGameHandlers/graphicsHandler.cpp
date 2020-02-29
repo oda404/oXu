@@ -98,8 +98,9 @@ void oxu::GraphicsHandler::handleGraphics(sf::RenderWindow &window, const float 
 
 void oxu::GraphicsHandler::drawHitCircles(sf::RenderWindow &window, const float &dt)
 {
-    if (mapSound->getAudioPlayingOffset() >= hitObjects->getHitCircleByIndex(hitObjects->getHitCircleIt() + 1)->getSpawnTime() - hitObjects->getApproachCircleByIndex(0)->getApproachSpeedAsMs())
-        hitObjects->incrementHitCircleIt();
+    if(hitObjects->getHitCircleIt() != hitObjects->getHitCircleVectorSize() - 1)
+        if (mapSound->getAudioPlayingOffset() >= hitObjects->getHitCircleByIndex(hitObjects->getHitCircleIt() + 1)->getSpawnTime() - hitObjects->getApproachCircleByIndex(0)->getApproachSpeedAsMs())
+            hitObjects->incrementHitCircleIt();
 
     for(int i = hitObjects->getHitCircleIt(); i >= hitObjects->getHitCircleCap(); --i)
     {

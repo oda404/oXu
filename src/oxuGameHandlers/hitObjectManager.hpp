@@ -38,6 +38,8 @@ namespace oxu
 
 		ApproachCircle *getApproachCircleByIndex(const uint16_t index);
 
+		int getHitCircleVectorSize() const;
+
 		void incrementHitCircleIt();
 
 		void incrementHitCircleCap();
