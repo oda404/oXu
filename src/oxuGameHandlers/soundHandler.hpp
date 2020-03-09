@@ -3,7 +3,8 @@
 
 #pragma once
 #include<SFML/System.hpp>
-#include"../3rdParty/bass.h"
+#include<bass.h>
+#include"../oxuGameComponents/timer.hpp"
 
 #include<memory>
 
@@ -13,7 +14,8 @@ namespace oxu
 	{
 	private:
 		HSTREAM streamHandle;
-		std::shared_ptr<sf::Clock> audioPlayingOffset;
+		QWORD bytePositionAtPause;
+		Timer mapTimer;
 		float initialVolume;
 
 	public:
@@ -29,7 +31,11 @@ namespace oxu
 
 		void freeAudio();
 
-		sf::Int32 getAudioPlayingOffset() const;
+		void pauseAudio();
+
+		void resumeAudio();
+
+		int64_t getAudioPlayingOffset();
 
 		static void scrollVolume(const float &delta);
 	};

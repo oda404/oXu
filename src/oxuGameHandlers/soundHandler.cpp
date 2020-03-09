@@ -18,8 +18,8 @@ void oxu::SoundHandler::loadAudioFile(const void *audioName) { streamHandle = BA
 
 void oxu::SoundHandler::playAudio() 
 {
-    BASS_ChannelPlay(streamHandle, FALSE);
-    audioPlayingOffset = std::make_shared<sf::Clock>();
+    BASS_ChannelPlay(streamHandle, 0);
+    mapTimer.start();
 }
 
 void oxu::SoundHandler::freeAudio()
@@ -28,6 +28,23 @@ void oxu::SoundHandler::freeAudio()
     BASS_Free();
 }
 
-sf::Int32 oxu::SoundHandler::getAudioPlayingOffset() const { return audioPlayingOffset->getElapsedTime().asMilliseconds(); }
+void oxu::SoundHandler::pauseAudio()
+{
+    bytePositionAtPause = BASS_ChannelGetPosition(streamHandle, BASS_POS_BYTE);
+    BASS_ChannelPause(streamHandle);
+    mapTimer.pause();
+}
+
+void oxu::SoundHandler::resumeAudio()
+{
+    BASS_ChannelPlay(streamHandle, 0);
+    BASS_ChannelSetPosition(streamHandle, bytePositionAtPause, BASS_POS_BYTE);
+    mapTimer.resume();
+}
+
+int64_t oxu::SoundHandler::getAudioPlayingOffset()
+{
+    return mapTimer.getEllapsedTimeAsMs();
+}
 
 void oxu::SoundHandler::scrollVolume(const float &delta) { BASS_SetVolume(BASS_GetVolume() + delta / 100); }

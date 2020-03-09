@@ -6,6 +6,14 @@
 oxu::GraphicsHandler::GraphicsHandler(InputHandler *inputHandler, HitObjectManager *hitObjPtr, SoundHandler *soundHandlerPtr, PlayField *playFieldPtr, MapManager *mapManagerPtr, std::vector<MapSelectButton> *buttonsPtr):
 inputHandler(inputHandler), hitObjects(hitObjPtr),  mapSound(soundHandlerPtr), playField(playFieldPtr), mapManager(mapManagerPtr), mapSelectButtons(buttonsPtr)
 {
+    for(int i = 0; i < 10; ++i)
+    {
+        sf::Texture t;
+        t.loadFromFile("skins/score-" + std::to_string(i) + ".png");
+        digitTextures.push_back(t);
+        digitSprites.emplace_back(digitTextures[i]);
+    }
+    
     sf::Texture t;
     t.loadFromFile("skins/hit0.png");
     hitScoreTextures.push_back(t);
@@ -13,6 +21,15 @@ inputHandler(inputHandler), hitObjects(hitObjPtr),  mapSound(soundHandlerPtr), p
     hitScoreTextures.push_back(t);
     t.loadFromFile("skins/hit100.png");
     hitScoreTextures.push_back(t);
+
+    buttonLeftTexture.loadFromFile("skins/button-left.png");
+    buttonLeftSprite.setTexture(buttonLeftTexture);
+    buttonLeftSprite.setOrigin(buttonLeftTexture.getSize().x / 2, buttonLeftTexture.getSize().y / 2);
+    buttonLeftSprite.setPosition(1900,450);
+
+    buttonLeftSprite2.setTexture(buttonLeftTexture);
+    buttonLeftSprite2.setOrigin(buttonLeftTexture.getSize().x / 2, buttonLeftTexture.getSize().y / 2);
+    buttonLeftSprite2.setPosition(1900,550);
 
     //=====================  font and combo text  =================================
 #ifdef __linux__
@@ -63,12 +80,20 @@ inputHandler(inputHandler), hitObjects(hitObjPtr),  mapSound(soundHandlerPtr), p
 
     aux.clear();
     //======================================================================================================================
+
+    //add pause menu handlers @ index 3=====================================================================================
+    aux.push_back([this](sf::RenderWindow &window, const float &dt) -> void { return this->drawPauseMenu(window, dt); });
+
+    sceneGraphicsHandlers.push_back(aux);
+
+    aux.clear();
+    //======================================================================================================================
 }
 
 void oxu::GraphicsHandler::drawPendingObjectScoring(sf::RenderWindow &window, const float &dt)
 {
     for(std::tuple<sf::Vector2f, uint8_t, uint8_t> &info: *inputHandler->getPendingObjScoring())
-    {
+    { //this is a place holder until i find a better solution
         if(std::get<2>(info) - 400 * dt > 0)
         {
             sf::Sprite s(hitScoreTextures[std::get<1>(info)]);
@@ -87,6 +112,9 @@ void oxu::GraphicsHandler::drawPendingObjectScoring(sf::RenderWindow &window, co
 
 void oxu::GraphicsHandler::handleGraphics(sf::RenderWindow &window, const float &dt, const std::uint8_t &sceneID)
 {
+    #ifdef __linux__
+        drawCursor(&window, static_cast<sf::Vector2f>(sf::Mouse::getPosition(window)));
+    #endif
     for(auto handler: sceneGraphicsHandlers[sceneID])
     {
         handler(window,dt);
@@ -113,7 +141,7 @@ void oxu::GraphicsHandler::drawHitCircles(sf::RenderWindow &window, const float 
 
             window.draw(*hitObjects->getHitCircleByIndex(i)->getHitCircleOverlay());
             window.draw(*hitObjects->getApproachCircleByIndex(i)->getApproachCircle());
-            window.draw(*hitObjects->getHitCircleByIndex(i)->getHitCircle());    
+            window.draw(*hitObjects->getHitCircleByIndex(i)->getHitCircle());
         }
         else
         {
@@ -133,25 +161,31 @@ void oxu::GraphicsHandler::drawHitCircles(sf::RenderWindow &window, const float 
 
 void oxu::GraphicsHandler::drawGameOverlay(sf::RenderWindow &window, const float &dt)
 {
-    //======================  rectangles for each input key (x,z)  ===========================================
-    sf::RectangleShape rec(sf::Vector2f({60,60}));
-    rec.setPosition({1860,420});
-    rec.setFillColor(sf::Color::White);
-    rec.setFillColor(sf::Color(rec.getFillColor().r, rec.getFillColor().g, rec.getFillColor().b, 60));
-
-    sf::RectangleShape rec1(sf::Vector2f({60,60}));
-    rec1.setPosition({1860,540});
-    rec1.setFillColor(sf::Color::White);
-    rec1.setFillColor(sf::Color(rec.getFillColor().r, rec.getFillColor().g, rec.getFillColor().b, 60));
-
+    //======================  buttons for each input key (x,z)  ===========================================
     if(inputHandler->getXKeyState())
-        rec.setFillColor(sf::Color(rec.getFillColor().r, rec.getFillColor().g, rec.getFillColor().b, 125));
+    {
+        if(buttonLeftSprite.getScale().x < 1.5f)
+            buttonLeftSprite.scale(130 *dt, 130 *dt);
+    }
+    else
+    {
+        if(buttonLeftSprite.getScale().x > 1.0f)
+            buttonLeftSprite.scale(105 *dt, 105 *dt);
+    }
 
     if(inputHandler->getZKeyState())
-        rec1.setFillColor(sf::Color(rec.getFillColor().r, rec.getFillColor().g, rec.getFillColor().b, 125));
+    {
+        if(buttonLeftSprite2.getScale().x < 1.5f)
+            buttonLeftSprite2.scale(130 *dt, 130 *dt);
+    }
+    else
+    {
+        if(buttonLeftSprite2.getScale().x > 1.0f)
+            buttonLeftSprite2.scale(105 *dt, 105 *dt);
+    }
     
-    window.draw(rec1);
-    window.draw(rec);
+    window.draw(buttonLeftSprite);
+    window.draw(buttonLeftSprite2);
     //==========================================================================================================
 
     //======================================  combo  ===========================================================
@@ -183,7 +217,7 @@ void oxu::GraphicsHandler::drawCursor(sf::RenderWindow *window, sf::Vector2f mou
         cursorTrailVector.push_back(mousePos);
     else
         cursorTrailVector.erase(cursorTrailVector.begin());
-    
+
     uint8_t alpha = 0;
     for(auto &pos: cursorTrailVector)
     {
@@ -255,4 +289,12 @@ void oxu::GraphicsHandler::drawSongSelectMenu(sf::RenderWindow &window, const fl
         window.draw(t404);
     }
     
+}
+
+void oxu::GraphicsHandler::drawPauseMenu(sf::RenderWindow &window, const float &dt)
+{
+    sf::Text t("The game is paused", font);
+    t.setPosition(window.getSize().x / 2 - t.getLocalBounds().width / 2, window.getSize().y / 6 - t.getLocalBounds().height / 2);
+
+    window.draw(t);
 }

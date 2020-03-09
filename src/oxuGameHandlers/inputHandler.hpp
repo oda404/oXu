@@ -24,7 +24,7 @@ namespace oxu
 
         std::vector<MapSelectButton> *mapSelectButtons;
 
-        bool xState = false, zState = false, mousePressed = false;
+        bool xState = false, zState = false, mousePressed = false, escState = false;
         int combo = 0, pendingObj = 0;
 
         uint32_t score = 0; //score consists of the scoring of every hit circle added together for now
@@ -42,6 +42,8 @@ namespace oxu
         void handleSongSelectInput(sf::RenderWindow &window, std::uint8_t &currentScene);
 
         void handleHitObjectsInput(sf::RenderWindow &window, std::uint8_t &currentScene);
+
+        void handlePauseMenuInput(sf::RenderWindow &window, std::uint8_t &currentScene);
         
     public:
         InputHandler(HitObjectManager *hitObjManagerPtr, SoundHandler *soundHandlerPtr, MapManager *mapManagerPtr, std::vector<MapSelectButton> *mapSelectButtons);

@@ -14,6 +14,21 @@ hitObjManager(hitObjManagerPtr), soundHandler(soundHandlerPtr), mapManager(mapMa
 
     //========== game input handler ==========================
     sceneInputHandlers.push_back([this](sf::RenderWindow &window, std::uint8_t &currentScene) -> void { return this->handleHitObjectsInput(window, currentScene); });
+
+    //========== pause menu input handler ====================
+    sceneInputHandlers.push_back([this](sf::RenderWindow &window, std::uint8_t &currentScene) -> void { return this->handlePauseMenuInput(window, currentScene); });
+}
+
+void oxu::InputHandler::handlePauseMenuInput(sf::RenderWindow &window, std::uint8_t &currentScene)
+{
+    if(kb.isKeyPressed(sf::Keyboard::Escape) && !escState)
+    {
+        soundHandler->resumeAudio();
+        --currentScene;
+        escState = true;
+    }
+    else if(!kb.isKeyPressed(sf::Keyboard::Escape))
+        escState = false;
 }
 
 float oxu::InputHandler::getApproachCirclePercentage(const float &spawnTime, const float &approachSpeed, const float &playingOffset) const
@@ -105,6 +120,15 @@ void oxu::InputHandler::handleSongSelectInput(sf::RenderWindow &window, std::uin
 
 void oxu::InputHandler::handleHitObjectsInput(sf::RenderWindow &window, std::uint8_t &currentScene)
 {
+    if(kb.isKeyPressed(sf::Keyboard::Escape) && !escState)
+    {
+        soundHandler->pauseAudio();
+        ++currentScene;
+        escState = true;
+    }
+    else if(!kb.isKeyPressed(sf::Keyboard::Escape))
+        escState = false;
+
     if(kb.isKeyPressed(sf::Keyboard::X))
     {
         if(!xState){

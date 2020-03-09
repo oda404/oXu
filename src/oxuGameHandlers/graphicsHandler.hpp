@@ -6,7 +6,6 @@
 #include<vector>
 #include<functional>
 #include<tuple>
-#include<iostream>
 
 #include "hitObjectManager.hpp"
 #include "../oxuGameComponents/playField.hpp"
@@ -36,10 +35,16 @@ namespace oxu
 
         sf::Texture cursorTexture;
         sf::Texture cursorTrailTexture;
+        sf::Texture buttonLeftTexture;
+        sf::Sprite buttonLeftSprite;
+        sf::Sprite buttonLeftSprite2;
         std::vector<sf::Vector2f> cursorTrailVector;
         std::shared_ptr<sf::Sprite> cursorSprite;
 
         std::vector<sf::Texture> hitScoreTextures;
+        
+        std::vector<sf::Texture> digitTextures;
+        std::vector<sf::Sprite> digitSprites;
 
         std::vector<std::vector<std::function<void (sf::RenderWindow &window, const float &dt)>>> sceneGraphicsHandlers;
 
@@ -63,5 +68,7 @@ namespace oxu
         void drawMainMenu(sf::RenderWindow &window, const float &dt);
 
         void drawSongSelectMenu(sf::RenderWindow &window, const float &dt);
+
+        void drawPauseMenu(sf::RenderWindow &window, const float &dt);
     };
 }
