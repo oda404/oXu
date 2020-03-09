@@ -5,6 +5,7 @@
 #include<SFML/Graphics.hpp>
 #include<memory>
 #include<vector>
+#include<iostream>
 #include<future>
 
 #include"../oxuGameHandlers/graphicsHandler.hpp"

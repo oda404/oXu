@@ -56,13 +56,12 @@ void oxu::Game::run()
 				break;
 			}
 		}
-
+		
 		window->clear();
-
 		graphicsHandler->handleGraphics(*window.get(), deltaTime.asSeconds(), currentScene);
+		window->display();
 
 		inputHandler->handleInput(*window.get(), currentScene);
 
-		window->display();
 	}
 }
