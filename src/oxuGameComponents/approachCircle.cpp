@@ -6,11 +6,14 @@
 oxu::ApproachCircle::ApproachCircle(const float &approachSpeed, const sf::Vector2f &position, const sf::Vector2f &scale, const sf::Texture &approachCircleTexture):
 initialScale(scale), approachSpeed(approachSpeed)
 {
-    this->approachCircle.setTexture(approachCircleTexture);
+    /* set the texture of the approach circle sprite and set it's alpha value to 0
+    so it start out transparent */
+    approachCircle.setTexture(approachCircleTexture);
     approachCircle.setColor(sf::Color(approachCircle.getColor().r,approachCircle.getColor().g, approachCircle.getColor().b, 0));
 
-    this->approachCircle.setOrigin((sf::Vector2f)approachCircleTexture.getSize() / 2.0f);
-    this->approachCircle.setPosition(position);
+    approachCircle.setOrigin((sf::Vector2f)approachCircleTexture.getSize() / 2.0f);
+    
+    approachCircle.setPosition(position);
 
     approachCircle.setScale(scale);
 }

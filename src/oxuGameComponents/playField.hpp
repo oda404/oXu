@@ -16,8 +16,6 @@ namespace oxu
 	public:
 		PlayField(const sf::Vector2u &screenSize);
 
-		sf::RectangleShape getPlayField() const;
-
 		sf::Vector2f getPlayFieldStartPoint() const;
 
 		float getOxuPx() const;
