@@ -1,14 +1,19 @@
-CXX := g++
-CXXFLAGS := -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lsfml-network -lpthread -lboost_system -lboost_filesystem -lbass -o oXu!
-SRC_DIR := $(shell find src/ -type f -regex ".*\.cpp")
-OBJS := $(patsubst %.cpp,%.o,$(SRC_DIR))
+CC=g++
+CPPFLAGS=
+LDFLAGS=-lSDL2 -lSDL2_image
 
-release:
-	$(CXX) $(SRC_DIR) $(CXXFLAGS)
+CPPSRC = $(wildcard src/main.cpp) 		\
+		 $(wildcard src/oxuUtils/*.cpp) \
+		 $(wildcard src/oxuCore/*.cpp) 	\
+		 $(wildcard src/oxuGameHandlers/graphicsHandler.cpp)
 
+OBJ = $(CPPSRC:.cpp=.o)
+
+release: $(OBJ)
+	$(CC) $^ -o oXu $(LDFLAGS)
+ 
 %.o: %.cpp
-	$(CXX) -c $<
+	$(CC) $(CPPFLAGS) -c $< -o $@
 
 clean:
-	rm *.o
-
+	rm $(OBJ)
