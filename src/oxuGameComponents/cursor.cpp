@@ -4,38 +4,29 @@ oxu::Cursor::Cursor() { }
 
 oxu::Cursor::~Cursor()
 {
-    SDL_DestroyTexture(cursorTex);
-    cursorTex = NULL;
+    SDL_FreeCursor(customCursor);
+    customCursor = NULL;
 }
 
-void oxu::Cursor::initTexture(SDL_Texture *p_cursorTex)
+void oxu::Cursor::init()
 {
-    cursorTex = p_cursorTex;
-
-    if(SDL_QueryTexture(cursorTex, NULL, NULL, &cursorRect.w, &cursorRect.h) < 0)
+    /* Load the image into a surface */
+    SDL_Surface *surface = IMG_Load("skins/cursor.png");
+    if(!surface)
     {
         logUtil.log(Log::WARNING, SDL_GetError());
     }
-    else
+
+    /* Create the cursor */
+	customCursor = SDL_CreateColorCursor(surface, surface->w / 2, surface->h / 2);
+    if(!customCursor)
     {
-        halfTex.x = cursorRect.w / 2;
-        halfTex.y = cursorRect.h / 2;
+        logUtil.log(Log::WARNING, SDL_GetError());
     }
-}
 
-SDL_Texture *oxu::Cursor::getTexture()
-{
-    return cursorTex;
-}
+    /* Free the above loaded surface */
+	SDL_FreeSurface(surface);
 
-const SDL_Rect *oxu::Cursor::getRect()
-{
-    return &cursorRect;
+    /* Set the cursor */
+	SDL_SetCursor(customCursor);
 }
-
-void oxu::Cursor::updatePos(const Vector2i &newPos)
-{
-    cursorRect.x = newPos.x - halfTex.x;
-    cursorRect.y = newPos.y - halfTex.y;
-}
-

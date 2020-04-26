@@ -6,7 +6,7 @@
 bool oxu::Game::w_init()
 {
 	/* Initialize SDL */
-	if( SDL_Init(SDL_INIT_EVERYTHING) < 0 )
+	if( SDL_Init(SDL_INIT_VIDEO) < 0 )
 	{
 		logUtil.log(Log::ERROR, SDL_GetError());
 		return false;
@@ -26,7 +26,7 @@ bool oxu::Game::w_init()
 		return false;
 	}
 
-	if(!graphicsHandler.init(window))
+	if(!sceneManager.init(window))
 	{
 		return false;
 	}
@@ -52,7 +52,9 @@ void oxu::Game::g_loop()
 			}
 		}
 
-		graphicsHandler.render();
+		sceneManager.handleCurrentSceneInput();
+
+		sceneManager.handleCurrentSceneGraphics();
 
 	}
 };
@@ -63,7 +65,7 @@ void oxu::Game::w_clean()
 	SDL_DestroyWindow(window);
 	window = NULL;
 
-	/* quit all SDL subsystems */
+	/* quit SDL video subsystem */
 	SDL_Quit();
 }
 

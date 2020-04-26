@@ -4,25 +4,23 @@
 #pragma once
 
 #include<SDL2/SDL.h>
-#include<SDL2/SDL_image.h>
 
 #include"../oxuUtils/log.hpp"
-#include"../oxuGameHandlers/graphicsHandler.hpp"
+#include"../oxuCore/sceneManager.hpp"
 
 namespace oxu
 {
     class Game
     {
     private:
-        oxu::Log logUtil;
+        Log             logUtil;
+        SceneManager    sceneManager;
 
-        oxu::GraphicsHandler graphicsHandler;
-
-        SDL_Window *window = NULL;
-
-        bool w_isClosed = false;
-        double deltaTime = 0;
-        uint64_t dt_now = 0, dt_last = 0;
+        SDL_Window  *window     = NULL;
+        bool        w_isClosed  = false;
+        double      deltaTime   = 0;
+        uint64_t    dt_now      = 0,
+                    dt_last     = 0;
 
     public:
         bool w_init();
