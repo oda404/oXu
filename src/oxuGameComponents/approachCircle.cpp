@@ -3,46 +3,24 @@
 
 #include"approachCircle.hpp"
 
-oxu::ApproachCircle::ApproachCircle(const float &approachSpeed, const sf::Vector2f &position, const sf::Vector2f &scale, const sf::Texture &approachCircleTexture):
-initialScale(scale), approachSpeed(approachSpeed)
+oxu::ApproachCircle::ApproachCircle(const Vector2i &spawnPos, const Vector2i &texSize):
+halfTex_x(texSize.x / 2), halfTex_y(texSize.y / 2)
 {
-    /* set the texture of the approach circle sprite and set it's alpha value to 0
-    so it start out transparent */
-    approachCircle.setTexture(approachCircleTexture);
-    approachCircle.setColor(sf::Color(approachCircle.getColor().r,approachCircle.getColor().g, approachCircle.getColor().b, 0));
+    /* Set the origin in the middle of the sprite */
+    ac_rect.w = texSize.x;
+    ac_rect.h = texSize.y;
 
-    approachCircle.setOrigin((sf::Vector2f)approachCircleTexture.getSize() / 2.0f);
-    
-    approachCircle.setPosition(position);
-
-    approachCircle.setScale(scale);
+    ac_rect.x = spawnPos.x - halfTex_x;
+    ac_rect.y = spawnPos.y - halfTex_y;
 }
 
-sf::Sprite *oxu::ApproachCircle::getApproachCircle() { return &approachCircle; }
-
-bool oxu::ApproachCircle::getApproachState() const { return doneApproacing; }
-
-float oxu::ApproachCircle::getApproachSpeedAsMs() const { return approachSpeed * 1000; }
-
-void oxu::ApproachCircle::approachTheCircle(const float &dt, const sf::Vector2f &hitCircleSize)
+const SDL_Rect *oxu::ApproachCircle::getSDLRect()
 {
-    if (approachCircle.getScale().x > hitCircleSize.x)
-    {
-        sf::Vector2f AT = (((initialScale - hitCircleSize) / approachSpeed)*dt);
-        approachCircle.setScale(approachCircle.getScale() - AT);
-    }
-    else
-        doneApproacing = true;
+    return &ac_rect;
 }
 
-void oxu::ApproachCircle::fadeCircleIn(const float &dt)
+void oxu::ApproachCircle::move(Vector2i pos)
 {
-    if(approachCircle.getColor().a + 1020 *dt < 255)
-        approachCircle.setColor(sf::Color(approachCircle.getColor().r,approachCircle.getColor().g, approachCircle.getColor().b, approachCircle.getColor().a + 1020 *dt));
-}
-
-void oxu::ApproachCircle::fadeCircleOut(const float &dt)
-{
-    if(approachCircle.getColor().a - 4080 * dt > 0)
-        approachCircle.setColor(sf::Color(approachCircle.getColor().r,approachCircle.getColor().g, approachCircle.getColor().b, approachCircle.getColor().a - 4080 *dt));
+    ac_rect.x = pos.x - halfTex_x;
+    ac_rect.y = pos.y - halfTex_y;
 }

@@ -2,46 +2,35 @@
 // Licensed under the MIT license found in the LICENSE file in the root of this repository.
 
 #pragma once
-#include<SFML/Graphics.hpp>
-#include<memory>
-#include<vector>
-#include<iostream>
-#include<future>
 
+#include<SDL2/SDL.h>
+#include<SDL2/SDL_image.h>
+
+#include"../oxuUtils/log.hpp"
 #include"../oxuGameHandlers/graphicsHandler.hpp"
-#include"../oxuGameHandlers/soundHandler.hpp"
-#include"../oxuGameHandlers/hitObjectManager.hpp"
-#include"../oxuGameComponents/playField.hpp"
-#include"../oxuGameHandlers/inputHandler.hpp"
-#include"../oxuGameHandlers/mapManager.hpp"
-#include"../oxuGameComponents/mapSelectButton.hpp"
-//#include"WyGMoGnEfRnhqEunHbYR01001011001011010010.hpp"
 
 namespace oxu
 {
     class Game
     {
     private:
-        sf::Vector2i screenSize = { 1920,1080 };
-        std::shared_ptr<sf::RenderWindow> window;
-        
-        std::vector<MapSelectButton> mapSelectionButtons;
-        std::shared_ptr<PlayField> playField;
-        std::shared_ptr<GraphicsHandler> graphicsHandler;
-        std::shared_ptr<InputHandler> inputHandler;
-        SoundHandler soundHandler;
-        std::shared_ptr<HitObjectManager> hitObjects;
-        std::shared_ptr<MapManager> mapManager;
+        oxu::Log logUtil;
 
-        std::uint8_t currentScene = 0;
+        oxu::GraphicsHandler graphicsHandler;
 
-        sf::Clock deltaClock;
-	    sf::Time deltaTime;
+        SDL_Window *window = NULL;
+
+        bool w_isClosed = false;
+        double deltaTime = 0;
+        uint64_t dt_now = 0, dt_last = 0;
 
     public:
-        Game();
+        bool w_init();
 
-        void run();
+        void w_clean();
 
+        void g_loop();
+
+        void g_calculateDeltaTime();
     };
 }

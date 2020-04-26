@@ -3,10 +3,22 @@
 
 #include"oxuCore/game.hpp"
 
+#define INIT_FAILURE -1
+
 int main()
 {
 	oxu::Game game;
-	game.run();
+
+	if(!game.w_init())
+	{
+		return INIT_FAILURE;
+	}
+	else
+	{
+		game.g_loop();
+	}
+
+	game.w_clean();
 
 	return 0;
 }

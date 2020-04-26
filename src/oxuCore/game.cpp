@@ -1,67 +1,75 @@
 // Copyright (c) Olaru Alexandru <olarualexandru404@gmail.com>
 // Licensed under the MIT license found in the LICENSE file in the root of this repository.
 
-#include"game.hpp"
+#include "game.hpp"
 
-oxu::Game::Game()
+bool oxu::Game::w_init()
 {
-    window = std::make_shared<sf::RenderWindow>(sf::VideoMode(screenSize.x, screenSize.y), "oXu", sf::Style::Titlebar | sf::Style::Close);
-	window->setPosition({0,0});
-    window->setFramerateLimit(120);
+	/* Initialize SDL */
+	if( SDL_Init(SDL_INIT_EVERYTHING) < 0 )
+	{
+		logUtil.log(Log::ERROR, SDL_GetError());
+		return false;
+	}
 
-	playField =  std::make_shared<PlayField>(window->getSize());
+	/* Create the window */
+	window = SDL_CreateWindow(
+	"oXu!", 				// window name
+	SDL_WINDOWPOS_CENTERED, // window pos X
+	SDL_WINDOWPOS_CENTERED, // window pos Y
+	1280, 720, 0 			// width, height, flags
+	);
 
-    hitObjects = std::make_shared<HitObjectManager>(playField.get());
+	if(!window)
+	{
+		logUtil.log(Log::ERROR, SDL_GetError());
+		return false;
+	}
 
-	mapManager = std::make_shared<MapManager>(&mapSelectionButtons);
+	if(!graphicsHandler.init(window))
+	{
+		return false;
+	}
 
-    inputHandler = std::make_shared<InputHandler>(hitObjects.get(), &soundHandler, mapManager.get(), &mapSelectionButtons);
-
-    graphicsHandler = std::make_shared<GraphicsHandler>(inputHandler.get(), hitObjects.get(), &soundHandler, playField.get(), mapManager.get(), &mapSelectionButtons);
-    graphicsHandler->setCursor(window.get());
-
+	return true;
 }
 
-void oxu::Game::run()
+void oxu::Game::g_loop()
 {
-	std::vector<std::future<void>> futures;
+	SDL_Event w_event;
 
-    while (window->isOpen())
+	while(!w_isClosed)
 	{
-		deltaTime = deltaClock.restart();
+		g_calculateDeltaTime();
 
-		sf::Event event;
-		while (window->pollEvent(event))
+		while(SDL_PollEvent(&w_event))
 		{
-			switch(event.type)
+			switch(w_event.type)
 			{
-			case sf::Event::Closed:
-				soundHandler.setVolumeToDefault();
-				soundHandler.freeAudio();
-				window->close();
-				break;
-
-			case sf::Event::MouseWheelScrolled:
-				if(currentScene == 1)
-					mapSelectionButtons[0].scrollButtons(mapSelectionButtons, event.mouseWheelScroll.delta);
-				else if(currentScene == 2)
-					futures.push_back(std::async(std::launch::async, soundHandler.scrollVolume, event.mouseWheelScroll.delta)); //*
-				break;
-			
-			case sf::Event::KeyPressed:
-				inputHandler->handleInput(*window, currentScene);
-				break;
-				
-			default:
-				break;
+				case SDL_QUIT:
+					w_isClosed = true;
+					break;
 			}
 		}
-		
-		window->clear();
-		graphicsHandler->handleGraphics(*window.get(), deltaTime.asSeconds(), currentScene);
-		window->display();
 
-		inputHandler->handleInput(*window.get(), currentScene);
+		graphicsHandler.render();
 
 	}
+};
+
+void oxu::Game::w_clean()
+{
+	/* destroy the window */
+	SDL_DestroyWindow(window);
+	window = NULL;
+
+	/* quit all SDL subsystems */
+	SDL_Quit();
+}
+
+void oxu::Game::g_calculateDeltaTime()
+{
+	dt_last = dt_now;
+	dt_now = SDL_GetPerformanceCounter();
+	deltaTime = (double)((dt_now - dt_last) * 1000 / (double)SDL_GetPerformanceFrequency() );
 }

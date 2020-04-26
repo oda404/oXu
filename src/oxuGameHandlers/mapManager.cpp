@@ -3,25 +3,6 @@
 
 #include"mapManager.hpp"
 
-oxu::MapManager::MapManager(std::vector<MapSelectButton> *buttonsPtr):
-mapSelectionButtons(buttonsPtr) { enumerateMaps(); }
-
-void oxu::MapManager::enumerateMaps()
-{
-    for (boost::filesystem::directory_entry& x : boost::filesystem::directory_iterator("songs/"))
-    {
-        for (boost::filesystem::directory_entry& y : boost::filesystem::directory_iterator(x))
-        {
-            if(boost::filesystem::extension(y) == ".osu")
-            {
-                mapSelectionButtons->emplace_back(boost::filesystem::canonical(y).string(), getMapMetaData(boost::filesystem::canonical(y).string()));
-            }
-        }
-    }
-    if(mapSelectionButtons->size() > 0)
-        mapSelectionButtons[0][0].arrangeButtons(*mapSelectionButtons);
-}
-
 std::vector<std::string> oxu::MapManager::getMapMetaData(std::string mapPath) const
 {
     std::ifstream map(mapPath);
@@ -247,6 +228,9 @@ void oxu::MapManager::loadHitObjects(std::string &path)
 std::vector<sf::Vector2f> oxu::MapManager::getHitObjectPositions() const { return hitCirclesPositions; }
 
 std::vector<int> oxu::MapManager::gethitObjectSpawnTimes() const { return hitCirclesSpawnTimes; }
+
+
+
 
 std::vector<int> oxu::MapManager::getSlidersSpawnTimes() const { return slidersSpawnTimes; }
 

@@ -3,12 +3,10 @@
 
 #pragma once
 
-#include<SFML/Graphics.hpp>
 #include <vector>
 #include <string>
 #include<sstream>
 #include<fstream>
-#include<boost/filesystem.hpp>
 #include"../oxuGameComponents/mapSelectButton.hpp"
 namespace oxu
 {
@@ -32,9 +30,6 @@ namespace oxu
         //===================================================================
 
     public:
-        MapManager(std::vector<MapSelectButton> *buttonsPtr);
-
-        void enumerateMaps();
 
         int getNumberOfMaps() const { return mapSelectionButtons->size(); }
 
