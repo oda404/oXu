@@ -3,58 +3,32 @@
 
 #pragma once
 
-#include <vector>
-#include <string>
+#include<vector>
+#include<string>
 #include<sstream>
 #include<fstream>
-#include"../oxuGameComponents/mapSelectButton.hpp"
+#include<iostream>
+#include <experimental/filesystem>
+
+
+namespace fs = std::experimental::filesystem;
+
 namespace oxu
 {
     class MapManager
     {
     private:
+        uint32_t numberOfMaps;
 
-        std::vector<MapSelectButton> *mapSelectionButtons;
-
-        //info about the map's hit circles===================================
-        std::vector<sf::Vector2f> hitCirclesPositions;
-        std::vector<int> hitCirclesSpawnTimes;
-        //===================================================================
-        //info about the map's sliders========================================
-        std::vector<std::vector<sf::Vector2f>> curvePointsCoords;
-        std::vector<sf::Vector2f> slidersPositions;
-        std::vector<char> curveType;
-        std::vector<int> slidersSpawnTimes; 
-        std::vector<int> nOfSlides;
-        std::vector<int> sliderLengths;
-        //===================================================================
+        /* idk how efficient storing
+            every beatmap's name is but fuck it */
+        std::vector<std::string> beatMaps;
 
     public:
+        MapManager();
 
-        int getNumberOfMaps() const { return mapSelectionButtons->size(); }
-
-        std::vector<std::string> getMapMetaData(std::string mapPath) const;
-
-        std::vector<std::string> getMapDifficulty(std::string mapPath);
-
-        void loadHitObjects(std::string &path);
-
-        std::vector<sf::Vector2f> getHitObjectPositions() const;
-
-        std::vector<int> gethitObjectSpawnTimes() const;
-
-        std::vector<int> getSlidersSpawnTimes() const;
-
-        std::vector<sf::Vector2f> getSlidersPositions() const;
+        void loadHitObjects(const std::string &mapPath);
         
-        std::vector<char> getHitObjectCurveType() const;
-
-        std::vector<std::vector<sf::Vector2f>> getSliderPointsCoord() const;
-
-        std::vector<int> getSlides() const;
-
-        std::vector<int> getSliderLength() const;
-
-        void clearMapInfo();
+        void enumBeatMaps();
     };
 }
