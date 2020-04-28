@@ -12,12 +12,15 @@ bool oxu::Game::w_init()
 		return false;
 	}
 
+	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+
 	/* Create the window */
 	window = SDL_CreateWindow(
-	"oXu!", 				// window name
-	SDL_WINDOWPOS_CENTERED, // window pos X
-	SDL_WINDOWPOS_CENTERED, // window pos Y
-	1280, 720, 0 			// width, height, flags
+	"oXu!", 						// window name
+	SDL_WINDOWPOS_CENTERED, 		// window pos X
+	SDL_WINDOWPOS_CENTERED,			// window pos Y
+	1280, 720, 0		// width, height, flags
 	);
 
 	if(!window)
@@ -38,9 +41,13 @@ void oxu::Game::g_loop()
 {
 	SDL_Event w_event;
 
+	MapManager m;
+
+	m.loadHitObjects("songs/eicateve - R.I.P. (Firika) [Hard].osu");
+
 	while(!w_isClosed)
 	{
-		g_calculateDeltaTime();
+		uint32_t startTick = SDL_GetTicks();
 
 		while(SDL_PollEvent(&w_event))
 		{
@@ -56,6 +63,12 @@ void oxu::Game::g_loop()
 
 		sceneManager.handleCurrentSceneGraphics();
 
+		/* Limit the fps to whatever is the max */
+		if(1000 / maxFPS > SDL_GetTicks() - startTick)
+		{
+			SDL_Delay(1000 / maxFPS - SDL_GetTicks() + startTick);
+		}
+
 	}
 };
 
@@ -67,11 +80,4 @@ void oxu::Game::w_clean()
 
 	/* quit SDL video subsystem */
 	SDL_Quit();
-}
-
-void oxu::Game::g_calculateDeltaTime()
-{
-	dt_last = dt_now;
-	dt_now = SDL_GetPerformanceCounter();
-	deltaTime = (double)((dt_now - dt_last) * 1000 / (double)SDL_GetPerformanceFrequency() );
 }

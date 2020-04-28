@@ -7,6 +7,7 @@
 
 #include"../oxuUtils/log.hpp"
 #include"../oxuCore/sceneManager.hpp"
+#include"../oxuGameHandlers/mapManager.hpp"
 
 namespace oxu
 {
@@ -18,9 +19,7 @@ namespace oxu
 
         SDL_Window  *window     = NULL;
         bool        w_isClosed  = false;
-        double      deltaTime   = 0;
-        uint64_t    dt_now      = 0,
-                    dt_last     = 0;
+        int         maxFPS      = 60;
 
     public:
         bool w_init();
@@ -29,6 +28,5 @@ namespace oxu
 
         void g_loop();
 
-        void g_calculateDeltaTime();
     };
 }
