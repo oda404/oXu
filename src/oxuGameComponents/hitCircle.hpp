@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include<cstdint>
+#include<SDL2/SDL_rect.h>
 
 #include"../oxuUtils/vector2.hpp"
 
@@ -12,10 +12,10 @@ namespace oxu
 	class HitCircle
     {
     private:
-        Vector2i position;
-        const uint32_t spawnTime; // in millis
+        SDL_Rect circleRect;
+        uint32_t spawnTime; // in millis
 
     public:
-        HitCircle(const Vector2i &p_position, const uint32_t &p_spawnTime);
+        HitCircle(unsigned int infoArr[3]);
     };
 }

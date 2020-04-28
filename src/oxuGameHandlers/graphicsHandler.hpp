@@ -6,6 +6,7 @@
 #include<SDL2/SDL_image.h>
 
 #include "../oxuCore/gameComponents.hpp"
+#include"../oxuCore/textures.hpp"
 
 namespace oxu
 {
@@ -13,6 +14,7 @@ namespace oxu
     {
     private:
         GameComponents &gameComponentsI = GameComponents::getInstance();
+        Textures       &texturesI       = Textures::getInstance();
 
         SDL_Renderer *w_renderer = NULL;
 

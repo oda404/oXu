@@ -3,8 +3,10 @@
 
 #include"hitCircle.hpp"
 
-oxu::HitCircle::HitCircle(const Vector2i &p_position, const uint32_t &p_spawnTime):
-position(p_position), spawnTime(p_spawnTime)
+oxu::HitCircle::HitCircle(unsigned int infoArr[3])
 {
-    
+    //position.x = infoArr[0];
+    //position.y = infoArr[1];
+
+    spawnTime = infoArr[2];
 }

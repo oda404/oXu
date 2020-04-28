@@ -9,11 +9,13 @@ bool oxu::GraphicsHandler::init(SDL_Window *window)
 {
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
 
-    w_renderer = SDL_CreateRenderer(window, -1 ,0);
+    w_renderer = SDL_CreateRenderer(window, -1 , SDL_RENDERER_ACCELERATED);
     if(!w_renderer)
     {
         return false;
     }
+
+    texturesI.init(w_renderer);
 
     gameComponentsI.cursor.init();
 
@@ -30,8 +32,20 @@ oxu::GraphicsHandler::~GraphicsHandler()
 
 void oxu::GraphicsHandler::render()
 {
-    SDL_RenderClear(w_renderer);
+    static bool a = true;
 
+    SDL_RenderClear(w_renderer);
+    
+    if(a)
+    {
+        SDL_RenderCopy(w_renderer, texturesI.getHCTex(), NULL, NULL);
+        a = false;
+    }
+    else
+    {
+        SDL_RenderCopy(w_renderer, texturesI.getACTex(), NULL, NULL);
+        a =true;
+    }
     
 
     SDL_RenderPresent(w_renderer);

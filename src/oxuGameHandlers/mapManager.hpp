@@ -10,6 +10,8 @@
 #include<iostream>
 #include <experimental/filesystem>
 
+#include"../oxuCore/gameComponents.hpp"
+
 
 namespace fs = std::experimental::filesystem;
 
@@ -23,6 +25,8 @@ namespace oxu
         /* idk how efficient storing
             every beatmap's name is but fuck it */
         std::vector<std::string> beatMaps;
+
+        GameComponents &gcI = GameComponents::getInstance();
 
     public:
         MapManager();
