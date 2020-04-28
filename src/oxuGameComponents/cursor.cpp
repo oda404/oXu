@@ -14,14 +14,14 @@ void oxu::Cursor::init()
     SDL_Surface *surface = IMG_Load("skins/cursor.png");
     if(!surface)
     {
-        logUtil.log(Log::WARNING, SDL_GetError());
+
     }
 
     /* Create the cursor */
 	customCursor = SDL_CreateColorCursor(surface, surface->w / 2, surface->h / 2);
     if(!customCursor)
     {
-        logUtil.log(Log::WARNING, SDL_GetError());
+
     }
 
     /* Free the above loaded surface */

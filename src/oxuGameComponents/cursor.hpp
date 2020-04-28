@@ -4,7 +4,6 @@
 #include<SDL2/SDL_mouse.h>
 #include<SDL2/SDL_image.h>
 
-#include "../oxuUtils/log.hpp"
 #include "../oxuUtils/vector2.hpp"
 
 namespace oxu
@@ -12,8 +11,6 @@ namespace oxu
     class Cursor
     {
     private:
-        Log logUtil;
-
         SDL_Cursor *customCursor = NULL;
 
     public:
