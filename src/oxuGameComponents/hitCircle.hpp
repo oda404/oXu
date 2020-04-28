@@ -2,37 +2,20 @@
 // Licensed under the MIT license found in the LICENSE file in the root of this repository.
 
 #pragma once
-#include<SFML/Graphics.hpp>
 
-#include"../oxuGameComponents/playField.hpp"
+#include<cstdint>
+
+#include"../oxuUtils/vector2.hpp"
 
 namespace oxu
 {
 	class HitCircle
-	{
-	private:
-		sf::Sprite hitCircle;
-		sf::Sprite hitCircleOverlay;
-		long spawnTime;
-		float TextureSize;
+    {
+    private:
+        Vector2i position;
+        const uint32_t spawnTime; // in millis
 
-	public:
-		HitCircle(const sf::Vector2f &position, const long &spawnTime, const float &CS, const PlayField &playField,const sf::Texture &hitCircleTexture, const sf::Texture &hitCircleOverlayTexture);
-
-		sf::Vector2f getHitCircleScale() const;
-
-		sf::Vector2f getPos() const;
-
-		sf::Sprite *getHitCircle();
-
-		sf::Sprite *getHitCircleOverlay();
-
-		long getSpawnTime() const;
-
-		float getHitCircleScaleInPixels() const;
-
-		void fadeCircleIn(const float &dt);
-
-		bool fadeCircleOut(const float &dt);
-	};
+    public:
+        HitCircle(const Vector2i &p_position, const uint32_t &p_spawnTime);
+    };
 }
