@@ -8,7 +8,7 @@ bool oxu::Game::w_init()
 	/* Initialize SDL */
 	if( SDL_Init(SDL_INIT_VIDEO) < 0 )
 	{
-		logUtil.log(Log::ERROR, SDL_GetError());
+
 		return false;
 	}
 
@@ -25,7 +25,7 @@ bool oxu::Game::w_init()
 
 	if(!window)
 	{
-		logUtil.log(Log::ERROR, SDL_GetError());
+
 		return false;
 	}
 

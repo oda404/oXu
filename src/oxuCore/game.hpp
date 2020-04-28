@@ -5,7 +5,6 @@
 
 #include<SDL2/SDL.h>
 
-#include"../oxuUtils/log.hpp"
 #include"../oxuCore/sceneManager.hpp"
 #include"../oxuGameHandlers/mapManager.hpp"
 
@@ -14,7 +13,6 @@ namespace oxu
     class Game
     {
     private:
-        Log             logUtil;
         SceneManager    sceneManager;
 
         SDL_Window  *window     = NULL;
