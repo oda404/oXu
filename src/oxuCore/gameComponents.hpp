@@ -11,6 +11,9 @@
 
 #pragma once
 
+#include<vector>
+
+#include"../oxuGameComponents/hitCircle.hpp"
 #include "../oxuGameComponents/cursor.hpp"
 
 namespace oxu
@@ -32,5 +35,7 @@ namespace oxu
 
         /* Game components */
         Cursor cursor;
+
+        std::vector<HitCircle> hitCircles;
     };
 }

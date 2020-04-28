@@ -3,10 +3,8 @@
 
 #pragma once
 
-#include<SDL2/SDL.h>
 #include<SDL2/SDL_image.h>
 
-#include"../oxuUtils/log.hpp"
 #include "../oxuCore/gameComponents.hpp"
 
 namespace oxu
@@ -14,10 +12,9 @@ namespace oxu
     class GraphicsHandler 
     {
     private:
-        Log logUtil;
         GameComponents &gameComponentsI = GameComponents::getInstance();
 
-        SDL_Renderer *w_renderer = NULL; // the window renderer
+        SDL_Renderer *w_renderer = NULL;
 
     public:
         GraphicsHandler();

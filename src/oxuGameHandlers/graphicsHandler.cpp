@@ -7,11 +7,11 @@ oxu::GraphicsHandler::GraphicsHandler() { }
 
 bool oxu::GraphicsHandler::init(SDL_Window *window)
 {
-    // Initiate the renderer
-    w_renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
+
+    w_renderer = SDL_CreateRenderer(window, -1 ,0);
     if(!w_renderer)
     {
-        logUtil.log(Log::ERROR, SDL_GetError());
         return false;
     }
 
@@ -22,9 +22,8 @@ bool oxu::GraphicsHandler::init(SDL_Window *window)
 
 oxu::GraphicsHandler::~GraphicsHandler()
 {
-    /* Destroy the renderer */
     SDL_DestroyRenderer(w_renderer);
-	w_renderer = NULL;
+    w_renderer = NULL;
 
 	IMG_Quit();
 }
@@ -32,6 +31,8 @@ oxu::GraphicsHandler::~GraphicsHandler()
 void oxu::GraphicsHandler::render()
 {
     SDL_RenderClear(w_renderer);
+
+    
 
     SDL_RenderPresent(w_renderer);
 }
