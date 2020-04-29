@@ -5,8 +5,6 @@
 
 #include<SDL2/SDL_rect.h>
 
-#include"../oxuUtils/vector2.hpp"
-
 namespace oxu
 {
 	class HitCircle
@@ -16,6 +14,8 @@ namespace oxu
         uint32_t spawnTime; // in millis
 
     public:
-        HitCircle(unsigned int infoArr[3]);
+        HitCircle(unsigned int infoArr[5]);
+
+        SDL_Rect *getSDLRect();
     };
 }

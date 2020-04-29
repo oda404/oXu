@@ -53,9 +53,12 @@ void oxu::MapManager::loadHitObjects(const std::string &mapPath)
     {
         if(shouldReadObjInf)
         {
-            unsigned int infoArr[3];
+            unsigned int infoArr[5];
 
             getObjCoreInfo(line, infoArr);
+
+            infoArr[3] = Textures::getInstance().getHCHalfTex();
+            infoArr[4] = Textures::getInstance().getACHalfTex();
 
             gcI.hitCircles.emplace_back(infoArr);
         }

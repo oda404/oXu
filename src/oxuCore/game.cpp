@@ -43,7 +43,8 @@ void oxu::Game::g_loop()
 
 	MapManager m;
 
-	//m.loadHitObjects("songs/eicateve - R.I.P. (Firika) [Hard].osu");
+	m.loadHitObjects("songs/eicateve - R.I.P. (Firika) [Hard].osu");
+	
 	while(!w_isClosed)
 	{
 		uint32_t startTick = SDL_GetTicks();

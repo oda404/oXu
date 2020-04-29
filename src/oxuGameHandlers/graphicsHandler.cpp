@@ -32,21 +32,9 @@ oxu::GraphicsHandler::~GraphicsHandler()
 
 void oxu::GraphicsHandler::render()
 {
-    static bool a = true;
-
     SDL_RenderClear(w_renderer);
     
-    if(a)
-    {
-        SDL_RenderCopy(w_renderer, texturesI.getHCTex(), NULL, NULL);
-        a = false;
-    }
-    else
-    {
-        SDL_RenderCopy(w_renderer, texturesI.getACTex(), NULL, NULL);
-        a =true;
-    }
-    
+    SDL_RenderCopy(w_renderer, texturesI.getHCTex(), NULL, gameComponentsI.hitCircles[0].getSDLRect());
 
     SDL_RenderPresent(w_renderer);
 }

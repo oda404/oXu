@@ -11,6 +11,7 @@
 #include <experimental/filesystem>
 
 #include"../oxuCore/gameComponents.hpp"
+#include"../oxuCore/textures.hpp"
 
 
 namespace fs = std::experimental::filesystem;

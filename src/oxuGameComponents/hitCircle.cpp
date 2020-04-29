@@ -3,10 +3,26 @@
 
 #include"hitCircle.hpp"
 
-oxu::HitCircle::HitCircle(unsigned int infoArr[3])
+oxu::HitCircle::HitCircle(unsigned int infoArr[5])
 {
-    //position.x = infoArr[0];
-    //position.y = infoArr[1];
+    /*
+    infoArr[0] == posX
+    infoArr[1] == posY
+    infoArr[2] == spawnTime
+    infoArr[3] == HCHalfTex
+    infoArr[4] == ACHalfTex 
+    */
+
+    circleRect.x = infoArr[0] - infoArr[3];
+    circleRect.y = infoArr[1] - infoArr[3];
+
+    circleRect.w = infoArr[3] * 2;
+    circleRect.h = circleRect.w;
 
     spawnTime = infoArr[2];
+}
+
+SDL_Rect *oxu::HitCircle::getSDLRect()
+{
+    return &circleRect;
 }

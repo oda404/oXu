@@ -9,6 +9,7 @@ CPPSRC = $(wildcard src/main.cpp) 		\
 		 $(wildcard src/oxuGameHandlers/inputHandler.cpp) \
 		 $(wildcard src/oxuGameHandlers/mapManager.cpp) \
 		 $(wildcard src/oxuGameComponents/cursor.cpp) \
+		 $(wildcard src/oxuGameComponents/hitCircle.cpp) \
 
 OBJ = $(CPPSRC:.cpp=.o)
 

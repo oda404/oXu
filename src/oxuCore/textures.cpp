@@ -24,7 +24,12 @@ void oxu::Textures::init(SDL_Renderer *w_renderer)
 
     /* TODO: implement actual individual skins */
     gameTextures.push_back( IMG_LoadTexture(w_renderer, "skins/hitcircle.png") );
+    SDL_QueryTexture(gameTextures[0], NULL, NULL, &HCHalfTex, NULL);
+    HCHalfTex /= 2;
+
     gameTextures.push_back( IMG_LoadTexture(w_renderer, "skins/approachcircle.png") );
+    ACHalfTex /= 2;
+    SDL_QueryTexture(gameTextures[1], NULL, NULL, &ACHalfTex, NULL);
 }
 
 SDL_Texture *oxu::Textures::getHCTex()
@@ -35,4 +40,14 @@ SDL_Texture *oxu::Textures::getHCTex()
 SDL_Texture *oxu::Textures::getACTex()
 {
     return gameTextures[1];
+}
+
+int &oxu::Textures::getHCHalfTex()
+{
+    return HCHalfTex;
+}
+
+int &oxu::Textures::getACHalfTex()
+{
+    return ACHalfTex;
 }
