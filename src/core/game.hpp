@@ -5,8 +5,8 @@
 
 #include<SDL2/SDL.h>
 
-#include"../oxuCore/sceneManager.hpp"
-#include"../oxuGameHandlers/mapManager.hpp"
+#include"sceneManager.hpp"
+#include"../beatmap/mapManager.hpp"
 
 namespace oxu
 {

@@ -5,8 +5,8 @@
 
 #include<SDL2/SDL_image.h>
 
-#include "../oxuCore/gameComponents.hpp"
-#include"../oxuCore/textures.hpp"
+#include "../components/gameComponents.hpp"
+#include"../components/textures.hpp"
 
 namespace oxu
 {

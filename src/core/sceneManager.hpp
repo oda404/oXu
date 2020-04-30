@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../oxuGameHandlers/graphicsHandler.hpp"
-#include "../oxuGameHandlers/inputHandler.hpp"
+#include "../handlers/graphicsHandler.hpp"
+#include "../handlers/inputHandler.hpp"
 
 namespace oxu
 {

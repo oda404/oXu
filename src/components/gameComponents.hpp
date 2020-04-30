@@ -13,10 +13,10 @@
 
 #include<vector>
 
-#include"../oxuGameComponents/hitCircle.hpp"
-#include"../oxuGameComponents/cursor.hpp"
-#include"../oxuGameComponents/timer.hpp"
-#include"../oxuGameComponents/playField.hpp"
+#include"game/hitCircle.hpp"
+#include"cursor.hpp"
+#include"../utils/timer.hpp"
+#include"game/playField.hpp"
 
 namespace oxu
 {

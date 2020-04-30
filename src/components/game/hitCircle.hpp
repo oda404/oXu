@@ -5,7 +5,7 @@
 
 #include<SDL2/SDL_rect.h>
 
-#include"../oxuGameComponents/playField.hpp"
+#include"playField.hpp"
 
 namespace oxu
 {

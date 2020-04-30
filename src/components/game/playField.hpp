@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include"../oxuUtils/vector2.hpp"
+#include"../../utils/vector2.hpp"
 
 namespace oxu
 {

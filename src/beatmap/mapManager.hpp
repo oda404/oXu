@@ -8,10 +8,10 @@
 #include<sstream>
 #include<fstream>
 #include<iostream>
-#include <experimental/filesystem>
+#include<experimental/filesystem>
 
-#include"../oxuCore/gameComponents.hpp"
-#include"../oxuCore/textures.hpp"
+#include"../components/gameComponents.hpp"
+#include"../components/textures.hpp"
 
 
 namespace fs = std::experimental::filesystem;

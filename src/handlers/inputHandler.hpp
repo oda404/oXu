@@ -5,7 +5,7 @@
 
 #include<SDL2/SDL_mouse.h>
 
-#include"../oxuCore/gameComponents.hpp"
+#include"../components/gameComponents.hpp"
 
 namespace oxu
 {
