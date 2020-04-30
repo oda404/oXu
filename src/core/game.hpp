@@ -6,6 +6,7 @@
 #include<SDL2/SDL.h>
 
 #include"sceneManager.hpp"
+#include"../components/cursor.hpp"
 #include"../beatmap/mapManager.hpp"
 
 namespace oxu

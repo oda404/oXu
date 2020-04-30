@@ -32,6 +32,8 @@ bool oxu::Game::w_init()
 		return false;
 	}
 
+	Cursor::getInstance().set();
+
 	return true;
 }
 

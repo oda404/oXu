@@ -8,13 +8,11 @@
 
 */
 
-
 #pragma once
 
 #include<vector>
 
 #include"game/hitCircle.hpp"
-#include"cursor.hpp"
 #include"../utils/timer.hpp"
 #include"game/playField.hpp"
 
@@ -34,10 +32,7 @@ namespace oxu
 
         /* Disable move-ctor */
         GameComponents(GameComponents&&) = delete;
-
-        /* Kinda used everywhere */
-        Cursor cursor;
-
+        
         /* Actual gameplay components */
         Timer gameTimer;
 

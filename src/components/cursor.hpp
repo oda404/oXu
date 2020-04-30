@@ -9,14 +9,22 @@ namespace oxu
     class Cursor
     {
     private:
+        Cursor();
         SDL_Cursor *customCursor = NULL;
 
     public:
-        Cursor();
         ~Cursor();
 
-        /* declared void because if the initialization fails
-        it's not a core component and doesn't stop the game (no return value needed) */
-        void init();
+        static Cursor &getInstance();
+
+        /* Disable copy-ctor */
+        Cursor(Cursor const&) = delete;
+
+        /* Disable move-ctor */
+        Cursor(Cursor&&) = delete;
+
+        /* Loads whatever png named "cursor.png"
+        exists in the skins folder as the cursor */
+        void set();
     };
 }

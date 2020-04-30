@@ -17,8 +17,7 @@ bool oxu::GraphicsHandler::init(SDL_Window *window)
 
     texturesI.init(w_renderer);
 
-    gcI.cursor.init();
-    gcI.playField.init(Vector2i(640, 480));
+    gcI.playField.init(Vector2i(640, 480)); // stupid hardcoded screen size
 
     return true;
 }
