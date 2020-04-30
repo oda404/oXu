@@ -1,11 +1,7 @@
 #include"timer.hpp"
 
-Timer::Timer(bool tStartState):
-tIsRunning(tStartState) {
-    if(tStartState) {
-        tStart = std::chrono::steady_clock::now();
-    }
-}
+Timer::Timer():
+tIsRunning(false) { }
 
 void Timer::start() {
     tStart = std::chrono::steady_clock::now();

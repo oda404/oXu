@@ -3,6 +3,8 @@
 
 #include "game.hpp"
 
+unsigned int windowWidth = 640, windowHeight = 480;
+
 bool oxu::Game::w_init()
 {
 	/* Initialize SDL */
@@ -12,20 +14,16 @@ bool oxu::Game::w_init()
 		return false;
 	}
 
-	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	//SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
-
 	/* Create the window */
 	window = SDL_CreateWindow(
 	"oXu!", 						// window name
 	SDL_WINDOWPOS_CENTERED, 		// window pos X
 	SDL_WINDOWPOS_CENTERED,			// window pos Y
-	1280, 720, 0		// width, height, flags
+	windowWidth, windowHeight, 0	// width, height, flags
 	);
 
 	if(!window)
 	{
-
 		return false;
 	}
 
@@ -43,7 +41,9 @@ void oxu::Game::g_loop()
 
 	MapManager m;
 
-	m.loadHitObjects("songs/eicateve - R.I.P. (Firika) [Hard].osu");
+	m.loadHitObjects("songs/Imperial Circus Dead Decadence - Yomi yori Kikoyu, Koukoku no Tou to Honoo no Shoujo. (DoKito) [Kyouaku].osu");
+
+	GameComponents::getInstance().gameTimer.start();
 	
 	while(!w_isClosed)
 	{

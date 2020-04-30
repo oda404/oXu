@@ -10,8 +10,7 @@ private:
     uint64_t tPausedTime = 0; // as milliseconds
 
 public:
-    Timer(bool tStartState = false);
-
+    Timer();
     ~Timer() = default;
 
     void start();

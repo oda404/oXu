@@ -5,17 +5,24 @@
 
 #include<SDL2/SDL_rect.h>
 
+#include"../oxuGameComponents/playField.hpp"
+
 namespace oxu
 {
 	class HitCircle
     {
     private:
-        SDL_Rect circleRect;
+        SDL_Rect ACRect;
+        SDL_Rect HCRect;
         uint32_t spawnTime; // in millis
 
     public:
-        HitCircle(unsigned int infoArr[5]);
+        HitCircle(unsigned int infoArr[5], PlayField &playField);
 
-        SDL_Rect *getSDLRect();
+        SDL_Rect *getHCSDLRect();
+
+        SDL_Rect *getACSDLRect();
+
+        uint32_t &getSpawnTime();
     };
 }

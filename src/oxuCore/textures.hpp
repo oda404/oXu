@@ -12,8 +12,6 @@ namespace oxu
     private:
         Textures();
 
-        std::vector<SDL_Texture*> gameTextures;
-
         /* Assume that the png is a perfect square
             probably going to bite me in the ass later */
         int HCHalfTex;
@@ -31,10 +29,9 @@ namespace oxu
 
         ~Textures();
 
-        void init(SDL_Renderer *w_renderer);
+        std::vector<SDL_Texture*> gameTextures;
 
-        SDL_Texture *getHCTex();
-        SDL_Texture *getACTex();
+        void init(SDL_Renderer *w_renderer);
 
         int &getHCHalfTex();
         int &getACHalfTex();

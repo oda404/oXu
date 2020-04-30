@@ -2,22 +2,24 @@
 // Licensed under the MIT license found in the LICENSE file in the root of this repository.
 
 #pragma once
-#include<SFML/Graphics.hpp>
+
+#include"../oxuUtils/vector2.hpp"
 
 namespace oxu
 {
 	class PlayField
 	{
 	private:
-		sf::RectangleShape playArea;
-		sf::Vector2f playFieldStartPoint;
+		Vector2f playFieldStartPoint;
 		float oxuPx;
 		
 	public:
-		PlayField(const sf::Vector2u &screenSize);
+		PlayField();
 
-		sf::Vector2f getPlayFieldStartPoint() const;
+		void init(const Vector2i &screenSize);
 
-		float getOxuPx() const;
+		Vector2f &getPlayFieldStartPoint();
+
+		float &getOxuPx();
 	};
 }

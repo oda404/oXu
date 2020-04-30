@@ -3,7 +3,7 @@
 
 #include"hitCircle.hpp"
 
-oxu::HitCircle::HitCircle(unsigned int infoArr[5])
+oxu::HitCircle::HitCircle(unsigned int infoArr[5], PlayField &playField)
 {
     /*
     infoArr[0] == posX
@@ -13,16 +13,38 @@ oxu::HitCircle::HitCircle(unsigned int infoArr[5])
     infoArr[4] == ACHalfTex 
     */
 
-    circleRect.x = infoArr[0] - infoArr[3];
-    circleRect.y = infoArr[1] - infoArr[3];
+    int objTrueX = playField.getPlayFieldStartPoint().x + infoArr[0] * playField.getOxuPx();
+    int objTrueY = playField.getPlayFieldStartPoint().y + infoArr[1] * playField.getOxuPx();
 
-    circleRect.w = infoArr[3] * 2;
-    circleRect.h = circleRect.w;
+    // Hit circle
+    // Offset the true position so it falls on it's center point
+    HCRect.x = objTrueX - infoArr[3];
+    HCRect.y = objTrueY - infoArr[3];
+
+    HCRect.w = infoArr[3] * 2;
+    HCRect.h = HCRect.w;
+
+    // Approach circle
+    ACRect.x = objTrueX - infoArr[4];
+    ACRect.y = objTrueY - infoArr[4];
+
+    ACRect.w = infoArr[4] * 2;
+    ACRect.h = ACRect.w;
 
     spawnTime = infoArr[2];
 }
 
-SDL_Rect *oxu::HitCircle::getSDLRect()
+SDL_Rect *oxu::HitCircle::getHCSDLRect()
 {
-    return &circleRect;
+    return &HCRect;
+}
+
+SDL_Rect *oxu::HitCircle::getACSDLRect()
+{
+    return &ACRect;
+}
+
+uint32_t &oxu::HitCircle::getSpawnTime()
+{
+    return spawnTime;
 }

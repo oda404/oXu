@@ -13,7 +13,7 @@ namespace oxu
     class GraphicsHandler 
     {
     private:
-        GameComponents &gameComponentsI = GameComponents::getInstance();
+        GameComponents &gcI = GameComponents::getInstance();
         Textures       &texturesI       = Textures::getInstance();
 
         SDL_Renderer *w_renderer = NULL;

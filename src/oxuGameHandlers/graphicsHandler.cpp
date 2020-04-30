@@ -17,7 +17,8 @@ bool oxu::GraphicsHandler::init(SDL_Window *window)
 
     texturesI.init(w_renderer);
 
-    gameComponentsI.cursor.init();
+    gcI.cursor.init();
+    gcI.playField.init(Vector2i(640, 480));
 
     return true;
 }
@@ -33,8 +34,18 @@ oxu::GraphicsHandler::~GraphicsHandler()
 void oxu::GraphicsHandler::render()
 {
     SDL_RenderClear(w_renderer);
+
+    static int currentObj = 0;
     
-    SDL_RenderCopy(w_renderer, texturesI.getHCTex(), NULL, gameComponentsI.hitCircles[0].getSDLRect());
+    for(int i = gcI.hitCircles.size() - 1; i >= 0 ; --i)
+    {
+        if(gcI.hitCircles[i].getSpawnTime() <= gcI.gameTimer.getEllapsedTimeAsMs())
+        {     
+            SDL_RenderCopy(w_renderer, texturesI.gameTextures[0], NULL, gcI.hitCircles[i].getHCSDLRect()); // hit circle
+            SDL_RenderCopy(w_renderer, texturesI.gameTextures[2], NULL, gcI.hitCircles[i].getHCSDLRect()); // hit circle overlay
+            SDL_RenderCopy(w_renderer, texturesI.gameTextures[1], NULL, gcI.hitCircles[i].getACSDLRect()); // approach circle
+        }
+    }
 
     SDL_RenderPresent(w_renderer);
 }

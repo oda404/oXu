@@ -14,7 +14,9 @@
 #include<vector>
 
 #include"../oxuGameComponents/hitCircle.hpp"
-#include "../oxuGameComponents/cursor.hpp"
+#include"../oxuGameComponents/cursor.hpp"
+#include"../oxuGameComponents/timer.hpp"
+#include"../oxuGameComponents/playField.hpp"
 
 namespace oxu
 {
@@ -33,8 +35,13 @@ namespace oxu
         /* Disable move-ctor */
         GameComponents(GameComponents&&) = delete;
 
-        /* Game components */
+        /* Kinda used everywhere */
         Cursor cursor;
+
+        /* Actual gameplay components */
+        Timer gameTimer;
+
+        PlayField playField;
 
         std::vector<HitCircle> hitCircles;
     };

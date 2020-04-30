@@ -11,10 +11,10 @@ oxu::Textures::Textures() { }
 oxu::Textures::~Textures()
 {
     /* Destroy all game textures */
-    for(int i = 0; i < gameTextures.size(); ++i)
+    for(SDL_Texture *tex: gameTextures)
     {
-        SDL_DestroyTexture(gameTextures[i]);
-        gameTextures[i] = NULL;
+        SDL_DestroyTexture(tex);
+        tex = NULL;
     }
 }
 
@@ -23,23 +23,16 @@ void oxu::Textures::init(SDL_Renderer *w_renderer)
     /* Good ol' yandere dev oriented programming */
 
     /* TODO: implement actual individual skins */
-    gameTextures.push_back( IMG_LoadTexture(w_renderer, "skins/hitcircle.png") );
+    gameTextures.emplace_back( IMG_LoadTexture(w_renderer, "skins/hitcircle.png") );
     SDL_QueryTexture(gameTextures[0], NULL, NULL, &HCHalfTex, NULL);
     HCHalfTex /= 2;
 
-    gameTextures.push_back( IMG_LoadTexture(w_renderer, "skins/approachcircle.png") );
-    ACHalfTex /= 2;
+    gameTextures.emplace_back( IMG_LoadTexture(w_renderer, "skins/approachcircle.png") );
     SDL_QueryTexture(gameTextures[1], NULL, NULL, &ACHalfTex, NULL);
-}
+    ACHalfTex /= 2;
 
-SDL_Texture *oxu::Textures::getHCTex()
-{
-    return gameTextures[0];
-}
-
-SDL_Texture *oxu::Textures::getACTex()
-{
-    return gameTextures[1];
+    gameTextures.emplace_back( IMG_LoadTexture(w_renderer, "skins/hitcircleoverlay.png") );
+    // uses the same rect as the hitcircle
 }
 
 int &oxu::Textures::getHCHalfTex()

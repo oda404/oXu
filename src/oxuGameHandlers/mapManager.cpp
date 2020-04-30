@@ -60,7 +60,7 @@ void oxu::MapManager::loadHitObjects(const std::string &mapPath)
             infoArr[3] = Textures::getInstance().getHCHalfTex();
             infoArr[4] = Textures::getInstance().getACHalfTex();
 
-            gcI.hitCircles.emplace_back(infoArr);
+            gcI.hitCircles.emplace_back(infoArr, gcI.playField);
         }
         else if(line == "[HitObjects]\r")
         {
