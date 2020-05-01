@@ -16,7 +16,7 @@ namespace oxu
 
         bool init(SDL_Window *window);
 
-        void handleCurrentSceneGraphics();
+        void handleCurrentSceneGraphics(const double &dt);
 
         void handleCurrentSceneInput();
     };

@@ -3,33 +3,34 @@
 
 #include"hitCircle.hpp"
 
-oxu::HitCircle::HitCircle(unsigned int infoArr[5], PlayField &playField)
+oxu::HitCircle::HitCircle(unsigned int infoArr[3], PlayField &playField)
 {
     /*
     infoArr[0] == posX
     infoArr[1] == posY
     infoArr[2] == spawnTime
-    infoArr[3] == HCHalfTex
-    infoArr[4] == ACHalfTex 
     */
-
-    int objTrueX = playField.getPlayFieldStartPoint().x + infoArr[0] * playField.getOxuPx();
-    int objTrueY = playField.getPlayFieldStartPoint().y + infoArr[1] * playField.getOxuPx();
+    objTruePosition = Vector2f(
+        playField.getPlayFieldStartPoint().x + infoArr[0] * playField.getOxuPx(),
+        playField.getPlayFieldStartPoint().y + infoArr[1] * playField.getOxuPx()
+    );
 
     // Hit circle
     // Offset the true position so it falls on it's center point
-    HCRect.x = objTrueX - infoArr[3];
-    HCRect.y = objTrueY - infoArr[3];
-
-    HCRect.w = infoArr[3] * 2;
+    HCRect.w = (((23.05f - (4.2f - 7.0f) * 4.4825f) * 2.0f * playField.getOxuPx()));
     HCRect.h = HCRect.w;
 
-    // Approach circle
-    ACRect.x = objTrueX - infoArr[4];
-    ACRect.y = objTrueY - infoArr[4];
+    HCRect.x = objTruePosition.x - HCRect.w / 2;
+    HCRect.y = objTruePosition.y - HCRect.h / 2;
 
-    ACRect.w = infoArr[4] * 2;
+    // Approach circle
+    ACRect.w = HCRect.w * (2.0f * playField.getOxuPx());
     ACRect.h = ACRect.w;
+
+    ACInitialSize = Vector2f(ACRect.w, ACRect.h);
+
+    ACRect.x = objTruePosition.x - ACRect.w / 2;
+    ACRect.y = objTruePosition.y - ACRect.h / 2;
 
     spawnTime = infoArr[2];
 }
@@ -47,4 +48,15 @@ SDL_Rect *oxu::HitCircle::getACSDLRect()
 uint32_t &oxu::HitCircle::getSpawnTime()
 {
     return spawnTime;
+}
+
+void oxu::HitCircle::approachCircle(const double &dt)
+{
+    /* hardcoded ar value */
+    ACRect.w -= ((ACInitialSize.x - HCRect.w) / 0.450f) * dt;
+    ACRect.h -= ((ACInitialSize.y - HCRect.h) / 0.450f) * dt;
+
+    /* recenter the approach circle */
+    ACRect.x = objTruePosition.x - ACRect.w / 2;
+    ACRect.y = objTruePosition.y - ACRect.h / 2;
 }

@@ -14,8 +14,6 @@ namespace oxu
 
         /* Assume that the png is a perfect square
             probably going to bite me in the ass later */
-        int HCHalfTex;
-        int ACHalfTex;
 
     public:
         /* Singleton stuff */
@@ -32,8 +30,5 @@ namespace oxu
         std::vector<SDL_Texture*> gameTextures;
 
         void init(SDL_Renderer *w_renderer);
-
-        int &getHCHalfTex();
-        int &getACHalfTex();
     };
 }

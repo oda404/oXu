@@ -20,27 +20,16 @@ oxu::Textures::~Textures()
 
 void oxu::Textures::init(SDL_Renderer *w_renderer)
 {
+    // Set the texture filter to be linear
+    // Basically scales the texture more nicely
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+    
     /* Good ol' yandere dev oriented programming */
 
     /* TODO: implement actual individual skins */
     gameTextures.emplace_back( IMG_LoadTexture(w_renderer, "skins/hitcircle.png") );
-    SDL_QueryTexture(gameTextures[0], NULL, NULL, &HCHalfTex, NULL);
-    HCHalfTex /= 2;
 
     gameTextures.emplace_back( IMG_LoadTexture(w_renderer, "skins/approachcircle.png") );
-    SDL_QueryTexture(gameTextures[1], NULL, NULL, &ACHalfTex, NULL);
-    ACHalfTex /= 2;
 
     gameTextures.emplace_back( IMG_LoadTexture(w_renderer, "skins/hitcircleoverlay.png") );
-    // uses the same rect as the hitcircle
-}
-
-int &oxu::Textures::getHCHalfTex()
-{
-    return HCHalfTex;
-}
-
-int &oxu::Textures::getACHalfTex()
-{
-    return ACHalfTex;
 }

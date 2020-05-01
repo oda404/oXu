@@ -25,6 +25,6 @@ namespace oxu
 
         bool init(SDL_Window *window);
 
-        void render(); // function that takes care of displaying to screen
+        void render(const double &dt); // function that takes care of displaying to screen
     };
 }

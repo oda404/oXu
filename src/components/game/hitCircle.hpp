@@ -13,6 +13,9 @@ namespace oxu
     {
     private:
         SDL_Rect ACRect;
+        Vector2f ACInitialSize;     // needed to scale the AC down
+        Vector2f objTruePosition;   // needed to recenter after scaling
+
         SDL_Rect HCRect;
         uint32_t spawnTime; // in millis
 
@@ -24,5 +27,7 @@ namespace oxu
         SDL_Rect *getACSDLRect();
 
         uint32_t &getSpawnTime();
+
+        void approachCircle(const double &dt);
     };
 }

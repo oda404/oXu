@@ -15,9 +15,12 @@ bool oxu::GraphicsHandler::init(SDL_Window *window)
         return false;
     }
 
+    /* Enable texture batching */
+    SDL_SetHint(SDL_HINT_RENDER_BATCHING, "1");
+
     texturesI.init(w_renderer);
 
-    gcI.playField.init(Vector2i(640, 480)); // stupid hardcoded screen size
+    gcI.playField.init(Vector2i(1920, 1080)); // stupid hardcoded screen size
 
     return true;
 }
@@ -30,19 +33,22 @@ oxu::GraphicsHandler::~GraphicsHandler()
 	IMG_Quit();
 }
 
-void oxu::GraphicsHandler::render()
+void oxu::GraphicsHandler::render(const double &dt)
 {
     SDL_RenderClear(w_renderer);
-
-    static int currentObj = 0;
     
+    /* need to implemenet some bounds */
     for(int i = gcI.hitCircles.size() - 1; i >= 0 ; --i)
     {
-        if(gcI.hitCircles[i].getSpawnTime() <= gcI.gameTimer.getEllapsedTimeAsMs())
-        {     
+        if(gcI.hitCircles[i].getSpawnTime() - 0.450f <= gcI.gameTimer.getEllapsedTimeAsMs())
+        {   
+            /* This shouldn't render the textures now, but batch them together
+            for the GPU to draw when SDL_RenderPresent is called */
             SDL_RenderCopy(w_renderer, texturesI.gameTextures[0], NULL, gcI.hitCircles[i].getHCSDLRect()); // hit circle
             SDL_RenderCopy(w_renderer, texturesI.gameTextures[2], NULL, gcI.hitCircles[i].getHCSDLRect()); // hit circle overlay
             SDL_RenderCopy(w_renderer, texturesI.gameTextures[1], NULL, gcI.hitCircles[i].getACSDLRect()); // approach circle
+
+            gcI.hitCircles[i].approachCircle(dt);
         }
     }
 

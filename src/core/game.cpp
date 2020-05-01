@@ -19,7 +19,7 @@ bool oxu::Game::w_init()
 	"oXu!", 						// window name
 	SDL_WINDOWPOS_CENTERED, 		// window pos X
 	SDL_WINDOWPOS_CENTERED,			// window pos Y
-	windowWidth, windowHeight, 0	// width, height, flags
+	1920, 1080, 0	// width, height, flags
 	);
 
 	if(!window)
@@ -46,10 +46,15 @@ void oxu::Game::g_loop()
 	m.loadHitObjects("songs/Imperial Circus Dead Decadence - Yomi yori Kikoyu, Koukoku no Tou to Honoo no Shoujo. (DoKito) [Kyouaku].osu");
 
 	GameComponents::getInstance().gameTimer.start();
+
+	uint32_t lastTick = 0;
+	double deltaTime = 0.0;
 	
 	while(!w_isClosed)
 	{
 		uint32_t startTick = SDL_GetTicks();
+		deltaTime = (double)(startTick - lastTick) / 1000.0f;
+		lastTick = startTick;
 
 		while(SDL_PollEvent(&w_event))
 		{
@@ -63,7 +68,7 @@ void oxu::Game::g_loop()
 
 		sceneManager.handleCurrentSceneInput();
 
-		sceneManager.handleCurrentSceneGraphics();
+		sceneManager.handleCurrentSceneGraphics(deltaTime);
 
 		/* Limit the fps to whatever is the max */
 		if(1000 / maxFPS > SDL_GetTicks() - startTick)

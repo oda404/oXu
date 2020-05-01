@@ -7,9 +7,9 @@ bool oxu::SceneManager::init(SDL_Window *window)
     return graphicsHandler.init(window);
 }
 
-void oxu::SceneManager::handleCurrentSceneGraphics()
+void oxu::SceneManager::handleCurrentSceneGraphics(const double &dt)
 {
-    graphicsHandler.render();
+    graphicsHandler.render(dt);
 }
 
 void oxu::SceneManager::handleCurrentSceneInput()
