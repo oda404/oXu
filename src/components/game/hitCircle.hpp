@@ -5,6 +5,9 @@
 
 #include<SDL2/SDL_rect.h>
 
+#include"../../utils/vector2.hpp"
+#include"../textures.hpp"
+
 #include"playField.hpp"
 
 namespace oxu
@@ -12,15 +15,19 @@ namespace oxu
 	class HitCircle
     {
     private:
+        /* Approach circle stuff */
         SDL_Rect ACRect;
         Vector2f ACInitialSize;     // needed to scale the AC down
-        Vector2f objTruePosition;   // needed to recenter after scaling
+        Vector2f ACFinalSize;
+        float    approachT = 0;
 
         SDL_Rect HCRect;
-        uint32_t spawnTime; // in millis
+        Vector2f objTruePosition;   // needed to recenter after scaling
+        uint32_t spawnTime;         // in millis
+        bool     isDone = false;
 
     public:
-        HitCircle(unsigned int infoArr[5], PlayField &playField);
+        HitCircle(unsigned int infoArr[3], PlayField &playField);
 
         SDL_Rect *getHCSDLRect();
 

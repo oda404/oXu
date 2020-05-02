@@ -5,6 +5,8 @@
 
 #include<vector>
 
+#include"../utils/vector2.hpp"
+
 namespace oxu
 {
     struct Textures
@@ -27,7 +29,8 @@ namespace oxu
 
         ~Textures();
 
-        std::vector<SDL_Texture*> gameTextures;
+        std::vector<SDL_Texture*>   gameTextures;
+        std::vector<Vector2i>       gameTexturesSizes;
 
         void init(SDL_Renderer *w_renderer);
     };
