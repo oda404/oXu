@@ -1,6 +1,6 @@
 CC=g++
 CPPFLAGS=-O2
-LDFLAGS=-lSDL2 -lSDL2_image -lstdc++fs
+LDFLAGS=-lSDL2 -lSDL2_image -lstdc++fs -lpthread
 
 CPPSRC = $(wildcard src/main.cpp) 		\
 		 $(wildcard src/utils/*.cpp) \
