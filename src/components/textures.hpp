@@ -22,10 +22,14 @@ namespace oxu
         static Textures &getInstance();
 
         /* Disable copy-ctor */
-        Textures(Textures const&) = delete;
+        Textures(const Textures&) = delete;
 
         /* Disable move-ctor */
         Textures(Textures&&) = delete;
+
+        Textures& operator=(const Textures&) = delete;
+
+        Textures& operator=(Textures&&) = delete;
 
         ~Textures();
 

@@ -7,7 +7,6 @@
     would look messy
 
 */
-
 #pragma once
 
 #include<vector>
@@ -32,6 +31,10 @@ namespace oxu
 
         /* Disable move-ctor */
         GameComponents(GameComponents&&) = delete;
+
+        GameComponents& operator=(const GameComponents&) = delete;
+
+        GameComponents& operator=(GameComponents&&) = delete;
         
         /* Actual gameplay components */
         Timer gameTimer;
