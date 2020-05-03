@@ -3,31 +3,25 @@
 
 #include "game.hpp"
 
-unsigned int windowWidth = 640, windowHeight = 480;
-
 bool oxu::Game::w_init()
 {
 	/* Initialize SDL */
 	if( SDL_Init(SDL_INIT_VIDEO) < 0 )
 	{
-
 		return false;
 	}
+
+	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
 
 	/* Create the window */
 	window = SDL_CreateWindow(
 	"oXu!", 						// window name
 	SDL_WINDOWPOS_CENTERED, 		// window pos X
 	SDL_WINDOWPOS_CENTERED,			// window pos Y
-	1920, 1080, 0	// width, height, flags
+	1920, 1080, 0					// width, height, flags
 	);
 
 	if(!window)
-	{
-		return false;
-	}
-
-	if(!sceneManager.init(window))
 	{
 		return false;
 	}
@@ -41,21 +35,14 @@ void oxu::Game::g_loop()
 {
 	SDL_Event w_event;
 
-	MapManager m;
-
-	m.loadHitObjects("songs/Imperial Circus Dead Decadence - Yomi yori Kikoyu, Koukoku no Tou to Honoo no Shoujo. (DoKito) [Kyouaku].osu");
-
 	GameComponents::getInstance().gameTimer.start();
 
-	uint32_t lastTick = 0;
-	double deltaTime = 0.0;
+	/* Initiates the handlers
+	which also creates the renderer thread */
+	graphicsHandler.init(window);
 	
 	while(!w_isClosed)
 	{
-		uint32_t startTick = SDL_GetTicks();
-		deltaTime = (double)(startTick - lastTick) / 1000.0f;
-		lastTick = startTick;
-
 		while(SDL_PollEvent(&w_event))
 		{
 			switch(w_event.type)
@@ -65,16 +52,6 @@ void oxu::Game::g_loop()
 					break;
 			}
 		}
-
-		sceneManager.handleCurrentSceneInput();
-
-		sceneManager.handleCurrentSceneGraphics(deltaTime);
-
-		/* Limit the fps to whatever is the max */
-		if(1000 / maxFPS > SDL_GetTicks() - startTick)
-		{
-			SDL_Delay(1000 / maxFPS - SDL_GetTicks() + startTick);
-		}
 	}
 };
 
@@ -83,6 +60,8 @@ void oxu::Game::w_clean()
 	/* destroy the window */
 	SDL_DestroyWindow(window);
 	window = NULL;
+
+	IMG_Quit();
 
 	/* quit SDL video subsystem */
 	SDL_Quit();

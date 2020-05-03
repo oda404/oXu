@@ -5,7 +5,7 @@
 
 #include<SDL2/SDL.h>
 
-#include"sceneManager.hpp"
+#include"../handlers/graphicsHandler.hpp"
 #include"../components/cursor.hpp"
 #include"../beatmap/mapManager.hpp"
 
@@ -14,12 +14,11 @@ namespace oxu
     class Game
     {
     private:
-        SceneManager    sceneManager;
+        GraphicsHandler graphicsHandler;
 
         SDL_Window  *window     = NULL;
         bool        w_isClosed  = false;
-        int         maxFPS      = 60;
-
+        
     public:
         bool w_init();
 
