@@ -5,9 +5,12 @@
 
 oxu::GraphicsHandler::GraphicsHandler() { }
 
-bool oxu::GraphicsHandler::init(SDL_Window *window)
+bool oxu::GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread> *gThreadSource, std::atomic<bool> *w_statePtr)
 {
     doneInit = false;
+
+    /* pointer to check if the window is open from the graphics thread */
+    w_isClosed = w_statePtr;
 
     /* Set the window ptr */
     this->window = window;
@@ -21,9 +24,8 @@ bool oxu::GraphicsHandler::init(SDL_Window *window)
     /* initiate the playfield */
     gcI.playField.init(Vector2i(1920, 1080)); // stupid hardcoded screen size
 
-    /* Create the thread and detach */
-    std::thread thread(&GraphicsHandler::render, this);
-    thread.detach();
+    /* Create the thread */
+    *gThreadSource = std::make_shared<std::thread>([this]{render();});
 
     /* Wait for the new thread to finish initiating
     to avoid any context problems */
@@ -59,7 +61,7 @@ void oxu::GraphicsHandler::render()
     doneInit = true;
 
     /* the render loop */
-    while(window)
+    while(!*w_isClosed)
     {
         /* Calculate delta time */
         uint32_t startTick = SDL_GetTicks();
@@ -85,7 +87,7 @@ void oxu::GraphicsHandler::render()
         }
 
         SDL_RenderPresent(w_renderer);
-
+        
         /* Limit the FPS */
         if(1000 / maxFPS > SDL_GetTicks() - startTick)
 		{

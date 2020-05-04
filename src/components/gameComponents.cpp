@@ -7,4 +7,3 @@ oxu::GameComponents &oxu::GameComponents::getInstance()
     static GameComponents instance;
     return instance;
 }
-

@@ -26,8 +26,10 @@ bool oxu::Game::w_init()
 		return false;
 	}
 
-	Cursor::getInstance().set();
+	w_isClosed = false;
 
+	Cursor::getInstance().set();
+	
 	return true;
 }
 
@@ -37,9 +39,7 @@ void oxu::Game::g_loop()
 
 	GameComponents::getInstance().gameTimer.start();
 
-	/* Initiates the handlers
-	which also creates the renderer thread */
-	graphicsHandler.init(window);
+	graphicsHandler.init(window, &graphicsThread, &w_isClosed);
 	
 	while(!w_isClosed)
 	{
@@ -48,11 +48,23 @@ void oxu::Game::g_loop()
 			switch(w_event.type)
 			{
 				case SDL_QUIT:
+					/* also breaks the graphics thread loop */
 					w_isClosed = true;
 					break;
 			}
 		}
 	}
+
+	/* joins the graphics thread */
+	if(graphicsThread->joinable())
+	{
+		graphicsThread->join();
+	}
+	else
+	{
+		std::cout << "ding dong bing bong the graphics thread is hung\n";
+	}
+	
 };
 
 void oxu::Game::w_clean()

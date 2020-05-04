@@ -16,8 +16,10 @@ namespace oxu
     private:
         GraphicsHandler graphicsHandler;
 
-        SDL_Window  *window     = NULL;
-        bool        w_isClosed  = false;
+        SDL_Window        *window     = NULL;
+        std::atomic<bool> w_isClosed;
+        
+        std::shared_ptr<std::thread> graphicsThread;
         
     public:
         bool w_init();
