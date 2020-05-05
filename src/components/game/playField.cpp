@@ -5,12 +5,12 @@
 
 oxu::PlayField::PlayField() { }
 
-void oxu::PlayField::init(const Vector2i &screenSize)
+void oxu::PlayField::init(const Vector2<int> &screenSize)
 {
-    oxuPx = screenSize.y / 480.f;
-    playFieldStartPoint = { screenSize.x / 2 - 256.0f * oxuPx, screenSize.y / 2 - 192 * oxuPx };
+    oxuPx = screenSize.getY() / 480.f;
+    playFieldStartPoint = { screenSize.getX() / 2 - 256.0f * oxuPx, screenSize.getY() / 2 - 192 * oxuPx };
 }
 
-oxu::Vector2f &oxu::PlayField::getPlayFieldStartPoint() { return playFieldStartPoint; }
+oxu::Vector2<float> &oxu::PlayField::getPlayFieldStartPoint() { return playFieldStartPoint; }
 
 float &oxu::PlayField::getOxuPx() { return oxuPx; }

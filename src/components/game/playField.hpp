@@ -10,15 +10,15 @@ namespace oxu
 	class PlayField
 	{
 	private:
-		Vector2f playFieldStartPoint;
+		Vector2<float> playFieldStartPoint;
 		float oxuPx;
 		
 	public:
 		PlayField();
 
-		void init(const Vector2i &screenSize);
+		void init(const Vector2<int> &screenSize);
 
-		Vector2f &getPlayFieldStartPoint();
+		Vector2<float> &getPlayFieldStartPoint();
 
 		float &getOxuPx();
 	};

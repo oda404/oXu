@@ -16,15 +16,15 @@ namespace oxu
     {
     private:
         /* Approach circle stuff */
-        SDL_Rect ACRect;
-        Vector2f ACInitialSize;     // needed to scale the AC down
-        Vector2f ACFinalSize;
-        float    approachT = 0;
+        SDL_Rect       ACRect;
+        Vector2<float> ACInitialSize;     // needed to scale the AC down
+        Vector2<float> ACFinalSize;
+        float          approachT = 0;
 
-        SDL_Rect HCRect;
-        Vector2f objTruePosition;   // needed to recenter after scaling
-        uint32_t spawnTime;         // in millis
-        bool     isDone = false;
+        SDL_Rect       HCRect;
+        Vector2<float> objTruePosition;   // needed to recenter after scaling
+        uint32_t       spawnTime;         // in millis
+        bool           isDone = false;
 
     public:
         HitCircle(unsigned int infoArr[3], PlayField &playField);

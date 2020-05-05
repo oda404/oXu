@@ -54,17 +54,8 @@ void oxu::Game::g_loop()
 			}
 		}
 	}
-
-	/* joins the graphics thread */
-	if(graphicsThread->joinable())
-	{
-		graphicsThread->join();
-	}
-	else
-	{
-		std::cout << "ding dong bing bong the graphics thread is hung\n";
-	}
 	
+	graphicsThread->join();
 };
 
 void oxu::Game::w_clean()

@@ -14,9 +14,6 @@ namespace oxu
     private:
         Textures();
 
-        /* Assume that the png is a perfect square
-            probably going to bite me in the ass later */
-
     public:
         /* Singleton stuff */
         static Textures &getInstance();
@@ -34,7 +31,7 @@ namespace oxu
         ~Textures();
 
         std::vector<SDL_Texture*>   gameTextures;
-        std::vector<Vector2i>       gameTexturesSizes;
+        std::vector<Vector2<int>>   gameTexturesSizes;
 
         void init(SDL_Renderer *w_renderer);
     };

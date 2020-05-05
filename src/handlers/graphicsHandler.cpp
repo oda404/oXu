@@ -18,11 +18,8 @@ bool oxu::GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread>
     /* get the current context */
     context = SDL_GL_GetCurrentContext();
 
-    /* Enable texture batching */
-    SDL_SetHint(SDL_HINT_RENDER_BATCHING, "1");
-
     /* initiate the playfield */
-    gcI.playField.init(Vector2i(1920, 1080)); // stupid hardcoded screen size
+    gcI.playField.init(Vector2<int>(1920, 1080)); // stupid hardcoded screen size
 
     /* Create the thread */
     *gThreadSource = std::make_shared<std::thread>([this]{render();});
@@ -46,6 +43,9 @@ void oxu::GraphicsHandler::render()
 {
     /* make the current context from the new thread */
     SDL_GL_MakeCurrent(window, context);
+
+    /* Enable texture batching */
+    SDL_SetHint(SDL_HINT_RENDER_BATCHING, "1");
 
     /* create the renderer */
     w_renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);

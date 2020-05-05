@@ -28,12 +28,12 @@ void oxu::Textures::init(SDL_Renderer *w_renderer)
 
     /* TODO: implement actual individual skins */
     gameTextures.emplace_back( IMG_LoadTexture(w_renderer, "skins/hitcircle.png") );
-    gameTexturesSizes.emplace_back(Vector2i());
-    SDL_QueryTexture(gameTextures[0], NULL, NULL, &gameTexturesSizes[0].x, &gameTexturesSizes[0].y);
+    gameTexturesSizes.emplace_back(Vector2<int>());
+    SDL_QueryTexture(gameTextures[0], NULL, NULL, &gameTexturesSizes[0][0], &gameTexturesSizes[0][1]);
 
     gameTextures.emplace_back( IMG_LoadTexture(w_renderer, "skins/approachcircle.png") );
-    gameTexturesSizes.emplace_back(Vector2i());
-    SDL_QueryTexture(gameTextures[1], NULL, NULL, &gameTexturesSizes[1].x, &gameTexturesSizes[1].y);
+    gameTexturesSizes.emplace_back(Vector2<int>());
+    SDL_QueryTexture(gameTextures[1], NULL, NULL, &gameTexturesSizes[1][0], &gameTexturesSizes[1][1]);
 
     gameTextures.emplace_back( IMG_LoadTexture(w_renderer, "skins/hitcircleoverlay.png") );
     // Uses the same texture size as the hit circle

@@ -10,9 +10,9 @@ oxu::HitCircle::HitCircle(unsigned int infoArr[3], PlayField &playField)
     infoArr[1] == posY
     infoArr[2] == spawnTime
     */
-    objTruePosition = Vector2f(
-        playField.getPlayFieldStartPoint().x + infoArr[0] * playField.getOxuPx(),
-        playField.getPlayFieldStartPoint().y + infoArr[1] * playField.getOxuPx()
+    objTruePosition = Vector2<float>(
+        playField.getPlayFieldStartPoint().getX() + infoArr[0] * playField.getOxuPx(),
+        playField.getPlayFieldStartPoint().getY() + infoArr[1] * playField.getOxuPx()
     );
 
     // Hit circle width and height
@@ -20,24 +20,21 @@ oxu::HitCircle::HitCircle(unsigned int infoArr[3], PlayField &playField)
     HCRect.h = HCRect.w;
 
     // Offset the true position so it falls on it's center point
-    HCRect.x = objTruePosition.x - HCRect.w / 2;
-    HCRect.y = objTruePosition.y - HCRect.h / 2;
+    HCRect.x = objTruePosition.getX() - HCRect.w / 2;
+    HCRect.y = objTruePosition.getY() - HCRect.h / 2;
 
     // Approach circle width and height
     ACRect.w = HCRect.w * (2.0f * playField.getOxuPx());
     ACRect.h = ACRect.w;
-    
-    // Approach circle initial and final size
-    // Needed to approach the circle
 
     /* Figure out the scaled approach circle size based on the hit circle size */
-    ACInitialSize = Vector2f(ACRect.w, ACRect.h);
-    int sizeAfterScaling = Textures::getInstance().gameTexturesSizes[1].x * HCRect.w / Textures::getInstance().gameTexturesSizes[0].x;
-    ACFinalSize = Vector2f(sizeAfterScaling, sizeAfterScaling);
+    ACInitialSize = Vector2<float>(ACRect.w, ACRect.h);
+    int sizeAfterScaling = Textures::getInstance().gameTexturesSizes[1].getX() * HCRect.w / Textures::getInstance().gameTexturesSizes[0].getX();
+    ACFinalSize = Vector2<float>(sizeAfterScaling, sizeAfterScaling);
 
     // Offset the true position so it falls on it's center point
-    ACRect.x = objTruePosition.x - ACRect.w / 2;
-    ACRect.y = objTruePosition.y - ACRect.h / 2;
+    ACRect.x = objTruePosition.getX() - ACRect.w / 2;
+    ACRect.y = objTruePosition.getY() - ACRect.h / 2;
 
     // Spawn time
     spawnTime = infoArr[2];
@@ -58,7 +55,7 @@ uint32_t &oxu::HitCircle::getSpawnTime()
     return spawnTime;
 }
 
-oxu::Vector2f lerp(const oxu::Vector2f &a, const oxu::Vector2f &b, const float &t)
+oxu::Vector2<float> lerp(const oxu::Vector2<float> &a, const oxu::Vector2<float> &b, const float &t)
 {
     return a * (1 - t) + b * t;
 }
@@ -69,15 +66,15 @@ void oxu::HitCircle::approachCircle(const double &dt)
     {
         approachT += dt / 0.450f;
 
-        Vector2f newPos = lerp(ACInitialSize, ACFinalSize, approachT);
+        Vector2<float> newPos = lerp(ACInitialSize, ACFinalSize, approachT);
 
         /* Scale the circle down */
-        ACRect.w = newPos.x;
-        ACRect.h = newPos.y;
+        ACRect.w = newPos.getX();
+        ACRect.h = newPos.getY();
 
         /* recenter the approach circle */
-        ACRect.x = objTruePosition.x - ACRect.w / 2;
-        ACRect.y = objTruePosition.y - ACRect.h / 2;
+        ACRect.x = objTruePosition.getX() - ACRect.w / 2;
+        ACRect.y = objTruePosition.getY() - ACRect.h / 2;
     }
     else
     {

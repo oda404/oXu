@@ -27,7 +27,7 @@ namespace oxu
 
         uint32_t          lastTick        = 0;
 	    double            deltaTime       = 0.0;
-        int               maxFPS          = 120;
+        int               maxFPS          = 60;
 
         std::atomic<bool> doneInit;
         std::atomic<bool> *w_isClosed;

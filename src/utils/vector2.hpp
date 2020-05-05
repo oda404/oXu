@@ -2,22 +2,72 @@
 
 namespace oxu
 {
-    struct Vector2f
+    template<typename T>
+    class Vector2
     {
-        float x, y;
-        Vector2f();
-        Vector2f(const float &x, const float &y);
+    private:
+        T values[2];
 
-        const Vector2f operator*(const float &n) const;
+    public:
+        Vector2() { }
 
-        const Vector2f operator+(const Vector2f &v) const;
-    };
+        Vector2(const T &firstV, const T &secondV)
+        {
+            values[0] = firstV;
+            values[1] = secondV;
+        }
 
-    struct Vector2i
-    {
-        int x, y;
-        Vector2i();
-        Vector2i(const int &x, const int &y);
-        
+        const T &getX() const { return values[0]; }
+ 
+        const T &getY() const { return values[1]; }
+
+        void setVector(const T &firstV, const T &secondV)
+        {
+            values[0] = firstV;
+            values[1] = secondV;
+        }
+
+        /* Index can only be 0 or 1 else you're going to get an out of bounds */
+        T &operator[](const unsigned int &i) { return values[i]; }
+
+        void operator=(const Vector2<T> &newVec)
+        {
+            values[0] = newVec.getX();
+            values[1] = newVec.getY();
+        }
+
+        const bool operator==(const Vector2<T> &compVec)
+        {
+            return values[0] == compVec.getX() && 
+                   values[1] == compVec.getY() ?  true : false;
+        }
+
+        void operator+=(const Vector2<T> &pVec)
+        {
+            values[0] += pVec.getX();
+            values[1] += pVec.getY();
+        }
+
+        const Vector2 operator+(const Vector2<T> &pVec) const
+        {
+            Vector2 result = *this;
+            result += pVec;
+
+            return result;
+        }
+
+        void operator*=(const T &n)
+        {
+            values[0] *= n;
+            values[1] *= n;
+        }
+
+        const Vector2 operator*(const T &n) const
+        {
+            Vector2 result = *this;
+            result *= n;
+
+            return result;
+        }
     };
 }
