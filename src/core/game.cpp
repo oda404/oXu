@@ -37,8 +37,6 @@ void oxu::Game::g_loop()
 {
 	SDL_Event w_event;
 
-	GameComponents::getInstance().gameTimer.start();
-
 	graphicsHandler.init(window, &graphicsThread, &w_isClosed);
 	
 	while(!w_isClosed)

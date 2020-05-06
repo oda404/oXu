@@ -10,7 +10,7 @@
 #include<iostream>
 #include<experimental/filesystem>
 
-#include"../components/gameComponents.hpp"
+#include"../beatmap/mapInfo.hpp"
 #include"../components/textures.hpp"
 
 
@@ -21,19 +21,33 @@ namespace oxu
     class MapManager
     {
     private:
-        uint32_t numberOfMaps;
+        MapManager();
 
         /* idk how efficient storing
             every beatmap's name is but fuck it */
         std::vector<std::string> beatMaps;
 
-        GameComponents &gcI = GameComponents::getInstance();
-
     public:
-        MapManager();
+        /* Singleton stuff */
+        static MapManager &getInstance();
 
-        void loadHitObjects(const std::string &mapPath);
+        /* Disable copy-ctor */
+        MapManager(const MapManager&) = delete;
+
+        /* Disable move-ctor */
+        MapManager(MapManager&&) = delete;
+
+        /* delete assignement operators */
+        MapManager& operator=(const MapManager&) = delete;
+
+        MapManager& operator=(MapManager&&) = delete;
+        /* ============================================ */
+
+
+        void loadHitObjects(const int &mapIndex);
         
         void enumBeatMaps();
+
+        void getMapDifficulty(const int &mapIndex);
     };
 }

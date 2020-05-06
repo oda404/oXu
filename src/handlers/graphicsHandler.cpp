@@ -19,7 +19,7 @@ bool oxu::GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread>
     context = SDL_GL_GetCurrentContext();
 
     /* initiate the playfield */
-    gcI.playField.init(Vector2<int>(1920, 1080)); // stupid hardcoded screen size
+    mapInfoI.playField.init(Vector2<int>(1920, 1080)); // stupid hardcoded screen size
 
     /* Create the thread */
     *gThreadSource = std::make_shared<std::thread>([this]{render();});
@@ -53,12 +53,15 @@ void oxu::GraphicsHandler::render()
     /* Initiate the textures here because they need the renderer */
     texturesI.init(w_renderer);
 
+    doneInit = true;
+
     /* Initiate the map here because it needs the textures */
     /* Fucking great design */
-    MapManager m;
-	m.loadHitObjects("songs/Imperial Circus Dead Decadence - Yomi yori Kikoyu, Koukoku no Tou to Honoo no Shoujo. (DoKito) [Kyouaku].osu");
+    mapManagerI.enumBeatMaps();
+	mapManagerI.loadHitObjects(0);
+    mapManagerI.getMapDifficulty(0);
 
-    doneInit = true;
+    mapInfoI.mapTimer.start();
 
     /* the render loop */
     while(!*w_isClosed)
@@ -72,17 +75,17 @@ void oxu::GraphicsHandler::render()
         SDL_RenderClear(w_renderer);
         
         /* need to implemenet some bounds */
-        for(int i = gcI.hitCircles.size() - 1; i >= 0 ; --i)
+        for(int i = mapInfoI.hitCircles.size() - 1; i >= 0; --i)
         {
-            if(gcI.hitCircles[i].getSpawnTime() - 0.450f <= gcI.gameTimer.getEllapsedTimeAsMs())
+            if(mapInfoI.hitCircles[i].getSpawnTime() - mapInfoI.ARInSeconds <= mapInfoI.mapTimer.getEllapsedTimeAsMs())
             {   
                 /* This shouldn't render the textures now, but batch them together
                 for the GPU to draw when SDL_RenderPresent is called */
-                SDL_RenderCopy(w_renderer, texturesI.gameTextures[0], NULL, gcI.hitCircles[i].getHCSDLRect()); // hit circle
-                SDL_RenderCopy(w_renderer, texturesI.gameTextures[2], NULL, gcI.hitCircles[i].getHCSDLRect()); // hit circle overlay
-                SDL_RenderCopy(w_renderer, texturesI.gameTextures[1], NULL, gcI.hitCircles[i].getACSDLRect()); // approach circle
+                SDL_RenderCopy(w_renderer, texturesI.gameTextures[0], NULL, mapInfoI.hitCircles[i].getHCSDLRect()); // hit circle
+                SDL_RenderCopy(w_renderer, texturesI.gameTextures[2], NULL, mapInfoI.hitCircles[i].getHCSDLRect()); // hit circle overlay
+                SDL_RenderCopy(w_renderer, texturesI.gameTextures[1], NULL, mapInfoI.hitCircles[i].getACSDLRect()); // approach circle
 
-                gcI.hitCircles[i].approachCircle(deltaTime);
+                mapInfoI.hitCircles[i].approachCircle(deltaTime);
             }
         }
 

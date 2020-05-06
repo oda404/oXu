@@ -4,14 +4,11 @@
 #pragma once
 
 
-#include"../components/gameComponents.hpp"
-
 namespace oxu
 {
     class InputHandler
     {
     private:
-        GameComponents &gameComponentsI = GameComponents::getInstance();
 
     public:
         InputHandler();

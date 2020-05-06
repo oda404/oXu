@@ -39,12 +39,19 @@ void getObjCoreInfo(const std::string &line, uint infoArr[3])
     }
 }
 
-
 oxu::MapManager::MapManager() { }
 
-void oxu::MapManager::loadHitObjects(const std::string &mapPath)
+oxu::MapManager &oxu::MapManager::getInstance()
 {
-    std::ifstream infileMap(mapPath);
+    static MapManager instance;
+    return instance;
+}
+
+void oxu::MapManager::loadHitObjects(const int &mapIndex)
+{
+    MapInfo &mapInfoI = MapInfo::getInstance();
+
+    std::ifstream infileMap(beatMaps[mapIndex]);
     std::string line;
 
     bool shouldReadObjInf = false;
@@ -57,7 +64,7 @@ void oxu::MapManager::loadHitObjects(const std::string &mapPath)
 
             getObjCoreInfo(line, infoArr);
 
-            gcI.hitCircles.emplace_back(infoArr, gcI.playField);
+            mapInfoI.hitCircles.emplace_back(infoArr, mapInfoI.playField);
         }
         else if(line == "[HitObjects]\r")
         {
@@ -71,12 +78,50 @@ void oxu::MapManager::loadHitObjects(const std::string &mapPath)
 void oxu::MapManager::enumBeatMaps()
 {
     beatMaps.clear();
-    numberOfMaps = 0;
 
     const char *mapFolderPath = "songs/";
     for(auto &p: fs::directory_iterator(mapFolderPath))
     {
         beatMaps.push_back(p.path());
-        ++numberOfMaps;
+    }
+}
+
+void oxu::MapManager::getMapDifficulty(const int &mapIndex)
+{
+    MapInfo &mapInfoI = MapInfo::getInstance();
+
+    std::ifstream infileMap(beatMaps[mapIndex]);
+    std::string line;
+    bool go = false;
+
+    while(std::getline(infileMap, line))
+    {
+        /* if it's still reading the difficulty section
+        and encounters a blank line (new section) break */
+        if(line == "\r" && go)
+            break;
+
+        if(go)
+        {
+            std::string keyValue = line.substr(0, line.find_first_of(':'));
+            float       diffValue = stof(line.substr(line.find_first_of(':') + 1));
+
+            mapInfoI.mapDifficulty.emplace(keyValue, diffValue);
+
+            /* transform the value into seconds */
+            if(keyValue == "ApproachRate")
+            {
+                if(diffValue <= 5)
+                    mapInfoI.ARInSeconds = 1800 - diffValue * 120;
+                else
+                    mapInfoI.ARInSeconds = 1200 - (diffValue - 5) * 150;
+
+                mapInfoI.ARInSeconds /= 1000;
+            }
+        }
+        else if(line == "[Difficulty]\r")
+        {
+            go = true;
+        }
     }
 }

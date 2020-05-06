@@ -9,16 +9,17 @@
 #include<thread>
 #include<atomic>
 
-#include"../components/gameComponents.hpp"
 #include"../components/textures.hpp"
 #include"../beatmap/mapManager.hpp"
+#include"../beatmap/mapInfo.hpp"
 
 namespace oxu
 {
     class GraphicsHandler 
     {
     private:
-        GameComponents    &gcI            = GameComponents::getInstance();
+        MapManager        &mapManagerI    = MapManager::getInstance();
+        MapInfo           &mapInfoI       = MapInfo::getInstance();
         Textures          &texturesI      = Textures::getInstance();
 
         SDL_Renderer      *w_renderer     = NULL;
