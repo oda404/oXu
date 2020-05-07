@@ -3,6 +3,8 @@
 
 #include "game.hpp"
 
+static bool w_isClosed;
+
 bool oxu::Game::w_init()
 {
 	/* Initialize SDL */

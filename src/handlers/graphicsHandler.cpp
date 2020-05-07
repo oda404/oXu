@@ -5,7 +5,7 @@
 
 oxu::GraphicsHandler::GraphicsHandler() { }
 
-bool oxu::GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread> *gThreadSource, std::atomic<bool> *w_statePtr)
+bool oxu::GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread> *gThreadSource, bool *w_statePtr)
 {
     doneInit = false;
 
@@ -55,27 +55,30 @@ void oxu::GraphicsHandler::render()
 
     doneInit = true;
 
-    /* Initiate the map here because it needs the textures */
-    /* Fucking great design */
     mapManagerI.enumBeatMaps();
 	mapManagerI.loadHitObjects(0);
     mapManagerI.getMapDifficulty(0);
 
     mapInfoI.mapTimer.start();
 
+    /* delta time calculation stuff */
+    uint32_t startTick;
+    uint32_t lastTick   = 0;
+    double   deltaTime  = 0.0;
+
     /* the render loop */
     while(!*w_isClosed)
     {
         /* Calculate delta time */
-        uint32_t startTick = SDL_GetTicks();
+        startTick = SDL_GetTicks();
 		deltaTime = (double)(startTick - lastTick) / 1000.0f;
-		lastTick = startTick;
+		lastTick  = startTick;
 
         /* Start rendering */
         SDL_RenderClear(w_renderer);
         
         /* need to implemenet some bounds */
-        for(int i = mapInfoI.hitCircles.size() - 1; i >= 0; --i)
+        for(int16_t i = mapInfoI.hitObjCapTop; i >=  mapInfoI.hitObjCapBottom; --i)
         {
             if(mapInfoI.hitCircles[i].getSpawnTime() - mapInfoI.ARInSeconds <= mapInfoI.mapTimer.getEllapsedTimeAsMs())
             {   
@@ -85,7 +88,8 @@ void oxu::GraphicsHandler::render()
                 SDL_RenderCopy(w_renderer, texturesI.gameTextures[2], NULL, mapInfoI.hitCircles[i].getHCSDLRect()); // hit circle overlay
                 SDL_RenderCopy(w_renderer, texturesI.gameTextures[1], NULL, mapInfoI.hitCircles[i].getACSDLRect()); // approach circle
 
-                mapInfoI.hitCircles[i].approachCircle(deltaTime);
+                if(!mapInfoI.hitCircles[i].approachCircle(deltaTime))
+                    ++mapInfoI.hitObjCapBottom;
             }
         }
 

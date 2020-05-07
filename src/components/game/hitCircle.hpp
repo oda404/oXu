@@ -35,6 +35,8 @@ namespace oxu
 
         uint32_t &getSpawnTime();
 
-        void approachCircle(const double &dt);
+        bool approachCircle(const double &dt);
+
+        const bool &isFinished();
     };
 }

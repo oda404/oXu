@@ -60,7 +60,7 @@ oxu::Vector2<float> lerp(const oxu::Vector2<float> &a, const oxu::Vector2<float>
     return a * (1 - t) + b * t;
 }
 
-void oxu::HitCircle::approachCircle(const double &dt)
+bool oxu::HitCircle::approachCircle(const double &dt)
 {
     if(approachT <= 1)
     {
@@ -75,9 +75,14 @@ void oxu::HitCircle::approachCircle(const double &dt)
         /* recenter the approach circle */
         ACRect.x = objTruePosition.getX() - ACRect.w / 2;
         ACRect.y = objTruePosition.getY() - ACRect.h / 2;
+
+        return true;
     }
-    else
-    {
-        isDone = true;
-    }
+    
+    return false;
+}
+
+const bool &oxu::HitCircle::isFinished() 
+{
+    return isDone;
 }

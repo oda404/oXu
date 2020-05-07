@@ -16,7 +16,7 @@ namespace oxu
         MapInfo();
 
     public:
-        /* Singleton stuff */
+        /* ========== Singleton stuff ================== */
         static MapInfo &getInstance();
 
         /* Disable copy-ctor */
@@ -36,6 +36,10 @@ namespace oxu
         std::vector<HitCircle>       hitCircles;
         std::map<std::string, float> mapDifficulty;
         float                        ARInSeconds;
+
+        /* Used to iterate the hit objects more efficiently */
+        std::int16_t                 hitObjCapTop    = 0;
+        std::int16_t                 hitObjCapBottom = 0;
 
         void clearMap();
     };
