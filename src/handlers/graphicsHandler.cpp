@@ -56,10 +56,10 @@ void oxu::GraphicsHandler::render()
     doneInit = true;
 
     mapManagerI.enumBeatMaps();
-	mapManagerI.loadHitObjects(0);
-    mapManagerI.getMapDifficulty(0);
+    mapManagerI.loadHitObjects(0);
+    mapManagerI.loadMapInfo(0);
 
-    mapInfoI.mapTimer.start();
+    mapInfoI.timer.start();
 
     /* delta time calculation stuff */
     uint32_t startTick;
@@ -71,8 +71,8 @@ void oxu::GraphicsHandler::render()
     {
         /* Calculate delta time */
         startTick = SDL_GetTicks();
-		deltaTime = (double)(startTick - lastTick) / 1000.0f;
-		lastTick  = startTick;
+        deltaTime = (double)(startTick - lastTick) / 1000.0f;
+        lastTick  = startTick;
 
         /* Start rendering */
         SDL_RenderClear(w_renderer);
@@ -80,7 +80,7 @@ void oxu::GraphicsHandler::render()
         /* need to implemenet some bounds */
         for(int16_t i = mapInfoI.hitObjCapTop; i >=  mapInfoI.hitObjCapBottom; --i)
         {
-            if(mapInfoI.hitCircles[i].getSpawnTime() - mapInfoI.ARInSeconds <= mapInfoI.mapTimer.getEllapsedTimeAsMs())
+            if(mapInfoI.hitCircles[i].getSpawnTime() - mapInfoI.ARInSeconds <= mapInfoI.timer.getEllapsedTimeAsMs())
             {   
                 /* This shouldn't render the textures now, but batch them together
                 for the GPU to draw when SDL_RenderPresent is called */
@@ -97,8 +97,8 @@ void oxu::GraphicsHandler::render()
         
         /* Limit the FPS */
         if(1000 / maxFPS > SDL_GetTicks() - startTick)
-		{
-			SDL_Delay(1000 / maxFPS - SDL_GetTicks() + startTick);
-		}
+        {
+            SDL_Delay(1000 / maxFPS - SDL_GetTicks() + startTick);
+        }
     }
 }

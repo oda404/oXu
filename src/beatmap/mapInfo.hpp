@@ -31,16 +31,20 @@ namespace oxu
         MapInfo& operator=(MapInfo&&) = delete;
         /* ============================================== */
 
+        std::map< std::string, std::string > mapGeneral;
+        std::map< std::string, float >       mapDifficulty;
+        std::map< std::string, std::string > mapMetadata;
+
+        std::vector< HitCircle >             hitCircles;
+
         PlayField                    playField;
-        Timer                        mapTimer;
-        std::vector<HitCircle>       hitCircles;
-        std::map<std::string, float> mapDifficulty;
+        Timer                        timer;
         float                        ARInSeconds;
 
         /* Used to iterate the hit objects more efficiently */
         std::int16_t                 hitObjCapTop    = 0;
         std::int16_t                 hitObjCapBottom = 0;
 
-        void clearMap();
+        void clear();
     };
 }

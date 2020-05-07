@@ -40,6 +40,8 @@ void oxu::Game::g_loop()
 	SDL_Event w_event;
 
 	graphicsHandler.init(window, &graphicsThread, &w_isClosed);
+
+	
 	
 	while(!w_isClosed)
 	{

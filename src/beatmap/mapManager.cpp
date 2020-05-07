@@ -51,6 +51,9 @@ void oxu::MapManager::loadHitObjects(const int &mapIndex)
 {
     MapInfo &mapInfoI = MapInfo::getInstance();
 
+    /* clear the hit circles vector */
+    mapInfoI.hitCircles.clear();
+
     std::ifstream infileMap(beatMaps[mapIndex]);
     std::string line;
 
@@ -86,15 +89,18 @@ void oxu::MapManager::enumBeatMaps()
     }
 }
 
-void oxu::MapManager::getMapDifficulty(const int &mapIndex)
+/* ================== Difficulty ============================= */
+void oxu::MapManager::getMapDifficulty(std::ifstream &mapFile)
 {
     MapInfo &mapInfoI = MapInfo::getInstance();
 
-    std::ifstream infileMap(beatMaps[mapIndex]);
+    /* Clear the map difficulty */
+    mapInfoI.mapDifficulty.clear();
+
     std::string line;
     bool go = false;
 
-    while(std::getline(infileMap, line))
+    while(std::getline(mapFile, line))
     {
         /* if it's still reading the difficulty section
         and encounters a blank line (new section) break */
@@ -103,7 +109,7 @@ void oxu::MapManager::getMapDifficulty(const int &mapIndex)
 
         if(go)
         {
-            std::string keyValue = line.substr(0, line.find_first_of(':'));
+            std::string keyValue  = line.substr(0, line.find_first_of(':')).c_str();
             float       diffValue = stof(line.substr(line.find_first_of(':') + 1));
 
             mapInfoI.mapDifficulty.emplace(keyValue, diffValue);
@@ -124,4 +130,79 @@ void oxu::MapManager::getMapDifficulty(const int &mapIndex)
             go = true;
         }
     }
+}
+
+/* ====================== [General] ===================== */
+void oxu::MapManager::getMapGeneral(std::ifstream &mapFile)
+{
+    MapInfo &mapInfoI = MapInfo::getInstance();
+
+    mapInfoI.mapGeneral.clear();
+
+    std::string   line;
+    bool          go = false;
+
+    while(std::getline(mapFile, line))
+    {
+        if(line == "\r" && go)
+            break;
+        
+        if(go)
+        {
+            std::string keyValue  = line.substr(0, line.find_first_of(':'));
+            std::string diffValue = line.substr(line.find_first_of(':') + 1);
+
+            /* Remove all spaces from string */
+            diffValue.erase(std::remove_if(diffValue.begin(), diffValue.end(), isspace));
+
+            mapInfoI.mapGeneral.emplace(keyValue, diffValue);
+        }
+        else if(line == "[General]\r")
+        {
+            go = true;
+        }
+    }
+}
+
+/* ======================== [Metadata] ====================== */
+void oxu::MapManager::getMapMetadata(std::ifstream &mapFile)
+{
+    MapInfo &mapInfoI = MapInfo::getInstance();
+
+    mapInfoI.mapMetadata.clear();
+
+    std::string line;
+    bool go = false;
+
+    while(std::getline(mapFile, line))
+    {
+        if(line == "\r" && go)
+            break;
+
+        if(go)
+        {
+            std::string keyValue  = line.substr(0, line.find_first_of(':'));
+            std::string diffValue = line.substr(line.find_first_of(':') + 1);
+
+            /* Remove all spaces from string */
+            diffValue.erase(std::remove_if(diffValue.begin(), diffValue.end(), isspace));
+
+            mapInfoI.mapMetadata.emplace(keyValue, diffValue);
+        }
+        else if(line == "[Metadata]\r")
+        {
+            go = true;
+        }
+    }
+}
+
+void oxu::MapManager::loadMapInfo(const int &mapIndex)
+{
+    MapInfo &mapInfoI = MapInfo::getInstance();
+
+    std::ifstream infileMap(beatMaps[mapIndex]);
+
+    getMapGeneral(infileMap);
+    getMapMetadata(infileMap);
+    getMapDifficulty(infileMap);
 }

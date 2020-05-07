@@ -9,10 +9,10 @@
 #include<fstream>
 #include<iostream>
 #include<experimental/filesystem>
+#include<algorithm>
 
 #include"../beatmap/mapInfo.hpp"
 #include"../components/textures.hpp"
-
 
 namespace fs = std::experimental::filesystem;
 
@@ -48,6 +48,12 @@ namespace oxu
         
         void enumBeatMaps();
 
-        void getMapDifficulty(const int &mapIndex);
+        void getMapDifficulty(std::ifstream &mapFile);
+
+        void getMapGeneral(std::ifstream &mapFile);
+
+        void getMapMetadata(std::ifstream &mapFile);
+
+        void loadMapInfo(const int &mapIndex);
     };
 }

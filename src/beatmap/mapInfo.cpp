@@ -5,7 +5,7 @@ oxu::MapInfo::MapInfo()
     
 }
 
-void oxu::MapInfo::clearMap()
+void oxu::MapInfo::clear()
 {
 
 }
