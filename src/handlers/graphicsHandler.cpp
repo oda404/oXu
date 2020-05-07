@@ -22,7 +22,7 @@ bool oxu::GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread>
     mapInfoI.playField.init(Vector2<int>(1920, 1080)); // stupid hardcoded screen size
 
     /* Create the thread */
-    *gThreadSource = std::make_shared<std::thread>([this]{render();});
+    *gThreadSource = std::make_shared<std::thread>( [this] { render(); } );
 
     /* Wait for the new thread to finish initiating
     to avoid any context problems */
@@ -53,18 +53,20 @@ void oxu::GraphicsHandler::render()
     /* Initiate the textures here because they need the renderer */
     texturesI.init(w_renderer);
 
-    doneInit = true;
-
     mapManagerI.enumBeatMaps();
-    mapManagerI.loadHitObjects(0);
     mapManagerI.loadMapInfo(0);
+    mapManagerI.loadHitObjects(0);
 
     mapInfoI.timer.start();
+
+    doneInit = true;
 
     /* delta time calculation stuff */
     uint32_t startTick;
     uint32_t lastTick   = 0;
     double   deltaTime  = 0.0;
+
+    int16_t i;
 
     /* the render loop */
     while(!*w_isClosed)
@@ -76,9 +78,8 @@ void oxu::GraphicsHandler::render()
 
         /* Start rendering */
         SDL_RenderClear(w_renderer);
-        
-        /* need to implemenet some bounds */
-        for(int16_t i = mapInfoI.hitObjCapTop; i >=  mapInfoI.hitObjCapBottom; --i)
+
+        for(i = mapInfoI.hitObjCapTop; i >=  mapInfoI.hitObjCapBottom; --i)
         {
             if(mapInfoI.hitCircles[i].getSpawnTime() - mapInfoI.ARInSeconds <= mapInfoI.timer.getEllapsedTimeAsMs())
             {   
@@ -87,10 +88,11 @@ void oxu::GraphicsHandler::render()
                 SDL_RenderCopy(w_renderer, texturesI.gameTextures[0], NULL, mapInfoI.hitCircles[i].getHCSDLRect()); // hit circle
                 SDL_RenderCopy(w_renderer, texturesI.gameTextures[2], NULL, mapInfoI.hitCircles[i].getHCSDLRect()); // hit circle overlay
                 SDL_RenderCopy(w_renderer, texturesI.gameTextures[1], NULL, mapInfoI.hitCircles[i].getACSDLRect()); // approach circle
-
+                
+                /* if the circle is done approaching increment the bottom cap */
                 if(!mapInfoI.hitCircles[i].approachCircle(deltaTime))
                     ++mapInfoI.hitObjCapBottom;
-            }
+            }   
         }
 
         SDL_RenderPresent(w_renderer);

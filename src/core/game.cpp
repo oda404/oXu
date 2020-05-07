@@ -41,7 +41,7 @@ void oxu::Game::g_loop()
 
 	graphicsHandler.init(window, &graphicsThread, &w_isClosed);
 
-	
+	MapInfo &mapInfoI = MapInfo::getInstance();
 	
 	while(!w_isClosed)
 	{
@@ -55,6 +55,9 @@ void oxu::Game::g_loop()
 					break;
 			}
 		}
+
+		if(mapInfoI.hitCircles[MapInfo::getInstance().hitObjCapTop + 1].getSpawnTime() + mapInfoI.ARInSeconds + 0.45f >=  mapInfoI.timer.getEllapsedTimeAsMs())
+            ++mapInfoI.hitObjCapTop;
 	}
 	
 	graphicsThread->join();
