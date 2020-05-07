@@ -47,6 +47,7 @@ oxu::MapManager &oxu::MapManager::getInstance()
     return instance;
 }
 
+/* Populate the hitCircles vector in the MapInfo singleton */
 void oxu::MapManager::loadHitObjects(const int &mapIndex)
 {
     MapInfo &mapInfoI = MapInfo::getInstance();
@@ -78,6 +79,10 @@ void oxu::MapManager::loadHitObjects(const int &mapIndex)
     infileMap.close();
 }
 
+/* Go through every map in the songs folder
+*  and store it's path in a vector to be accessed
+*  with an index
+*/
 void oxu::MapManager::enumBeatMaps()
 {
     beatMaps.clear();
@@ -196,6 +201,9 @@ void oxu::MapManager::getMapMetadata(std::ifstream &mapFile)
     }
 }
 
+/* Load the General, Metadata and Difficulty sections
+*  of the beatmap at the specified index
+*/
 void oxu::MapManager::loadMapInfo(const int &mapIndex)
 {
     MapInfo &mapInfoI = MapInfo::getInstance();
