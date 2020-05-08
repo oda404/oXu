@@ -1,6 +1,6 @@
 CC=g++
 CPPFLAGS=-O2
-LDFLAGS=-lSDL2 -lSDL2_image -lstdc++fs -lpthread
+LDFLAGS=-lSDL2 -lSDL2_image -lSDL2_mixer -lstdc++fs -lpthread
 
 CPPSRC = $(wildcard src/main.cpp) 		\
 		 $(wildcard src/utils/*.cpp) \
@@ -8,8 +8,7 @@ CPPSRC = $(wildcard src/main.cpp) 		\
 		 $(wildcard src/components/*.cpp) \
 		 $(wildcard src/components/game/*.cpp) \
 		 $(wildcard src/beatmap/*.cpp ) \
-		 $(wildcard src/handlers/graphicsHandler.cpp) \
-		 $(wildcard src/handlers/inputHandler.cpp) \
+		 $(wildcard src/handlers/*.cpp) \
 
 OBJ = $(CPPSRC:.cpp=.o)
 

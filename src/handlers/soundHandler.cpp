@@ -3,48 +3,60 @@
 
 #include"soundHandler.hpp"
 
-oxu::SoundHandler::SoundHandler()
+oxu::SoundHandler::SoundHandler() { }
+
+oxu::SoundHandler::~SoundHandler()
 {
-    BASS_Init(-1, 44100, 0, 0, NULL);
-    initialVolume = BASS_GetVolume();
-    BASS_SetVolume(0.2f);
+    Mix_FreeMusic(musicTrack);
+    musicTrack = NULL;
+
+    Mix_CloseAudio();
+    Mix_Quit();
 }
 
-void oxu::SoundHandler::setVolumeToDefault() { BASS_SetVolume(initialVolume); }
-
-void oxu::SoundHandler::setAudioVolume(const float &volume) { BASS_SetVolume(volume); }
-
-void oxu::SoundHandler::loadAudioFile(const void *audioName) { streamHandle = BASS_StreamCreateFile(FALSE, audioName, 0, 0, 0); }
-
-void oxu::SoundHandler::playAudio() 
+bool oxu::SoundHandler::init()
 {
-    BASS_ChannelPlay(streamHandle, 0);
-    mapTimer.start();
+    audioRate     = 44100;
+    audioFormat   = AUDIO_S32;
+    audioChannels = 1;
+    audioBuffers  = 4096;
+
+    if(Mix_OpenAudio(audioRate, audioFormat, audioChannels, audioBuffers < 0))
+    {
+        //log message
+        return false;
+    }
+
+    if(Mix_Init(MIX_INIT_MP3) != MIX_INIT_MP3)
+    {
+        // log message
+        return false;
+    }
+
+    return true;
 }
 
-void oxu::SoundHandler::freeAudio()
+bool oxu::SoundHandler::loadMusic(const char *fileName)
 {
-    BASS_StreamFree(streamHandle);
-    BASS_Free();
+    Mix_FreeMusic(musicTrack);
+    musicTrack = NULL;
+
+    musicTrack = Mix_LoadMUS(fileName);
+
+    if(!musicTrack)
+    {
+        return false;
+    }
+
+    return true;
 }
 
-void oxu::SoundHandler::pauseAudio()
+void oxu::SoundHandler::playMusic()
 {
-    bytePositionAtPause = BASS_ChannelGetPosition(streamHandle, BASS_POS_BYTE);
-    BASS_ChannelPause(streamHandle);
-    mapTimer.pause();
+    Mix_PlayMusic(musicTrack, 0);
 }
 
-void oxu::SoundHandler::resumeAudio()
+void oxu::SoundHandler::setVolume(const int &volume)
 {
-    BASS_ChannelPlay(streamHandle, 0);
-    BASS_ChannelSetPosition(streamHandle, bytePositionAtPause, BASS_POS_BYTE);
-    mapTimer.resume();
+    Mix_VolumeMusic(volume);
 }
-
-int64_t oxu::SoundHandler::getAudioPlayingOffset()
-{
-    return mapTimer.getEllapsedTimeAsMs();
-}
-
-void oxu::SoundHandler::scrollVolume(const float &delta) { BASS_SetVolume(BASS_GetVolume() + delta / 100); }

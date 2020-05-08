@@ -159,6 +159,7 @@ void oxu::MapManager::getMapGeneral(std::ifstream &mapFile)
 
             /* Remove all spaces from string */
             diffValue.erase(std::remove_if(diffValue.begin(), diffValue.end(), isspace));
+            diffValue.erase(diffValue.find_last_of('\r'));
 
             mapInfoI.mapGeneral.emplace(keyValue, diffValue);
         }

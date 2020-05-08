@@ -86,3 +86,8 @@ const bool &oxu::HitCircle::isFinished()
 {
     return isDone;
 }
+
+const float &oxu::HitCircle::getState()
+{
+    return approachT;
+}

@@ -2,41 +2,34 @@
 // Licensed under the MIT license found in the LICENSE file in the root of this repository.
 
 #pragma once
-#include<SFML/System.hpp>
-#include<bass.h>
-#include"../oxuGameComponents/timer.hpp"
 
-#include<memory>
+#include<SDL2/SDL_mixer.h>
+
+#include<cstdint>
 
 namespace oxu
 {
 	class SoundHandler
 	{
 	private:
-		HSTREAM streamHandle;
-		QWORD bytePositionAtPause;
-		Timer mapTimer;
-		float initialVolume;
+		int     audioRate;
+		int16_t audioFormat;
+		int     audioChannels;
+		int     audioBuffers;
+
+		Mix_Music *musicTrack = NULL;
 
 	public:
 		SoundHandler();
 
-		void setVolumeToDefault();
+		~SoundHandler();
 
-		void setAudioVolume(const float &volume);
+		bool init();
 
-		void loadAudioFile(const void *audioName);
+		bool loadMusic(const char *filePath);
 
-		void playAudio();
+		void playMusic();
 
-		void freeAudio();
-
-		void pauseAudio();
-
-		void resumeAudio();
-
-		int64_t getAudioPlayingOffset();
-
-		static void scrollVolume(const float &delta);
+		void setVolume(const int &volume);
 	};
 }

@@ -9,6 +9,8 @@
 #include"../components/cursor.hpp"
 #include"../beatmap/mapManager.hpp"
 
+#include"../handlers/soundHandler.hpp"
+
 namespace oxu
 {
     class Game

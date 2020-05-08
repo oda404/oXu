@@ -39,6 +39,8 @@ oxu::GraphicsHandler::~GraphicsHandler()
     SDL_GL_DeleteContext(context);
 }
 
+#include"soundHandler.hpp"
+
 void oxu::GraphicsHandler::render()
 {
     /* make the current context from the new thread */
@@ -56,6 +58,12 @@ void oxu::GraphicsHandler::render()
     mapManagerI.enumBeatMaps();
     mapManagerI.loadMapInfo(0);
     mapManagerI.loadHitObjects(0);
+
+    SoundHandler s;
+	s.init();
+	s.setVolume(20);
+	s.loadMusic(("songs/" + mapInfoI.mapGeneral.find("AudioFilename")->second).c_str());
+	s.playMusic();
 
     mapInfoI.timer.start();
 
@@ -81,7 +89,7 @@ void oxu::GraphicsHandler::render()
 
         for(i = mapInfoI.hitObjCapTop; i >=  mapInfoI.hitObjCapBottom; --i)
         {
-            if(mapInfoI.hitCircles[i].getSpawnTime() - mapInfoI.ARInSeconds <= mapInfoI.timer.getEllapsedTimeAsMs())
+            if(mapInfoI.timer.getEllapsedTimeAsMs() >= mapInfoI.hitCircles[i].getSpawnTime() - 450) // hardcoded val
             {   
                 /* This shouldn't render the textures now, but batch them together
                 for the GPU to draw when SDL_RenderPresent is called */
@@ -91,7 +99,9 @@ void oxu::GraphicsHandler::render()
                 
                 /* if the circle is done approaching increment the bottom cap */
                 if(!mapInfoI.hitCircles[i].approachCircle(deltaTime))
-                    ++mapInfoI.hitObjCapBottom;
+                {
+                   ++mapInfoI.hitObjCapBottom;
+                }
             }   
         }
 

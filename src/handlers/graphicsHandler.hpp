@@ -27,7 +27,7 @@ namespace oxu
         SDL_Window        *window         = NULL;
         SDL_GLContext     context;
 
-        int               maxFPS          = 120;
+        int               maxFPS          = 240;
 
         std::atomic<bool> doneInit;
         bool              *w_isClosed;

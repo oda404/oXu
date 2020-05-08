@@ -38,5 +38,7 @@ namespace oxu
         bool approachCircle(const double &dt);
 
         const bool &isFinished();
+
+        const float &getState();
     };
 }
