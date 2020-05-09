@@ -3,16 +3,33 @@
 
 #pragma once
 
+#include<SDL2/SDL_events.h>
+
+#include<vector>
+
+#include"../utils/vector2.hpp"
 
 namespace oxu
 {
+    struct Click
+    {
+        Vector2<int> mousePos;
+        uint32_t     clickTimeStamp;
+
+        Click(const Vector2<int> &pMousePos, const uint32_t &pClickTimeStamp);
+    };
+
     class InputHandler
     {
     private:
+        SDL_Event event;
+
+        std::vector<Click> clicks;
 
     public:
         InputHandler();
 
-        void handleInput();
+        void handleInput(bool &w_isClosed);
+
     };
 }

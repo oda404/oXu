@@ -48,17 +48,10 @@ void oxu::Game::g_loop()
         deltaTime = (double)(startTick - lastTick) / 1000.0f;
         lastTick  = startTick;
 
-		while(SDL_PollEvent(&w_event))
-		{
-			switch(w_event.type)
-			{
-				case SDL_QUIT:
-					/* also breaks the graphics thread loop */
-					w_isClosed = true;
-					break;
-			}
-		}
+		/* event/input handling */
+		inputHandler.handleInput(w_isClosed);
 
+		/* check to see if the first hit object is done */
 		if(mapInfoI.hitCircles[mapInfoI.hitObjCapBottom].isFinished())
 			++mapInfoI.hitObjCapBottom;
 

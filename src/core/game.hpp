@@ -6,6 +6,7 @@
 #include<SDL2/SDL.h>
 
 #include"../handlers/graphicsHandler.hpp"
+#include"../handlers/inputHandler.hpp"
 #include"../components/cursor.hpp"
 
 namespace oxu
@@ -15,6 +16,8 @@ namespace oxu
     private:
         GraphicsHandler              graphicsHandler;
         std::shared_ptr<std::thread> graphicsThread;
+
+        InputHandler                 inputHandler;
 
         MapInfo     &mapInfoI = MapInfo::getInstance();
 
