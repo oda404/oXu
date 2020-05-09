@@ -8,6 +8,7 @@
 #include"../handlers/graphicsHandler.hpp"
 #include"../handlers/inputHandler.hpp"
 #include"../components/cursor.hpp"
+#include"../utils/logger.hpp"
 
 namespace oxu
 {

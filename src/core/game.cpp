@@ -7,13 +7,22 @@ static bool w_isClosed;
 
 bool oxu::Game::w_init()
 {
+	/* Initiate the logger */
+	Logger::init();
+	Logger::getLogger()->info("Initiated the logger");
+
 	/* Initialize SDL */
 	if( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0 )
 	{
+		Logger::getLogger()->error("Failed to initialize SDL: {0}", SDL_GetError());
 		return false;
 	}
 
-	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
+	if(IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) < 0)
+	{
+		Logger::getLogger()->error("Failed to initialize SDL_IMG: {0}", IMG_GetError());
+		return false;
+	}
 
 	/* Create the window */
 	window = SDL_CreateWindow(
@@ -25,6 +34,7 @@ bool oxu::Game::w_init()
 
 	if(!window)
 	{
+		Logger::getLogger()->error("Failed to create the window: {0}", SDL_GetError());
 		return false;
 	}
 
@@ -37,8 +47,6 @@ bool oxu::Game::w_init()
 
 void oxu::Game::g_loop()
 {
-	SDL_Event w_event;
-
 	graphicsHandler.init(window, &graphicsThread, &w_isClosed, &maxFPS);
 	
 	while(!w_isClosed)

@@ -13,6 +13,7 @@
 #include"../components/textures.hpp"
 #include"../beatmap/mapManager.hpp"
 #include"../beatmap/mapInfo.hpp"
+#include"../utils/logger.hpp"
 
 namespace oxu
 {

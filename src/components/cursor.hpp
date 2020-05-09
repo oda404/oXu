@@ -4,6 +4,8 @@
 #include<SDL2/SDL_mouse.h>
 #include<SDL2/SDL_image.h>
 
+#include"../utils/logger.hpp"
+
 namespace oxu
 {
     class Cursor

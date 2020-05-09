@@ -47,12 +47,17 @@ void oxu::GraphicsHandler::render()
 {
     /* make the current context from the new thread */
     SDL_GL_MakeCurrent(window, context);
-
+ 
     /* Enable texture batching */
     SDL_SetHint(SDL_HINT_RENDER_BATCHING, "1");
 
     /* create the renderer */
     w_renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+    if(!w_renderer)
+    {
+        Logger::getLogger()->error("Failed to create renderer: {0}", SDL_GetError());
+    }
 
     /* Initiate the textures here because they need the renderer */
     texturesI.init(w_renderer);

@@ -19,6 +19,11 @@ void oxu::Cursor::set()
     /* Load the image into a surface */
     SDL_Surface *surface = IMG_Load("skins/cursor.png");
 
+    if(!surface)
+    {
+        Logger::getLogger()->warn("Could not load cursor sprite: {0}", IMG_GetError());
+    }
+
     /* Check to see if there is already a custom cursor loaded */
     if(customCursor)
     {
