@@ -7,6 +7,8 @@ oxu::SoundHandler::SoundHandler() { }
 
 oxu::SoundHandler::~SoundHandler()
 {
+    Mix_PauseMusic();
+
     Mix_FreeMusic(musicTrack);
     musicTrack = NULL;
 
