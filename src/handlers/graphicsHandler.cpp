@@ -5,12 +5,14 @@
 
 oxu::GraphicsHandler::GraphicsHandler() { }
 
-bool oxu::GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread> *gThreadSource, bool *w_statePtr)
+bool oxu::GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread> *gThreadSource, bool *w_statePtr, int *pMaxFPS)
 {
     doneInit = false;
 
     /* pointer to check if the window is open from the graphics thread */
     w_isClosed = w_statePtr;
+
+    maxFPS = pMaxFPS;
 
     /* Set the window ptr */
     this->window = window;
@@ -55,7 +57,10 @@ void oxu::GraphicsHandler::render()
     /* Initiate the textures here because they need the renderer */
     texturesI.init(w_renderer);
 
+    /* Initiate the mapMager */
     mapManagerI.enumBeatMaps();
+
+    /* Load beat map info */
     mapManagerI.loadMapInfo(0);
     mapManagerI.loadHitObjects(0);
 
@@ -98,19 +103,16 @@ void oxu::GraphicsHandler::render()
                 SDL_RenderCopy(w_renderer, texturesI.gameTextures[1], NULL, mapInfoI.hitCircles[i].getACSDLRect()); // approach circle
                 
                 /* if the circle is done approaching increment the bottom cap */
-                if(!mapInfoI.hitCircles[i].approachCircle(deltaTime))
-                {
-                   ++mapInfoI.hitObjCapBottom;
-                }
+                mapInfoI.hitCircles[i].approachCircle(deltaTime);
             }   
         }
 
         SDL_RenderPresent(w_renderer);
         
         /* Limit the FPS */
-        if(1000 / maxFPS > SDL_GetTicks() - startTick)
+        if(1000 / *maxFPS > SDL_GetTicks() - startTick)
         {
-            SDL_Delay(1000 / maxFPS - SDL_GetTicks() + startTick);
+            SDL_Delay(1000 / *maxFPS - SDL_GetTicks() + startTick);
         }
     }
 }

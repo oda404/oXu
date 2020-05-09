@@ -39,14 +39,7 @@ void oxu::Game::g_loop()
 {
 	SDL_Event w_event;
 
-	graphicsHandler.init(window, &graphicsThread, &w_isClosed);
-
-	MapInfo &mapInfoI = MapInfo::getInstance();
-
-	/* delta time calculation stuff */
-    uint32_t startTick;
-    uint32_t lastTick   = 0;
-    double   deltaTime  = 0.0;
+	graphicsHandler.init(window, &graphicsThread, &w_isClosed, &maxFPS);
 	
 	while(!w_isClosed)
 	{
@@ -66,14 +59,17 @@ void oxu::Game::g_loop()
 			}
 		}
 
+		if(mapInfoI.hitCircles[mapInfoI.hitObjCapBottom].isFinished())
+			++mapInfoI.hitObjCapBottom;
+
 		/* check if should increment to next object */
-		if(mapInfoI.hitCircles[mapInfoI.hitObjCapTop + 1].getSpawnTime() + mapInfoI.ARInSeconds + 0.45f >=  mapInfoI.timer.getEllapsedTimeAsMs())
+		if(mapInfoI.timer.getEllapsedTimeAsMs() >= mapInfoI.hitCircles[mapInfoI.hitObjCapTop].getSpawnTime() - 450)
             ++mapInfoI.hitObjCapTop;
 
 		/* Limit the FPS */
-        if(1000 / 120 > SDL_GetTicks() - startTick)
+        if(1000 / maxFPS > SDL_GetTicks() - startTick)
         {
-            SDL_Delay(1000 / 120 - SDL_GetTicks() + startTick);
+            SDL_Delay(1000 / maxFPS - SDL_GetTicks() + startTick);
         }
 	}
 	
@@ -88,6 +84,6 @@ void oxu::Game::w_clean()
 
 	IMG_Quit();
 
-	/* quit SDL video subsystem */
+	/* quit all SDL subsystems */
 	SDL_Quit();
 }

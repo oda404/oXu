@@ -27,7 +27,7 @@ namespace oxu
         SDL_Window        *window         = NULL;
         SDL_GLContext     context;
 
-        int               maxFPS          = 240;
+        int               *maxFPS;
 
         std::atomic<bool> doneInit;
         bool              *w_isClosed;
@@ -36,7 +36,10 @@ namespace oxu
         GraphicsHandler();
         ~GraphicsHandler();
 
-        bool init(SDL_Window *window, std::shared_ptr<std::thread> *gThreadSource, bool *w_statePtr);
+        bool init(SDL_Window                   *window, 
+                  std::shared_ptr<std::thread> *gThreadSource, 
+                  bool                         *w_statePtr,
+                  int                          *pMaxFPS);
 
         void render();
     };

@@ -7,20 +7,25 @@
 
 #include"../handlers/graphicsHandler.hpp"
 #include"../components/cursor.hpp"
-#include"../beatmap/mapManager.hpp"
-
-#include"../handlers/soundHandler.hpp"
 
 namespace oxu
 {
     class Game
     {
     private:
-        GraphicsHandler graphicsHandler;
-
-        SDL_Window *window = NULL;
-
+        GraphicsHandler              graphicsHandler;
         std::shared_ptr<std::thread> graphicsThread;
+
+        MapInfo     &mapInfoI = MapInfo::getInstance();
+
+        SDL_Window *window    = NULL;
+
+        /* delta time calculation stuff */
+        uint32_t startTick;
+        uint32_t lastTick   = 0;
+        double   deltaTime  = 0.0;
+
+        int      maxFPS     = 240;
         
     public:
         bool w_init();
