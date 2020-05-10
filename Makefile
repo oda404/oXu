@@ -1,24 +1,34 @@
-CC=g++
-CPPFLAGS=-O2 -DSPDLOG_COMPILED_LIB
-CPP_INCLUDE_PATH=-Ivendor/spdlog/include
+CXX=g++
+CXXFLAGS=-O2 -Wall -DSPDLOG_COMPILED_LIB
+CXX_INCLUDE_PATH=-Ivendor/spdlog/include
 LDFLAGS=-lSDL2 -lSDL2_image -lSDL2_mixer -lstdc++fs -lpthread
 
-CPPSRC = $(wildcard vendor/spdlog/src/*.cpp)    \
+CXXSRC = $(wildcard vendor/spdlog/src/*.cpp)    \
+                                                \
          $(wildcard src/utils/*.cpp)            \
-         $(wildcard src/main.cpp) 		\
-	 $(wildcard src/core/*.cpp) 	        \
+         $(wildcard src/main.cpp) 		        \
+	     $(wildcard src/core/*.cpp) 	        \
          $(wildcard src/components/*.cpp)       \
-	 $(wildcard src/components/game/*.cpp)  \
-	 $(wildcard src/beatmap/*.cpp )         \
-	 $(wildcard src/handlers/*.cpp)         \
+	     $(wildcard src/components/game/*.cpp)  \
+	     $(wildcard src/beatmap/*.cpp )         \
+	     $(wildcard src/handlers/*.cpp)         \
 
-OBJ = $(CPPSRC:.cpp=.o)
+OBJ = $(CXXSRC:.cpp=.o)
+
+CXX_GAME_SRC = $(filter-out $(wildcard vendor/spdlog/src/*.cpp), $(CXXSRC))
+
+GAME_OBJ = $(CXX_GAME_SRC:.cpp=.o)
 
 release: $(OBJ)
-	$(CC) $^ -o oXu $(LDFLAGS)
+	$(CXX) $^ -o oXu $(LDFLAGS)
  
 %.o: %.cpp
-	$(CC) $(CPPFLAGS) $(CPP_INCLUDE_PATH) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(CXX_INCLUDE_PATH) -c $< -o $@
+
+.PHONY: clean clean-all
 
 clean:
+	rm $(GAME_OBJ)
+
+clean-all:
 	rm $(OBJ)
