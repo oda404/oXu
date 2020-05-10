@@ -24,7 +24,7 @@ oxu::HitCircle::HitCircle(unsigned int infoArr[3], PlayField &playField)
     HCRect.y = objTruePosition.getY() - HCRect.h / 2;
 
     // Approach circle width and height
-    ACRect.w = HCRect.w * (2.0f * playField.getOxuPx());
+    ACRect.w = HCRect.w * (1.5f * playField.getOxuPx());
     ACRect.h = ACRect.w;
 
     /* Figure out the scaled approach circle size based on the hit circle size */
