@@ -21,7 +21,7 @@ void oxu::Cursor::set()
 
     if(!surface)
     {
-        Logger::getLogger()->warn("Could not load cursor sprite: {0}", IMG_GetError());
+        LOG_WARN("Could not load cursor sprite: {0}", IMG_GetError());
     }
 
     /* Check to see if there is already a custom cursor loaded */

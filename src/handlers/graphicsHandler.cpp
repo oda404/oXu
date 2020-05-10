@@ -51,12 +51,16 @@ void oxu::GraphicsHandler::render()
     /* Enable texture batching */
     SDL_SetHint(SDL_HINT_RENDER_BATCHING, "1");
 
+    // Set the texture filter to be linear
+    // Basically scales the texture more nicely
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+
     /* create the renderer */
     w_renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     if(!w_renderer)
     {
-        Logger::getLogger()->error("Failed to create renderer: {0}", SDL_GetError());
+        LOG_ERR("Failed to create renderer: {0}", SDL_GetError());
     }
 
     /* Initiate the textures here because they need the renderer */

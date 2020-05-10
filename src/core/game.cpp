@@ -9,18 +9,17 @@ bool oxu::Game::w_init()
 {
 	/* Initiate the logger */
 	Logger::init();
-	Logger::getLogger()->info("Initiated the logger");
 
 	/* Initialize SDL */
 	if( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0 )
 	{
-		Logger::getLogger()->error("Failed to initialize SDL: {0}", SDL_GetError());
+		LOG_ERR("Failed to initialize SDL: {0}", SDL_GetError());
 		return false;
 	}
 
 	if(IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) < 0)
 	{
-		Logger::getLogger()->error("Failed to initialize SDL_IMG: {0}", IMG_GetError());
+		LOG_ERR("Failed to initialize SDL_IMG: {0}", IMG_GetError());
 		return false;
 	}
 
@@ -34,7 +33,7 @@ bool oxu::Game::w_init()
 
 	if(!window)
 	{
-		Logger::getLogger()->error("Failed to create the window: {0}", SDL_GetError());
+		LOG_ERR("Failed to create the window: {0}", SDL_GetError());
 		return false;
 	}
 
@@ -79,6 +78,7 @@ void oxu::Game::g_loop()
 
 void oxu::Game::w_clean()
 {
+	LOG_INFO("Exiting gracefully. Hai noroc!");
 	/* destroy the window */
 	SDL_DestroyWindow(window);
 	window = NULL;
