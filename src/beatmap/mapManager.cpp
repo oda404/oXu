@@ -9,7 +9,7 @@ uint parseIntFromStr(const std::string &str)
 {
 	uint integer = 0;
 
-	for(int i = 0; i < str.size(); ++i)
+	for(unsigned int i = 0; i < str.size(); ++i)
 		if((int)str[i] >= 48 && (int)str[i] <= 57)
 			integer = integer * 10 + (int)str[i] - 48;
 
@@ -207,8 +207,6 @@ void oxu::MapManager::getMapMetadata(std::ifstream &mapFile)
 */
 void oxu::MapManager::loadMapInfo(const int &mapIndex)
 {
-    MapInfo &mapInfoI = MapInfo::getInstance();
-
     std::ifstream infileMap(beatMaps[mapIndex]);
 
     getMapGeneral(infileMap);
