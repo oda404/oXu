@@ -6,6 +6,7 @@
 #include<vector>
 
 #include"../utils/vector2.hpp"
+#include"../utils/logger.hpp"
 
 namespace oxu
 {
