@@ -22,14 +22,26 @@ namespace oxu
     class InputHandler
     {
     private:
-        SDL_Event event;
+        InputHandler();
 
+        SDL_Event event;
         std::vector<Click> clicks;
 
     public:
-        InputHandler();
+        /* ================== Singleton stuff ================ */
+        static InputHandler &getInstance();
+        
+        InputHandler(const InputHandler&)            = delete;
+
+        InputHandler(InputHandler&&)                 = delete;
+
+        InputHandler& operator=(const InputHandler&) = delete;
+
+        InputHandler& operator=(InputHandler&&)      = delete;
+        /* ==================================================== */
+
+        void init();
 
         void handleInput(bool &w_isClosed);
-
     };
 }

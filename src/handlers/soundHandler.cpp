@@ -16,6 +16,12 @@ oxu::SoundHandler::~SoundHandler()
     Mix_Quit();
 }
 
+oxu::SoundHandler &oxu::SoundHandler::getInstance()
+{
+    static SoundHandler instance;
+    return instance;
+}
+
 bool oxu::SoundHandler::init()
 {
     audioRate     = 44100;
@@ -25,13 +31,13 @@ bool oxu::SoundHandler::init()
 
     if(Mix_OpenAudio(audioRate, audioFormat, audioChannels, audioBuffers < 0))
     {
-        //log message
+        LOG_ERR("Failed to open audio: {0}", Mix_GetError());
         return false;
     }
 
     if(Mix_Init(MIX_INIT_MP3) != MIX_INIT_MP3)
     {
-        // log message
+        LOG_ERR("Failed to initialize Mixer: {0}", Mix_GetError());
         return false;
     }
 
@@ -47,6 +53,7 @@ bool oxu::SoundHandler::loadMusic(const char *fileName)
 
     if(!musicTrack)
     {
+        LOG_ERR("Couldn't load music track: {0}", Mix_GetError());
         return false;
     }
 

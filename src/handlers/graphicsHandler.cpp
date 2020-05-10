@@ -5,7 +5,13 @@
 
 oxu::GraphicsHandler::GraphicsHandler() { }
 
-bool oxu::GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread> *gThreadSource, bool *w_statePtr, int *pMaxFPS)
+oxu::GraphicsHandler &oxu::GraphicsHandler::getInstance()
+{
+    static GraphicsHandler instance;
+    return instance;
+}
+
+bool oxu::GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread> *gThreadSource, bool *w_statePtr, unsigned int *pMaxFPS)
 {
     doneInit = false;
 
@@ -73,11 +79,10 @@ void oxu::GraphicsHandler::render()
     mapManagerI.loadMapInfo(0);
     mapManagerI.loadHitObjects(0);
 
-    SoundHandler s;
-	s.init();
-	s.setVolume(20);
-	s.loadMusic(("songs/" + mapInfoI.mapGeneral.find("AudioFilename")->second).c_str());
-	s.playMusic();
+	SoundHandler::getInstance().init();
+	SoundHandler::getInstance().setVolume(20);
+	SoundHandler::getInstance().loadMusic(("songs/" + mapInfoI.mapGeneral.find("AudioFilename")->second).c_str());
+	SoundHandler::getInstance().playMusic();
 
     mapInfoI.timer.start();
 

@@ -3,10 +3,11 @@
 
 #include "game.hpp"
 
-static bool w_isClosed;
+bool oxu::Game::w_isClosed = false;
 
 bool oxu::Game::w_init()
 {
+
 	/* Initiate the logger */
 	Logger::init();
 
@@ -37,8 +38,6 @@ bool oxu::Game::w_init()
 		return false;
 	}
 
-	w_isClosed = false;
-
 	Cursor::getInstance().set();
 	
 	return true;
@@ -46,7 +45,8 @@ bool oxu::Game::w_init()
 
 void oxu::Game::g_loop()
 {
-	graphicsHandler.init(window, &graphicsThread, &w_isClosed, &maxFPS);
+	InputHandler::getInstance().init();
+	GraphicsHandler::getInstance().init(window, &graphicsThread, &w_isClosed, &maxFPS);
 	
 	while(!w_isClosed)
 	{
@@ -56,7 +56,7 @@ void oxu::Game::g_loop()
         lastTick  = startTick;
 
 		/* event/input handling */
-		inputHandler.handleInput(w_isClosed);
+		InputHandler::getInstance().handleInput(w_isClosed);
 
 		/* check to see if the first hit object is done */
 		if(mapInfoI.hitCircles[mapInfoI.hitObjCapBottom].isFinished())

@@ -22,10 +22,18 @@ int eventWatch(void *userdata, SDL_Event *event)
     return 1;
 }
 
-oxu::InputHandler::InputHandler()
+oxu::InputHandler::InputHandler() { }
+
+void oxu::InputHandler::init()
 {
     /* Add an event watch to check if a key is pressed */
     SDL_AddEventWatch(eventWatch, &clicks);
+}
+
+oxu::InputHandler &oxu::InputHandler::getInstance()
+{
+    static InputHandler instance;
+    return instance;
 }
 
 void oxu::InputHandler::handleInput(bool &w_isClosed)
