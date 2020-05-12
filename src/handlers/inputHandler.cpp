@@ -6,15 +6,24 @@
 int eventWatch(void *userdata, SDL_Event *event)
 {
     /* Gets the exact mouse position + key timestamp when the key is pressed */
-    if(event->type == SDL_KEYDOWN)
+    if(event->type == SDL_KEYDOWN && ( event->key.keysym.sym == SDLK_x ))
     {
+        static oxu::MapInfo &mapInfoI = oxu::MapInfo::getInstance();
+        static oxu::SoundHandler *soundHandlerPtr = (oxu::SoundHandler*)userdata;
+
         oxu::Vector2<int> mousePos;
         SDL_GetMouseState(&mousePos[0], &mousePos[1]);
 
-        /* Cast the void* to Click* struct */
-        std::vector<oxu::Click> *clicksVec = static_cast<std::vector<oxu::Click>*>(userdata);
+        SDL_Rect *lastACRect = mapInfoI.hitCircles[mapInfoI.hitObjCapBottom].getHCSDLRect();
 
-        clicksVec->emplace_back(mousePos, event->key.timestamp);
+        if(mousePos[0] >= lastACRect->x &&
+           mousePos[1] >= lastACRect->y &&
+           mousePos[0] <= lastACRect->x + lastACRect->w &&
+           mousePos[1] <= lastACRect->y + lastACRect->h)
+           {
+               soundHandlerPtr->playHitSound();
+               ++mapInfoI.hitObjCapBottom;
+           }
 
         return 0;
     }
@@ -24,16 +33,10 @@ int eventWatch(void *userdata, SDL_Event *event)
 
 oxu::InputHandler::InputHandler() { }
 
-void oxu::InputHandler::init()
+void oxu::InputHandler::init(SoundHandler *pSoundHandler)
 {
     /* Add an event watch to check if a key is pressed */
-    SDL_AddEventWatch(eventWatch, &clicks);
-}
-
-oxu::InputHandler &oxu::InputHandler::getInstance()
-{
-    static InputHandler instance;
-    return instance;
+    SDL_AddEventWatch(eventWatch, pSoundHandler);
 }
 
 void oxu::InputHandler::handleInput(bool &w_isClosed)
@@ -47,10 +50,4 @@ void oxu::InputHandler::handleInput(bool &w_isClosed)
                 break;
         }
     }
-}
-
-oxu::Click::Click(const Vector2<int> &pMousePos, const uint32_t &pClickTimeStamp):
-mousePos(pMousePos), clickTimeStamp(pClickTimeStamp)
-{
-
 }
