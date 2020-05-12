@@ -11,6 +11,12 @@ oxu::Textures::Textures() { }
 oxu::Textures::~Textures()
 {
     /* Destroy all game textures */
+    for(SDL_Surface *surface: gameSurfaces)
+    {
+        SDL_FreeSurface(surface);
+        surface = NULL;
+    }
+
     for(SDL_Texture *tex: gameTextures)
     {
         SDL_DestroyTexture(tex);
@@ -18,31 +24,33 @@ oxu::Textures::~Textures()
     }
 }
 
-void oxu::Textures::init(SDL_Renderer *w_renderer)
-{   
-    /* Good ol' yandere dev oriented programming */
-
+void oxu::Textures::init()
+{
     /* TODO: implement actual individual skins */
-    gameTextures.emplace_back( IMG_LoadTexture(w_renderer, "skins/hitcircle.png") );
-    if(!gameTextures[0])
+    gameSurfaces.emplace_back( IMG_Load("skins/hitcircle.png") );
+    if(!gameSurfaces[0])
     {
         LOG_WARN("{0}", IMG_GetError());
     }
-    gameTexturesSizes.emplace_back(Vector2<int>());
-    SDL_QueryTexture(gameTextures[0], NULL, NULL, &gameTexturesSizes[0][0], &gameTexturesSizes[0][1]);
 
-    gameTextures.emplace_back( IMG_LoadTexture(w_renderer, "skins/approachcircle.png") );
-    if(!gameTextures[1])
+    gameSurfaces.emplace_back( IMG_Load("skins/approachcircle.png") );
+    if(!gameSurfaces[1])
     {
         LOG_WARN("{0}", IMG_GetError());
     }
-    gameTexturesSizes.emplace_back(Vector2<int>());
-    SDL_QueryTexture(gameTextures[1], NULL, NULL, &gameTexturesSizes[1][0], &gameTexturesSizes[1][1]);
 
-    gameTextures.emplace_back( IMG_LoadTexture(w_renderer, "skins/hitcircleoverlay.png") );
-    if(!gameTextures[2])
+    gameSurfaces.emplace_back( IMG_Load("skins/hitcircleoverlay.png") );
+    if(!gameSurfaces[2])
     {
         LOG_WARN("{0}", IMG_GetError());
     }
-    // Uses the same texture size as the hit circle
+}
+
+void oxu::Textures::createTextures(SDL_Renderer *renderer)
+{
+    gameTextures.emplace_back(SDL_CreateTextureFromSurface(renderer, gameSurfaces[0]));
+
+    gameTextures.emplace_back(SDL_CreateTextureFromSurface(renderer, gameSurfaces[1]));
+
+    gameTextures.emplace_back(SDL_CreateTextureFromSurface(renderer, gameSurfaces[2]));
 }

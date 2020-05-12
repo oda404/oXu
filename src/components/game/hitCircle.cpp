@@ -29,7 +29,7 @@ oxu::HitCircle::HitCircle(unsigned int infoArr[3], PlayField &playField)
 
     /* Figure out the scaled approach circle size based on the hit circle size */
     ACInitialSize = Vector2<float>(ACRect.w, ACRect.h);
-    int sizeAfterScaling = Textures::getInstance().gameTexturesSizes[1].getX() * HCRect.w / Textures::getInstance().gameTexturesSizes[0].getX();
+    int sizeAfterScaling = Textures::getInstance().gameSurfaces[1]->w * HCRect.w / Textures::getInstance().gameSurfaces[0]->w;
     ACFinalSize = Vector2<float>(sizeAfterScaling, sizeAfterScaling);
 
     // Offset the true position so it falls on it's center point

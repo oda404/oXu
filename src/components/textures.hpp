@@ -31,9 +31,11 @@ namespace oxu
 
         ~Textures();
 
+        std::vector<SDL_Surface*>   gameSurfaces;
         std::vector<SDL_Texture*>   gameTextures;
-        std::vector<Vector2<int>>   gameTexturesSizes;
 
-        void init(SDL_Renderer *w_renderer);
+        void init();
+
+        void createTextures(SDL_Renderer *renderer);
     };
 }
