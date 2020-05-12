@@ -5,9 +5,14 @@
 
 bool oxu::Game::w_isClosed = false;
 
-bool oxu::Game::w_init()
+oxu::Game &oxu::Game::getInstance()
 {
+	static Game instance;
+	return instance;
+}
 
+bool oxu::Game::init()
+{
 	/* Initiate the logger */
 	Logger::init();
 
@@ -18,18 +23,22 @@ bool oxu::Game::w_init()
 		return false;
 	}
 
-	if(IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) < 0)
+	if( IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) < 0 )
 	{
 		LOG_ERR("Failed to initialize SDL_IMG: {0}", IMG_GetError());
 		return false;
 	}
+
+	screenSize = { 800, 600 };
 
 	/* Create the window */
 	window = SDL_CreateWindow(
 	"oXu!", 						// window name
 	SDL_WINDOWPOS_CENTERED, 		// window pos X
 	SDL_WINDOWPOS_CENTERED,			// window pos Y
-	1920, 1080, 0					// width, height, flags
+	screenSize.getX(),              // screen width
+	screenSize.getY(),              // screen height
+	0                               // flags
 	);
 
 	if(!window)
@@ -38,45 +47,65 @@ bool oxu::Game::w_init()
 		return false;
 	}
 
+	/* Load surfaces */
+	Textures::getInstance().init();
+
+	/* Set the cursor png */
 	Cursor::getInstance().set();
+
+	mapInfoI.playField.init(screenSize);
+
+	beatmapManager.enumBeatMaps();
+	beatmapManager.loadMapInfo(0);
+	beatmapManager.loadHitObjects(0);
+
+	/* Initiate the graphics handler */
+	graphicsHandler.init(window, &graphicsThread, &w_isClosed, &maxFPS);
+
+	/* Initiate the input handler */
+	inputHandler.init(&soundHandler);
+	
+	/* Initiate the sound handler */
+	soundHandler.init();
+
+	soundHandler.loadMusic(("songs/" + mapInfoI.mapGeneral.find("AudioFilename")->second).c_str());
+	soundHandler.setMusicVolume(20);
+	
+	soundHandler.loadSoundEffects();
+	soundHandler.setEffectsVolume(20);
+
+	soundHandler.playMusic();
 	
 	return true;
 }
 
-void oxu::Game::g_loop()
+void oxu::Game::loop()
 {
-	InputHandler::getInstance().init();
-	GraphicsHandler::getInstance().init(window, &graphicsThread, &w_isClosed, &maxFPS);
-	
 	while(!w_isClosed)
 	{
-		/* Calculate delta time */
-        startTick = SDL_GetTicks();
-        deltaTime = (double)(startTick - lastTick) / 1000.0f;
-        lastTick  = startTick;
+		calculateDeltaTime();
 
 		/* event/input handling */
-		InputHandler::getInstance().handleInput(w_isClosed);
+		inputHandler.handleInput(w_isClosed);
 
 		/* check to see if the first hit object is done */
 		if(mapInfoI.hitCircles[mapInfoI.hitObjCapBottom].isFinished())
+		{
 			++mapInfoI.hitObjCapBottom;
+			soundHandler.playHitSound();
+		}
 
 		/* check if should increment to next object */
 		if(mapInfoI.timer.getEllapsedTimeAsMs() >= mapInfoI.hitCircles[mapInfoI.hitObjCapTop].getSpawnTime() - 450)
             ++mapInfoI.hitObjCapTop;
 
-		/* Limit the FPS */
-        if(1000 / maxFPS > SDL_GetTicks() - startTick)
-        {
-            SDL_Delay(1000 / maxFPS - SDL_GetTicks() + startTick);
-        }
+		limitFPS();
 	}
 	
 	graphicsThread->join();
 };
 
-void oxu::Game::w_clean()
+void oxu::Game::clean()
 {
 	LOG_INFO("Exiting gracefully. Hai noroc!");
 	/* destroy the window */
@@ -87,4 +116,19 @@ void oxu::Game::w_clean()
 
 	/* quit all SDL subsystems */
 	SDL_Quit();
+}
+
+void oxu::Game::calculateDeltaTime()
+{
+	startTick = SDL_GetTicks();
+	deltaTime = (double)(startTick - lastTick) / 1000.0f;
+	lastTick  = startTick;
+}
+
+void oxu::Game::limitFPS()
+{
+	if(1000 / maxFPS > SDL_GetTicks() - startTick)
+	{
+		SDL_Delay(1000 / maxFPS - SDL_GetTicks() + startTick);
+	}
 }

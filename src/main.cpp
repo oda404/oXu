@@ -3,22 +3,17 @@
 
 #include"core/game.hpp"
 
-#define INIT_FAILURE -1
-
-int main()
+int main(int argc, char **argv)
 {
-	oxu::Game game;
-
-	if(!game.w_init())
+	if(!oxu::Game::getInstance().init())
 	{
+		oxu::Game::getInstance().clean();
 		return INIT_FAILURE;
 	}
-	else
-	{
-		game.g_loop();
-	}
 
-	game.w_clean();
+	oxu::Game::getInstance().loop();
 
-	return 0;
+	oxu::Game::getInstance().clean();
+
+	return GOOD_EXIT;
 }

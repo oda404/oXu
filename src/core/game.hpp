@@ -7,16 +7,34 @@
 
 #include"../handlers/graphicsHandler.hpp"
 #include"../handlers/inputHandler.hpp"
+#include"../handlers/soundHandler.hpp"
+
 #include"../components/cursor.hpp"
+#include"../components/textures.hpp"
+
+#include"../beatmap/mapManager.hpp"
+
 #include"../utils/logger.hpp"
+#include"../utils/vector2.hpp"
+
+#define GOOD_EXIT     0
+#define INIT_FAILURE -1
 
 namespace oxu
 {
     class Game
     {
     private:
+        Game() = default;
+
         SDL_Window *window    = NULL;
         std::shared_ptr<std::thread> graphicsThread;
+
+        GraphicsHandler graphicsHandler;
+        InputHandler    inputHandler;
+        SoundHandler    soundHandler;
+
+        MapManager      beatmapManager;
 
         MapInfo     &mapInfoI = MapInfo::getInstance();
 
@@ -25,16 +43,29 @@ namespace oxu
         uint32_t lastTick   = 0;
         double   deltaTime  = 0.0;
 
-        unsigned int      maxFPS     = 240;
-
-        static bool w_isClosed;
+        unsigned int   maxFPS     = 240;
+        static bool    w_isClosed;
+        Vector2<int>   screenSize;
         
     public:
-        bool w_init();
+        //====== singleton stuff ==============
+        static Game &getInstance();
+        Game(const Game&) = delete;
+        Game(Game&&) = delete;
+        Game& operator=(const Game&) = delete;
+        Game& operator=(Game&&) = delete;
+        //=====================================
 
-        void w_clean();
+        bool init();
 
-        void g_loop();
+        void clean();
+
+        void loop();
+    
+    private:
+        void calculateDeltaTime();
+
+        void limitFPS();
 
     };
 }
