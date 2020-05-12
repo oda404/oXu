@@ -6,6 +6,7 @@
 #include<SDL2/SDL_mixer.h>
 
 #include"../utils/logger.hpp"
+#include"../beatmap/mapInfo.hpp"
 
 #include<cstdint>
 
@@ -14,8 +15,6 @@ namespace oxu
 	class SoundHandler
 	{
 	private:
-		SoundHandler();
-
 		int     audioRate;
 		int16_t audioFormat;
 		int     audioChannels;
@@ -23,27 +22,26 @@ namespace oxu
 
 		Mix_Music *musicTrack = NULL;
 
+		// ====== effect sounds ======
+		Mix_Chunk *hitSound   = NULL;
+
 	public:
+		SoundHandler();
 		~SoundHandler();
-
-		/* =================== Singleton stuff ====================== */
-		static SoundHandler &getInstance();
-
-        SoundHandler(const SoundHandler&)            = delete;
-
-        SoundHandler(SoundHandler&&)                 = delete;
-
-        SoundHandler& operator=(const SoundHandler&) = delete;
-
-        SoundHandler& operator=(SoundHandler&&)      = delete;
-		/* ========================================================== */
 
 		bool init();
 
 		bool loadMusic(const char *filePath);
 
+		bool loadSoundEffects();
+
 		void playMusic();
 
-		void setVolume(const int &volume);
+		void playHitSound();
+
+		void setMusicVolume(const int &volume);
+
+		void setEffectsVolume(const int &volume);
+
 	};
 }

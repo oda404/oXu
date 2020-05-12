@@ -8,25 +8,23 @@ oxu::SoundHandler::SoundHandler() { }
 oxu::SoundHandler::~SoundHandler()
 {
     Mix_PauseMusic();
+    Mix_Pause(-1);
 
     Mix_FreeMusic(musicTrack);
     musicTrack = NULL;
+
+    Mix_FreeChunk(hitSound);
+    hitSound = NULL;
 
     Mix_CloseAudio();
     Mix_Quit();
 }
 
-oxu::SoundHandler &oxu::SoundHandler::getInstance()
-{
-    static SoundHandler instance;
-    return instance;
-}
-
 bool oxu::SoundHandler::init()
 {
     audioRate     = 44100;
-    audioFormat   = AUDIO_S32;
-    audioChannels = 1;
+    audioFormat   = AUDIO_S16SYS;
+    audioChannels = 2;
     audioBuffers  = 4096;
 
     if(Mix_OpenAudio(audioRate, audioFormat, audioChannels, audioBuffers < 0))
@@ -60,12 +58,36 @@ bool oxu::SoundHandler::loadMusic(const char *fileName)
     return true;
 }
 
-void oxu::SoundHandler::playMusic()
+bool oxu::SoundHandler::loadSoundEffects()
 {
-    Mix_PlayMusic(musicTrack, 0);
+    hitSound = Mix_LoadWAV("skins/normal-hitnormal.wav");
+    if(!hitSound)
+    {
+        LOG_WARN("Couldn't load sound effect: {0}", Mix_GetError());
+        return false;
+    }
+
+    return true;
 }
 
-void oxu::SoundHandler::setVolume(const int &volume)
+void oxu::SoundHandler::playMusic()
+{
+    MapInfo::getInstance().timer.restart();
+    Mix_PlayMusic(musicTrack, 0);
+    MapInfo::getInstance().timer.start();
+}
+
+void oxu::SoundHandler::playHitSound()
+{
+    Mix_PlayChannel(-1, hitSound, 0);
+}
+
+void oxu::SoundHandler::setMusicVolume(const int &volume)
 {
     Mix_VolumeMusic(volume);
+}
+
+void oxu::SoundHandler::setEffectsVolume(const int &volume)
+{
+    Mix_VolumeChunk(hitSound, volume);
 }
