@@ -20,10 +20,7 @@ namespace oxu
     class GraphicsHandler 
     {
     private:
-        GraphicsHandler();
-
         /* Singleton instances */
-        MapManager        &mapManagerI    = MapManager::getInstance();
         MapInfo           &mapInfoI       = MapInfo::getInstance();
         Textures          &texturesI      = Textures::getInstance();
 
@@ -32,27 +29,21 @@ namespace oxu
         SDL_GLContext     context;
 
         unsigned int      *maxFPS;
-
         std::atomic<bool> doneInit;
         bool              *w_isClosed;
+
+        /* delta time calculation stuff */
+        uint32_t startTick;
+        uint32_t lastTick   = 0;
+        double   deltaTime  = 0.0;
+        int16_t i;
 
         /* render function */
         void render();
 
     public:
+        GraphicsHandler();
         ~GraphicsHandler();
-
-        /* ================== Singleton stuff =================== */
-        static GraphicsHandler &getInstance();
-
-        GraphicsHandler(const GraphicsHandler&)            = delete;
-
-        GraphicsHandler(GraphicsHandler&&)                 = delete;
-
-        GraphicsHandler& operator=(const GraphicsHandler&) = delete;
-
-        GraphicsHandler& operator=(GraphicsHandler&&)      = delete;
-        /* ======================================================= */
 
         bool init(SDL_Window                   *window, 
                   std::shared_ptr<std::thread> *gThreadSource, 

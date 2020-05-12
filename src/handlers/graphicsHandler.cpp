@@ -5,12 +5,6 @@
 
 oxu::GraphicsHandler::GraphicsHandler() { }
 
-oxu::GraphicsHandler &oxu::GraphicsHandler::getInstance()
-{
-    static GraphicsHandler instance;
-    return instance;
-}
-
 bool oxu::GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread> *gThreadSource, bool *w_statePtr, unsigned int *pMaxFPS)
 {
     doneInit = false;
@@ -25,9 +19,6 @@ bool oxu::GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread>
 
     /* get the current context */
     context = SDL_GL_GetCurrentContext();
-
-    /* initiate the playfield */
-    mapInfoI.playField.init(Vector2<int>(1920, 1080)); // stupid hardcoded screen size
 
     /* Create the thread */
     *gThreadSource = std::make_shared<std::thread>( [this] { render(); } );
@@ -69,31 +60,9 @@ void oxu::GraphicsHandler::render()
         LOG_ERR("Failed to create renderer: {0}", SDL_GetError());
     }
 
-    /* Initiate the textures here because they need the renderer */
-    texturesI.init(w_renderer);
-
-    /* Initiate the mapMager */
-    mapManagerI.enumBeatMaps();
-
-    /* Load beat map info */
-    mapManagerI.loadMapInfo(0);
-    mapManagerI.loadHitObjects(0);
-
-	SoundHandler::getInstance().init();
-	SoundHandler::getInstance().setVolume(20);
-	SoundHandler::getInstance().loadMusic(("songs/" + mapInfoI.mapGeneral.find("AudioFilename")->second).c_str());
-	SoundHandler::getInstance().playMusic();
-
-    mapInfoI.timer.start();
+    texturesI.createTextures(w_renderer);
 
     doneInit = true;
-
-    /* delta time calculation stuff */
-    uint32_t startTick;
-    uint32_t lastTick   = 0;
-    double   deltaTime  = 0.0;
-
-    int16_t i;
 
     /* the render loop */
     while(!*w_isClosed)
