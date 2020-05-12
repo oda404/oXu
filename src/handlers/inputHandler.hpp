@@ -8,7 +8,9 @@
 #include<vector>
 
 #include"../utils/vector2.hpp"
+
 #include"../beatmap/mapInfo.hpp"
+
 #include"../handlers/soundHandler.hpp"
 
 namespace oxu

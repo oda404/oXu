@@ -31,11 +31,11 @@ void oxu::Cursor::set()
         customCursor = NULL;
     }
     /* Create the cursor */
-	customCursor = SDL_CreateColorCursor(surface, surface->w / 2, surface->h / 2);
+    customCursor = SDL_CreateColorCursor(surface, surface->w / 2, surface->h / 2);
 
     /* Free the above loaded surface */
-	SDL_FreeSurface(surface);
+    SDL_FreeSurface(surface);
 
     /* Set the cursor */
-	SDL_SetCursor(customCursor);
+    SDL_SetCursor(customCursor);
 }

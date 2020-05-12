@@ -33,12 +33,12 @@ bool oxu::Game::init()
 
 	/* Create the window */
 	window = SDL_CreateWindow(
-	"oXu!", 						// window name
-	SDL_WINDOWPOS_CENTERED, 		// window pos X
-	SDL_WINDOWPOS_CENTERED,			// window pos Y
-	screenSize.getX(),              // screen width
-	screenSize.getY(),              // screen height
-	0                               // flags
+	"oXu!",                      // window name
+	SDL_WINDOWPOS_CENTERED,      // window pos X
+	SDL_WINDOWPOS_CENTERED,      // window pos Y
+	screenSize.getX(),           // screen width
+	screenSize.getY(),           // screen height
+	0                            // flags
 	);
 
 	if(!window)
@@ -56,8 +56,8 @@ bool oxu::Game::init()
 	mapInfoI.playField.init(screenSize);
 
 	beatmapManager.enumBeatMaps();
-	beatmapManager.loadMapInfo(0);
-	beatmapManager.loadHitObjects(0);
+	beatmapManager.loadMapInfo(1);
+	beatmapManager.loadHitObjects(1);
 
 	/* Initiate the graphics handler */
 	graphicsHandler.init(window, &graphicsThread, &w_isClosed, &maxFPS);
@@ -97,7 +97,7 @@ void oxu::Game::loop()
 
 		/* check if should increment to next object */
 		if(mapInfoI.timer.getEllapsedTimeAsMs() >= mapInfoI.hitCircles[mapInfoI.hitObjCapTop].getSpawnTime() - 450)
-            ++mapInfoI.hitObjCapTop;
+                        ++mapInfoI.hitObjCapTop;
 
 		limitFPS();
 	}

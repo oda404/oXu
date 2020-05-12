@@ -5,20 +5,21 @@
 
 #include<SDL2/SDL_mixer.h>
 
-#include"../utils/logger.hpp"
-#include"../beatmap/mapInfo.hpp"
-
 #include<cstdint>
+
+#include"../utils/logger.hpp"
+
+#include"../beatmap/mapInfo.hpp"
 
 namespace oxu
 {
 	class SoundHandler
 	{
 	private:
-		int     audioRate;
-		int16_t audioFormat;
-		int     audioChannels;
-		int     audioBuffers;
+		int       audioRate;
+		int16_t   audioFormat;
+		int       audioChannels;
+		int       audioBuffers;
 
 		Mix_Music *musicTrack = NULL;
 

@@ -11,8 +11,10 @@
 #include<cstdint>
 
 #include"../components/textures.hpp"
+
 #include"../beatmap/mapManager.hpp"
 #include"../beatmap/mapInfo.hpp"
+
 #include"../utils/logger.hpp"
 
 namespace oxu
@@ -21,11 +23,11 @@ namespace oxu
     {
     private:
         /* Singleton instances */
-        MapInfo           &mapInfoI       = MapInfo::getInstance();
-        Textures          &texturesI      = Textures::getInstance();
+        MapInfo           &mapInfoI    = MapInfo::getInstance();
+        Textures          &texturesI   = Textures::getInstance();
 
-        SDL_Renderer      *w_renderer     = NULL;
-        SDL_Window        *window         = NULL;
+        SDL_Renderer      *w_renderer  = NULL;
+        SDL_Window        *window      = NULL;
         SDL_GLContext     context;
 
         unsigned int      *maxFPS;
@@ -33,12 +35,12 @@ namespace oxu
         bool              *w_isClosed;
 
         /* delta time calculation stuff */
-        uint32_t startTick;
-        uint32_t lastTick   = 0;
-        double   deltaTime  = 0.0;
-        int16_t i;
+        uint32_t          startTick;
+        uint32_t          lastTick     = 0;
+        double            deltaTime    = 0.0;
+        int16_t           i;
 
-        /* render function */
+        /* render method */
         void render();
 
     public:

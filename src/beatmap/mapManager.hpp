@@ -3,15 +3,16 @@
 
 #pragma once
 
-#include<vector>
-#include<string>
-#include<sstream>
-#include<fstream>
-#include<iostream>
 #include<experimental/filesystem>
 #include<algorithm>
+#include<iostream>
+#include<sstream>
+#include<fstream>
+#include<vector>
+#include<string>
 
 #include"../beatmap/mapInfo.hpp"
+
 #include"../components/textures.hpp"
 
 namespace fs = std::experimental::filesystem;
