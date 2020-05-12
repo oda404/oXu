@@ -39,14 +39,6 @@ void getObjCoreInfo(const std::string &line, uint infoArr[3])
     }
 }
 
-oxu::MapManager::MapManager() { }
-
-oxu::MapManager &oxu::MapManager::getInstance()
-{
-    static MapManager instance;
-    return instance;
-}
-
 /* Populate the hitCircles vector in the MapInfo singleton */
 void oxu::MapManager::loadHitObjects(const int &mapIndex)
 {

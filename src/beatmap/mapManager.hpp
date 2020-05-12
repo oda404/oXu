@@ -21,29 +21,11 @@ namespace oxu
     class MapManager
     {
     private:
-        MapManager();
-
         /* idk how efficient storing
             every beatmap's name is but fuck it */
         std::vector<std::string> beatMaps;
 
     public:
-        /* Singleton stuff */
-        static MapManager &getInstance();
-
-        /* Disable copy-ctor */
-        MapManager(const MapManager&) = delete;
-
-        /* Disable move-ctor */
-        MapManager(MapManager&&) = delete;
-
-        /* delete assignement operators */
-        MapManager& operator=(const MapManager&) = delete;
-
-        MapManager& operator=(MapManager&&) = delete;
-        /* ============================================ */
-
-
         void loadHitObjects(const int &mapIndex);
         
         void enumBeatMaps();
