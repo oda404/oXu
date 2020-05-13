@@ -14,11 +14,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Checkout spdlog
-      uses: actions/checkout@v2
       with:
-        repository: gabime/spdlog
-        path: vendor/spdlog
+        submodules: recursive 
     - name: configure
       run: ./deps.sh
     - name: make
