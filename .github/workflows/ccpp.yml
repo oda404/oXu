@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: SDL
+      run: apt-get install -y libsdl2-dev
     - name: Checkout
       uses: actions/checkout@v2
       with:
