@@ -9,13 +9,13 @@ The game is missing a lot of features that are standard in osu!, so don't expect
 <b>Keep in mind that the game was only tested on Linux, so Windows will probably not work.</b><br>
 The only way to play the game right now is to build it from source. To do that you will need to:
 ```console
-- git clone --recursive https://github.com/oda404/oXu
-- cd oXu
-- sudo ./deps.sh
-- make
+git clone --recursive https://github.com/oda404/oXu
+cd oXu
+sudo ./deps.sh
+make
 ```
-The -j# flag can used to speed up the build process. Where # is the number of threads used to make.
-- A new file named oXu will pop up, which you can execute using ./oXu.<br>
+The -j# flag can used to speed up the build process. Where # is the number of threads used to make.<br>
+A new file named oXu will pop up, which you can execute using ./oXu.<br>
 Before trying to play oXu you should add some beatmaps to the songs folder(oXu! supports osu! beatmaps).
 
 ## Dev info
