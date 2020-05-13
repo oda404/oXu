@@ -17,7 +17,7 @@ jobs:
     - name: Checkout spdlog
       uses: actions/checkout@v2
       with:
-        repository: https://github.com/gabime/spdlog
+        repository: gabime/spdlog
         path: vendor
     - name: configure
       run: ./deps.sh
