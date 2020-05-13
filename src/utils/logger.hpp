@@ -18,7 +18,8 @@ namespace oxu
         static std::shared_ptr<spdlog::logger> &getLogger();
     };
 
-    #define LOG_INFO Logger::getLogger()->info
-    #define LOG_WARN Logger::getLogger()->warn
-    #define LOG_ERR  Logger::getLogger()->error
+    #define LOG_INFO  Logger::getLogger()->info
+    #define LOG_WARN  Logger::getLogger()->warn
+    #define LOG_ERR   Logger::getLogger()->error
+    #define LOG_DEBUG Logger::getLogger()->debug
 }
