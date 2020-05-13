@@ -22,12 +22,10 @@ namespace oxu
     class MapManager
     {
     private:
-        /* idk how efficient storing
-            every beatmap's name is but fuck it */
-        std::vector<std::string> beatMaps;
+        std::vector<std::pair<std::string, std::vector<std::string>>> beatmaps;
 
     public:
-        void loadHitObjects(const int &mapIndex);
+        void loadHitObjects(const int &songI, const int &mapI);
         
         void enumBeatMaps();
 
@@ -37,6 +35,9 @@ namespace oxu
 
         void getMapMetadata(std::ifstream &mapFile);
 
-        void loadMapInfo(const int &mapIndex);
+        void loadMapInfo(const int &songI, const int &mapI);
+
+        std::string getSongPath(const int &index);
+
     };
 }

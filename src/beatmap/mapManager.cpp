@@ -40,14 +40,14 @@ void getObjCoreInfo(const std::string &line, uint infoArr[3])
 }
 
 /* Populate the hitCircles vector in the MapInfo singleton */
-void oxu::MapManager::loadHitObjects(const int &mapIndex)
+void oxu::MapManager::loadHitObjects(const int &songI, const int &mapI)
 {
     MapInfo &mapInfoI = MapInfo::getInstance();
 
     /* clear the hit circles vector */
     mapInfoI.hitCircles.clear();
 
-    std::ifstream infileMap(beatMaps[mapIndex]);
+    std::ifstream infileMap(beatmaps[songI].second[mapI]);
     std::string line;
 
     bool shouldReadObjInf = false;
@@ -77,12 +77,25 @@ void oxu::MapManager::loadHitObjects(const int &mapIndex)
 */
 void oxu::MapManager::enumBeatMaps()
 {
-    beatMaps.clear();
+    beatmaps.clear();
 
     const char *mapFolderPath = "songs/";
     for(auto &p: fs::directory_iterator(mapFolderPath))
     {
-        beatMaps.push_back(p.path());
+        if(fs::is_directory(p))
+        {
+            std::pair<std::string, std::vector<std::string>> beatMap;
+            beatMap.first = p.path();
+
+            LOG_DEBUG("Loaded Song: {0}", p.path().filename().c_str());
+
+            for(auto &file: fs::directory_iterator(p))
+            {
+                if(file.path().extension() == ".osu")
+                    beatMap.second.emplace_back(file.path());
+            }
+            beatmaps.emplace_back(beatMap);
+        }
     }
 }
 
@@ -197,11 +210,16 @@ void oxu::MapManager::getMapMetadata(std::ifstream &mapFile)
 /* Load the General, Metadata and Difficulty sections
 *  of the beatmap at the specified index
 */
-void oxu::MapManager::loadMapInfo(const int &mapIndex)
+void oxu::MapManager::loadMapInfo(const int &songI, const int &mapI)
 {
-    std::ifstream infileMap(beatMaps[mapIndex]);
+    std::ifstream infileMap(beatmaps[songI].second[mapI]);
 
     getMapGeneral(infileMap);
     getMapMetadata(infileMap);
     getMapDifficulty(infileMap);
+}
+
+std::string oxu::MapManager::getSongPath(const int &index)
+{
+    return beatmaps[index].first.c_str();
 }
