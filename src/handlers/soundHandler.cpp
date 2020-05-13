@@ -10,6 +10,9 @@ oxu::SoundHandler::~SoundHandler()
     Mix_PauseMusic();
     Mix_Pause(-1);
 
+    Mix_HaltChannel(-1);
+    Mix_HaltMusic();
+
     Mix_FreeMusic(musicTrack);
     musicTrack = NULL;
 
@@ -25,9 +28,9 @@ bool oxu::SoundHandler::init()
     audioRate     = 44100;
     audioFormat   = AUDIO_S16SYS;
     audioChannels = 2;
-    audioBuffers  = 4096;
+    audioBuffers  = 0;
 
-    if(Mix_OpenAudio(audioRate, audioFormat, audioChannels, audioBuffers < 0))
+    if(Mix_OpenAudio(audioRate, audioFormat, audioChannels, audioBuffers) < 0)
     {
         LOG_ERR("Failed to open audio: {0}", Mix_GetError());
         return false;
@@ -58,9 +61,9 @@ bool oxu::SoundHandler::loadMusic(const char *fileName)
     return true;
 }
 
-bool oxu::SoundHandler::loadSoundEffects()
+bool oxu::SoundHandler::loadSoundEffects(const std::string &skinPath)
 {
-    hitSound = Mix_LoadWAV("skins/normal-hitnormal.wav");
+    hitSound = Mix_LoadWAV( (skinPath + "/normal-hitnormal.wav").c_str() );
     if(!hitSound)
     {
         LOG_WARN("Couldn't load sound effect: {0}", Mix_GetError());

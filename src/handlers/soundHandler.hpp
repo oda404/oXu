@@ -34,7 +34,8 @@ namespace oxu
 
 		bool loadMusic(const char *filePath);
 
-		bool loadSoundEffects();
+		/* loads sound effects from the specified skin */
+		bool loadSoundEffects(const std::string &skinPath);
 
 		void playMusic();
 
