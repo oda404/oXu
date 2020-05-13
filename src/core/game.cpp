@@ -29,7 +29,7 @@ bool oxu::Game::init()
 		return false;
 	}
 
-	screenSize = { 800, 600 };
+	screenSize = { 1920, 1080 };
 
 	/* Create the window */
 	window = SDL_CreateWindow(
@@ -46,18 +46,19 @@ bool oxu::Game::init()
 		LOG_ERR("Failed to create the window: {0}", SDL_GetError());
 		return false;
 	}
+	
+	skinsManager.enumSkins();
 
-	/* Load surfaces */
-	Textures::getInstance().init();
+	Textures::getInstance().loadSkinTextures(skinsManager.getSkinPath(0));
 
 	/* Set the cursor png */
-	Cursor::getInstance().set();
+	Cursor::getInstance().set(skinsManager.getSkinPath(0));
 
 	mapInfoI.playField.init(screenSize);
 
 	beatmapManager.enumBeatMaps();
-	beatmapManager.loadMapInfo(1);
-	beatmapManager.loadHitObjects(1);
+	beatmapManager.loadMapInfo(0, 0);
+	beatmapManager.loadHitObjects(0, 0);
 
 	/* Initiate the graphics handler */
 	graphicsHandler.init(window, &graphicsThread, &w_isClosed, &maxFPS);
@@ -68,10 +69,10 @@ bool oxu::Game::init()
 	/* Initiate the sound handler */
 	soundHandler.init();
 
-	soundHandler.loadMusic(("songs/" + mapInfoI.mapGeneral.find("AudioFilename")->second).c_str());
+	soundHandler.loadMusic((beatmapManager.getSongPath(0) + '/' + mapInfoI.mapGeneral.find("AudioFilename")->second).c_str());
 	soundHandler.setMusicVolume(20);
 	
-	soundHandler.loadSoundEffects();
+	soundHandler.loadSoundEffects(skinsManager.getSkinPath(0));
 	soundHandler.setEffectsVolume(20);
 
 	soundHandler.playMusic();
@@ -97,7 +98,7 @@ void oxu::Game::loop()
 
 		/* check if should increment to next object */
 		if(mapInfoI.timer.getEllapsedTimeAsMs() >= mapInfoI.hitCircles[mapInfoI.hitObjCapTop].getSpawnTime() - 450)
-                        ++mapInfoI.hitObjCapTop;
+		    ++mapInfoI.hitObjCapTop;
 
 		limitFPS();
 	}

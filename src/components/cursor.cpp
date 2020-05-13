@@ -14,10 +14,10 @@ oxu::Cursor &oxu::Cursor::getInstance()
     return cursorInstance;
 }
 
-void oxu::Cursor::set()
+void oxu::Cursor::set(const std::string &skinPath)
 {
     /* Load the image into a surface */
-    SDL_Surface *surface = IMG_Load("skins/cursor.png");
+    SDL_Surface *surface = IMG_Load( (skinPath + "/cursor.png").c_str() );
 
     if(!surface)
     {

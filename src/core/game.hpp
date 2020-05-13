@@ -17,6 +17,8 @@
 #include"../utils/logger.hpp"
 #include"../utils/vector2.hpp"
 
+#include"../skin/skinManager.hpp"
+
 #define GOOD_EXIT     0
 #define INIT_FAILURE -1
 
@@ -35,6 +37,7 @@ namespace oxu
         SoundHandler    soundHandler;
 
         MapManager      beatmapManager;
+        SkinManager     skinsManager;
 
         MapInfo         &mapInfoI = MapInfo::getInstance();
 

@@ -3,10 +3,14 @@
 #include<SDL2/SDL_render.h>
 #include<SDL2/SDL_image.h>
 
+#include<experimental/filesystem>
 #include<vector>
+#include<string>
 
 #include"../utils/vector2.hpp"
 #include"../utils/logger.hpp"
+
+namespace fs = std::experimental::filesystem;
 
 namespace oxu
 {
@@ -34,7 +38,7 @@ namespace oxu
         std::vector<SDL_Surface*>   gameSurfaces;
         std::vector<SDL_Texture*>   gameTextures;
 
-        void init();
+        void loadSkinTextures(const std::string &skinPath);
 
         void createTextures(SDL_Renderer *renderer);
     };

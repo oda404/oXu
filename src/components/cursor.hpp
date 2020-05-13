@@ -27,6 +27,6 @@ namespace oxu
 
         /* Loads whatever png named "cursor.png"
         exists in the skins folder as the cursor */
-        void set();
+        void set(const std::string &skinPath);
     };
 }

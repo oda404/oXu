@@ -24,22 +24,22 @@ oxu::Textures::~Textures()
     }
 }
 
-void oxu::Textures::init()
+void oxu::Textures::loadSkinTextures(const std::string &skinPath)
 {
     /* TODO: implement actual individual skins */
-    gameSurfaces.emplace_back( IMG_Load("skins/hitcircle.png") );
+    gameSurfaces.emplace_back( IMG_Load( (skinPath + "/hitcircle.png").c_str() ) );
     if(!gameSurfaces[0])
     {
         LOG_WARN("{0}", IMG_GetError());
     }
 
-    gameSurfaces.emplace_back( IMG_Load("skins/approachcircle.png") );
+    gameSurfaces.emplace_back( IMG_Load( (skinPath+ "/approachcircle.png").c_str() ) );
     if(!gameSurfaces[1])
     {
         LOG_WARN("{0}", IMG_GetError());
     }
-
-    gameSurfaces.emplace_back( IMG_Load("skins/hitcircleoverlay.png") );
+    
+    gameSurfaces.emplace_back( IMG_Load( (skinPath + "/hitcircleoverlay.png").c_str() ) );
     if(!gameSurfaces[2])
     {
         LOG_WARN("{0}", IMG_GetError());
