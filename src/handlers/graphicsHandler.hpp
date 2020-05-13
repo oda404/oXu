@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include<SDL2/SDL_hints.h>
 #include<SDL2/SDL_render.h>
 #include<SDL2/SDL_image.h>
 
