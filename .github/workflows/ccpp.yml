@@ -18,7 +18,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         repository: gabime/spdlog
-        path: .vendor
+        path: .vendor/spdlog
     - name: configure
       run: ./deps.sh
     - name: make
