@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - name: SDL
-      run: sudo apt-get install -y libsdl2-dev
+      run: sudo apt-get install -y libsdl2-dev --fix-missing
     - name: Checkout
       uses: actions/checkout@v2
       with:
