@@ -12,8 +12,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: SDL
-      run: sudo apt-get update && sudo apt-get install -y libsdl2-dev --fix-missing
     - name: Checkout
       uses: actions/checkout@v2
       with:
