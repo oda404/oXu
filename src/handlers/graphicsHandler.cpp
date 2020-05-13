@@ -42,28 +42,13 @@ void oxu::GraphicsHandler::render()
 {
     /* make the current context from the new thread */
     SDL_GL_MakeCurrent(window, context);
-
-    SDL_version v;
-    SDL_GetVersion(&v);
-    if(v.major >= 2 && v.minor > 0)
-    {
-        #define BATCHING
-    }
-    else if(v.major >= 2 && v.minor >= 0 && v.patch >= 9)
-    {
-        #define BATCHING
-    }
-
-#ifdef BATCHING
+ 
     /* Enable texture batching */
-    SDL_SetHint(SDL_HINT_RENDER_BATCHING, "1");
-#else
-    LOG_WARN("You are using an SDL version under 2.0.9 and texture batching will not be enabled");
-#endif
+    SDL_SetHint("SDL_RENDER_BATCHING", "1");
 
     // Set the texture filter to be linear
     // Basically scales the texture more nicely
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
+    SDL_SetHint("SDL_RENDER_SCALE_QUALITY", "1");
 
     /* create the renderer */
     w_renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
