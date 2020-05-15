@@ -12,6 +12,8 @@
 
 #include"../utils/timer.hpp"
 
+class HitCircle;
+
 namespace oxu
 {
     struct MapInfo
