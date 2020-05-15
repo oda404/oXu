@@ -7,18 +7,23 @@ oxu::SoundHandler::SoundHandler() { }
 
 oxu::SoundHandler::~SoundHandler()
 {
-    Mix_PauseMusic();
-    Mix_Pause(-1);
-
+    /* Halt all channels i think */
     Mix_HaltChannel(-1);
+    /* Free all allocated channels */
+    Mix_AllocateChannels(0);
+
+    /* Mix and halt the music */
+    Mix_PauseMusic();
     Mix_HaltMusic();
 
+    /* Free the music */
     Mix_FreeMusic(musicTrack);
     musicTrack = NULL;
 
+    /* Free the chunks */
     Mix_FreeChunk(hitSound);
     hitSound = NULL;
-
+    
     Mix_CloseAudio();
     Mix_Quit();
 }
@@ -41,6 +46,8 @@ bool oxu::SoundHandler::init()
         LOG_ERR("Failed to initialize Mixer: {0}", Mix_GetError());
         return false;
     }
+
+    Mix_AllocateChannels(10);
 
     return true;
 }
