@@ -7,6 +7,7 @@
 
 #include"../../utils/vector2.hpp"
 #include"../textures.hpp"
+#include"../../beatmap/mapInfo.hpp"
 
 #include"playField.hpp"
 
@@ -19,7 +20,7 @@ namespace oxu
         SDL_Rect       ACRect;
         Vector2<float> ACInitialSize;     // needed to scale the AC down
         Vector2<float> ACFinalSize;
-        float          approachT = 0;
+        float          approachT = 0.0f;
 
         SDL_Rect       HCRect;
         Vector2<float> objTruePosition;   // needed to recenter after scaling
@@ -38,6 +39,8 @@ namespace oxu
         void approachCircle(const double &dt);
 
         const bool &isFinished();
+
+        void finish();
 
         const float &getState();
     };

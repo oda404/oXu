@@ -16,7 +16,7 @@ oxu::HitCircle::HitCircle(unsigned int infoArr[3], PlayField &playField)
     );
 
     // Hit circle width and height
-    HCRect.w = (23.05f - (4.2f - 7.0f) * 4.4825f) * 2.0f * playField.getOxuPx();
+    HCRect.w = (23.05f - (MapInfo::getInstance().mapDifficulty.find("CircleSize")->second - 7.0f) * 4.4825f) * 2.0f * playField.getOxuPx();
     HCRect.h = HCRect.w;
 
     // Offset the true position so it falls on it's center point
@@ -62,9 +62,9 @@ oxu::Vector2<float> lerp(const oxu::Vector2<float> &a, const oxu::Vector2<float>
 
 void oxu::HitCircle::approachCircle(const double &dt)
 {
-    if(approachT <= 1)
+    if(approachT < 1)
     {
-        approachT += dt / 0.450f;
+        approachT += dt / MapInfo::getInstance().ARInSeconds;
 
         Vector2<float> newPos = lerp(ACInitialSize, ACFinalSize, approachT);
 
@@ -85,6 +85,11 @@ void oxu::HitCircle::approachCircle(const double &dt)
 const bool &oxu::HitCircle::isFinished() 
 {
     return isDone;
+}
+
+void oxu::HitCircle::finish()
+{
+    isDone = true;
 }
 
 const float &oxu::HitCircle::getState()
