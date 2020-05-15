@@ -75,7 +75,7 @@ void oxu::GraphicsHandler::render()
 
         for(i = mapInfoI.hitObjCapTop; i >=  mapInfoI.hitObjCapBottom; --i)
         {
-            if(mapInfoI.timer.getEllapsedTimeAsMs() >= mapInfoI.hitCircles[i].getSpawnTime() - 450) // hardcoded val
+            if(mapInfoI.timer.getEllapsedTimeAsMs() >= mapInfoI.hitCircles[i].getSpawnTime() - mapInfoI.ARInSeconds * 1000)
             {   
                 /* This shouldn't render the textures now, but batch them together
                 for the GPU to draw when SDL_RenderPresent is called */
