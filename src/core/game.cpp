@@ -63,9 +63,6 @@ bool oxu::Game::init()
 	/* Initiate the graphics handler */
 	graphicsHandler.init(window, &graphicsThread, &w_isClosed, &maxFPS);
 
-	/* Initiate the input handler */
-	inputHandler.init(&soundHandler);
-	
 	/* Initiate the sound handler */
 	soundHandler.init();
 
@@ -76,6 +73,9 @@ bool oxu::Game::init()
 	soundHandler.setEffectsVolume(20);
 
 	soundHandler.playMusic();
+
+	/* Initiate the input handler */
+	inputHandler.init(&soundHandler);
 	
 	return true;
 }
@@ -92,8 +92,8 @@ void oxu::Game::loop()
 		/* check to see if the first hit object is done */
 		if(mapInfoI.hitCircles[mapInfoI.hitObjCapBottom].isFinished())
 		{
-			++mapInfoI.hitObjCapBottom;
 			soundHandler.playHitSound();
+			++mapInfoI.hitObjCapBottom;
 		}
 
 		/* check if should increment to next object */
