@@ -9,7 +9,6 @@ int eventWatch(void *userdata, SDL_Event *event)
     if(event->type == SDL_KEYDOWN && ( event->key.keysym.sym == SDLK_x ))
     {
         static oxu::MapInfo &mapInfoI = oxu::MapInfo::getInstance();
-        static oxu::SoundHandler *soundHandlerPtr = (oxu::SoundHandler*)userdata;
 
         oxu::Vector2<int> mousePos;
         SDL_GetMouseState(&mousePos[0], &mousePos[1]);
@@ -21,8 +20,7 @@ int eventWatch(void *userdata, SDL_Event *event)
            mousePos[0] <= lastACRect->x + lastACRect->w &&
            mousePos[1] <= lastACRect->y + lastACRect->h)
            {
-               soundHandlerPtr->playHitSound();
-               ++mapInfoI.hitObjCapBottom;
+               mapInfoI.hitCircles[mapInfoI.hitObjCapBottom].finish();
            }
 
         return 0;
