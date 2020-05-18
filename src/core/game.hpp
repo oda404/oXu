@@ -61,9 +61,9 @@ namespace oxu
 
         bool init();
 
-        void clean();
-
         void loop();
+
+        void clean();
     
     private:
         void calculateDeltaTime();

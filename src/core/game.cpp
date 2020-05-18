@@ -19,13 +19,13 @@ bool oxu::Game::init()
 	/* Initialize SDL */
 	if( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0 )
 	{
-		LOG_ERR("Failed to initialize SDL: {0}", SDL_GetError());
+		LOG_ERR("{0}", SDL_GetError());
 		return false;
 	}
 
 	if( IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) < 0 )
 	{
-		LOG_ERR("Failed to initialize SDL_IMG: {0}", IMG_GetError());
+		LOG_ERR("{0}", IMG_GetError());
 		return false;
 	}
 
@@ -47,16 +47,21 @@ bool oxu::Game::init()
 		return false;
 	}
 	
+	/* Enumerate all skins */
 	skinsManager.enumSkins();
 
+	/* Load the skins images onto surfaces */
 	Textures::getInstance().loadSkinSurfaces(skinsManager.getSkinPath(0));
 
 	/* Set the cursor png */
 	Cursor::getInstance().set(skinsManager.getSkinPath(0));
 
+	/* Initiate the playfield */
 	mapInfoI.playField.init(screenSize);
 
+	/* Enumerate all the beatmaps */
 	beatmapManager.enumBeatMaps();
+	/* Load info/objects from song 0 map 0 */
 	beatmapManager.loadMapInfo(0, 0);
 	beatmapManager.loadHitObjects(0, 0);
 
@@ -66,7 +71,7 @@ bool oxu::Game::init()
 	/* Initiate the sound handler */
 	soundHandler.init();
 
-	soundHandler.loadMusic((beatmapManager.getSongPath(0) + '/' + mapInfoI.mapGeneral.find("AudioFilename")->second).c_str());
+	soundHandler.loadMusic((beatmapManager.getSongPath(0) + '/' + mapInfoI.getGeneralAttr("AudioFilename")).c_str());
 	soundHandler.setMusicVolume(5);
 	
 	soundHandler.loadSoundEffects(skinsManager.getSkinPath(0));
