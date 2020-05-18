@@ -41,16 +41,23 @@ namespace oxu
         double            deltaTime    = 0.0;
         int16_t           i;
 
-        /* render method */
-        void render();
-
     public:
         GraphicsHandler();
         ~GraphicsHandler();
 
-        bool init(SDL_Window                   *window, 
+        void init(SDL_Window                   *window, 
                   std::shared_ptr<std::thread> *gThreadSource, 
                   bool                         *w_statePtr,
-                  unsigned int                 *pMaxFPS);
+                  unsigned int                 *maxFPS);
+
+    private:
+        /* render method */
+        void render();
+
+        void renderHitCircles();
+
+        void calculateDeltaTime();
+
+        void limitFPS();
     };
 }
