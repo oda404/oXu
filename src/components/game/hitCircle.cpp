@@ -19,7 +19,7 @@ combo(combo)
 
     /* ============================= HIT CIRCLE ================================== */
     // Hit circle width and height
-    HCRect.w = (23.05f - (MapInfo::getInstance().mapDifficulty.find("CircleSize")->second - 7.0f) * 4.4825f) * 2.0f * playField.getOxuPx();
+    HCRect.w = (23.05f - (MapInfo::getInstance().getDifficultyAttr("CircleSize") - 7.0f) * 4.4825f) * 2.0f * playField.getOxuPx();
     HCRect.h = HCRect.w;
 
     // Offset the true position so it falls on it's center point

@@ -3,18 +3,38 @@
 
 #include"mapInfo.hpp"
 
-oxu::MapInfo::MapInfo()
+namespace oxu
 {
-    
-}
+    MapInfo::MapInfo()
+    {
+        
+    }
 
-void oxu::MapInfo::clear()
-{
+    void MapInfo::clear()
+    {
+        mapGeneral.clear();
+        mapDifficulty.clear();
+        mapMetadata.clear();
+    }
 
-}
+    MapInfo &MapInfo::getInstance()
+    {
+        static MapInfo instance;
+        return instance;
+    }
 
-oxu::MapInfo &oxu::MapInfo::getInstance()
-{
-    static MapInfo instance;
-    return instance;
+    void MapInfo::addGeneralAttr(const std::string &key, const std::string &attr)
+    {
+        mapGeneral.emplace(key, attr);
+    }
+
+    void MapInfo::addDifficultyAttr(const std::string &key, const float &attr)
+    {
+        mapDifficulty.emplace(key, attr);
+    }
+
+    void MapInfo::addMetadataAttr(const std::string &key, const std::string &attr)
+    {
+        mapMetadata.emplace(key, attr);
+    }
 }

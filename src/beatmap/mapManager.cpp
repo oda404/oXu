@@ -118,9 +118,6 @@ void oxu::MapManager::getMapDifficulty(std::ifstream &mapFile)
 {
     MapInfo &mapInfoI = MapInfo::getInstance();
 
-    /* Clear the map difficulty */
-    mapInfoI.mapDifficulty.clear();
-
     std::string line;
     bool go = false;
 
@@ -133,10 +130,10 @@ void oxu::MapManager::getMapDifficulty(std::ifstream &mapFile)
 
         if(go)
         {
-            std::string keyValue  = line.substr(0, line.find_first_of(':')).c_str();
+            std::string keyValue  = line.substr(0, line.find_first_of(':'));
             float       diffValue = stof(line.substr(line.find_first_of(':') + 1));
 
-            mapInfoI.mapDifficulty.emplace(keyValue, diffValue);
+            mapInfoI.addDifficultyAttr(keyValue, diffValue);
 
             /* transform the value into seconds */
             if(keyValue == "ApproachRate")
@@ -161,8 +158,6 @@ void oxu::MapManager::getMapGeneral(std::ifstream &mapFile)
 {
     MapInfo &mapInfoI = MapInfo::getInstance();
 
-    mapInfoI.mapGeneral.clear();
-
     std::string   line;
     bool          go = false;
 
@@ -180,7 +175,7 @@ void oxu::MapManager::getMapGeneral(std::ifstream &mapFile)
             diffValue.erase(std::remove_if(diffValue.begin(), diffValue.end(), isspace));
             diffValue.erase(diffValue.find_last_of('\r'));
 
-            mapInfoI.mapGeneral.emplace(keyValue, diffValue);
+            mapInfoI.addGeneralAttr(keyValue, diffValue);
         }
         else if(line == "[General]\r")
         {
@@ -193,8 +188,6 @@ void oxu::MapManager::getMapGeneral(std::ifstream &mapFile)
 void oxu::MapManager::getMapMetadata(std::ifstream &mapFile)
 {
     MapInfo &mapInfoI = MapInfo::getInstance();
-
-    mapInfoI.mapMetadata.clear();
 
     std::string line;
     bool go = false;
@@ -212,7 +205,7 @@ void oxu::MapManager::getMapMetadata(std::ifstream &mapFile)
             /* Remove all spaces from string */
             diffValue.erase(std::remove_if(diffValue.begin(), diffValue.end(), isspace));
 
-            mapInfoI.mapMetadata.emplace(keyValue, diffValue);
+            mapInfoI.addMetadataAttr(keyValue, diffValue);
         }
         else if(line == "[Metadata]\r")
         {
@@ -235,5 +228,5 @@ void oxu::MapManager::loadMapInfo(const int &songI, const int &mapI)
 
 std::string oxu::MapManager::getSongPath(const int &index)
 {
-    return beatmaps[index].first.c_str();
+    return beatmaps[index].first;
 }
