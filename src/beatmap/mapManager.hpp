@@ -23,7 +23,8 @@ namespace oxu
     {
     private:
         std::vector<std::pair<std::string, std::vector<std::string>>> beatmaps;
-
+        int combo = 1;
+        
     public:
         void loadHitObjects(const int &songI, const int &mapI);
         

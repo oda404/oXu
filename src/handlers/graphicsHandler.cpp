@@ -77,14 +77,24 @@ void oxu::GraphicsHandler::render()
         {
             if(mapInfoI.timer.getEllapsedTimeAsMs() >= mapInfoI.hitCircles[i].getSpawnTime() - mapInfoI.ARInSeconds * 1000)
             {   
+                HitCircle &HC = mapInfoI.hitCircles[i];
                 /* This shouldn't render the textures now, but batch them together
                 for the GPU to draw when SDL_RenderPresent is called */
-                SDL_RenderCopy(w_renderer, texturesI.gameTextures[0], NULL, mapInfoI.hitCircles[i].getHCSDLRect()); // hit circle
-                SDL_RenderCopy(w_renderer, texturesI.gameTextures[2], NULL, mapInfoI.hitCircles[i].getHCSDLRect()); // hit circle overlay
-                SDL_RenderCopy(w_renderer, texturesI.gameTextures[1], NULL, mapInfoI.hitCircles[i].getACSDLRect()); // approach circle
+
+                /* Hit circle */
+                SDL_RenderCopy(w_renderer, texturesI.getHCTex(),        NULL, HC.getHCSDLRect());
+
+                /* Hit circle overlay */
+                SDL_RenderCopy(w_renderer, texturesI.getHCOverlayTex(), NULL, HC.getHCSDLRect());
+
+                /* Approach circle */
+                SDL_RenderCopy(w_renderer, texturesI.getACTex(),        NULL, HC.getACSDLRect());
+
+                /* Combo */
+                SDL_RenderCopy(w_renderer, texturesI.getComboNumTex(w_renderer, HC.getCombo()), NULL, HC.getComboNumRect());
                 
-                /* if the circle is done approaching increment the bottom cap */
-                mapInfoI.hitCircles[i].approachCircle(deltaTime);
+                /* Close the approach circle */
+                HC.approachCircle(deltaTime);
             }   
         }
 

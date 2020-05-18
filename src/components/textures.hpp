@@ -22,6 +22,12 @@ namespace oxu
     private:
         Textures();
 
+        std::vector<SDL_Surface*>   gameSurfaces;
+        std::vector<SDL_Texture*>   gameTextures;
+
+        /* Used for combining multiple digits together */
+        std::vector<SDL_Texture*>   extraComboNumTex;
+
     public:
         /* Singleton stuff */
         static Textures &getInstance();
@@ -38,11 +44,25 @@ namespace oxu
 
         ~Textures();
 
-        std::vector<SDL_Surface*>   gameSurfaces;
-        std::vector<SDL_Texture*>   gameTextures;
-
-        void loadSkinTextures(const std::string &skinPath);
+        void loadSkinSurfaces(const std::string &skinPath);
 
         void createTextures(SDL_Renderer *renderer);
+
+        /* Surface getters */
+        inline SDL_Surface *getHCSurf() { return gameSurfaces[0]; }
+
+        inline SDL_Surface *getACSurf() { return gameSurfaces[1]; }
+
+        inline SDL_Surface *getComboNumDefaultSurf() { return gameSurfaces[3]; }
+
+        /* Texture getters */
+        inline SDL_Texture *getHCTex() { return gameTextures[0]; }
+
+        inline SDL_Texture *getACTex() { return gameTextures[1]; }
+
+        inline SDL_Texture *getHCOverlayTex() { return gameTextures[2]; }
+
+        SDL_Texture *getComboNumTex(SDL_Renderer *renderer, const uint8_t &n);
+
     };
 }

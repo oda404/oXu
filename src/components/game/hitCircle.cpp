@@ -3,18 +3,21 @@
 
 #include"hitCircle.hpp"
 
-oxu::HitCircle::HitCircle(unsigned int infoArr[3], PlayField &playField)
+oxu::HitCircle::HitCircle(unsigned int infoArr[4], const int &combo, PlayField &playField):
+combo(combo)
 {
     /*
     infoArr[0] == posX
     infoArr[1] == posY
     infoArr[2] == spawnTime
+    infoArr[3] == type
     */
     objTruePosition = Vector2<float>(
         playField.getPlayFieldStartPoint().getX() + infoArr[0] * playField.getOxuPx(),
         playField.getPlayFieldStartPoint().getY() + infoArr[1] * playField.getOxuPx()
     );
 
+    /* ============================= HIT CIRCLE ================================== */
     // Hit circle width and height
     HCRect.w = (23.05f - (MapInfo::getInstance().mapDifficulty.find("CircleSize")->second - 7.0f) * 4.4825f) * 2.0f * playField.getOxuPx();
     HCRect.h = HCRect.w;
@@ -23,13 +26,33 @@ oxu::HitCircle::HitCircle(unsigned int infoArr[3], PlayField &playField)
     HCRect.x = objTruePosition.getX() - HCRect.w / 2;
     HCRect.y = objTruePosition.getY() - HCRect.h / 2;
 
+    /* ============================ COMBO ================================== */
+    /* Check to see if the combo is one digit or bigger to determine it's width */
+    if(combo < 10)
+    {
+        // Combo width and height
+        comboNumRect.h = Textures::getInstance().getComboNumDefaultSurf()->h;
+        comboNumRect.w = Textures::getInstance().getComboNumDefaultSurf()->w;
+    }
+    else
+    {
+        // Combo width and height
+        comboNumRect.h = Textures::getInstance().getComboNumDefaultSurf()->h;
+        comboNumRect.w = Textures::getInstance().getComboNumDefaultSurf()->w * 2;
+    }
+
+    // Combo position
+    comboNumRect.x = objTruePosition.getX() - comboNumRect.w / 2;
+    comboNumRect.y = objTruePosition.getY() - comboNumRect.h / 2;
+
+    /* =================== APPROACH CIRCLE ================================= */
     // Approach circle width and height
     ACRect.w = HCRect.w * (1.5f * playField.getOxuPx());
     ACRect.h = ACRect.w;
 
     /* Figure out the scaled approach circle size based on the hit circle size */
     ACInitialSize = Vector2<float>(ACRect.w, ACRect.h);
-    int sizeAfterScaling = Textures::getInstance().gameSurfaces[1]->w * HCRect.w / Textures::getInstance().gameSurfaces[0]->w;
+    int sizeAfterScaling = Textures::getInstance().getACSurf()->w * HCRect.w / Textures::getInstance().getACSurf()->w;
     ACFinalSize = Vector2<float>(sizeAfterScaling, sizeAfterScaling);
 
     // Offset the true position so it falls on it's center point
@@ -48,6 +71,11 @@ SDL_Rect *oxu::HitCircle::getHCSDLRect()
 SDL_Rect *oxu::HitCircle::getACSDLRect()
 {
     return &ACRect;
+}
+
+SDL_Rect *oxu::HitCircle::getComboNumRect()
+{
+    return &comboNumRect;    
 }
 
 uint32_t &oxu::HitCircle::getSpawnTime()
@@ -92,7 +120,7 @@ void oxu::HitCircle::finish()
     isDone = true;
 }
 
-const float &oxu::HitCircle::getState()
+const int &oxu::HitCircle::getCombo()
 {
-    return approachT;
+    return combo;
 }

@@ -16,25 +16,30 @@ uint parseIntFromStr(const std::string &str)
 	return integer;
 }
 
-void getObjCoreInfo(const std::string &line, uint infoArr[3])
+void getObjCoreInfo(const std::string &line, uint infoArr[5])
 {
     std::string buff;
     uint8_t     commaN = 0;
-    uint8_t     commaPos = 0;
 
     for(const char &c: line)
     {
+        /* If the current char is not a collon add it to a buffer */
+        /* else if the char is a collon add/process the current buffer as obj info */
         if(c != ',')
+        {
             buff += c;
+        }
         else
         {
-            if(commaN < 3)
+            if(commaN < 4)
             {
-                infoArr[commaN++] = parseIntFromStr(buff.substr(commaPos));
-                commaPos = buff.size();
+                infoArr[commaN++] = parseIntFromStr(buff);
+                buff.clear();
             }
             else
+            {
                 break;
+            }
         }      
     }
 }
@@ -56,11 +61,20 @@ void oxu::MapManager::loadHitObjects(const int &songI, const int &mapI)
     {
         if(shouldReadObjInf)
         {
-            unsigned int infoArr[3];
+            unsigned int infoArr[4];
 
             getObjCoreInfo(line, infoArr);
 
-            mapInfoI.hitCircles.emplace_back(infoArr, mapInfoI.playField);
+            if( (infoArr[3] & ( 1 << 2 ) ) >> 2 )
+            {
+                combo = 1;
+            }
+            else
+            {
+                ++combo;
+            }
+
+            mapInfoI.hitCircles.emplace_back(infoArr, combo, mapInfoI.playField);
         }
         else if(line == "[HitObjects]\r")
         {

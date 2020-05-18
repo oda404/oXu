@@ -49,7 +49,7 @@ bool oxu::Game::init()
 	
 	skinsManager.enumSkins();
 
-	Textures::getInstance().loadSkinTextures(skinsManager.getSkinPath(0));
+	Textures::getInstance().loadSkinSurfaces(skinsManager.getSkinPath(0));
 
 	/* Set the cursor png */
 	Cursor::getInstance().set(skinsManager.getSkinPath(0));
@@ -67,10 +67,10 @@ bool oxu::Game::init()
 	soundHandler.init();
 
 	soundHandler.loadMusic((beatmapManager.getSongPath(0) + '/' + mapInfoI.mapGeneral.find("AudioFilename")->second).c_str());
-	soundHandler.setMusicVolume(20);
+	soundHandler.setMusicVolume(5);
 	
 	soundHandler.loadSoundEffects(skinsManager.getSkinPath(0));
-	soundHandler.setEffectsVolume(20);
+	soundHandler.setEffectsVolume(5);
 
 	soundHandler.playMusic();
 

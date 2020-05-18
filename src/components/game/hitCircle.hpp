@@ -13,6 +13,7 @@
 
 namespace oxu
 {
+
 	class HitCircle
     {
     private:
@@ -22,17 +23,22 @@ namespace oxu
         Vector2<float> ACFinalSize;
         float          approachT = 0.0f;
 
+        SDL_Rect       comboNumRect;
+        int            combo;
+
         SDL_Rect       HCRect;
         Vector2<float> objTruePosition;   // needed to recenter after scaling
         uint32_t       spawnTime;         // in millis
         bool           isDone = false;
 
     public:
-        HitCircle(unsigned int infoArr[3], PlayField &playField);
+        HitCircle(unsigned int infoArr[4], const int &combo, PlayField &playField);
 
         SDL_Rect *getHCSDLRect();
 
         SDL_Rect *getACSDLRect();
+
+        SDL_Rect *getComboNumRect();
 
         uint32_t &getSpawnTime();
 
@@ -42,6 +48,6 @@ namespace oxu
 
         void finish();
 
-        const float &getState();
+        const int &getCombo();
     };
 }
