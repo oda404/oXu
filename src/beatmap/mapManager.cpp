@@ -16,6 +16,16 @@ uint parseIntFromStr(const std::string &str)
 	return integer;
 }
 
+bool isBitOn(const uint8_t &number, const uint8_t &bit)
+{
+    if( (number & ( 1 << bit ) ) >> bit ) 
+    {
+        return true;
+    }
+
+    return false;
+}
+
 void getObjCoreInfo(const std::string &line, uint infoArr[5])
 {
     std::string buff;
@@ -61,11 +71,13 @@ void oxu::MapManager::loadHitObjects(const int &songI, const int &mapI)
     {
         if(shouldReadObjInf)
         {
-            unsigned int infoArr[4];
-
+            unsigned int infoArr[5];
+            
+            /* Parse the object line */
             getObjCoreInfo(line, infoArr);
 
-            if( (infoArr[3] & ( 1 << 2 ) ) >> 2 )
+            /* Check the combo bit */
+            if(isBitOn(infoArr[3], 2))
             {
                 combo = 1;
             }
@@ -74,7 +86,10 @@ void oxu::MapManager::loadHitObjects(const int &songI, const int &mapI)
                 ++combo;
             }
 
-            mapInfoI.hitCircles.emplace_back(infoArr, combo, mapInfoI.playField);
+            infoArr[4] = combo;
+
+            /* Add the hit circle */
+            mapInfoI.hitCircles.emplace_back(infoArr, mapInfoI.playField);
         }
         else if(line == "[HitObjects]\r")
         {
