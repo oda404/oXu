@@ -13,14 +13,14 @@ int eventWatch(void *userdata, SDL_Event *event)
         oxu::Vector2<int> mousePos;
         SDL_GetMouseState(&mousePos[0], &mousePos[1]);
 
-        SDL_Rect *lastACRect = mapInfoI.hitCircles[mapInfoI.hitObjCapBottom].getHCSDLRect();
+        const SDL_Rect *lastACRect = mapInfoI.hitCircles[mapInfoI.hitObjCapBottom].getHCRect();
 
         if(mousePos[0] >= lastACRect->x &&
            mousePos[1] >= lastACRect->y &&
            mousePos[0] <= lastACRect->x + lastACRect->w &&
            mousePos[1] <= lastACRect->y + lastACRect->h)
            {
-               mapInfoI.hitCircles[mapInfoI.hitObjCapBottom].finish();
+               mapInfoI.hitCircles[mapInfoI.hitObjCapBottom].hit();
            }
 
         return 0;

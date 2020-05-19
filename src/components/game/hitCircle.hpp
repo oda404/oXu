@@ -5,9 +5,11 @@
 
 #include<SDL2/SDL_rect.h>
 
-#include"../../utils/vector2.hpp"
-#include"../textures.hpp"
 #include"../../beatmap/mapInfo.hpp"
+
+#include"../../utils/vector2.hpp"
+
+#include"../textures.hpp"
 
 #include"playField.hpp"
 
@@ -17,37 +19,37 @@ namespace oxu
 	class HitCircle
     {
     private:
-        /* Approach circle stuff */
-        SDL_Rect       ACRect;
-        Vector2<float> ACInitialSize;     // needed to scale the AC down
-        Vector2<float> ACFinalSize;
-        float          approachT = 0.0f;
+        SDL_Rect       ACRect;            // approach circle SDL_Rect
+        Vector2<float> ACInitialSize;     // the size the approach circle gets spawned with
+        Vector2<float> ACFinalSize;       // position to which the approach circle lerps
+        float          approachT = 0.0f;  // t value for lerp
 
-        SDL_Rect       comboNumRect;
-        int            combo;
+        SDL_Rect       comboRect;         // combo SDL_Rect
+        int            combo;             // actual combo integer
 
-        SDL_Rect       HCRect;
-        Vector2<float> objTruePosition;   // needed to recenter after scaling
-        uint32_t       spawnTime;         // in millis
-        bool           isDone = false;
+        SDL_Rect       HCRect;            // hit circle SDL_Rect
+
+        Vector2<float> objTruePosition;   // the x, y values taken from the beatmap
+        uint32_t       hitTime;           // when the approach circle should be hit in milliseconds
+        bool           done = false;      // if the approach circle is done approaching or object has been hit
 
     public:
-        HitCircle(unsigned int infoArr[4], const int &combo, PlayField &playField);
+        HitCircle(unsigned int infoArr[5], PlayField &playField);
 
-        SDL_Rect *getHCSDLRect();
+        const SDL_Rect *getHCRect();
 
-        SDL_Rect *getACSDLRect();
+        const SDL_Rect *getACRect();
 
-        SDL_Rect *getComboNumRect();
+        const SDL_Rect *getComboRect();
 
-        uint32_t &getSpawnTime();
+        const uint32_t &getHitTime();
 
         void approachCircle(const double &dt);
 
-        const bool &isFinished();
-
-        void finish();
+        const bool &isDone();
 
         const int &getCombo();
+
+        void hit();
     };
 }

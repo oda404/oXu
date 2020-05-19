@@ -78,23 +78,23 @@ void oxu::GraphicsHandler::renderHitCircles()
 {
     for(i = mapInfoI.hitObjCapTop; i >=  mapInfoI.hitObjCapBottom; --i)
     {
-        if(mapInfoI.timer.getEllapsedTimeAsMs() >= mapInfoI.hitCircles[i].getSpawnTime() - mapInfoI.ARInSeconds * 1000)
+        if(mapInfoI.timer.getEllapsedTimeAsMs() >= mapInfoI.hitCircles[i].getHitTime() - mapInfoI.ARInSeconds * 1000)
         {   
             HitCircle &HC = mapInfoI.hitCircles[i];
             /* This shouldn't render the textures now, but batch them together
             for the GPU to draw when SDL_RenderPresent is called */
 
             /* Hit circle */
-            SDL_RenderCopy(w_renderer, texturesI.getHCTex(),        NULL, HC.getHCSDLRect());
+            SDL_RenderCopy(w_renderer, texturesI.getHCTex(),        NULL, HC.getHCRect());
 
             /* Hit circle overlay */
-            SDL_RenderCopy(w_renderer, texturesI.getHCOverlayTex(), NULL, HC.getHCSDLRect());
+            SDL_RenderCopy(w_renderer, texturesI.getHCOverlayTex(), NULL, HC.getHCRect());
 
             /* Approach circle */
-            SDL_RenderCopy(w_renderer, texturesI.getACTex(),        NULL, HC.getACSDLRect());
+            SDL_RenderCopy(w_renderer, texturesI.getACTex(),        NULL, HC.getACRect());
 
             /* Combo */
-            SDL_RenderCopy(w_renderer, texturesI.getComboNumTex(w_renderer, HC.getCombo()), NULL, HC.getComboNumRect());
+            SDL_RenderCopy(w_renderer, texturesI.getComboNumTex(w_renderer, HC.getCombo()), NULL, HC.getComboRect());
             
             /* Close the approach circle */
             HC.approachCircle(deltaTime);

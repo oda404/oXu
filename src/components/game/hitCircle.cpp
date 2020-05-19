@@ -3,14 +3,15 @@
 
 #include"hitCircle.hpp"
 
-oxu::HitCircle::HitCircle(unsigned int infoArr[4], const int &combo, PlayField &playField):
-combo(combo)
+oxu::HitCircle::HitCircle(unsigned int infoArr[5], PlayField &playField):
+hitTime(infoArr[2]), combo(infoArr[4])
 {
     /*
     infoArr[0] == posX
     infoArr[1] == posY
-    infoArr[2] == spawnTime
-    infoArr[3] == type
+    infoArr[2] == hitTime
+    infoArr[3] == obj type(flags)
+    infoArr[4] == combo
     */
     objTruePosition = Vector2<float>(
         playField.getPlayFieldStartPoint().getX() + infoArr[0] * playField.getOxuPx(),
@@ -18,7 +19,7 @@ combo(combo)
     );
 
     /* ============================= HIT CIRCLE ================================== */
-    // Hit circle width and height
+    // Set the width and height
     HCRect.w = (23.05f - (MapInfo::getInstance().getDifficultyAttr("CircleSize") - 7.0f) * 4.4825f) * 2.0f * playField.getOxuPx();
     HCRect.h = HCRect.w;
 
@@ -30,23 +31,21 @@ combo(combo)
     /* Check to see if the combo is one digit or bigger to determine it's width */
     if(combo < 10)
     {
-        // Combo width and height
-        comboNumRect.h = Textures::getInstance().getComboNumDefaultSurf()->h;
-        comboNumRect.w = Textures::getInstance().getComboNumDefaultSurf()->w;
+        comboRect.h = Textures::getInstance().getComboNumDefaultSurf()->h;
+        comboRect.w = Textures::getInstance().getComboNumDefaultSurf()->w;
     }
     else
     {
-        // Combo width and height
-        comboNumRect.h = Textures::getInstance().getComboNumDefaultSurf()->h;
-        comboNumRect.w = Textures::getInstance().getComboNumDefaultSurf()->w * 2;
+        comboRect.h = Textures::getInstance().getComboNumDefaultSurf()->h;
+        comboRect.w = Textures::getInstance().getComboNumDefaultSurf()->w * 2;
     }
 
-    // Combo position
-    comboNumRect.x = objTruePosition.getX() - comboNumRect.w / 2;
-    comboNumRect.y = objTruePosition.getY() - comboNumRect.h / 2;
+    // Offset the true position so it falls on it's center point
+    comboRect.x = objTruePosition.getX() - comboRect.w / 2;
+    comboRect.y = objTruePosition.getY() - comboRect.h / 2;
 
     /* =================== APPROACH CIRCLE ================================= */
-    // Approach circle width and height
+    // Set the width and height
     ACRect.w = HCRect.w * (1.5f * playField.getOxuPx());
     ACRect.h = ACRect.w;
 
@@ -58,29 +57,26 @@ combo(combo)
     // Offset the true position so it falls on it's center point
     ACRect.x = objTruePosition.getX() - ACRect.w / 2;
     ACRect.y = objTruePosition.getY() - ACRect.h / 2;
-
-    // Spawn time
-    spawnTime = infoArr[2];
 }
 
-SDL_Rect *oxu::HitCircle::getHCSDLRect()
+const SDL_Rect *oxu::HitCircle::getHCRect()
 {
     return &HCRect;
 }
 
-SDL_Rect *oxu::HitCircle::getACSDLRect()
+const SDL_Rect *oxu::HitCircle::getACRect()
 {
     return &ACRect;
 }
 
-SDL_Rect *oxu::HitCircle::getComboNumRect()
+const SDL_Rect *oxu::HitCircle::getComboRect()
 {
-    return &comboNumRect;    
+    return &comboRect;    
 }
 
-uint32_t &oxu::HitCircle::getSpawnTime()
+const uint32_t &oxu::HitCircle::getHitTime()
 {
-    return spawnTime;
+    return hitTime;
 }
 
 oxu::Vector2<float> lerp(const oxu::Vector2<float> &a, const oxu::Vector2<float> &b, const float &t)
@@ -106,18 +102,18 @@ void oxu::HitCircle::approachCircle(const double &dt)
     }
     else
     {
-        isDone = true;
+        done = true;
     }
 }
 
-const bool &oxu::HitCircle::isFinished() 
+const bool &oxu::HitCircle::isDone() 
 {
-    return isDone;
+    return done;
 }
 
-void oxu::HitCircle::finish()
+void oxu::HitCircle::hit()
 {
-    isDone = true;
+    done = true;
 }
 
 const int &oxu::HitCircle::getCombo()

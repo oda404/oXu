@@ -95,14 +95,14 @@ void oxu::Game::loop()
 		inputHandler.handleInput(w_isClosed);
 
 		/* check to see if the first hit object is done */
-		if(mapInfoI.hitCircles[mapInfoI.hitObjCapBottom].isFinished())
+		if(mapInfoI.hitCircles[mapInfoI.hitObjCapBottom].isDone())
 		{
 			soundHandler.playHitSound();
 			++mapInfoI.hitObjCapBottom;
 		}
 
 		/* check if should increment to next object */
-		if(mapInfoI.timer.getEllapsedTimeAsMs() >= mapInfoI.hitCircles[mapInfoI.hitObjCapTop].getSpawnTime() - 450)
+		if(mapInfoI.timer.getEllapsedTimeAsMs() >= mapInfoI.hitCircles[mapInfoI.hitObjCapTop].getHitTime() - 450)
 		    ++mapInfoI.hitObjCapTop;
 
 		limitFPS();
