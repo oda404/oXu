@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include<math.h>
+
 namespace oxu
 {
     template<typename T>
@@ -39,7 +41,7 @@ namespace oxu
             values[1] = newVec.getY();
         }
 
-        const bool operator==(const Vector2<T> &compVec)
+        const bool operator==(const Vector2<T> &compVec) const
         {
             return values[0] == compVec.getX() && 
                    values[1] == compVec.getY() ?  true : false;
@@ -51,11 +53,25 @@ namespace oxu
             values[1] += pVec.getY();
         }
 
+        void operator-=(const Vector2<T> &pVec)
+        {
+            values[0] -= pVec.getX();
+            values[1] -= pVec.getY();
+        }
+
         const Vector2 operator+(const Vector2<T> &pVec) const
         {
             Vector2 result = *this;
             result += pVec;
 
+            return result;
+        }
+
+        const Vector2 operator-(const Vector2<T> &pVec) const
+        {
+            Vector2 result = *this;
+            result -= pVec;
+            
             return result;
         }
 
@@ -71,6 +87,30 @@ namespace oxu
             result *= n;
 
             return result;
+        }
+
+        void operator/=(const T &n)
+        {
+            values[0] /= n;
+            values[1] /= n;
+        }
+
+        const Vector2 operator/(const T &n) const
+        {
+            Vector2 result = *this;
+            result /= n;
+
+            return result;
+        }
+
+        const bool operator!=(const Vector2<T> &pVec) const
+        {
+            if(*this == pVec)
+            {
+                return false;
+            }
+
+            return true;
         }
     };
 }
