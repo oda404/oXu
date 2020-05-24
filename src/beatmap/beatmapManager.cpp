@@ -1,7 +1,7 @@
 // Copyright (c) Olaru Alexandru <olarualexandru404@gmail.com>
 // Licensed under the MIT license found in the LICENSE file in the root of this repository.
 
-#include"mapManager.hpp"
+#include"beatmapManager.hpp"
 
 /* because fuck that dogshit stoi function
     never works*/
@@ -68,13 +68,13 @@ uint8_t getObjCoreInfo(const std::string &line, uint infoArr[4])
 
 namespace oxu
 {
-    void MapManager::updateCombo(const uint8_t &flags)
+    void BeatmapManager::updateCombo(const uint8_t &flags)
     {
         isBitOn(flags, 2) ? combo = 1 : ++combo;
     }
 
     /* Populate the hitCircles vector in the MapInfo singleton */
-    void MapManager::loadHitObjects(const int &songI, const int &mapI)
+    void BeatmapManager::loadHitObjects(const int &songI, const int &mapI)
     {
         PlayField playField;
 
@@ -103,7 +103,7 @@ namespace oxu
                 coreInfoArr[3] = combo;
 
                 /* Add the hit circle */
-                objectInfo.addHitCircle(coreInfoArr, playField, beatmapInfo);
+                hitObjectsInfo.addHitCircle(coreInfoArr, playField, beatmapInfo);
             }
             else if(line == "[HitObjects]\r")
             {
@@ -118,7 +118,7 @@ namespace oxu
     *  and store it's path in a vector to be accessed
     *  with an index
     */
-    void oxu::MapManager::enumBeatMaps()
+    void BeatmapManager::enumBeatMaps()
     {
         beatmaps.clear();
 
@@ -143,7 +143,7 @@ namespace oxu
     }
 
     /* ================== Difficulty ============================= */
-    void oxu::MapManager::getMapDifficulty(std::ifstream &mapFile)
+    void BeatmapManager::getMapDifficulty(std::ifstream &mapFile)
     {
         std::string line;
         bool go = false;
@@ -174,7 +174,7 @@ namespace oxu
     }
 
     /* ====================== [General] ===================== */
-    void oxu::MapManager::getMapGeneral(std::ifstream &mapFile)
+    void BeatmapManager::getMapGeneral(std::ifstream &mapFile)
     {
         std::string   line;
         bool          go = false;
@@ -203,7 +203,7 @@ namespace oxu
     }
 
     /* ======================== [Metadata] ====================== */
-    void oxu::MapManager::getMapMetadata(std::ifstream &mapFile)
+    void BeatmapManager::getMapMetadata(std::ifstream &mapFile)
     {
         std::string line;
         bool go = false;
@@ -233,7 +233,7 @@ namespace oxu
     /* Load the General, Metadata and Difficulty sections
     *  of the beatmap at the specified index
     */
-    void oxu::MapManager::loadMapInfo(const int &songI, const int &mapI)
+    void BeatmapManager::loadMapInfo(const int &songI, const int &mapI)
     {
         beatmapInfo.clear();
         std::ifstream infileMap(beatmaps[songI].second[mapI]);
@@ -243,18 +243,18 @@ namespace oxu
         getMapDifficulty(infileMap);
     }
 
-    std::string oxu::MapManager::getSongPath(const int &index)
+    std::string &BeatmapManager::getSongPath(const int &index)
     {
         return beatmaps[index].first;
     }
 
-    MapInfo &MapManager::getCurrentBeatmapInfo()
+    BeatmapInfo &BeatmapManager::getBeatmapInfo()
     {
         return beatmapInfo;
     }
 
-    ObjectInfo &MapManager::getCurrentObjectInfo()
+    HitObjectsInfo &BeatmapManager::getObjectsInfo()
     {
-        return objectInfo;
+        return hitObjectsInfo;
     }
 }

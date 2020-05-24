@@ -26,7 +26,7 @@ oxu::SoundHandler::~SoundHandler()
     Mix_Quit();
 }
 
-bool oxu::SoundHandler::init(MapManager *beatmapManagerPtr)
+bool oxu::SoundHandler::init(BeatmapManager *beatmapManagerPtr)
 {
     beatmapManager = beatmapManagerPtr;
 
@@ -82,9 +82,9 @@ bool oxu::SoundHandler::loadSoundEffects(const std::string &skinPath)
 
 void oxu::SoundHandler::playMusic()
 {
-    beatmapManager->getCurrentObjectInfo().timer.restart();
+    beatmapManager->getObjectsInfo().timer.restart();
     Mix_PlayMusic(musicTrack, 0);
-    beatmapManager->getCurrentObjectInfo().timer.start();
+    beatmapManager->getObjectsInfo().timer.start();
 }
 
 void oxu::SoundHandler::playHitSound()

@@ -9,7 +9,7 @@
 
 namespace oxu
 {
-    struct MapInfo
+    struct BeatmapInfo
     {
     private:
         std::map<std::string, std::string> mapGeneral;

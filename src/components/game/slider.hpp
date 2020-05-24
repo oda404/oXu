@@ -3,7 +3,7 @@
 #include<vector>
 #include<math.h>
 
-#include"../../beatmap/mapInfo.hpp"
+#include"../../beatmap/beatmapInfo.hpp"
 #include"hitCircle.hpp"
 #include"../../utils/vector2.hpp"
 #include"playField.hpp"
@@ -32,7 +32,7 @@ namespace oxu
 		void calculatePath(PlayField &playField, const double &precision = 0.005);
 
 	public:
-		Slider(unsigned int infoArr[4], const std::vector<Vector2<float>> &controlPoints, const int &length,const uint8_t &sliderType, PlayField &playField, MapInfo &mapInfo);
+		Slider(unsigned int infoArr[4], const std::vector<Vector2<float>> &controlPoints, const int &length,const uint8_t &sliderType, PlayField &playField, BeatmapInfo &mapInfo);
 
 		const std::vector<Vector2<float>> &getCalculatedPath();
 

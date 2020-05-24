@@ -3,7 +3,7 @@
 
 #include"graphicsHandler.hpp"
 
-void oxu::GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread> *gThreadSource, bool *w_statePtr, MapManager *mapManagerPtr)
+void oxu::GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread> *gThreadSource, bool *w_statePtr, BeatmapManager *mapManagerPtr)
 {
     doneInit = false;
 
@@ -76,13 +76,13 @@ void oxu::GraphicsHandler::render()
 
 void oxu::GraphicsHandler::renderHitCircles()
 {
-    for(i = mapManager->getCurrentObjectInfo().HCTopCap; i >=  mapManager->getCurrentObjectInfo().HCBotCap; --i)
+    HitObjectsInfo &objInfo = mapManager->getObjectsInfo();
+
+    for(i = objInfo.HCTopCap; i >=  objInfo.HCBotCap; --i)
     {
-        if(mapManager->getCurrentObjectInfo().timer.getEllapsedTimeAsMs() >= mapManager->getCurrentObjectInfo().getHCAt(i).getHitTime() - mapManager->getCurrentBeatmapInfo().ARInSeconds * 1000)
+        if(objInfo.timer.getEllapsedTimeAsMs() >= objInfo.getHCAt(i).getHitTime() - mapManager->getBeatmapInfo().ARInSeconds * 1000)
         {   
-            HitCircle &HC = mapManager->getCurrentObjectInfo().getHCAt(i);
-            /* This shouldn't render the textures now, but batch them together
-            for the GPU to draw when SDL_RenderPresent is called */
+            HitCircle &HC = objInfo.getHCAt(i);
 
             /* Hit circle */
             SDL_RenderCopy(w_renderer, texturesI.getHCTex(), NULL, HC.getHCRect());
@@ -104,7 +104,6 @@ void oxu::GraphicsHandler::renderHitCircles()
 
 void oxu::GraphicsHandler::calculateDeltaTime()
 {
-    /* Calculate delta time */
     startTick = SDL_GetTicks();
     deltaTime = (double)(startTick - lastTick) / 1000.0f;
     lastTick  = startTick;
@@ -112,7 +111,6 @@ void oxu::GraphicsHandler::calculateDeltaTime()
 
 void oxu::GraphicsHandler::limitFPS()
 {
-    /* Limit the FPS */
     if(1000 / maxFPS > SDL_GetTicks() - startTick)
     {
         SDL_Delay(1000 / maxFPS - SDL_GetTicks() + startTick);

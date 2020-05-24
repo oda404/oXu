@@ -8,19 +8,19 @@ int eventWatch(void *userdata, SDL_Event *event)
     /* Gets the exact mouse position + key timestamp when the key is pressed */
     if(event->type == SDL_KEYDOWN && ( event->key.keysym.sym == SDLK_x ))
     {
-        oxu::MapManager *mapManager = (oxu::MapManager*)userdata;
+        oxu::BeatmapManager *mapManager = (oxu::BeatmapManager*)userdata;
 
         oxu::Vector2<int> mousePos;
         SDL_GetMouseState(&mousePos[0], &mousePos[1]);
 
-        const SDL_Rect *lastACRect = mapManager->getCurrentObjectInfo().getHCAt(mapManager->getCurrentObjectInfo().HCBotCap).getHCRect();
+        const SDL_Rect *lastACRect = mapManager->getObjectsInfo().getHCAt(mapManager->getObjectsInfo().HCBotCap).getHCRect();
 
         if(mousePos[0] >= lastACRect->x &&
            mousePos[1] >= lastACRect->y &&
            mousePos[0] <= lastACRect->x + lastACRect->w &&
            mousePos[1] <= lastACRect->y + lastACRect->h)
            {
-               mapManager->getCurrentObjectInfo().getHCAt(mapManager->getCurrentObjectInfo().HCBotCap).hit();
+               mapManager->getObjectsInfo().getHCAt(mapManager->getObjectsInfo().HCBotCap).hit();
            }
 
         return 0;
@@ -29,7 +29,7 @@ int eventWatch(void *userdata, SDL_Event *event)
     return 1;
 }
 
-void oxu::InputHandler::init(MapManager *mapManager)
+void oxu::InputHandler::init(BeatmapManager *mapManager)
 {
     this->beatmapManager = mapManager;
     /* Add an event watch to check if a key is pressed */

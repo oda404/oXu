@@ -12,7 +12,7 @@
 #include"../components/cursor.hpp"
 #include"../components/textures.hpp"
 
-#include"../beatmap/mapManager.hpp"
+#include"../beatmap/beatmapManager.hpp"
 
 #include"../utils/logger.hpp"
 #include"../utils/vector2.hpp"
@@ -36,7 +36,7 @@ namespace oxu
         InputHandler    inputHandler;
         SoundHandler    soundHandler;
 
-        MapManager      beatmapManager;
+        BeatmapManager  beatmapManager;
         SkinManager     skinsManager;
 
         Cursor          cursor;

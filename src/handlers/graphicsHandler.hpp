@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include<SDL2/SDL_hints.h>
 #include<SDL2/SDL_render.h>
 #include<SDL2/SDL_image.h>
 
@@ -14,7 +13,7 @@
 
 #include"../components/textures.hpp"
 
-#include"../beatmap/mapManager.hpp"
+#include"../beatmap/beatmapManager.hpp"
 
 #include"../utils/logger.hpp"
 
@@ -23,10 +22,9 @@ namespace oxu
     class GraphicsHandler 
     {
     private:
-        /* Singleton instances */
         Textures          &texturesI   = Textures::getInstance();
 
-        MapManager *mapManager;
+        BeatmapManager    *mapManager;
 
         SDL_Renderer      *w_renderer  = NULL;
         SDL_Window        *window      = NULL;
@@ -47,10 +45,9 @@ namespace oxu
     public:
         ~GraphicsHandler();
 
-        void init(SDL_Window *window, std::shared_ptr<std::thread> *gThreadSource, bool *w_statePtr, MapManager *mapManagerPtr);
+        void init(SDL_Window *window, std::shared_ptr<std::thread> *gThreadSource, bool *w_statePtr, BeatmapManager *mapManagerPtr);
 
     private:
-        /* render method */
         void render();
 
         void renderHitCircles();

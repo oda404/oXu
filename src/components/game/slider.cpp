@@ -10,7 +10,7 @@ namespace oxu
 
    /* Public methods */
 
-    Slider::Slider(unsigned int infoArr[4], const std::vector<Vector2<float>> &pControlPoints, const int &pLength, const uint8_t &pType, PlayField &playField, MapInfo &mapInfo):HitCircle(infoArr, playField, mapInfo)
+    Slider::Slider(unsigned int infoArr[4], const std::vector<Vector2<float>> &pControlPoints, const int &pLength, const uint8_t &pType, PlayField &playField, BeatmapInfo &mapInfo):HitCircle(infoArr, playField, mapInfo)
     {
         controlPoints = pControlPoints;
         expectedLength = pLength;

@@ -9,14 +9,14 @@
 
 #include"../utils/logger.hpp"
 
-#include"../beatmap/mapManager.hpp"
+#include"../beatmap/beatmapManager.hpp"
 
 namespace oxu
 {
 	class SoundHandler
 	{
 	private:
-		MapManager *beatmapManager;
+		BeatmapManager *beatmapManager;
 
 		int       audioRate;
 		int16_t   audioFormat;
@@ -31,7 +31,7 @@ namespace oxu
 	public:
 		~SoundHandler();
 
-		bool init(MapManager *beatmapManagerPtr);
+		bool init(BeatmapManager *beatmapManagerPtr);
 
 		bool loadMusic(const char *filePath);
 

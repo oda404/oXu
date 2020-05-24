@@ -44,7 +44,7 @@ bool oxu::Game::init()
 
 	if(!window)
 	{
-		LOG_ERR("Failed to create the window: {0}", SDL_GetError());
+		LOG_ERR(SDL_GetError());
 		return false;
 	}
 	
@@ -70,7 +70,7 @@ bool oxu::Game::init()
 	/* Initiate the sound handler */
 	soundHandler.init(&beatmapManager);
 
-	soundHandler.loadMusic((beatmapManager.getSongPath(0) + '/' + beatmapManager.getCurrentBeatmapInfo().getGeneralAttr("AudioFilename")).c_str());
+	soundHandler.loadMusic((beatmapManager.getSongPath(0) + '/' + beatmapManager.getBeatmapInfo().getGeneralAttr("AudioFilename")).c_str());
 	soundHandler.setMusicVolume(5);
 	
 	soundHandler.loadSoundEffects(skinsManager.getSkinPath(0));
@@ -87,7 +87,7 @@ bool oxu::Game::init()
 
 void oxu::Game::loop()
 {
-	ObjectInfo &objInfo = beatmapManager.getCurrentObjectInfo();
+	HitObjectsInfo &objInfo = beatmapManager.getObjectsInfo();
 	
 	while(!w_isClosed)
 	{
@@ -97,14 +97,14 @@ void oxu::Game::loop()
 		inputHandler.handleInput(w_isClosed);
 
 
-		if(objInfo.getHCAt(objInfo.HCBotCap).isDone())
+		if(objInfo.getHCAt(objInfo.HCBotCap).isHit())
 		{
 			soundHandler.playHitSound();
 			++objInfo.HCBotCap;
 		}
 
 		/* check if should increment to next object */
-		if(objInfo.timer.getEllapsedTimeAsMs() >= objInfo.getHCAt(objInfo.HCTopCap).getHitTime() - beatmapManager.getCurrentBeatmapInfo().ARInSeconds * 1000)
+		if(objInfo.timer.getEllapsedTimeAsMs() >= objInfo.getHCAt(objInfo.HCTopCap).getHitTime() - beatmapManager.getBeatmapInfo().ARInSeconds * 1000)
 		    ++objInfo.HCTopCap;
 
 		limitFPS();

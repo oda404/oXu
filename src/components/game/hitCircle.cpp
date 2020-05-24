@@ -3,7 +3,7 @@
 
 #include"hitCircle.hpp"
 
-oxu::HitCircle::HitCircle(unsigned int infoArr[4], PlayField &playField, MapInfo &mapInfo):
+oxu::HitCircle::HitCircle(unsigned int infoArr[4], PlayField &playField, BeatmapInfo &mapInfo):
 hitTime(infoArr[2]), combo(infoArr[3]), ARInSeconds(mapInfo.ARInSeconds)
 {
     /*
@@ -101,18 +101,18 @@ void oxu::HitCircle::approachCircle(const double &dt)
     }
     else
     {
-        done = true;
+        doneApproaching = true;
     }
 }
 
-const bool &oxu::HitCircle::isDone() 
+const bool &oxu::HitCircle::isHit() 
 {
-    return done;
+    return doneApproaching;
 }
 
 void oxu::HitCircle::hit()
 {
-    done = true;
+    doneApproaching = true;
 }
 
 const int &oxu::HitCircle::getCombo()

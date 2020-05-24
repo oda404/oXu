@@ -7,7 +7,7 @@
 
 #include"../utils/vector2.hpp"
 
-#include"../beatmap/mapManager.hpp"
+#include"../beatmap/beatmapManager.hpp"
 
 namespace oxu
 {
@@ -15,10 +15,10 @@ namespace oxu
     {
     private:
         SDL_Event event;
-        MapManager *beatmapManager;
+        BeatmapManager *beatmapManager;
 
     public:        
-        void init(MapManager *mapManagerPtr);
+        void init(BeatmapManager *mapManagerPtr);
 
         void handleInput(bool &w_isClosed);
 

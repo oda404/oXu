@@ -12,8 +12,8 @@
 #include<string>
 #include<cstdint>
 
-#include"mapInfo.hpp"
-#include"objectInfo.hpp"
+#include"beatmapInfo.hpp"
+#include"hitObjectsInfo.hpp"
 
 #include"../components/game/playField.hpp"
 
@@ -21,14 +21,14 @@ namespace fs = std::experimental::filesystem;
 
 namespace oxu
 {
-    class MapManager
+    class BeatmapManager
     {
     private:
         std::vector<std::pair<std::string, std::vector<std::string>>> beatmaps;
         int combo = 1;
 
-        MapInfo beatmapInfo;
-        ObjectInfo objectInfo;
+        BeatmapInfo    beatmapInfo;
+        HitObjectsInfo hitObjectsInfo;
 
         /* Updates the current combo based on the 2nd bit flag */
         void updateCombo(const uint8_t &flags);
@@ -46,11 +46,11 @@ namespace oxu
 
         void loadMapInfo(const int &songI, const int &mapI);
 
-        std::string getSongPath(const int &index);
+        std::string &getSongPath(const int &index);
 
-        MapInfo &getCurrentBeatmapInfo();
+        BeatmapInfo &getBeatmapInfo();
 
-        ObjectInfo &getCurrentObjectInfo();
+        HitObjectsInfo &getObjectsInfo();
 
     };
 }

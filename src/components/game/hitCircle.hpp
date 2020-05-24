@@ -7,7 +7,7 @@
 
 #include"../../core/scaling.hpp"
 
-#include"../../beatmap/mapInfo.hpp"
+#include"../../beatmap/beatmapInfo.hpp"
 
 #include"../../utils/vector2.hpp"
 
@@ -21,24 +21,24 @@ namespace oxu
 	class HitCircle
     {
     protected:
-        SDL_Rect       ACRect;            // approach circle SDL_Rect
-        Vector2<float> ACInitialSize;     // the size the approach circle gets spawned with
-        Vector2<float> ACFinalSize;       // position to which the approach circle lerps
-        float          approachT = 0.0f;  // t value for lerp
+        SDL_Rect       ACRect;                   // approach circle SDL_Rect
+        Vector2<float> ACInitialSize;            // the size the approach circle gets spawned with
+        Vector2<float> ACFinalSize;              // position to which the approach circle lerps
+        float          approachT = 0.0f;         // t value for lerp
 
-        SDL_Rect       HCRect;            // hit circle SDL_Rect
+        SDL_Rect       HCRect;                   // hit circle SDL_Rect
 
-        Vector2<float> objTruePosition;   // the x, y values taken from the beatmap
-        uint32_t       hitTime;           // when the approach circle should be hit in milliseconds
-        bool           done = false;      // if the approach circle is done approaching or object has been hit
+        Vector2<float> objTruePosition;          // the x, y values taken from the beatmap
+        uint32_t       hitTime;                  // when the approach circle should be hit in milliseconds
+        bool           doneApproaching = false;  // if the approach circle is done approaching or object has been hit
 
-        SDL_Rect       comboRect;         // combo SDL_Rect
-        int            combo;             // actual combo integer
+        SDL_Rect       comboRect;                // combo SDL_Rect
+        int            combo;                    // actual combo integer
 
-        float ARInSeconds;
+        float          ARInSeconds;
 
     public:
-        HitCircle(unsigned int infoArr[4], PlayField &playField, MapInfo &mapInfo);
+        HitCircle(unsigned int infoArr[4], PlayField &playField, BeatmapInfo &mapInfo);
 
         const SDL_Rect *getHCRect();
 
@@ -50,7 +50,7 @@ namespace oxu
 
         void approachCircle(const double &dt);
 
-        const bool &isDone();
+        const bool &isHit();
 
         const int &getCombo();
 

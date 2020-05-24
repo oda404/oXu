@@ -4,14 +4,16 @@
 #include<cstdint>
 
 #include"../components/game/hitCircle.hpp"
+#include"../components/game/slider.hpp"
 #include"../utils/timer.hpp"
 
 namespace oxu
 {
-    struct ObjectInfo
+    struct HitObjectsInfo
     {
     private:
         std::vector< HitCircle > hitCircles;
+        std::vector< Slider >    sliders;
 
     public:
         Timer   timer;
@@ -21,7 +23,7 @@ namespace oxu
 
         void clear();
 
-        void addHitCircle(unsigned int infoArr[4], PlayField &playField, MapInfo &mapInfo);
+        void addHitCircle(unsigned int infoArr[4], PlayField &playField, BeatmapInfo &mapInfo);
 
         HitCircle &getHCAt(const unsigned int &index);
     };
