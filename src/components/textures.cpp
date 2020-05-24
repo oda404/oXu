@@ -86,7 +86,7 @@ SDL_Texture *oxu::Textures::getComboNumTex(SDL_Renderer *renderer, const uint8_t
     }
 
     /* Only create new texture with the combined digits if it doesn't exist */
-    if(n - 10 == extraComboNumTex.size())
+    if(n - (unsigned int)10 == extraComboNumTex.size())
     {
         /* Create a new surface which has the same attributes as the combo numbers surface (gamSurface[3]) used as default */
         SDL_Surface *s = SDL_CreateRGBSurface(gameSurfaces[3]->flags, gameSurfaces[3]->w * 2,
