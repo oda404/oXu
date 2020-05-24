@@ -10,6 +10,7 @@
 #include<thread>
 #include<atomic>
 #include<cstdint>
+#include<memory>
 
 #include"../components/textures.hpp"
 
@@ -31,7 +32,7 @@ namespace oxu
         SDL_Window        *window      = NULL;
         SDL_GLContext     context;
 
-        unsigned int      *maxFPS;
+        unsigned int      maxFPS = 240;
         std::atomic<bool> doneInit;
         bool              *w_isClosed;
 
@@ -47,8 +48,7 @@ namespace oxu
 
         void init(SDL_Window                   *window, 
                   std::shared_ptr<std::thread> *gThreadSource, 
-                  bool                         *w_statePtr,
-                  unsigned int                 *maxFPS);
+                  bool                         *w_statePtr);
 
     private:
         /* render method */

@@ -29,15 +29,16 @@ bool oxu::Game::init()
 		return false;
 	}
 
-	screenSize = { 1920, 1080 };
+	Global::screenSize = { 1920, 1080 };
+	Global::oxuPx = Global::screenSize.getY() / 480.f;
 
 	/* Create the window */
 	window = SDL_CreateWindow(
 	"oXu!",                      // window name
 	SDL_WINDOWPOS_CENTERED,      // window pos X
 	SDL_WINDOWPOS_CENTERED,      // window pos Y
-	screenSize.getX(),           // screen width
-	screenSize.getY(),           // screen height
+	Global::screenSize.getX(),   // screen width
+	Global::screenSize.getY(),   // screen height
 	0                            // flags
 	);
 
@@ -56,9 +57,6 @@ bool oxu::Game::init()
 	/* Set the cursor png */
 	Cursor::getInstance().set(skinsManager.getSkinPath(0));
 
-	/* Initiate the playfield */
-	mapInfoI.playField.init(screenSize);
-
 	/* Enumerate all the beatmaps */
 	beatmapManager.enumBeatMaps();
 	/* Load info/objects from song 0 map 0 */
@@ -66,7 +64,7 @@ bool oxu::Game::init()
 	beatmapManager.loadHitObjects(0, 0);
 
 	/* Initiate the graphics handler */
-	graphicsHandler.init(window, &graphicsThread, &w_isClosed, &maxFPS);
+	graphicsHandler.init(window, &graphicsThread, &w_isClosed);
 
 	/* Initiate the sound handler */
 	soundHandler.init();
@@ -94,7 +92,6 @@ void oxu::Game::loop()
 		/* event/input handling */
 		inputHandler.handleInput(w_isClosed);
 
-		/* check to see if the first hit object is done */
 		if(mapInfoI.hitCircles[mapInfoI.hitObjCapBottom].isDone())
 		{
 			soundHandler.playHitSound();

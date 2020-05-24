@@ -46,9 +46,8 @@ namespace oxu
         uint32_t        lastTick   = 0;
         double          deltaTime  = 0.0;
 
-        unsigned int    maxFPS     = 240;
+        unsigned int    maxFPS     = 1000;
         static bool     w_isClosed;
-        Vector2<int>    screenSize;
         
     public:
         //====== singleton stuff ==============

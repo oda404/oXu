@@ -5,15 +5,13 @@
 
 oxu::GraphicsHandler::GraphicsHandler() { }
 
-void oxu::GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread> *gThreadSource, bool *w_statePtr, unsigned int *pMaxFPS)
+void oxu::GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread> *gThreadSource, bool *w_statePtr)
 {
     doneInit = false;
 
     this->window = window;
 
     w_isClosed = w_statePtr;
-
-    maxFPS = pMaxFPS;
 
     /* get the current context */
     context = SDL_GL_GetCurrentContext();
@@ -85,13 +83,13 @@ void oxu::GraphicsHandler::renderHitCircles()
             for the GPU to draw when SDL_RenderPresent is called */
 
             /* Hit circle */
-            SDL_RenderCopy(w_renderer, texturesI.getHCTex(),        NULL, HC.getHCRect());
+            SDL_RenderCopy(w_renderer, texturesI.getHCTex(), NULL, HC.getHCRect());
 
             /* Hit circle overlay */
             SDL_RenderCopy(w_renderer, texturesI.getHCOverlayTex(), NULL, HC.getHCRect());
 
             /* Approach circle */
-            SDL_RenderCopy(w_renderer, texturesI.getACTex(),        NULL, HC.getACRect());
+            SDL_RenderCopy(w_renderer, texturesI.getACTex(), NULL, HC.getACRect());
 
             /* Combo */
             SDL_RenderCopy(w_renderer, texturesI.getComboNumTex(w_renderer, HC.getCombo()), NULL, HC.getComboRect());
@@ -113,8 +111,8 @@ void oxu::GraphicsHandler::calculateDeltaTime()
 void oxu::GraphicsHandler::limitFPS()
 {
     /* Limit the FPS */
-    if(1000 / *maxFPS > SDL_GetTicks() - startTick)
+    if(1000 / maxFPS > SDL_GetTicks() - startTick)
     {
-        SDL_Delay(1000 / *maxFPS - SDL_GetTicks() + startTick);
+        SDL_Delay(1000 / maxFPS - SDL_GetTicks() + startTick);
     }
 }
