@@ -3,18 +3,10 @@
 
 #include"cursor.hpp"
 
-oxu::Cursor::Cursor() { }
-
 oxu::Cursor::~Cursor()
 {
     SDL_FreeCursor(customCursor);
     customCursor = NULL;
-}
-
-oxu::Cursor &oxu::Cursor::getInstance()
-{
-    static Cursor cursorInstance;
-    return cursorInstance;
 }
 
 void oxu::Cursor::set(const std::string &skinPath)
@@ -24,7 +16,7 @@ void oxu::Cursor::set(const std::string &skinPath)
 
     if(!surface)
     {
-        LOG_WARN("Could not load cursor sprite: {0}", IMG_GetError());
+        LOG_WARN(IMG_GetError());
     }
 
     /* Check to see if there is already a custom cursor loaded */
