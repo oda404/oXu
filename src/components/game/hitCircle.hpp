@@ -5,6 +5,8 @@
 
 #include<SDL2/SDL_rect.h>
 
+#include"../../core/scaling.hpp"
+
 #include"../../beatmap/mapInfo.hpp"
 
 #include"../../utils/vector2.hpp"
@@ -18,14 +20,11 @@ namespace oxu
 
 	class HitCircle
     {
-    private:
+    protected:
         SDL_Rect       ACRect;            // approach circle SDL_Rect
         Vector2<float> ACInitialSize;     // the size the approach circle gets spawned with
         Vector2<float> ACFinalSize;       // position to which the approach circle lerps
         float          approachT = 0.0f;  // t value for lerp
-
-        SDL_Rect       comboRect;         // combo SDL_Rect
-        int            combo;             // actual combo integer
 
         SDL_Rect       HCRect;            // hit circle SDL_Rect
 
@@ -33,8 +32,11 @@ namespace oxu
         uint32_t       hitTime;           // when the approach circle should be hit in milliseconds
         bool           done = false;      // if the approach circle is done approaching or object has been hit
 
+        SDL_Rect       comboRect;         // combo SDL_Rect
+        int            combo;             // actual combo integer
+
     public:
-        HitCircle(unsigned int infoArr[5], PlayField &playField);
+        HitCircle(unsigned int infoArr[4], PlayField &playField);
 
         const SDL_Rect *getHCRect();
 

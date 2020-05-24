@@ -3,24 +3,23 @@
 
 #include"hitCircle.hpp"
 
-oxu::HitCircle::HitCircle(unsigned int infoArr[5], PlayField &playField):
-hitTime(infoArr[2]), combo(infoArr[4])
+oxu::HitCircle::HitCircle(unsigned int infoArr[4], PlayField &playField):
+hitTime(infoArr[2]), combo(infoArr[3])
 {
     /*
     infoArr[0] == posX
     infoArr[1] == posY
     infoArr[2] == hitTime
-    infoArr[3] == obj type(flags)
-    infoArr[4] == combo
+    infoArr[3] == combo
     */
     objTruePosition = Vector2<float>(
-        playField.getPlayFieldStartPoint().getX() + infoArr[0] * playField.getOxuPx(),
-        playField.getPlayFieldStartPoint().getY() + infoArr[1] * playField.getOxuPx()
+        playField.getPlayFieldStartPoint().getX() + infoArr[0] * Global::oxuPx,
+        playField.getPlayFieldStartPoint().getY() + infoArr[1] * Global::oxuPx
     );
 
     /* ============================= HIT CIRCLE ================================== */
     // Set the width and height
-    HCRect.w = (23.05f - (MapInfo::getInstance().getDifficultyAttr("CircleSize") - 7.0f) * 4.4825f) * 2.0f * playField.getOxuPx();
+    HCRect.w = (23.05f - (MapInfo::getInstance().getDifficultyAttr("CircleSize") - 7.0f) * 4.4825f) * 2.0f * Global::oxuPx;
     HCRect.h = HCRect.w;
 
     // Offset the true position so it falls on it's center point
@@ -46,7 +45,7 @@ hitTime(infoArr[2]), combo(infoArr[4])
 
     /* =================== APPROACH CIRCLE ================================= */
     // Set the width and height
-    ACRect.w = HCRect.w * (1.5f * playField.getOxuPx());
+    ACRect.w = HCRect.w * (1.5f * Global::oxuPx);
     ACRect.h = ACRect.w;
 
     /* Figure out the scaled approach circle size based on the hit circle size */

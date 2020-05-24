@@ -3,14 +3,9 @@
 
 #include"playField.hpp"
 
-oxu::PlayField::PlayField() { }
-
-void oxu::PlayField::init(const Vector2<int> &screenSize)
+oxu::PlayField::PlayField()
 {
-    oxuPx = screenSize.getY() / 480.f;
-    playFieldStartPoint = { screenSize.getX() / 2 - 256.0f * oxuPx, screenSize.getY() / 2 - 192 * oxuPx };
+    playFieldStartPoint = { Global::screenSize.getX() / 2 - 256.0f * Global::oxuPx, Global::screenSize.getY() / 2 - 192 * Global::oxuPx };
 }
 
-oxu::Vector2<float> &oxu::PlayField::getPlayFieldStartPoint() { return playFieldStartPoint; }
-
-float &oxu::PlayField::getOxuPx() { return oxuPx; }
+const oxu::Vector2<float> &oxu::PlayField::getPlayFieldStartPoint() { return playFieldStartPoint; }

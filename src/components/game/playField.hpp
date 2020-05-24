@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include"../../core/scaling.hpp"
 #include"../../utils/vector2.hpp"
 
 namespace oxu
@@ -11,15 +12,11 @@ namespace oxu
 	{
 	private:
 		Vector2<float> playFieldStartPoint;
-		float oxuPx;
 		
 	public:
 		PlayField();
 
-		void init(const Vector2<int> &screenSize);
-
-		Vector2<float> &getPlayFieldStartPoint();
-
-		float &getOxuPx();
+		const Vector2<float> &getPlayFieldStartPoint();
+		
 	};
 }
