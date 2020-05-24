@@ -3,8 +3,6 @@
 
 #include"soundHandler.hpp"
 
-oxu::SoundHandler::SoundHandler() { }
-
 oxu::SoundHandler::~SoundHandler()
 {
     /* Halt all channels i think */
@@ -28,8 +26,10 @@ oxu::SoundHandler::~SoundHandler()
     Mix_Quit();
 }
 
-bool oxu::SoundHandler::init()
+bool oxu::SoundHandler::init(MapManager *beatmapManagerPtr)
 {
+    beatmapManager = beatmapManagerPtr;
+
     audioRate     = 44100;
     audioFormat   = AUDIO_S16SYS;
     audioChannels = 2;
@@ -82,9 +82,9 @@ bool oxu::SoundHandler::loadSoundEffects(const std::string &skinPath)
 
 void oxu::SoundHandler::playMusic()
 {
-    MapInfo::getInstance().timer.restart();
+    beatmapManager->getCurrentObjectInfo().timer.restart();
     Mix_PlayMusic(musicTrack, 0);
-    MapInfo::getInstance().timer.start();
+    beatmapManager->getCurrentObjectInfo().timer.start();
 }
 
 void oxu::SoundHandler::playHitSound()

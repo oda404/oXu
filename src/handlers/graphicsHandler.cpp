@@ -3,15 +3,15 @@
 
 #include"graphicsHandler.hpp"
 
-oxu::GraphicsHandler::GraphicsHandler() { }
-
-void oxu::GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread> *gThreadSource, bool *w_statePtr)
+void oxu::GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread> *gThreadSource, bool *w_statePtr, MapManager *mapManagerPtr)
 {
     doneInit = false;
 
     this->window = window;
 
     w_isClosed = w_statePtr;
+
+    mapManager = mapManagerPtr;
 
     /* get the current context */
     context = SDL_GL_GetCurrentContext();
@@ -64,7 +64,9 @@ void oxu::GraphicsHandler::render()
         /* Start rendering */
         SDL_RenderClear(w_renderer);
 
+        std::unique_lock<std::mutex> lockGuard(graphicsMutex);
         renderHitCircles();
+        lockGuard.unlock();
 
         SDL_RenderPresent(w_renderer);
 
@@ -74,11 +76,11 @@ void oxu::GraphicsHandler::render()
 
 void oxu::GraphicsHandler::renderHitCircles()
 {
-    for(i = mapInfoI.hitObjCapTop; i >=  mapInfoI.hitObjCapBottom; --i)
+    for(i = mapManager->getCurrentObjectInfo().HCTopCap; i >=  mapManager->getCurrentObjectInfo().HCBotCap; --i)
     {
-        if(mapInfoI.timer.getEllapsedTimeAsMs() >= mapInfoI.hitCircles[i].getHitTime() - mapInfoI.ARInSeconds * 1000)
+        if(mapManager->getCurrentObjectInfo().timer.getEllapsedTimeAsMs() >= mapManager->getCurrentObjectInfo().getHCAt(i).getHitTime() - mapManager->getCurrentBeatmapInfo().ARInSeconds * 1000)
         {   
-            HitCircle &HC = mapInfoI.hitCircles[i];
+            HitCircle &HC = mapManager->getCurrentObjectInfo().getHCAt(i);
             /* This shouldn't render the textures now, but batch them together
             for the GPU to draw when SDL_RenderPresent is called */
 

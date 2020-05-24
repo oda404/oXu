@@ -10,12 +10,11 @@
 #include<thread>
 #include<atomic>
 #include<cstdint>
-#include<memory>
+#include<mutex>
 
 #include"../components/textures.hpp"
 
 #include"../beatmap/mapManager.hpp"
-#include"../beatmap/mapInfo.hpp"
 
 #include"../utils/logger.hpp"
 
@@ -25,8 +24,9 @@ namespace oxu
     {
     private:
         /* Singleton instances */
-        MapInfo           &mapInfoI    = MapInfo::getInstance();
         Textures          &texturesI   = Textures::getInstance();
+
+        MapManager *mapManager;
 
         SDL_Renderer      *w_renderer  = NULL;
         SDL_Window        *window      = NULL;
@@ -42,13 +42,12 @@ namespace oxu
         double            deltaTime    = 0.0;
         int16_t           i;
 
+        std::mutex graphicsMutex;
+
     public:
-        GraphicsHandler();
         ~GraphicsHandler();
 
-        void init(SDL_Window                   *window, 
-                  std::shared_ptr<std::thread> *gThreadSource, 
-                  bool                         *w_statePtr);
+        void init(SDL_Window *window, std::shared_ptr<std::thread> *gThreadSource, bool *w_statePtr, MapManager *mapManagerPtr);
 
     private:
         /* render method */

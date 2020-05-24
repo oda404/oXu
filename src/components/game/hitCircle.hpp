@@ -35,8 +35,10 @@ namespace oxu
         SDL_Rect       comboRect;         // combo SDL_Rect
         int            combo;             // actual combo integer
 
+        float ARInSeconds;
+
     public:
-        HitCircle(unsigned int infoArr[4], PlayField &playField);
+        HitCircle(unsigned int infoArr[4], PlayField &playField, MapInfo &mapInfo);
 
         const SDL_Rect *getHCRect();
 

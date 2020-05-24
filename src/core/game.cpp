@@ -55,7 +55,7 @@ bool oxu::Game::init()
 	Textures::getInstance().loadSkinSurfaces(skinsManager.getSkinPath(0));
 
 	/* Set the cursor png */
-	Cursor::getInstance().set(skinsManager.getSkinPath(0));
+	cursor.set(skinsManager.getSkinPath(0));
 
 	/* Enumerate all the beatmaps */
 	beatmapManager.enumBeatMaps();
@@ -64,12 +64,13 @@ bool oxu::Game::init()
 	beatmapManager.loadHitObjects(0, 0);
 
 	/* Initiate the graphics handler */
-	graphicsHandler.init(window, &graphicsThread, &w_isClosed);
+	/* This spawns another thread */
+	graphicsHandler.init(window, &graphicsThread, &w_isClosed, &beatmapManager);
 
 	/* Initiate the sound handler */
-	soundHandler.init();
+	soundHandler.init(&beatmapManager);
 
-	soundHandler.loadMusic((beatmapManager.getSongPath(0) + '/' + mapInfoI.getGeneralAttr("AudioFilename")).c_str());
+	soundHandler.loadMusic((beatmapManager.getSongPath(0) + '/' + beatmapManager.getCurrentBeatmapInfo().getGeneralAttr("AudioFilename")).c_str());
 	soundHandler.setMusicVolume(5);
 	
 	soundHandler.loadSoundEffects(skinsManager.getSkinPath(0));
@@ -78,13 +79,16 @@ bool oxu::Game::init()
 	soundHandler.playMusic();
 
 	/* Initiate the input handler */
-	inputHandler.init(&soundHandler);
+	/* The input handler uses the main thread and does not spawn another one */
+	inputHandler.init(&beatmapManager);
 	
 	return true;
 }
 
 void oxu::Game::loop()
 {
+	ObjectInfo &objInfo = beatmapManager.getCurrentObjectInfo();
+	
 	while(!w_isClosed)
 	{
 		calculateDeltaTime();
@@ -92,15 +96,16 @@ void oxu::Game::loop()
 		/* event/input handling */
 		inputHandler.handleInput(w_isClosed);
 
-		if(mapInfoI.hitCircles[mapInfoI.hitObjCapBottom].isDone())
+
+		if(objInfo.getHCAt(objInfo.HCBotCap).isDone())
 		{
 			soundHandler.playHitSound();
-			++mapInfoI.hitObjCapBottom;
+			++objInfo.HCBotCap;
 		}
 
 		/* check if should increment to next object */
-		if(mapInfoI.timer.getEllapsedTimeAsMs() >= mapInfoI.hitCircles[mapInfoI.hitObjCapTop].getHitTime() - 450)
-		    ++mapInfoI.hitObjCapTop;
+		if(objInfo.timer.getEllapsedTimeAsMs() >= objInfo.getHCAt(objInfo.HCTopCap).getHitTime() - beatmapManager.getCurrentBeatmapInfo().ARInSeconds * 1000)
+		    ++objInfo.HCTopCap;
 
 		limitFPS();
 	}

@@ -5,22 +5,11 @@
 
 namespace oxu
 {
-    MapInfo::MapInfo()
-    {
-        
-    }
-
     void MapInfo::clear()
     {
         mapGeneral.clear();
         mapDifficulty.clear();
         mapMetadata.clear();
-    }
-
-    MapInfo &MapInfo::getInstance()
-    {
-        static MapInfo instance;
-        return instance;
     }
 
     void MapInfo::addGeneralAttr(const std::string &key, const std::string &attr)

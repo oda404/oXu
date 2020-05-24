@@ -77,7 +77,6 @@ namespace oxu
     void MapManager::loadHitObjects(const int &songI, const int &mapI)
     {
         PlayField playField;
-        MapInfo &mapInfoI = MapInfo::getInstance();
 
         std::ifstream infileMap(beatmaps[songI].second[mapI]);
         std::string line;
@@ -104,7 +103,7 @@ namespace oxu
                 coreInfoArr[3] = combo;
 
                 /* Add the hit circle */
-                mapInfoI.hitCircles.emplace_back(coreInfoArr, playField);
+                objectInfo.addHitCircle(coreInfoArr, playField, beatmapInfo);
             }
             else if(line == "[HitObjects]\r")
             {
@@ -146,8 +145,6 @@ namespace oxu
     /* ================== Difficulty ============================= */
     void oxu::MapManager::getMapDifficulty(std::ifstream &mapFile)
     {
-        MapInfo &mapInfoI = MapInfo::getInstance();
-
         std::string line;
         bool go = false;
 
@@ -163,31 +160,22 @@ namespace oxu
                 std::string keyValue  = line.substr(0, line.find_first_of(':'));
                 float       diffValue = stof(line.substr(line.find_first_of(':') + 1));
 
-                mapInfoI.addDifficultyAttr(keyValue, diffValue);
-
-                /* transform the value into seconds */
-                if(keyValue == "ApproachRate")
-                {
-                    if(diffValue <= 5)
-                        mapInfoI.ARInSeconds = 1800 - diffValue * 120;
-                    else
-                        mapInfoI.ARInSeconds = 1200 - (diffValue - 5) * 150;
-
-                    mapInfoI.ARInSeconds /= 1000;
-                }
+                beatmapInfo.addDifficultyAttr(keyValue, diffValue);
             }
             else if(line == "[Difficulty]\r")
             {
                 go = true;
             }
         }
+
+        float AR = beatmapInfo.getDifficultyAttr("ApproachRate");
+        beatmapInfo.ARInSeconds = AR <= 5 ? 1800 - AR * 120 : 1200 - (AR - 5) * 150;
+        beatmapInfo.ARInSeconds /= 1000;
     }
 
     /* ====================== [General] ===================== */
     void oxu::MapManager::getMapGeneral(std::ifstream &mapFile)
     {
-        MapInfo &mapInfoI = MapInfo::getInstance();
-
         std::string   line;
         bool          go = false;
 
@@ -205,7 +193,7 @@ namespace oxu
                 diffValue.erase(std::remove_if(diffValue.begin(), diffValue.end(), isspace));
                 diffValue.erase(diffValue.find_last_of('\r'));
 
-                mapInfoI.addGeneralAttr(keyValue, diffValue);
+                beatmapInfo.addGeneralAttr(keyValue, diffValue);
             }
             else if(line == "[General]\r")
             {
@@ -217,8 +205,6 @@ namespace oxu
     /* ======================== [Metadata] ====================== */
     void oxu::MapManager::getMapMetadata(std::ifstream &mapFile)
     {
-        MapInfo &mapInfoI = MapInfo::getInstance();
-
         std::string line;
         bool go = false;
 
@@ -235,7 +221,7 @@ namespace oxu
                 /* Remove all spaces from string */
                 diffValue.erase(std::remove_if(diffValue.begin(), diffValue.end(), isspace));
 
-                mapInfoI.addMetadataAttr(keyValue, diffValue);
+                beatmapInfo.addMetadataAttr(keyValue, diffValue);
             }
             else if(line == "[Metadata]\r")
             {
@@ -249,6 +235,7 @@ namespace oxu
     */
     void oxu::MapManager::loadMapInfo(const int &songI, const int &mapI)
     {
+        beatmapInfo.clear();
         std::ifstream infileMap(beatmaps[songI].second[mapI]);
 
         getMapGeneral(infileMap);
@@ -259,5 +246,15 @@ namespace oxu
     std::string oxu::MapManager::getSongPath(const int &index)
     {
         return beatmaps[index].first;
+    }
+
+    MapInfo &MapManager::getCurrentBeatmapInfo()
+    {
+        return beatmapInfo;
+    }
+
+    ObjectInfo &MapManager::getCurrentObjectInfo()
+    {
+        return objectInfo;
     }
 }

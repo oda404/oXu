@@ -5,13 +5,9 @@
 
 #include<SDL2/SDL_events.h>
 
-#include<vector>
-
 #include"../utils/vector2.hpp"
 
-#include"../beatmap/mapInfo.hpp"
-
-#include"../handlers/soundHandler.hpp"
+#include"../beatmap/mapManager.hpp"
 
 namespace oxu
 {
@@ -19,12 +15,13 @@ namespace oxu
     {
     private:
         SDL_Event event;
+        MapManager *beatmapManager;
 
-    public:
-        InputHandler();
-        
-        void init(SoundHandler *pSoundHandler);
+    public:        
+        void init(MapManager *mapManagerPtr);
 
         void handleInput(bool &w_isClosed);
+
+        void handleEvents();
     };
 }

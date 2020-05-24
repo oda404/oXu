@@ -39,7 +39,7 @@ namespace oxu
         MapManager      beatmapManager;
         SkinManager     skinsManager;
 
-        MapInfo         &mapInfoI = MapInfo::getInstance();
+        Cursor          cursor;
 
         /* delta time calculation stuff */
         uint32_t        startTick;

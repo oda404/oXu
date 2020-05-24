@@ -3,8 +3,8 @@
 
 #include"hitCircle.hpp"
 
-oxu::HitCircle::HitCircle(unsigned int infoArr[4], PlayField &playField):
-hitTime(infoArr[2]), combo(infoArr[3])
+oxu::HitCircle::HitCircle(unsigned int infoArr[4], PlayField &playField, MapInfo &mapInfo):
+hitTime(infoArr[2]), combo(infoArr[3]), ARInSeconds(mapInfo.ARInSeconds)
 {
     /*
     infoArr[0] == posX
@@ -19,7 +19,7 @@ hitTime(infoArr[2]), combo(infoArr[3])
 
     /* ============================= HIT CIRCLE ================================== */
     // Set the width and height
-    HCRect.w = (23.05f - (MapInfo::getInstance().getDifficultyAttr("CircleSize") - 7.0f) * 4.4825f) * 2.0f * Global::oxuPx;
+    HCRect.w = (23.05f - (mapInfo.getDifficultyAttr("CircleSize") - 7.0f) * 4.4825f) * 2.0f * Global::oxuPx;
     HCRect.h = HCRect.w;
 
     // Offset the true position so it falls on it's center point
@@ -87,7 +87,7 @@ void oxu::HitCircle::approachCircle(const double &dt)
 {
     if(approachT < 1)
     {
-        approachT += dt / MapInfo::getInstance().ARInSeconds;
+        approachT += dt / ARInSeconds;
 
         Vector2<float> newPos = lerp(ACInitialSize, ACFinalSize, approachT);
 
