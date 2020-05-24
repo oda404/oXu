@@ -8,7 +8,6 @@
 #include<map>
 
 #include"../components/game/hitCircle.hpp"
-#include"../components/game/playField.hpp"
 
 #include"../utils/timer.hpp"
 
@@ -42,9 +41,8 @@ namespace oxu
         /* ============================================== */
 
         std::vector< HitCircle > hitCircles;
-
-        PlayField                playField;
         Timer                    timer;
+
         float                    ARInSeconds;
 
         /* Used to iterate the hit objects more efficiently */
