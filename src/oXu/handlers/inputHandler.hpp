@@ -5,9 +5,9 @@
 
 #include<SDL2/SDL_events.h>
 
-#include"../utils/vector2.hpp"
+#include<oXu/utils/vector2.hpp>
 
-#include"../beatmap/beatmapManager.hpp"
+#include<oXu/beatmap/beatmapManager.hpp>
 
 namespace oxu
 {

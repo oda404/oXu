@@ -5,15 +5,14 @@
 
 #include<SDL2/SDL_rect.h>
 
-#include"../../core/scaling.hpp"
+#include<oXu/core/scaling.hpp>
 
-#include"../../beatmap/beatmapInfo.hpp"
+#include<oXu/beatmap/beatmapInfo.hpp>
 
-#include"../../utils/vector2.hpp"
+#include<oXu/utils/vector2.hpp>
 
-#include"../textures.hpp"
-
-#include"playField.hpp"
+#include<oXu/components/textures.hpp>
+#include<oXu/components/game/playField.hpp>
 
 namespace oxu
 {

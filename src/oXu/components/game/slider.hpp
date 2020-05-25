@@ -3,15 +3,15 @@
 #include<vector>
 #include<math.h>
 
-#include"hitCircle.hpp"
-#include"playField.hpp"
-#include"sliderTypes.hpp"
+#include<oXu/components/game/hitCircle.hpp>
+#include<oXu/components/game/playField.hpp>
+#include<oXu/components/game/sliderTypes.hpp>
 
-#include"../../utils/pathCalculator.hpp"
+#include<oXu/utils/pathCalculator.hpp>
 
-#include"../../beatmap/beatmapInfo.hpp"
+#include<oXu/beatmap/beatmapInfo.hpp>
 
-#include"../../utils/vector2.hpp"
+#include<oXu/utils/vector2.hpp>
 
 namespace oxu
 {

@@ -7,7 +7,7 @@
 #include<SDL2/SDL_mouse.h>
 #include<SDL2/SDL_image.h>
 
-#include"../utils/logger.hpp"
+#include<oXu/utils/logger.hpp>
 
 namespace oxu
 {

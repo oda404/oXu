@@ -3,9 +3,10 @@
 #include<vector>
 #include<cstdint>
 
-#include"../components/game/hitCircle.hpp"
-#include"../components/game/slider.hpp"
-#include"../utils/timer.hpp"
+#include<oXu/components/game/hitCircle.hpp>
+#include<oXu/components/game/slider.hpp>
+
+#include<oXu/utils/timer.hpp>
 
 namespace oxu
 {

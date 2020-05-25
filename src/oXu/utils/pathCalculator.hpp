@@ -3,9 +3,9 @@
 #include<vector>
 #include<math.h>
 
-#include"../components/game/playField.hpp"
+#include<oXu/components/game/playField.hpp>
 
-#include"vector2.hpp"
+#include<oXu/utils/vector2.hpp>
 
 namespace oxu
 {

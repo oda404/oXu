@@ -11,11 +11,11 @@
 #include<cstdint>
 #include<mutex>
 
-#include"../components/textures.hpp"
+#include<oXu/components/textures.hpp>
 
-#include"../beatmap/beatmapManager.hpp"
+#include<oXu/beatmap/beatmapManager.hpp>
 
-#include"../utils/logger.hpp"
+#include<oXu/utils/logger.hpp>
 
 namespace oxu
 {

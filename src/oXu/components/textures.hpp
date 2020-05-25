@@ -10,8 +10,8 @@
 #include<vector>
 #include<string>
 
-#include"../utils/vector2.hpp"
-#include"../utils/logger.hpp"
+#include<oXu/utils/vector2.hpp>
+#include<oXu/utils/logger.hpp>
 
 namespace fs = std::experimental::filesystem;
 

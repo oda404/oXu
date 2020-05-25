@@ -11,12 +11,11 @@
 #include<string>
 #include<cstdint>
 
-#include"beatmapInfo.hpp"
-#include"hitObjectsInfo.hpp"
+#include<oXu/beatmap/beatmapInfo.hpp>
+#include<oXu/beatmap/hitObjectsInfo.hpp>
 
-#include"../components/game/sliderTypes.hpp"
-
-#include"../components/game/playField.hpp"
+#include<oXu/components/game/sliderTypes.hpp>
+#include<oXu/components/game/playField.hpp>
 
 namespace fs = std::experimental::filesystem;
 

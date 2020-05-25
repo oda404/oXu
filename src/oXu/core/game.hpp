@@ -5,19 +5,19 @@
 
 #include<SDL2/SDL.h>
 
-#include"../handlers/graphicsHandler.hpp"
-#include"../handlers/inputHandler.hpp"
-#include"../handlers/soundHandler.hpp"
+#include<oXu/handlers/graphicsHandler.hpp>
+#include<oXu/handlers/inputHandler.hpp>
+#include<oXu/handlers/soundHandler.hpp>
 
-#include"../components/cursor.hpp"
-#include"../components/textures.hpp"
+#include<oXu/components/cursor.hpp>
+#include<oXu/components/textures.hpp>
 
-#include"../beatmap/beatmapManager.hpp"
+#include<oXu/beatmap/beatmapManager.hpp>
 
-#include"../utils/logger.hpp"
-#include"../utils/vector2.hpp"
+#include<oXu/utils/logger.hpp>
+#include<oXu/utils/vector2.hpp>
 
-#include"../skin/skinManager.hpp"
+#include<oXu/skin/skinManager.hpp>
 
 #define GOOD_EXIT     0
 #define INIT_FAILURE -1

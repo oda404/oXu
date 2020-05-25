@@ -1,6 +1,6 @@
 #pragma once
 
-#include"../utils/vector2.hpp"
+#include<oXu/utils/vector2.hpp>
 
 namespace oxu
 {

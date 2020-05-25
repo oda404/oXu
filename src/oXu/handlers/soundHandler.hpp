@@ -7,9 +7,9 @@
 
 #include<cstdint>
 
-#include"../utils/logger.hpp"
+#include<oXu/utils/logger.hpp>
 
-#include"../beatmap/beatmapManager.hpp"
+#include<oXu/beatmap/beatmapManager.hpp>
 
 namespace oxu
 {
