@@ -1,18 +1,18 @@
 CXX=g++
 CXXFLAGS=-O2 -Wall -DSPDLOG_COMPILED_LIB
-CXX_INCLUDE_PATH=-Ivendor/spdlog/include
+CXX_INCLUDE_PATH=-Ivendor/spdlog/include -Isrc
 LDFLAGS=-lSDL2 -lSDL2_image -lSDL2_mixer -lstdc++fs -lpthread
 
 CXXSRC = $(wildcard vendor/spdlog/src/*.cpp)    \
                                                 \
-         $(wildcard src/utils/*.cpp)            \
-         $(wildcard src/main.cpp)               \
-         $(wildcard src/core/*.cpp) 	        \
-         $(wildcard src/components/*.cpp)       \
-         $(wildcard src/components/game/*.cpp)  \
-         $(wildcard src/beatmap/*.cpp )         \
-         $(wildcard src/handlers/*.cpp)         \
-         $(wildcard src/skin/skinManager.cpp)  \
+         $(wildcard src/oXu/utils/*.cpp)            \
+         $(wildcard src/oXu/main.cpp)               \
+         $(wildcard src/oXu/core/*.cpp) 	        \
+         $(wildcard src/oXu/components/*.cpp)       \
+         $(wildcard src/oXu/components/game/*.cpp)  \
+         $(wildcard src/oXu/beatmap/*.cpp )         \
+         $(wildcard src/oXu/handlers/*.cpp)         \
+         $(wildcard src/oXu/skin/skinManager.cpp)  \
 
 OBJ = $(CXXSRC:.cpp=.o)
 
