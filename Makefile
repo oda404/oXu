@@ -21,7 +21,7 @@ CXX_GAME_SRC = $(filter-out $(wildcard vendor/spdlog/src/*.cpp), $(CXXSRC))
 GAME_OBJ = $(CXX_GAME_SRC:.cpp=.o)
 
 release: $(OBJ)
-	$(CXX) $^ -o oXu $(LDFLAGS)
+	$(CXX) $^ -o oXu.out $(LDFLAGS)
  
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) $(CXX_INCLUDE_PATH) -c $< -o $@
