@@ -23,7 +23,9 @@ namespace oxu
 
         void clear();
 
-        void addHitCircle(unsigned int infoArr[4], PlayField &playField, BeatmapInfo &mapInfo);
+        void addHitCircle(unsigned int infoArr[4], const PlayField &playField, BeatmapInfo &mapInfo);
+
+        void addSlider(unsigned int infoArr[4], const std::vector<Vector2<float>> &controlPoints, const int &repeats, const double &length, const uint8_t &sliderType, const PlayField &playField, BeatmapInfo &mapInfo);
 
         HitCircle &getHCAt(const unsigned int &index);
     };

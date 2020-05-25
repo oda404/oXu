@@ -38,7 +38,7 @@ namespace oxu
         float          ARInSeconds;
 
     public:
-        HitCircle(unsigned int infoArr[4], PlayField &playField, BeatmapInfo &mapInfo);
+        HitCircle(unsigned int infoArr[4], const PlayField &playField, BeatmapInfo &mapInfo);
 
         const SDL_Rect *getHCRect();
 

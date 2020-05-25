@@ -10,11 +10,12 @@ namespace oxu
 
    /* Public methods */
 
-    Slider::Slider(unsigned int infoArr[4], const std::vector<Vector2<float>> &pControlPoints, const int &pLength, const uint8_t &pType, PlayField &playField, BeatmapInfo &mapInfo):HitCircle(infoArr, playField, mapInfo)
+    Slider::Slider(unsigned int infoArr[4], const std::vector<Vector2<float>> &pControlPoints, const int &pRepeats, const double &pLength, const uint8_t &pType, const PlayField &playField, BeatmapInfo &mapInfo):HitCircle(infoArr, playField, mapInfo)
     {
         controlPoints = pControlPoints;
         expectedLength = pLength;
         type = pType;
+        repeats = pRepeats;
 
         calculatePath(playField);
         calculateLength();
@@ -55,18 +56,21 @@ namespace oxu
         }
     }
 
-    void Slider::calculatePath(PlayField &playField, const double &precision)
+    void Slider::calculatePath(const PlayField &playField)
     {
-        Vector2<float> coord;
-        for(double t = 0; t < 1; t += precision)
+        switch(type)
         {
-            /* Cubic bezier formula */
-            coord = controlPoints[0] *      pow(1 - t, 3) +
-                    controlPoints[1] * (3 * pow(1 - t, 2) * t) +
-                    controlPoints[2] * (3 * pow(1 - t, 1) * pow(t, 2)) +
-                    controlPoints[3] *                      pow(t, 3);
+            case SliderType::Linear:
+                //calculateLinearPath();
+                break;
 
-            calculatedPath.push_back(coord);
-        }        
+            case SliderType::Circle:
+                //calculateCircularPath();
+                break;
+
+            case SliderType::Bezier:
+                calculateBezierPath(controlPoints, calculatedPath, playField);
+                break;
+        } 
     }
 }

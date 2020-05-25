@@ -8,4 +8,4 @@ oxu::PlayField::PlayField()
     playFieldStartPoint = { Global::screenSize.getX() / 2 - 256.0f * Global::oxuPx, Global::screenSize.getY() / 2 - 192 * Global::oxuPx };
 }
 
-const oxu::Vector2<float> &oxu::PlayField::getPlayFieldStartPoint() { return playFieldStartPoint; }
+const oxu::Vector2<float> &oxu::PlayField::getPlayFieldStartPoint() const { return playFieldStartPoint; }

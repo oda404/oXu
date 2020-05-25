@@ -4,7 +4,6 @@
 #pragma once
 
 #include<experimental/filesystem>
-#include<algorithm>
 #include<iostream>
 #include<sstream>
 #include<fstream>
@@ -14,6 +13,8 @@
 
 #include"beatmapInfo.hpp"
 #include"hitObjectsInfo.hpp"
+
+#include"../components/game/sliderTypes.hpp"
 
 #include"../components/game/playField.hpp"
 
@@ -32,6 +33,8 @@ namespace oxu
 
         /* Updates the current combo based on the 2nd bit flag */
         void updateCombo(const uint8_t &flags);
+        
+        void addHitObject(const std::string &line, const PlayField &playField);
         
     public:
         void loadHitObjects(const int &songI, const int &mapI);

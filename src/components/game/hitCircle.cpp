@@ -3,7 +3,7 @@
 
 #include"hitCircle.hpp"
 
-oxu::HitCircle::HitCircle(unsigned int infoArr[4], PlayField &playField, BeatmapInfo &mapInfo):
+oxu::HitCircle::HitCircle(unsigned int infoArr[4], const PlayField &playField, BeatmapInfo &mapInfo):
 hitTime(infoArr[2]), combo(infoArr[3]), ARInSeconds(mapInfo.ARInSeconds)
 {
     /*

@@ -3,19 +3,6 @@
 
 #include"beatmapManager.hpp"
 
-/* because fuck that dogshit stoi function
-    never works*/
-uint parseIntFromStr(const std::string &str)
-{
-	uint integer = 0;
-
-	for(unsigned int i = 0; i < str.size(); ++i)
-		if((int)str[i] >= 48 && (int)str[i] <= 57)
-			integer = integer * 10 + (int)str[i] - 48;
-
-	return integer;
-}
-
 bool isBitOn(const uint8_t &number, const uint8_t &bit)
 {
     if( (number & ( 1 << bit ) ) >> bit ) 
@@ -26,44 +13,67 @@ bool isBitOn(const uint8_t &number, const uint8_t &bit)
     return false;
 }
 
+std::vector<std::string> split(const std::string &str, const char &splitChar)
+{
+    std::vector<std::string> result;
+    unsigned int lastPos = 0;
+    unsigned int i = 0;
+
+    for(; i < str.size(); ++i)
+    {
+        if(str[i] == splitChar)
+        {
+            result.emplace_back(str.substr(lastPos, i - lastPos));
+            lastPos = i + 1;
+        }
+    }
+    
+    result.emplace_back(str.substr(lastPos, i - lastPos + 1));
+
+    return result;
+}
+
 /* Returns the flags for the specified object */
 uint8_t getObjCoreInfo(const std::string &line, uint infoArr[4])
 {
-    std::string buff;
-    uint8_t     commaN = 0;
-    uint8_t     flags = 0;
+    std::vector<std::string> splitInfo = split(line, ',');
 
-    for(const char &c: line)
+    infoArr[0] = std::stoi(splitInfo[0]); // X
+    infoArr[1] = std::stoi(splitInfo[1]); // Y
+    infoArr[2] = std::stoi(splitInfo[2]); // hit time
+
+    return std::stoi(splitInfo[3]); // flags
+}
+
+void getSliderExtraInfo(const std::string &line, std::vector<oxu::Vector2<float>> &controlPoints, int &repeats, double &length, uint8_t type)
+{
+    std::vector<std::string> splitInfo = split(line, ',');
+
+    std::vector<std::string> splitControlPoints = split(splitInfo[5], '|');
+
+    for(std::size_t i = 1; i < splitControlPoints.size(); ++i)
     {
-        /* If the current char is not a collon add it to a buffer */
-        /* else if the char is a collon add/process the current buffer as obj info */
-        if(c != ',')
-        {
-            buff += c;
-        }
-        else
-        {
-            if(commaN < 4)
-            {
-                if(commaN == 3)
-                {
-                    flags = parseIntFromStr(buff);
-                    ++commaN;
-                    buff.clear();
-                }
-                else
-                {
-                    infoArr[commaN++] = parseIntFromStr(buff);
-                    buff.clear();
-                }
-            }
-            else
-            {
-                break;
-            }
-        }      
+        std::vector<std::string> cp = split(splitControlPoints[i], ':');
+        controlPoints.emplace_back(std::stoi(cp[0]), std::stoi(cp[1]));
     }
-    return flags;
+
+    switch(splitInfo[5][0]) // first character of the 5th sub string
+    {
+        case 'L':
+            type = oxu::SliderType::Linear;
+            break;
+
+        case 'P':
+            type = oxu::SliderType::Circle;
+            break;
+
+        case 'B':
+            type = oxu::SliderType::Bezier;
+            break;
+    }
+
+    repeats = std::stoi(splitInfo[6]);
+    length = std::stod(splitInfo[7]);
 }
 
 namespace oxu
@@ -71,6 +81,51 @@ namespace oxu
     void BeatmapManager::updateCombo(const uint8_t &flags)
     {
         isBitOn(flags, 2) ? combo = 1 : ++combo;
+    }
+
+    void BeatmapManager::addHitObject(const std::string &line, const PlayField &playField)
+    {
+        /*
+        The core info array contains:
+        [0] = posX,
+        [1] = posY
+        [2] = hit time
+        [3] = combo
+        */
+        unsigned int coreInfoArr[4];
+
+        /* Parse the object line */
+        uint8_t flags = getObjCoreInfo(line, coreInfoArr);
+
+        updateCombo(flags);
+
+        coreInfoArr[3] = combo;
+
+        /* Check the type of the object */
+
+        if(isBitOn(flags, 0)) // it's a hit circle
+        {
+            hitObjectsInfo.addHitCircle(coreInfoArr, playField, beatmapInfo);
+        }
+        else if(isBitOn(flags, 1)) // it's a slider
+        {
+            std::vector<Vector2<float>> controlPoints;
+
+            /* Add the initial x y position */
+            controlPoints.emplace_back(coreInfoArr[0], coreInfoArr[1]);
+
+            int repeats;
+            double length;
+            uint8_t type;
+
+            getSliderExtraInfo(line, controlPoints, repeats, length, type);
+
+            hitObjectsInfo.addSlider(coreInfoArr, controlPoints, repeats, length, type, playField, beatmapInfo);
+        }
+        else if(isBitOn(flags, 3)) // it's a spinner
+        {
+
+        }
     }
 
     /* Populate the hitCircles vector in the MapInfo singleton */
@@ -87,23 +142,7 @@ namespace oxu
         {
             if(shouldReadObjInf)
             {
-                /*The info array will be passed to the hit circle and contains:
-                [0] = posX,
-                [1] = posY
-                [2] = hit time
-                [3] = combo
-                */
-                unsigned int coreInfoArr[4];
-                
-                /* Parse the object line */
-                uint8_t flags = getObjCoreInfo(line, coreInfoArr);
-
-                updateCombo(flags);
-
-                coreInfoArr[3] = combo;
-
-                /* Add the hit circle */
-                hitObjectsInfo.addHitCircle(coreInfoArr, playField, beatmapInfo);
+                addHitObject(line, playField);
             }
             else if(line == "[HitObjects]\r")
             {
