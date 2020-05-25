@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include<math.h>
-
 namespace oxu
 {
     template<typename T>
