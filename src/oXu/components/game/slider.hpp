@@ -20,6 +20,9 @@ namespace oxu
 	private:
 		/* Slider control points including initial position */
 		std::vector<Vector2<float>> controlPoints;
+
+		/* Calculated path coords */
+		std::vector<Vector2<float>> calculatedPath;
 		
 		/* The slider length from the beatmap file */
 		double expectedLength;
@@ -27,15 +30,8 @@ namespace oxu
 		/* The slider type (Liner, Circle, Bezier) */
 		uint8_t type;
 
-		/* Length calculated after building the slider path */
-		double calculatedLength = 0;
-
 		int repeats;
 
-		/* Calculated path coords */
-		std::vector<Vector2<float>> calculatedPath;
-
-		void calculateLength();
 		void calculatePath(const PlayField &playField);
 
 	public:
@@ -43,10 +39,7 @@ namespace oxu
 
 		const std::vector<Vector2<float>> &getCalculatedPath();
 
-		const std::vector<Vector2<float>> &getControlPoints();
-
 		const double &getExpectedLength();
-		const double &getCalculatedLength();
 
 		const uint8_t &getSliderType();
 	};

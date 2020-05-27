@@ -13,18 +13,18 @@ hitTime(infoArr[2]), combo(infoArr[3]), ARInSeconds(mapInfo.ARInSeconds)
     infoArr[3] == combo
     */
     objTruePosition = Vector2<float>(
-        playField.getPlayFieldStartPoint().getX() + infoArr[0] * Global::oxuPx,
-        playField.getPlayFieldStartPoint().getY() + infoArr[1] * Global::oxuPx
+        playField.getPlayFieldStartPoint().x + infoArr[0] * Scaling::oxuPx,
+        playField.getPlayFieldStartPoint().y + infoArr[1] * Scaling::oxuPx
     );
 
     /* ============================= HIT CIRCLE ================================== */
     // Set the width and height
-    HCRect.w = (23.05f - (mapInfo.getDifficultyAttr("CircleSize") - 7.0f) * 4.4825f) * 2.0f * Global::oxuPx;
+    HCRect.w = (23.05f - (mapInfo.getDifficultyAttr("CircleSize") - 7.0f) * 4.4825f) * 2.0f * Scaling::oxuPx;
     HCRect.h = HCRect.w;
 
     // Offset the true position so it falls on it's center point
-    HCRect.x = objTruePosition.getX() - HCRect.w / 2;
-    HCRect.y = objTruePosition.getY() - HCRect.h / 2;
+    HCRect.x = objTruePosition.x - HCRect.w / 2;
+    HCRect.y = objTruePosition.y - HCRect.h / 2;
 
     /* ============================ COMBO ================================== */
     /* Check to see if the combo is one digit or bigger to determine it's width */
@@ -40,12 +40,12 @@ hitTime(infoArr[2]), combo(infoArr[3]), ARInSeconds(mapInfo.ARInSeconds)
     }
 
     // Offset the true position so it falls on it's center point
-    comboRect.x = objTruePosition.getX() - comboRect.w / 2;
-    comboRect.y = objTruePosition.getY() - comboRect.h / 2;
+    comboRect.x = objTruePosition.x - comboRect.w / 2;
+    comboRect.y = objTruePosition.y - comboRect.h / 2;
 
     /* =================== APPROACH CIRCLE ================================= */
     // Set the width and height
-    ACRect.w = HCRect.w * (1.5f * Global::oxuPx);
+    ACRect.w = HCRect.w * (1.5f * Scaling::oxuPx);
     ACRect.h = ACRect.w;
 
     /* Figure out the scaled approach circle size based on the hit circle size */
@@ -54,8 +54,8 @@ hitTime(infoArr[2]), combo(infoArr[3]), ARInSeconds(mapInfo.ARInSeconds)
     ACFinalSize = Vector2<float>(sizeAfterScaling, sizeAfterScaling);
 
     // Offset the true position so it falls on it's center point
-    ACRect.x = objTruePosition.getX() - ACRect.w / 2;
-    ACRect.y = objTruePosition.getY() - ACRect.h / 2;
+    ACRect.x = objTruePosition.x - ACRect.w / 2;
+    ACRect.y = objTruePosition.y - ACRect.h / 2;
 }
 
 const SDL_Rect *oxu::HitCircle::getHCRect()
@@ -78,26 +78,21 @@ const uint32_t &oxu::HitCircle::getHitTime()
     return hitTime;
 }
 
-oxu::Vector2<float> lerp(const oxu::Vector2<float> &a, const oxu::Vector2<float> &b, const float &t)
-{
-    return a * (1 - t) + b * t;
-}
-
 void oxu::HitCircle::approachCircle(const double &dt)
 {
     if(approachT < 1)
     {
         approachT += dt / ARInSeconds;
 
-        Vector2<float> newPos = lerp(ACInitialSize, ACFinalSize, approachT);
+        Vector2<float> newPos = Vector2<float>::lerp(ACInitialSize, ACFinalSize, approachT);
 
         /* Scale the circle down */
-        ACRect.w = newPos.getX();
-        ACRect.h = newPos.getY();
+        ACRect.w = newPos.x;
+        ACRect.h = newPos.y;
 
         /* recenter the approach circle */
-        ACRect.x = objTruePosition.getX() - ACRect.w / 2;
-        ACRect.y = objTruePosition.getY() - ACRect.h / 2;
+        ACRect.x = objTruePosition.x - ACRect.w / 2;
+        ACRect.y = objTruePosition.y - ACRect.h / 2;
     }
     else
     {

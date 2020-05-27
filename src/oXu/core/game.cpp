@@ -29,16 +29,16 @@ bool oxu::Game::init()
 		return false;
 	}
 
-	Global::screenSize = { 1920, 1080 };
-	Global::oxuPx = Global::screenSize.getY() / 480.f;
+	Scaling::screenSize = { 1920, 1080 };
+	Scaling::oxuPx = Scaling::screenSize.y / 480.f;
 
 	/* Create the window */
 	window = SDL_CreateWindow(
 	"oXu!",                      // window name
 	SDL_WINDOWPOS_CENTERED,      // window pos X
 	SDL_WINDOWPOS_CENTERED,      // window pos Y
-	Global::screenSize.getX(),   // screen width
-	Global::screenSize.getY(),   // screen height
+	Scaling::screenSize.x,   // screen width
+	Scaling::screenSize.y,   // screen height
 	0                            // flags
 	);
 
@@ -103,7 +103,6 @@ void oxu::Game::loop()
 			++objInfo.HCBotCap;
 		}
 
-		/* check if should increment to next object */
 		if(objInfo.timer.getEllapsedTimeAsMs() >= objInfo.getHCAt(objInfo.HCTopCap).getHitTime() - beatmapManager.getBeatmapInfo().ARInSeconds * 1000)
 		    ++objInfo.HCTopCap;
 

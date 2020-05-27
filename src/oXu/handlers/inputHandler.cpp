@@ -11,14 +11,14 @@ int eventWatch(void *userdata, SDL_Event *event)
         oxu::BeatmapManager *mapManager = (oxu::BeatmapManager*)userdata;
 
         oxu::Vector2<int> mousePos;
-        SDL_GetMouseState(&mousePos[0], &mousePos[1]);
+        SDL_GetMouseState(&mousePos.x, &mousePos.y);
 
         const SDL_Rect *lastACRect = mapManager->getObjectsInfo().getHCAt(mapManager->getObjectsInfo().HCBotCap).getHCRect();
 
-        if(mousePos[0] >= lastACRect->x &&
-           mousePos[1] >= lastACRect->y &&
-           mousePos[0] <= lastACRect->x + lastACRect->w &&
-           mousePos[1] <= lastACRect->y + lastACRect->h)
+        if(mousePos.x >= lastACRect->x &&
+           mousePos.y >= lastACRect->y &&
+           mousePos.x <= lastACRect->x + lastACRect->w &&
+           mousePos.y <= lastACRect->y + lastACRect->h)
            {
                mapManager->getObjectsInfo().getHCAt(mapManager->getObjectsInfo().HCBotCap).hit();
            }

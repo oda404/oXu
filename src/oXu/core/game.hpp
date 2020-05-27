@@ -46,7 +46,7 @@ namespace oxu
         uint32_t        lastTick   = 0;
         double          deltaTime  = 0.0;
 
-        unsigned int    maxFPS     = 1000;
+        const unsigned int maxFPS  = 1000;
         static bool     w_isClosed;
         
     public:

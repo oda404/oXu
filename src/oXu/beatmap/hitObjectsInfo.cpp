@@ -31,4 +31,9 @@ namespace oxu
     {
         return hitCircles[index];
     }
+
+    Slider &HitObjectsInfo::getSliderAt(const unsigned int &index)
+    {
+        return sliders[index];
+    }
 }

@@ -45,7 +45,7 @@ uint8_t getObjCoreInfo(const std::string &line, uint infoArr[4])
     return std::stoi(splitInfo[3]); // flags
 }
 
-void getSliderExtraInfo(const std::string &line, std::vector<oxu::Vector2<float>> &controlPoints, int &repeats, double &length, uint8_t type)
+void getSliderExtraInfo(const std::string &line, std::vector<oxu::Vector2<float>> &controlPoints, int &repeats, double &length, uint8_t &type)
 {
     std::vector<std::string> splitInfo = split(line, ',');
 
@@ -131,6 +131,8 @@ namespace oxu
     /* Populate the hitCircles vector in the MapInfo singleton */
     void BeatmapManager::loadHitObjects(const int &songI, const int &mapI)
     {
+        hitObjectsInfo.clear();
+
         PlayField playField;
 
         std::ifstream infileMap(beatmaps[songI].second[mapI]);

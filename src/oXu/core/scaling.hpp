@@ -4,7 +4,7 @@
 
 namespace oxu
 {
-    struct Global
+    struct Scaling
     {
         static float oxuPx;
         static Vector2<int> screenSize;

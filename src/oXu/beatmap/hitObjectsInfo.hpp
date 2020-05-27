@@ -29,5 +29,7 @@ namespace oxu
         void addSlider(unsigned int infoArr[4], const std::vector<Vector2<float>> &controlPoints, const int &repeats, const double &length, const uint8_t &sliderType, const PlayField &playField, BeatmapInfo &mapInfo);
 
         HitCircle &getHCAt(const unsigned int &index);
+
+        Slider &getSliderAt(const unsigned int &index);
     };
 }

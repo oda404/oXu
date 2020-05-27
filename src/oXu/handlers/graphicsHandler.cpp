@@ -62,7 +62,10 @@ void oxu::GraphicsHandler::render()
         calculateDeltaTime();
 
         /* Start rendering */
+        SDL_SetRenderDrawColor(w_renderer, 0,0,0,255);
         SDL_RenderClear(w_renderer);
+
+        renderSliders();
 
         std::unique_lock<std::mutex> lockGuard(graphicsMutex);
         renderHitCircles();
@@ -100,6 +103,12 @@ void oxu::GraphicsHandler::renderHitCircles()
             HC.approachCircle(deltaTime);
         }   
     }
+}
+
+void oxu::GraphicsHandler::renderSliders()
+{
+    HitObjectsInfo &objInfo = mapManager->getObjectsInfo();
+    
 }
 
 void oxu::GraphicsHandler::calculateDeltaTime()

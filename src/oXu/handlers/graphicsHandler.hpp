@@ -40,7 +40,7 @@ namespace oxu
         double            deltaTime    = 0.0;
         int16_t           i;
 
-        std::mutex graphicsMutex;
+        std::mutex        graphicsMutex;
 
     public:
         ~GraphicsHandler();
@@ -50,10 +50,12 @@ namespace oxu
     private:
         void render();
 
-        void renderHitCircles();
-
         void calculateDeltaTime();
 
         void limitFPS();
+
+        void renderHitCircles();
+
+        void renderSliders();
     };
 }
