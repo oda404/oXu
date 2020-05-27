@@ -33,13 +33,13 @@ namespace oxu
         }
 
         /* Returns the vector's length(magnitude). */
-        float getLength()
+        float getLength() const
         {
             return static_cast<float>(std::sqrt(x * x + y * y));
         }
 
         /* Returns the vector's length(magnitude) squared. */
-        float getLengthSquared()
+        float getLengthSquared() const
         {
             return static_cast<float>(x * x + y * y);
         }
@@ -51,7 +51,7 @@ namespace oxu
         }
 
         /* Returns a normalized version of the vector. This doesn't modify the base vector */
-        Vector2<T> normalized()
+        Vector2<T> normalized() const
         {
             Vector2<T> result = *this;
             result /= this->getLength();
@@ -70,7 +70,7 @@ namespace oxu
         }
 
         /* Returns a clamped version of the vector. This doesn't modify the base vector */
-        Vector2<T> clamped(const T &min, const T &max)
+        Vector2<T> clamped(const T &min, const T &max) const
         {
             Vector2<T> result = *this;
 
@@ -93,16 +93,15 @@ namespace oxu
         Uses the base vector as the starting point for the lerp
         This doesn't modify the base vector
         */
-        Vector2<T> lerped(const Vector2<T> &dest, const float &t)
+        Vector2<T> lerped(const Vector2<T> &dest, const float &t) const
         {
             return *this * (1 - t) + dest * t;
         }
 
         /* Returns the vector formatted as a string */
-        std::string toString()
+        std::string toString() const
         {
             std::string result = "(" + std::to_string(x) + ", " + std::to_string(y) + ")";
-
             return result;
         }
 
