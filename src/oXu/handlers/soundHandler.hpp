@@ -11,6 +11,8 @@
 
 #include<oXu/beatmap/beatmapManager.hpp>
 
+#include<oXu/core/statusCodes.hpp>
+
 namespace oxu
 {
 	class SoundHandler

@@ -19,8 +19,7 @@
 
 #include<oXu/skin/skinManager.hpp>
 
-#define GOOD_EXIT     0
-#define INIT_FAILURE -1
+#include<oXu/core/statusCodes.hpp>
 
 namespace oxu
 {
@@ -58,7 +57,9 @@ namespace oxu
         Game& operator=(Game&&)      = delete;
         //=====================================
 
-        bool init();
+        static int errorCode;
+
+        int init();
 
         void loop();
 

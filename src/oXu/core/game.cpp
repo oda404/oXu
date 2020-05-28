@@ -11,7 +11,7 @@ oxu::Game &oxu::Game::getInstance()
 	return instance;
 }
 
-bool oxu::Game::init()
+int oxu::Game::init()
 {
 	/* Initiate the logger */
 	Logger::init();
@@ -19,13 +19,15 @@ bool oxu::Game::init()
 	/* Initialize SDL */
 	if( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0 )
 	{
-		LOG_ERR("{0}", SDL_GetError());
+		LOG_ERR(SDL_GetError());
+		StatusCodes::statusCode = StatusCodes::SDL_INIT_FAIL;
 		return false;
 	}
 
 	if( IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) < 0 )
 	{
-		LOG_ERR("{0}", IMG_GetError());
+		LOG_ERR(IMG_GetError());
+		StatusCodes::statusCode = StatusCodes::IMG_INIT_FAIL;
 		return false;
 	}
 
@@ -45,6 +47,7 @@ bool oxu::Game::init()
 	if(!window)
 	{
 		LOG_ERR(SDL_GetError());
+		StatusCodes::statusCode = StatusCodes::WINDOW_CREATE_FAIL;
 		return false;
 	}
 	
@@ -68,7 +71,10 @@ bool oxu::Game::init()
 	graphicsHandler.init(window, &graphicsThread, &w_isClosed, &beatmapManager);
 
 	/* Initiate the sound handler */
-	soundHandler.init(&beatmapManager);
+	if(!soundHandler.init(&beatmapManager))
+	{
+		return false;
+	}
 
 	soundHandler.loadMusic((beatmapManager.getSongPath(0) + '/' + beatmapManager.getBeatmapInfo().getGeneralAttr("AudioFilename")).c_str());
 	soundHandler.setMusicVolume(5);
@@ -106,7 +112,15 @@ void oxu::Game::loop()
 
 void oxu::Game::clean()
 {
-	LOG_INFO("Exiting gracefully. Hai noroc!");
+	if(StatusCodes::statusCode != StatusCodes::OK)
+	{
+		LOG_WARN("Exiting with return status {0}", StatusCodes::statusCode);
+	}
+	else
+	{
+		LOG_INFO("Exiting gracefully. Hai noroc!");
+	}
+
 	/* destroy the window */
 	SDL_DestroyWindow(window);
 	window = NULL;

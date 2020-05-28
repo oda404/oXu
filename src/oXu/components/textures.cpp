@@ -41,31 +41,31 @@ oxu::Textures::~Textures()
 void oxu::Textures::loadSkinSurfaces(const std::string &skinPath)
 {
     /* TODO: implement actual individual skins */
-    gameSurfaces.emplace_back( IMG_Load( (skinPath + "/hitcircle.png").c_str() ) );
+    gameSurfaces.push_back( IMG_Load( (skinPath + "/hitcircle.png").c_str() ) );
     if(!gameSurfaces[0])
     {
-        LOG_WARN("{0}", IMG_GetError());
+        LOG_WARN(IMG_GetError());
     }
 
-    gameSurfaces.emplace_back( IMG_Load( (skinPath+ "/approachcircle.png").c_str() ) );
+    gameSurfaces.push_back( IMG_Load( (skinPath+ "/approachcircle.png").c_str() ) );
     if(!gameSurfaces[1])
     {
-        LOG_WARN("{0}", IMG_GetError());
+        LOG_WARN(IMG_GetError());
     }
     
-    gameSurfaces.emplace_back( IMG_Load( (skinPath + "/hitcircleoverlay.png").c_str() ) );
+    gameSurfaces.push_back( IMG_Load( (skinPath + "/hitcircleoverlay.png").c_str() ) );
     if(!gameSurfaces[2])
     {
-        LOG_WARN("{0}", IMG_GetError());
+        LOG_WARN(IMG_GetError());
     }
 
     /* Load default numbers surfaces */
     for(uint8_t i = 0; i < 10; ++i)
     {
-        gameSurfaces.emplace_back( IMG_Load( (skinPath + "/default-" + toChar(i) + ".png").c_str() ) );
+        gameSurfaces.push_back( IMG_Load( (skinPath + "/default-" + toChar(i) + ".png").c_str() ) );
         if(!gameSurfaces[3 + i])
         {
-            LOG_WARN("{0}", IMG_GetError());
+            LOG_WARN(IMG_GetError());
         }
     }
 }
@@ -74,7 +74,7 @@ void oxu::Textures::createTextures(SDL_Renderer *renderer)
 {
     for(uint8_t i = 0; i < gameSurfaces.size(); ++i)
     {
-        gameTextures.emplace_back(SDL_CreateTextureFromSurface(renderer, gameSurfaces[i]));
+        gameTextures.push_back(SDL_CreateTextureFromSurface(renderer, gameSurfaces[i]));
     }
 }
 
@@ -105,7 +105,7 @@ SDL_Texture *oxu::Textures::getComboNumTex(SDL_Renderer *renderer, const uint8_t
         /* Blit the second digit */
         SDL_BlitSurface(gameSurfaces[3 + n % 10], NULL, s, &destRec);
 
-        extraComboNumTex.emplace_back(SDL_CreateTextureFromSurface(renderer, s));
+        extraComboNumTex.push_back(SDL_CreateTextureFromSurface(renderer, s));
 
         SDL_FreeSurface(s);
     }

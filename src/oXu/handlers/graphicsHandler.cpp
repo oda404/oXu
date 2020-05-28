@@ -32,7 +32,7 @@ oxu::GraphicsHandler::~GraphicsHandler()
     SDL_GL_DeleteContext(context);
 }
 
-void oxu::GraphicsHandler::render()
+bool oxu::GraphicsHandler::render()
 {
     /* make the current context from the new thread */
     SDL_GL_MakeCurrent(window, context);
@@ -49,7 +49,9 @@ void oxu::GraphicsHandler::render()
 
     if(!w_renderer)
     {
-        LOG_ERR("{0}", SDL_GetError());
+        LOG_ERR(SDL_GetError());
+        StatusCodes::statusCode = StatusCodes::RENDERER_CREATE_FAIL;
+        return false;
     }
 
     texturesI.createTextures(w_renderer);
@@ -72,6 +74,8 @@ void oxu::GraphicsHandler::render()
 
         limitFPS();
     }
+
+    return true;
 }
 
 void oxu::GraphicsHandler::renderHitCircles()

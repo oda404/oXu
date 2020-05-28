@@ -8,12 +8,12 @@ int main(int argc, char **argv)
 	if(!oxu::Game::getInstance().init())
 	{
 		oxu::Game::getInstance().clean();
-		return INIT_FAILURE;
+		return oxu::StatusCodes::statusCode;
 	}
 
 	oxu::Game::getInstance().loop();
 
 	oxu::Game::getInstance().clean();
 
-	return GOOD_EXIT;
+	return oxu::StatusCodes::statusCode;
 }

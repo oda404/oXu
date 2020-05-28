@@ -17,6 +17,8 @@
 
 #include<oXu/utils/logger.hpp>
 
+#include<oXu/core/statusCodes.hpp>
+
 namespace oxu
 {
     class GraphicsHandler 
@@ -48,7 +50,7 @@ namespace oxu
         void init(SDL_Window *window, std::shared_ptr<std::thread> *gThreadSource, bool *w_statePtr, BeatmapManager *mapManagerPtr);
 
     private:
-        void render();
+        bool render();
 
         void calculateDeltaTime();
 
