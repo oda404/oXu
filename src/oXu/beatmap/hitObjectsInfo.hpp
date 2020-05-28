@@ -18,7 +18,6 @@ namespace oxu
 
     public:
         Timer   timer;
-        /* Used to iterate the hit objects more efficiently */
         int16_t HCTopCap = 0;
         int16_t HCBotCap = 0;
 
@@ -30,6 +29,8 @@ namespace oxu
 
         HitCircle &getHCAt(const unsigned int &index);
 
-        Slider &getSliderAt(const unsigned int &index);
+        Slider    &getSliderAt(const unsigned int &index);
+
+        void      checkHitCircleBounds();
     };
 }

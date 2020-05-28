@@ -62,10 +62,7 @@ void oxu::GraphicsHandler::render()
         calculateDeltaTime();
 
         /* Start rendering */
-        SDL_SetRenderDrawColor(w_renderer, 0,0,0,255);
         SDL_RenderClear(w_renderer);
-
-        renderSliders();
 
         std::unique_lock<std::mutex> lockGuard(graphicsMutex);
         renderHitCircles();
@@ -81,10 +78,10 @@ void oxu::GraphicsHandler::renderHitCircles()
 {
     HitObjectsInfo &objInfo = mapManager->getObjectsInfo();
 
-    for(i = objInfo.HCTopCap; i >=  objInfo.HCBotCap; --i)
+    for(i = objInfo.HCTopCap - 1; i >=  objInfo.HCBotCap; --i)
     {
-        if(objInfo.timer.getEllapsedTimeAsMs() >= objInfo.getHCAt(i).getHitTime() - mapManager->getBeatmapInfo().ARInSeconds * 1000)
-        {   
+        if(!objInfo.getHCAt(i).isHit())
+        {
             HitCircle &HC = objInfo.getHCAt(i);
 
             /* Hit circle */
@@ -103,12 +100,6 @@ void oxu::GraphicsHandler::renderHitCircles()
             HC.approachCircle(deltaTime);
         }   
     }
-}
-
-void oxu::GraphicsHandler::renderSliders()
-{
-    HitObjectsInfo &objInfo = mapManager->getObjectsInfo();
-    
 }
 
 void oxu::GraphicsHandler::calculateDeltaTime()

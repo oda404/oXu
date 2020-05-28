@@ -96,15 +96,7 @@ void oxu::Game::loop()
 		/* event/input handling */
 		inputHandler.handleInput(w_isClosed);
 
-
-		if(objInfo.getHCAt(objInfo.HCBotCap).isHit())
-		{
-			soundHandler.playHitSound();
-			++objInfo.HCBotCap;
-		}
-
-		if(objInfo.timer.getEllapsedTimeAsMs() >= objInfo.getHCAt(objInfo.HCTopCap).getHitTime() - beatmapManager.getBeatmapInfo().ARInSeconds * 1000)
-		    ++objInfo.HCTopCap;
+		objInfo.checkHitCircleBounds();
 
 		limitFPS();
 	}

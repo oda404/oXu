@@ -47,11 +47,13 @@ namespace oxu
 
         const uint32_t &getHitTime();
 
+        uint32_t       getSpawnTime();
+
+        const int      &getCombo();
+
         void approachCircle(const double &dt);
 
         const bool &isHit();
-
-        const int &getCombo();
 
         void hit();
     };

@@ -36,4 +36,17 @@ namespace oxu
     {
         return sliders[index];
     }
+
+    void HitObjectsInfo::checkHitCircleBounds()
+    {
+        if(hitCircles[HCBotCap].isHit())
+        {
+            ++HCBotCap;
+        }
+
+        if(timer.getEllapsedTimeAsMs() >= hitCircles[HCTopCap].getSpawnTime())
+        {
+            ++HCTopCap;
+        }
+    }
 }

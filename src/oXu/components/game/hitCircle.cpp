@@ -78,6 +78,11 @@ const uint32_t &oxu::HitCircle::getHitTime()
     return hitTime;
 }
 
+uint32_t oxu::HitCircle::getSpawnTime()
+{
+    return hitTime - ARInSeconds * 1000;
+}
+
 void oxu::HitCircle::approachCircle(const double &dt)
 {
     if(approachT < 1)
