@@ -1,13 +1,12 @@
 # oXu!
-oXu! is an osu! clone written in C++. The project is made mainly as a learning excersise.
+oXu! is an osu! client written in C++. The project is made mainly as a learning excersise.
 oXu! is still in a pre-alpha state and under heavy development.
 
 ## Features
 The game is missing a lot of features that are standard in osu!, so don't expect it to be playable.
 
 ## Playing oXu!
-<b>Keep in mind that the game was only tested on Linux, so Windows will probably not work.</b><br>
-The only way to play the game right now is to build it from source. To do that you will need to:
+<b>Keep in mind that the game was only tested on Linux.</b><br>
 ```console
 git clone --recursive https://github.com/oda404/oXu
 cd oXu
