@@ -4,7 +4,7 @@
 #include<cstdint>
 
 #include<oXu/components/game/hitCircle.hpp>
-#include<oXu/components/game/models/hitCircldeModel.hpp>
+#include<oXu/components/game/models/hitCircleModel.hpp>
 
 #include<oXu/utils/timer.hpp>
 

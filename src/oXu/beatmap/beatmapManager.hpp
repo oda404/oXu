@@ -16,7 +16,7 @@
 
 #include<oXu/components/game/sliderTypes.hpp>
 #include<oXu/components/game/playField.hpp>
-#include<oXu/components/game/models/hitCircldeModel.hpp>
+#include<oXu/components/game/models/hitCircleModel.hpp>
 
 namespace fs = std::experimental::filesystem;
 
