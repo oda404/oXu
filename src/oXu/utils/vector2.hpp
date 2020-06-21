@@ -88,16 +88,6 @@ namespace oxu
             return start * (1 - t) + end * t;
         }
 
-        /*
-        Returns a lerped version of the vector
-        Uses the base vector as the starting point for the lerp
-        This doesn't modify the base vector
-        */
-        Vector2<T> lerped(const Vector2<T> &dest, const float &t) const
-        {
-            return *this * (1 - t) + dest * t;
-        }
-
         /* Returns the vector formatted as a string */
         std::string toString() const
         {
