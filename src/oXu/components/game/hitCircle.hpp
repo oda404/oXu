@@ -13,6 +13,7 @@
 
 #include<oXu/components/textures.hpp>
 #include<oXu/components/game/playField.hpp>
+#include<oXu/components/game/models/hitCircldeModel.hpp>
 
 namespace oxu
 {
@@ -37,7 +38,7 @@ namespace oxu
         float          ARInSeconds;
 
     public:
-        HitCircle(unsigned int infoArr[4], const PlayField &playField, BeatmapInfo &mapInfo);
+        HitCircle(const HitCircleModel &model, const PlayField &playField);
 
         const SDL_Rect *getHCRect();
 

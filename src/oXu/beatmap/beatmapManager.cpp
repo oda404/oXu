@@ -33,94 +33,38 @@ std::vector<std::string> split(const std::string &str, const char &splitChar)
     return result;
 }
 
-/* Returns the flags for the specified object */
-uint8_t getObjCoreInfo(const std::string &line, uint infoArr[4])
-{
-    std::vector<std::string> splitInfo = split(line, ',');
-
-    infoArr[0] = std::stoi(splitInfo[0]); // X
-    infoArr[1] = std::stoi(splitInfo[1]); // Y
-    infoArr[2] = std::stoi(splitInfo[2]); // hit time
-
-    return std::stoi(splitInfo[3]); // flags
-}
-
-void getSliderExtraInfo(const std::string &line, std::vector<oxu::Vector2<float>> &controlPoints, int &repeats, double &length, uint8_t &type)
-{
-    std::vector<std::string> splitInfo = split(line, ',');
-
-    std::vector<std::string> splitControlPoints = split(splitInfo[5], '|');
-
-    for(std::size_t i = 1; i < splitControlPoints.size(); ++i)
-    {
-        std::vector<std::string> cp = split(splitControlPoints[i], ':');
-        controlPoints.emplace_back(std::stoi(cp[0]), std::stoi(cp[1]));
-    }
-
-    switch(splitInfo[5][0]) // first character of the 5th sub string
-    {
-        case 'L':
-            type = oxu::SliderType::Linear;
-            break;
-
-        case 'P':
-            type = oxu::SliderType::Circle;
-            break;
-
-        case 'B':
-            type = oxu::SliderType::Bezier;
-            break;
-    }
-
-    repeats = std::stoi(splitInfo[6]);
-    length = std::stod(splitInfo[7]);
-}
-
 namespace oxu
 {
-    void BeatmapManager::updateCombo(const uint8_t &flags)
+    uint8_t BeatmapManager::setObjCoreInfo(const std::string &line)
     {
+        std::vector<std::string> splitInfo = split(line, ',');
+
+        HCModel.position = oxu::Vector2<float>(std::stoi(splitInfo[0]), std::stoi(splitInfo[1]));
+        HCModel.hitTime = std::stoi(splitInfo[2]);
+
+        uint16_t flags = std::stoi(splitInfo[3]);
+
         isBitOn(flags, 2) ? combo = 1 : ++combo;
+
+        HCModel.combo = combo;
+
+        return flags;
     }
 
     void BeatmapManager::addHitObject(const std::string &line, const PlayField &playField)
     {
-        /*
-        The core info array contains:
-        [0] = posX,
-        [1] = posY
-        [2] = hit time
-        [3] = combo
-        */
-        unsigned int coreInfoArr[4];
+        uint8_t flags = setObjCoreInfo(line);
 
-        /* Parse the object line */
-        uint8_t flags = getObjCoreInfo(line, coreInfoArr);
-
-        updateCombo(flags);
-
-        coreInfoArr[3] = combo;
-
-        /* Check the type of the object */
+        HCModel.circleSize = beatmapInfo.getDifficultyAttr("CircleSize");
+        HCModel.ARInSeconds = beatmapInfo.ARInSeconds;
 
         if(isBitOn(flags, 0)) // it's a hit circle
         {
-            hitObjectsInfo.addHitCircle(coreInfoArr, playField, beatmapInfo);
+            hitObjectsInfo.addHitCircle(HCModel, playField);
         }
         else if(isBitOn(flags, 1)) // it's a slider
         {
-            std::vector<Vector2<float>> controlPoints;
-
-            /* Add the initial x y position */
-            controlPoints.emplace_back(coreInfoArr[0], coreInfoArr[1]);
-
-            int repeats;
-            double length;
-            uint8_t type;
-
-            getSliderExtraInfo(line, controlPoints, repeats, length, type);
-
-            hitObjectsInfo.addSlider(coreInfoArr, controlPoints, repeats, length, type, playField, beatmapInfo);
+            
         }
         else if(isBitOn(flags, 3)) // it's a spinner
         {

@@ -41,7 +41,6 @@ bool oxu::GraphicsHandler::render()
     SDL_SetHint("SDL_RENDER_BATCHING", "1");
 
     // Set the texture filter to be linear
-    // Basically scales the texture more nicely
     SDL_SetHint("SDL_RENDER_SCALE_QUALITY", "1");
 
     /* create the renderer */
@@ -88,6 +87,9 @@ void oxu::GraphicsHandler::renderHitCircles()
         {
             HitCircle &HC = objInfo.getHCAt(i);
 
+            /* Close the approach circle */
+            HC.approachCircle(deltaTime);
+
             /* Hit circle */
             SDL_RenderCopy(w_renderer, texturesI.getHCTex(), NULL, HC.getHCRect());
 
@@ -99,9 +101,6 @@ void oxu::GraphicsHandler::renderHitCircles()
 
             /* Combo */
             SDL_RenderCopy(w_renderer, texturesI.getComboNumTex(w_renderer, HC.getCombo()), NULL, HC.getComboRect());
-            
-            /* Close the approach circle */
-            HC.approachCircle(deltaTime);
         }   
     }
 }

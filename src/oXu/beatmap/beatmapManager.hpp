@@ -16,6 +16,7 @@
 
 #include<oXu/components/game/sliderTypes.hpp>
 #include<oXu/components/game/playField.hpp>
+#include<oXu/components/game/models/hitCircldeModel.hpp>
 
 namespace fs = std::experimental::filesystem;
 
@@ -25,15 +26,16 @@ namespace oxu
     {
     private:
         std::vector<std::pair<std::string, std::vector<std::string>>> beatmaps;
-        int combo = 1;
+        uint16_t combo = 1;
 
         BeatmapInfo    beatmapInfo;
         HitObjectsInfo hitObjectsInfo;
 
-        /* Updates the current combo based on the 2nd bit flag */
-        void updateCombo(const uint8_t &flags);
+        HitCircleModel HCModel;
         
         void addHitObject(const std::string &line, const PlayField &playField);
+
+        uint8_t setObjCoreInfo(const std::string &line);
         
     public:
         void loadHitObjects(const int &songI, const int &mapI);
@@ -53,6 +55,5 @@ namespace oxu
         BeatmapInfo &getBeatmapInfo();
 
         HitObjectsInfo &getObjectsInfo();
-
     };
 }

@@ -9,32 +9,14 @@ namespace oxu
         HCBotCap = 0;
     }
 
-    void HitObjectsInfo::addHitCircle(unsigned int infoArr[4], const PlayField &playField, BeatmapInfo &mapInfo)
+    void HitObjectsInfo::addHitCircle(const HitCircleModel &model, const PlayField &playField)
     {
-        hitCircles.emplace_back(infoArr, playField, mapInfo);
-    }
-
-    void HitObjectsInfo::addSlider(
-    unsigned int infoArr[4],
-    const std::vector<Vector2<float>> &controlPoints, 
-    const int &repeats, 
-    const double &length, 
-    const uint8_t &sliderType, 
-    const PlayField &playField, 
-    BeatmapInfo &mapInfo
-    )
-    {
-        sliders.emplace_back(infoArr, controlPoints, repeats, length, sliderType, playField, mapInfo);
+        hitCircles.emplace_back(model, playField);
     }
 
     HitCircle &HitObjectsInfo::getHCAt(const unsigned int &index)
     {
         return hitCircles[index];
-    }
-
-    Slider &HitObjectsInfo::getSliderAt(const unsigned int &index)
-    {
-        return sliders[index];
     }
 
     void HitObjectsInfo::checkHitCircleBounds()

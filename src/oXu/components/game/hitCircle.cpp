@@ -3,23 +3,14 @@
 
 #include"hitCircle.hpp"
 
-oxu::HitCircle::HitCircle(unsigned int infoArr[4], const PlayField &playField, BeatmapInfo &mapInfo):
-hitTime(infoArr[2]), combo(infoArr[3]), ARInSeconds(mapInfo.ARInSeconds)
+oxu::HitCircle::HitCircle(const HitCircleModel &model, const PlayField &playField):
+hitTime(model.hitTime), combo(model.combo), ARInSeconds(model.ARInSeconds)
 {
-    /*
-    infoArr[0] == posX
-    infoArr[1] == posY
-    infoArr[2] == hitTime
-    infoArr[3] == combo
-    */
-    objTruePosition = Vector2<float>(
-        playField.getPlayFieldStartPoint().x + infoArr[0] * Scaling::oxuPx,
-        playField.getPlayFieldStartPoint().y + infoArr[1] * Scaling::oxuPx
-    );
+    objTruePosition = playField.getPlayFieldStartPoint() + model.position * Scaling::oxuPx;
 
     /* ============================= HIT CIRCLE ================================== */
     // Set the width and height
-    HCRect.w = (23.05f - (mapInfo.getDifficultyAttr("CircleSize") - 7.0f) * 4.4825f) * 2.0f * Scaling::oxuPx;
+    HCRect.w = (23.05f - (model.circleSize - 7.0f) * 4.4825f) * 2.0f * Scaling::oxuPx;
     HCRect.h = HCRect.w;
 
     // Offset the true position so it falls on it's center point
@@ -48,10 +39,8 @@ hitTime(infoArr[2]), combo(infoArr[3]), ARInSeconds(mapInfo.ARInSeconds)
     ACRect.w = HCRect.w * (1.5f * Scaling::oxuPx);
     ACRect.h = ACRect.w;
 
-    /* Figure out the scaled approach circle size based on the hit circle size */
     ACInitialSize = Vector2<float>(ACRect.w, ACRect.h);
-    int sizeAfterScaling = Textures::getInstance().getACSurf()->w * HCRect.w / Textures::getInstance().getACSurf()->w;
-    ACFinalSize = Vector2<float>(sizeAfterScaling, sizeAfterScaling);
+    ACFinalSize = Vector2<float>(HCRect.w, HCRect.h);
 
     // Offset the true position so it falls on it's center point
     ACRect.x = objTruePosition.x - ACRect.w / 2;
@@ -85,13 +74,10 @@ uint32_t oxu::HitCircle::getSpawnTime()
 
 void oxu::HitCircle::approachCircle(const double &dt)
 {
-    if(approachT < 1)
+    if(approachT <= 1)
     {
-        approachT += dt / ARInSeconds;
-
         Vector2<float> newPos = Vector2<float>::lerp(ACInitialSize, ACFinalSize, approachT);
-
-        /* Scale the circle down */
+        
         ACRect.w = newPos.x;
         ACRect.h = newPos.y;
 
@@ -103,6 +89,8 @@ void oxu::HitCircle::approachCircle(const double &dt)
     {
         doneApproaching = true;
     }
+
+    approachT += dt / ARInSeconds;
 }
 
 const bool &oxu::HitCircle::isHit() 

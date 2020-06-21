@@ -4,7 +4,7 @@
 #include<cstdint>
 
 #include<oXu/components/game/hitCircle.hpp>
-#include<oXu/components/game/slider.hpp>
+#include<oXu/components/game/models/hitCircldeModel.hpp>
 
 #include<oXu/utils/timer.hpp>
 
@@ -14,7 +14,6 @@ namespace oxu
     {
     private:
         std::vector< HitCircle > hitCircles;
-        std::vector< Slider >    sliders;
 
     public:
         Timer   timer;
@@ -23,13 +22,11 @@ namespace oxu
 
         void clear();
 
-        void addHitCircle(unsigned int infoArr[4], const PlayField &playField, BeatmapInfo &mapInfo);
+        void addHitCircle(const HitCircleModel &model, const PlayField &playField);
 
         void addSlider(unsigned int infoArr[4], const std::vector<Vector2<float>> &controlPoints, const int &repeats, const double &length, const uint8_t &sliderType, const PlayField &playField, BeatmapInfo &mapInfo);
 
         HitCircle &getHCAt(const unsigned int &index);
-
-        Slider    &getSliderAt(const unsigned int &index);
 
         void      checkHitCircleBounds();
     };
