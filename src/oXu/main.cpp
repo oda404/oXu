@@ -5,15 +5,16 @@
 
 int main(int argc, char **argv)
 {
-	if(!oxu::Game::getInstance().init())
+	oxu::Game game;
+	if(!game.init())
 	{
-		oxu::Game::getInstance().clean();
+		game.clean();
 		return oxu::StatusCodes::statusCode;
 	}
 
-	oxu::Game::getInstance().loop();
+	game.loop();
 
-	oxu::Game::getInstance().clean();
+	game.clean();
 
 	return oxu::StatusCodes::statusCode;
 }

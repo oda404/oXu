@@ -5,15 +5,17 @@
 
 #include<SDL2/SDL_render.h>
 #include<SDL2/SDL_image.h>
+#include<SDL2/SDL_ttf.h>
 
 #include<thread>
 #include<atomic>
 #include<cstdint>
 #include<mutex>
 
-#include<oXu/components/textures.hpp>
+#include<oXu/components/text.hpp>
 
-#include<oXu/beatmap/beatmapManager.hpp>
+#include<oXu/beatmap/songManager.hpp>
+#include<oXu/components/textures.hpp>
 
 #include<oXu/utils/logger.hpp>
 
@@ -24,40 +26,44 @@ namespace oxu
     class GraphicsHandler 
     {
     private:
-        Textures          &texturesI   = Textures::getInstance();
+        Textures &texturesI = Textures::getInstance();
 
-        BeatmapManager    *mapManager;
+        SDL_Renderer *renderer = NULL;
+        SDL_Window *window = NULL;
+        SDL_GLContext context;
 
-        SDL_Renderer      *w_renderer  = NULL;
-        SDL_Window        *window      = NULL;
-        SDL_GLContext     context;
-
-        unsigned int      maxFPS = 240;
-        std::atomic<bool> doneInit;
-        bool              *w_isClosed;
+        uint16_t maxFPS = 240;
+        std::atomic<bool> doneInit = false;
+        bool *windowState;
 
         /* delta time calculation stuff */
-        uint32_t          startTick;
-        uint32_t          lastTick     = 0;
-        double            deltaTime    = 0.0;
-        int16_t           i;
+        uint32_t startTick;
+        uint32_t lastTick = 0;
+        double delta = 0.0;
+        double *inputThreadDelta;
 
-        std::mutex        graphicsMutex;
+        std::mutex graphicsMutex;
+
+        SongManager *songManager;
+
+        Text text;
+
+        TextBox graphicsThreadFPS;
+        TextBox inputThreadFPS;
 
     public:
         ~GraphicsHandler();
 
-        void init(SDL_Window *window, std::shared_ptr<std::thread> *gThreadSource, bool *w_statePtr, BeatmapManager *mapManagerPtr);
-
-    private:
+        bool init(SDL_Window *window, std::shared_ptr<std::thread> *graphicsThread, double *inputThreadDelta, bool *windowState, SongManager *songManager);
+    
         bool render();
 
-        void calculateDeltaTime();
+        void calculateDelta();
 
         void limitFPS();
 
         void renderHitCircles();
 
-        void renderSliders();
+        void renderThreadInfo();
     };
 }

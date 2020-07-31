@@ -17,6 +17,8 @@ namespace oxu
             RENDERER_CREATE_FAIL,
             MIX_OPEN_FAIL,
             MIX_INIT_FAIL,
+            TTF_INIT_FAIL,
+            FONT_LOAD_FAIL,
         };
     };
 }

@@ -5,6 +5,11 @@
 
 namespace oxu
 {
+    static int getNormalizedVolume(const uint8_t &volume)
+    {
+        return volume * MIX_MAX_VOLUME / 100;
+    }
+
     oxu::SoundHandler::~SoundHandler()
     {
         /* Halt all channels i think */
@@ -28,14 +33,12 @@ namespace oxu
         Mix_Quit();
     }
 
-    bool oxu::SoundHandler::init(BeatmapManager *beatmapManagerPtr)
+    bool oxu::SoundHandler::init()
     {
-        beatmapManager = beatmapManagerPtr;
-
-        audioRate     = 44100;
-        audioFormat   = AUDIO_S16SYS;
+        audioRate = 44100;
+        audioFormat = AUDIO_S16SYS;
         audioChannels = 2;
-        audioBuffers  = 0;
+        audioBuffers = 0;
 
         if(Mix_OpenAudio(audioRate, audioFormat, audioChannels, audioBuffers) < 0)
         {
@@ -56,12 +59,16 @@ namespace oxu
         return true;
     }
 
-    bool oxu::SoundHandler::loadMusic(const char *fileName)
+    bool oxu::SoundHandler::loadMusic(const std::string &fileName)
     {
         Mix_FreeMusic(musicTrack);
         musicTrack = NULL;
 
-        musicTrack = Mix_LoadMUS(fileName);
+        std::string temp = fileName;
+
+        temp = temp.substr(0, temp.size() - 1);
+
+        musicTrack = Mix_LoadMUS(temp.c_str());
 
         if(!musicTrack)
         {
@@ -84,11 +91,10 @@ namespace oxu
         return true;
     }
 
-    void oxu::SoundHandler::playMusic()
+    void oxu::SoundHandler::playMusic(const uint32_t &offset)
     {
-        beatmapManager->getObjectsInfo().timer.restart();
         Mix_PlayMusic(musicTrack, 0);
-        beatmapManager->getObjectsInfo().timer.start();
+        Mix_SetMusicPosition(offset / 1000.f);
     }
 
     void oxu::SoundHandler::playHitSound()
@@ -96,12 +102,12 @@ namespace oxu
         Mix_PlayChannel(-1, hitSound, 0);
     }
 
-    void oxu::SoundHandler::setMusicVolume(const int &volume)
+    void oxu::SoundHandler::setMusicVolume(const uint8_t &volume)
     {
-        Mix_VolumeMusic(volume);
+        Mix_VolumeMusic(getNormalizedVolume(volume));
     }
 
-    void oxu::SoundHandler::setEffectsVolume(const int &volume)
+    void oxu::SoundHandler::setEffectsVolume(const uint8_t &volume)
     {
         Mix_VolumeChunk(hitSound, volume);
     }

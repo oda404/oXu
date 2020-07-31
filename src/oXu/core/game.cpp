@@ -3,13 +3,7 @@
 
 #include "game.hpp"
 
-bool oxu::Game::w_isClosed = false;
-
-oxu::Game &oxu::Game::getInstance()
-{
-	static Game instance;
-	return instance;
-}
+bool oxu::Game::windowState = false;
 
 int oxu::Game::init()
 {
@@ -36,12 +30,12 @@ int oxu::Game::init()
 
 	/* Create the window */
 	window = SDL_CreateWindow(
-	"oXu!",                      // window name
-	SDL_WINDOWPOS_CENTERED,      // window pos X
-	SDL_WINDOWPOS_CENTERED,      // window pos Y
-	Scaling::screenSize.x,   // screen width
-	Scaling::screenSize.y,   // screen height
-	0                            // flags
+		"oXu!",
+		SDL_WINDOWPOS_CENTERED,
+		SDL_WINDOWPOS_CENTERED,
+		Scaling::screenSize.x,
+		Scaling::screenSize.y,
+		0
 	);
 
 	if(!window)
@@ -50,59 +44,56 @@ int oxu::Game::init()
 		StatusCodes::statusCode = StatusCodes::WINDOW_CREATE_FAIL;
 		return false;
 	}
+
+	songManager.enumerateSongs();
+	songManager.getSong(1).getBeatmap(0).loadGenericInfo();
+	songManager.getSong(1).getBeatmap(0).loadGameInfo();
 	
 	/* Enumerate all skins */
-	skinsManager.enumSkins();
+	skinManager.enumSkins();
 
 	/* Load the skins images onto surfaces */
-	Textures::getInstance().loadSkinSurfaces(skinsManager.getSkinPath(0));
+	Textures::getInstance().loadSkinSurfaces(skinManager.getSkinPath(0));
 
 	/* Set the cursor png */
-	cursor.set(skinsManager.getSkinPath(0));
-
-	/* Enumerate all the beatmaps */
-	beatmapManager.enumBeatMaps();
-	/* Load info/objects from song 0 map 0 */
-	beatmapManager.loadMapInfo(0, 0);
-	beatmapManager.loadHitObjects(0, 0);
+	cursor.set(skinManager.getSkinPath(0));
 
 	/* Initiate the graphics handler */
 	/* This spawns another thread */
-	graphicsHandler.init(window, &graphicsThread, &w_isClosed, &beatmapManager);
+	graphicsHandler.init(window, &graphicsThread, &deltaTime, &windowState, &songManager);
 
-	/* Initiate the sound handler */
-	if(!soundHandler.init(&beatmapManager))
-	{
-		return false;
-	}
-
-	soundHandler.loadMusic((beatmapManager.getSongPath(0) + '/' + beatmapManager.getBeatmapInfo().getGeneralAttr("AudioFilename")).c_str());
+	soundHandler.init();
 	soundHandler.setMusicVolume(5);
-	
-	soundHandler.loadSoundEffects(skinsManager.getSkinPath(0));
-	soundHandler.setEffectsVolume(5);
+	//TODO fix extra \r and the end of audiofilename
+	soundHandler.loadMusic(songManager.getSong(1).path + '/' + songManager.getSong(1).getBeatmap(0).general.audioFilename);
 
-	soundHandler.playMusic();
+	songManager.getSong(1).getBeatmap(0).timer.start();
 
-	/* Initiate the input handler */
-	/* The input handler uses the main thread and does not spawn another one */
-	inputHandler.init(&beatmapManager);
+	soundHandler.playMusic(songManager.getSong(1).getBeatmap(0).timer.getEllapsedTimeAsMs());
 	
 	return true;
 }
 
 void oxu::Game::loop()
 {
-	HitObjectsInfo &objInfo = beatmapManager.getObjectsInfo();
-	
-	while(!w_isClosed)
+	Beatmap &beatmap = songManager.getSong(1).getBeatmap(0);
+
+	while(!windowState)
 	{
 		calculateDeltaTime();
 
-		/* event/input handling */
-		inputHandler.handleInput(w_isClosed);
+		inputHandler.handleInput(windowState);
 
-		objInfo.checkHitCircleBounds();
+		if(beatmap.hitObjects[beatmap.objTopCap + 1].shouldBeAddedToPool(beatmap.timer.getEllapsedTimeAsMs()))
+		{
+			beatmap.hitObjects[beatmap.objTopCap + 1].errorMargin = beatmap.timer.getEllapsedTimeAsMs() - beatmap.hitObjects[beatmap.objTopCap + 1].getSpawnTime();
+			++beatmap.objTopCap;
+		}
+
+		if(beatmap.hitObjects[beatmap.objBotCap].shouldBeRemovedFromPool(beatmap.timer.getEllapsedTimeAsMs()))
+		{
+			++beatmap.objBotCap;
+		}
 
 		limitFPS();
 	}
@@ -133,15 +124,15 @@ void oxu::Game::clean()
 
 void oxu::Game::calculateDeltaTime()
 {
-	startTick = SDL_GetTicks();
-	deltaTime = (double)(startTick - lastTick) / 1000.0f;
 	lastTick  = startTick;
+	startTick = SDL_GetTicks();
+	deltaTime = (startTick - lastTick) / 1000.0;
 }
 
 void oxu::Game::limitFPS()
 {
-	if(1000 / maxFPS > SDL_GetTicks() - startTick)
+	if(1000.0 / maxFPS > SDL_GetTicks() - startTick)
 	{
-		SDL_Delay(1000 / maxFPS - SDL_GetTicks() + startTick);
+		SDL_Delay(1000.0 / maxFPS - SDL_GetTicks() + startTick);
 	}
 }

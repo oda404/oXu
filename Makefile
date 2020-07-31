@@ -1,18 +1,20 @@
 CXX=g++
-CXXFLAGS=-O2 -Wall -DSPDLOG_COMPILED_LIB
+CXXFLAGS=-O2 -Wall -DSPDLOG_COMPILED_LIB --std=c++17
 CXX_INCLUDE_PATH=-Ivendor/spdlog/include -Isrc
-LDFLAGS=-lSDL2 -lSDL2_image -lSDL2_mixer -lstdc++fs -lpthread
+LDFLAGS=-lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lstdc++fs -lpthread
 
-CXXSRC = $(wildcard vendor/spdlog/src/*.cpp)    \
-                                                \
-         $(wildcard src/oXu/utils/*.cpp)            \
-         $(wildcard src/oXu/main.cpp)               \
-         $(wildcard src/oXu/core/*.cpp) 	        \
-         $(wildcard src/oXu/components/*.cpp)       \
-         $(wildcard src/oXu/components/game/*.cpp)  \
-         $(wildcard src/oXu/beatmap/*.cpp )         \
-         $(wildcard src/oXu/handlers/*.cpp)         \
-         $(wildcard src/oXu/skin/skinManager.cpp)  \
+CXXSRC = $(wildcard vendor/spdlog/src/*.cpp)          \
+                                                      \
+         $(wildcard src/oXu/beatmap/components/*.cpp) \
+         $(wildcard src/oXu/beatmap/sections/*.cpp)   \
+         $(wildcard src/oXu/utils/*.cpp)              \
+         $(wildcard src/oXu/main.cpp)                 \
+         $(wildcard src/oXu/core/*.cpp) 	          \
+         $(wildcard src/oXu/components/*.cpp)         \
+         $(wildcard src/oXu/components/game/*.cpp)    \
+         $(wildcard src/oXu/beatmap/*.cpp )           \
+         $(wildcard src/oXu/handlers/*.cpp)           \
+         $(wildcard src/oXu/skin/skinManager.cpp)     \
 
 OBJ = $(CXXSRC:.cpp=.o)
 

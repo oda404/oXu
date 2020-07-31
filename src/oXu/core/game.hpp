@@ -12,53 +12,41 @@
 #include<oXu/components/cursor.hpp>
 #include<oXu/components/textures.hpp>
 
-#include<oXu/beatmap/beatmapManager.hpp>
-
 #include<oXu/utils/logger.hpp>
 #include<oXu/utils/vector2.hpp>
 
 #include<oXu/skin/skinManager.hpp>
 
 #include<oXu/core/statusCodes.hpp>
+#include<oXu/core/scaling.hpp>
+
+#include<oXu/beatmap/songManager.hpp>
 
 namespace oxu
 {
     class Game
     {
     private:
-        Game() = default;
-
-        SDL_Window                   *window = NULL;
+        SDL_Window *window = NULL;
         std::shared_ptr<std::thread> graphicsThread;
 
         GraphicsHandler graphicsHandler;
-        InputHandler    inputHandler;
-        SoundHandler    soundHandler;
+        InputHandler inputHandler;
+        SoundHandler soundHandler;
 
-        BeatmapManager  beatmapManager;
-        SkinManager     skinsManager;
-
-        Cursor          cursor;
+        SongManager songManager;
+        SkinManager skinManager;
+        Cursor cursor;
 
         /* delta time calculation stuff */
-        uint32_t        startTick;
-        uint32_t        lastTick   = 0;
-        double          deltaTime  = 0.0;
+        uint32_t startTick;
+        uint32_t lastTick = 0;
+        double deltaTime = 0.0;
 
-        const unsigned int maxFPS  = 1000;
-        static bool     w_isClosed;
+        uint16_t maxFPS = 1000;
+        static bool windowState;
         
     public:
-        //====== singleton stuff ==============
-        static Game &getInstance();
-        Game(const Game&)            = delete;
-        Game(Game&&)                 = delete;
-        Game& operator=(const Game&) = delete;
-        Game& operator=(Game&&)      = delete;
-        //=====================================
-
-        static int errorCode;
-
         int init();
 
         void loop();
@@ -69,6 +57,5 @@ namespace oxu
         void calculateDeltaTime();
 
         void limitFPS();
-
     };
 }

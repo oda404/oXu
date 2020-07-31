@@ -7,18 +7,15 @@
 
 #include<oXu/utils/vector2.hpp>
 
-#include<oXu/beatmap/beatmapManager.hpp>
-
 namespace oxu
 {
     class InputHandler
     {
     private:
         SDL_Event event;
-        BeatmapManager *beatmapManager;
 
     public:        
-        void init(BeatmapManager *mapManagerPtr);
+        void init();
 
         void handleInput(bool &w_isClosed);
 

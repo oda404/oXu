@@ -16,7 +16,10 @@ namespace oxu
 	public:
 		PlayField();
 
-		const Vector2<float> &getPlayFieldStartPoint() const;
+		inline const Vector2<float> &getPlayFieldStartPoint() const
+		{
+			return playFieldStartPoint;
+		}
 		
 	};
 }

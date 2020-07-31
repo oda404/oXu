@@ -6,10 +6,9 @@
 #include<SDL2/SDL_mixer.h>
 
 #include<cstdint>
+#include<string>
 
 #include<oXu/utils/logger.hpp>
-
-#include<oXu/beatmap/beatmapManager.hpp>
 
 #include<oXu/core/statusCodes.hpp>
 
@@ -18,35 +17,31 @@ namespace oxu
 	class SoundHandler
 	{
 	private:
-		BeatmapManager *beatmapManager;
-
-		int       audioRate;
-		int16_t   audioFormat;
-		int       audioChannels;
-		int       audioBuffers;
+		int audioRate;
+		int16_t audioFormat;
+		int audioChannels;
+		int audioBuffers;
 
 		Mix_Music *musicTrack = NULL;
 
-		// ====== effect sounds ======
-		Mix_Chunk *hitSound   = NULL;
+		Mix_Chunk *hitSound = NULL;
 
 	public:
 		~SoundHandler();
 
-		bool init(BeatmapManager *beatmapManagerPtr);
+		bool init();
 
-		bool loadMusic(const char *filePath);
+		bool loadMusic(const std::string &filePath);
 
-		/* loads sound effects from the specified skin */
 		bool loadSoundEffects(const std::string &skinPath);
 
-		void playMusic();
+		void playMusic(const uint32_t &offset);
 
 		void playHitSound();
 
-		void setMusicVolume(const int &volume);
+		void setMusicVolume(const uint8_t &volume);
 
-		void setEffectsVolume(const int &volume);
+		void setEffectsVolume(const uint8_t &volume);
 
 	};
 }
