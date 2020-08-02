@@ -6,31 +6,18 @@
 #include<chrono>
 #include<cstdint>
 
-class Timer {
-private:
-    std::chrono::steady_clock::time_point tStart, tStop, tpStart;
-    bool tIsRunning, tIsPaused = false;
-    uint64_t tPausedTime = 0; // as milliseconds
+namespace oxu
+{
+    class Timer
+    {
+    private:
+        std::chrono::steady_clock::time_point startPoint, stopPoint;
+        bool running = false;
 
-public:
-    Timer();
-    ~Timer() = default;
+    public:
+        void start();
 
-    void start();
-
-    void stop ();
-
-    void pause();
-
-    void resume();
-
-    void restart();
-
-    bool isTimerRunning() const;
-
-    bool isTimerPaused() const;
-
-    uint64_t getEllapsedTimeAsMs() const;
-
-    uint64_t getPausedTimeAsMs() const;
-};
+        /* as milliseconds */
+        uint32_t getEllapsedTime();
+    };
+}

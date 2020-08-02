@@ -5,31 +5,20 @@
 
 namespace oxu
 {
-    bool GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread> *graphicsThread, double *inputThreadDelta, bool *windowState, SongManager *songManager, SkinManager *skinManager)
+    bool GraphicsHandler::init(SDL_Window *window, bool *windowState, SongManager *songManager)
     {
+        this->songManager = songManager;
+        this->windowState = windowState;
         this->window = window;
 
-        this->songManager = songManager;
-
-        this->windowState = windowState;
-
-        this->inputThreadDelta = inputThreadDelta;
-
-        this->skinManager = skinManager;
-
-        /* get the current context */
+        /* maybe redundant since I don't use the openGL context directly
+        but i'm gonna leave it here just in case */
         context = SDL_GL_GetCurrentContext();
 
-        /* Create the thread */
-        *graphicsThread = std::make_shared<std::thread>([this] { render(); });
+        thisThread = &Threads::instance().threads[GRAPHICS_THREAD];
+        thisThread->maxFPS = 240;
+        thisThread->thread = std::make_shared<std::thread>([this] { initThread(); });
 
-        if(!text.init())
-        {
-            return false;
-        }
-
-        /* Wait for the new thread to finish initiating
-        to avoid any context problems */
         while(!doneInit);
 
         return true;
@@ -43,8 +32,10 @@ namespace oxu
         SDL_GL_DeleteContext(context);
     }
 
-    bool GraphicsHandler::render()
+    bool GraphicsHandler::initThread()
     {
+        thisThread->timer.start();
+
         SDL_GL_MakeCurrent(window, context);
         SDL_SetHint("SDL_RENDER_BATCHING", "1");
         SDL_SetHint("SDL_RENDER_SCALE_QUALITY", "1");
@@ -58,7 +49,13 @@ namespace oxu
             return false;
         }
 
-        currentSkin = &skinManager->getSkin(0);
+        if(!text.init())
+        {
+            return false;
+        }
+
+        skinManager.enumerateSkins();
+        currentSkin = &skinManager.getSkin(0);
         currentSkin->loadTextures(renderer);
         currentSkin->setCursor();
 
@@ -66,32 +63,37 @@ namespace oxu
 
         doneInit = true;
 
+        startThread();
+
+        return true;
+    }
+
+    void GraphicsHandler::startThread()
+    {
         while(!*windowState)
         {
-            calculateDelta();
+            thisThread->calculateDelta();
 
             SDL_RenderClear(renderer);
                         
-            std::unique_lock<std::mutex> lockGuard(graphicsMutex);
+            std::unique_lock<std::mutex> lockGuard(Threads::instance().mtx);
 
-            renderThreadInfo();
-            renderHitCircles();
+                renderThreadsInfo();
+                renderHitCircles();
 
             lockGuard.unlock();
 
             SDL_RenderPresent(renderer);
 
-            limitFPS();
+            thisThread->limitFPS();
         }
-
-        return true;
     }
 
     void GraphicsHandler::renderHitCircles()
     {
         for(int32_t i = currentBeatmap->objTopCap; i >= currentBeatmap->objBotCap; --i)
         {
-            currentBeatmap->hitObjects[i].approachCircle(delta, currentBeatmap->difficulty.approachRateMs);
+            currentBeatmap->hitObjects[i].approachCircle(thisThread->delta, currentBeatmap->difficulty.approachRateMs);
 
             SDL_RenderCopy(renderer, currentSkin->getTexture(Tex::HIT_CIRCLE), NULL, currentBeatmap->hitObjects[i].getHCRect());
             SDL_RenderCopy(renderer, currentSkin->getTexture(Tex::APPROACH_CIRCLE), NULL, currentBeatmap->hitObjects[i].getACRect());
@@ -99,34 +101,19 @@ namespace oxu
         }
     }
 
-    void GraphicsHandler::renderThreadInfo()
+    void GraphicsHandler::renderThreadsInfo()
     {        
-        graphicsThreadFPS.text = "Graphics thread: " + std::to_string(static_cast<int>(1.0 / delta)) + " FPS";
+        graphicsThreadFPS.text = "Graphics thread: " + std::to_string(static_cast<int>(1.0 / thisThread->delta)) + " FPS";
         text.createTexture(renderer, graphicsThreadFPS);
         graphicsThreadFPS.rect.x = Scaling::screenSize.x - graphicsThreadFPS.rect.w - 10;
         graphicsThreadFPS.rect.y = 10;
 
-        inputThreadFPS.text = "Input thread: " + std::to_string(static_cast<int>(1.0 / *inputThreadDelta)) + " FPS";
+        inputThreadFPS.text = "Input thread: " + std::to_string(static_cast<int>(1.0 / Threads::instance().threads[MAIN_THREAD].delta)) + " FPS";
         text.createTexture(renderer, inputThreadFPS);
         inputThreadFPS.rect.x = Scaling::screenSize.x - inputThreadFPS.rect.w - 10;
         inputThreadFPS.rect.y = graphicsThreadFPS.rect.y + graphicsThreadFPS.rect.h + 10;
 
         SDL_RenderCopy(renderer, graphicsThreadFPS.tex, NULL, &graphicsThreadFPS.rect);
         SDL_RenderCopy(renderer, inputThreadFPS.tex, NULL, &inputThreadFPS.rect);
-    }
-
-    void GraphicsHandler::calculateDelta()
-    {
-        lastTick  = startTick;
-        startTick = SDL_GetTicks();
-        delta = (startTick - lastTick) / 1000.0;
-    }
-
-    void GraphicsHandler::limitFPS()
-    {
-        if(1000.0 / maxFPS > SDL_GetTicks() - startTick)
-        {
-            SDL_Delay(1000.0 / maxFPS - SDL_GetTicks() + startTick);
-        }
     }
 }

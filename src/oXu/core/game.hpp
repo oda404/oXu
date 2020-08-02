@@ -5,15 +5,15 @@
 
 #include<SDL2/SDL.h>
 
+#include<mutex>
+
 #include<oXu/handlers/graphics.hpp>
 #include<oXu/handlers/input.hpp>
 #include<oXu/handlers/sound.hpp>
 
-#include<oXu/components/cursor.hpp>
-
 #include<oXu/utils/logger.hpp>
-#include<oXu/utils/vector2.hpp>
 
+#include<oXu/core/threading/threads.hpp>
 #include<oXu/core/statusCodes.hpp>
 #include<oXu/core/scaling.hpp>
 
@@ -26,23 +26,16 @@ namespace oxu
     {
     private:
         SDL_Window *window = NULL;
-        std::shared_ptr<std::thread> graphicsThread;
+        bool windowState = false;
 
         GraphicsHandler graphicsHandler;
         InputHandler inputHandler;
         SoundHandler soundHandler;
 
         SongManager songManager;
-        SkinManager skinManager;
-        Cursor cursor;
+        Beatmap *currentBeatmap;
 
-        /* delta time calculation stuff */
-        uint32_t startTick;
-        uint32_t lastTick = 0;
-        double deltaTime = 0.0;
-
-        uint16_t maxFPS = 1000;
-        static bool windowState;
+        Thread *thisThread;
         
     public:
         int init();
@@ -50,10 +43,5 @@ namespace oxu
         void loop();
 
         void clean();
-    
-    private:
-        void calculateDeltaTime();
-
-        void limitFPS();
     };
 }

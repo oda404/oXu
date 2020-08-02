@@ -11,10 +11,10 @@ CXXSRC = $(wildcard vendor/spdlog/src/*.cpp)          \
          $(wildcard src/oXu/main.cpp)                 \
          $(wildcard src/oXu/core/*.cpp) 	          \
          $(wildcard src/oXu/components/*.cpp)         \
-         $(wildcard src/oXu/components/game/*.cpp)    \
          $(wildcard src/oXu/beatmap/*.cpp )           \
          $(wildcard src/oXu/handlers/*.cpp)           \
          $(wildcard src/oXu/skin/*.cpp)               \
+         $(wildcard src/oXu/core/threading/*.cpp)     \
 
 OBJ = $(CXXSRC:.cpp=.o)
 

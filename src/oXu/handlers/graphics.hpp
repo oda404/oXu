@@ -5,9 +5,7 @@
 
 #include<SDL2/SDL_render.h>
 
-#include<thread>
 #include<atomic>
-#include<cstdint>
 #include<mutex>
 
 #include<oXu/components/text.hpp>
@@ -18,53 +16,44 @@
 #include<oXu/utils/logger.hpp>
 
 #include<oXu/core/statusCodes.hpp>
+#include<oXu/core/threading/threads.hpp>
 
 namespace oxu
 {
     class GraphicsHandler 
     {
     private:
-
         SDL_Renderer *renderer = NULL;
-        SDL_Window *window = NULL;
         SDL_GLContext context;
-
-        uint16_t maxFPS = 240;
-        std::atomic<bool> doneInit = false;
+        SDL_Window *window = NULL;
         bool *windowState;
 
-        /* delta time calculation stuff */
-        uint32_t startTick;
-        uint32_t lastTick = 0;
-        double delta = 0.0;
-        double *inputThreadDelta;
-
-        std::mutex graphicsMutex;
+        std::atomic<bool> doneInit = false;
 
         SongManager *songManager;
-        SkinManager *skinManager;
+        SkinManager skinManager;
 
         Skin *currentSkin;
         Beatmap *currentBeatmap;
 
         Text text;
-
         TextBox graphicsThreadFPS;
         TextBox inputThreadFPS;
+
+        Thread *thisThread;
 
     public:
         ~GraphicsHandler();
 
-        bool init(SDL_Window *window, std::shared_ptr<std::thread> *graphicsThread, double *inputThreadDelta, bool *windowState, SongManager *songManager, SkinManager *skinManager);
-    
-        bool render();
+        bool init(SDL_Window *window, bool *windowState, SongManager *songManager);
 
-        void calculateDelta();
+    private:
+        bool initThread();
 
-        void limitFPS();
+        void startThread();
 
         void renderHitCircles();
 
-        void renderThreadInfo();
+        void renderThreadsInfo();
     };
 }
