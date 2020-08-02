@@ -18,13 +18,13 @@ namespace oxu
         std::ifstream beatmapFile(path);
         std::string line;
 
-        uint8_t section = 9;
+        uint8_t section = SECTIONS_COUNT;
 
         while(std::getline(beatmapFile, line))
         {
             if(line[0] == '[')
             {
-                if(section == DIFFICULTY_SECTION)
+                if(section == Sections::DIFFICULTY_SECTION)
                 {
                     break;
                 }
@@ -35,15 +35,15 @@ namespace oxu
             {
                 switch(section)
                 {
-                    case GENERAL_SECTION:
+                    case Sections::GENERAL_SECTION:
                         parseGeneral(line, general);
                         break;
 
-                    case METADATA_SECTION:
+                    case Sections::METADATA_SECTION:
                         parseMetadata(line, metadata);
                         break;
 
-                    case DIFFICULTY_SECTION:
+                    case Sections::DIFFICULTY_SECTION:
                         parseDifficulty(line, difficulty);
                         break;
                 }
@@ -57,7 +57,7 @@ namespace oxu
     {
         std::ifstream beatmapFile(path);
         std::string line;
-        uint8_t section = 9;
+        uint8_t section = SECTIONS_COUNT;
 
         PlayField playField;
 
@@ -71,11 +71,11 @@ namespace oxu
             {
                 switch(section)
                 {
-                    case TIMING_SECTION:
+                    case Sections::TIMING_SECTION:
                         parseTimingPoints(line, timingPoints);
                         break;
 
-                    case OBJECTS_SECTION:
+                    case Sections::OBJECTS_SECTION:
                         parseObjects(line, hitObjects, playField, difficulty);
                         break;
                 }

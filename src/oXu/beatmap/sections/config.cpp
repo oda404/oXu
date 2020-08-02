@@ -1,12 +1,12 @@
 #include"config.hpp"
 
-std::map<std::string, uint8_t> oxu::sectionsMap = {
-    {"[General]\r",      GENERAL_SECTION},
-    {"[Editor]\r",       EDITOR_SECTION},
-    {"[Metadata]\r",     METADATA_SECTION},
-    {"[Difficulty]\r",   DIFFICULTY_SECTION},
-    {"[Events]\r",       EVENTS_SECTION},
-    {"[TimingPoints]\r", TIMING_SECTION},
-    {"[Colours]\r",      COLORS_SECTION},
-    {"[HitObjects]\r",   OBJECTS_SECTION}
+const std::map<std::string, uint8_t> oxu::sectionsMap = {
+    {"[General]\r",      Sections::GENERAL_SECTION},
+    {"[Editor]\r",       Sections::EDITOR_SECTION},
+    {"[Metadata]\r",     Sections::METADATA_SECTION},
+    {"[Difficulty]\r",   Sections::DIFFICULTY_SECTION},
+    {"[Events]\r",       Sections::EVENTS_SECTION},
+    {"[TimingPoints]\r", Sections::TIMING_SECTION},
+    {"[Colours]\r",      Sections::COLORS_SECTION},
+    {"[HitObjects]\r",   Sections::OBJECTS_SECTION}
 };

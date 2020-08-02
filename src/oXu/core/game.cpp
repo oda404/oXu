@@ -48,19 +48,12 @@ int oxu::Game::init()
 	songManager.enumerateSongs();
 	songManager.getSong(1).getBeatmap(0).loadGenericInfo();
 	songManager.getSong(1).getBeatmap(0).loadGameInfo();
-	
-	/* Enumerate all skins */
-	skinManager.enumSkins();
 
-	/* Load the skins images onto surfaces */
-	Textures::getInstance().loadSkinSurfaces(skinManager.getSkinPath(0));
-
-	/* Set the cursor png */
-	cursor.set(skinManager.getSkinPath(0));
+	skinManager.enumerateSkins();
 
 	/* Initiate the graphics handler */
 	/* This spawns another thread */
-	graphicsHandler.init(window, &graphicsThread, &deltaTime, &windowState, &songManager);
+	graphicsHandler.init(window, &graphicsThread, &deltaTime, &windowState, &songManager, &skinManager);
 
 	soundHandler.init();
 	soundHandler.setMusicVolume(5);
@@ -112,13 +105,11 @@ void oxu::Game::clean()
 		LOG_INFO("Exiting gracefully. Hai noroc!");
 	}
 
-	/* destroy the window */
 	SDL_DestroyWindow(window);
 	window = NULL;
 
 	IMG_Quit();
 
-	/* quit all SDL subsystems */
 	SDL_Quit();
 }
 

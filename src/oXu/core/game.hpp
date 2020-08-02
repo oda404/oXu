@@ -5,22 +5,20 @@
 
 #include<SDL2/SDL.h>
 
-#include<oXu/handlers/graphicsHandler.hpp>
-#include<oXu/handlers/inputHandler.hpp>
-#include<oXu/handlers/soundHandler.hpp>
+#include<oXu/handlers/graphics.hpp>
+#include<oXu/handlers/input.hpp>
+#include<oXu/handlers/sound.hpp>
 
 #include<oXu/components/cursor.hpp>
-#include<oXu/components/textures.hpp>
 
 #include<oXu/utils/logger.hpp>
 #include<oXu/utils/vector2.hpp>
-
-#include<oXu/skin/skinManager.hpp>
 
 #include<oXu/core/statusCodes.hpp>
 #include<oXu/core/scaling.hpp>
 
 #include<oXu/beatmap/songManager.hpp>
+#include<oXu/skin/skinManager.hpp>
 
 namespace oxu
 {

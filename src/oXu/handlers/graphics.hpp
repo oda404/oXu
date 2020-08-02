@@ -4,8 +4,6 @@
 #pragma once
 
 #include<SDL2/SDL_render.h>
-#include<SDL2/SDL_image.h>
-#include<SDL2/SDL_ttf.h>
 
 #include<thread>
 #include<atomic>
@@ -15,7 +13,7 @@
 #include<oXu/components/text.hpp>
 
 #include<oXu/beatmap/songManager.hpp>
-#include<oXu/components/textures.hpp>
+#include<oXu/skin/skinManager.hpp>
 
 #include<oXu/utils/logger.hpp>
 
@@ -26,7 +24,6 @@ namespace oxu
     class GraphicsHandler 
     {
     private:
-        Textures &texturesI = Textures::getInstance();
 
         SDL_Renderer *renderer = NULL;
         SDL_Window *window = NULL;
@@ -45,6 +42,10 @@ namespace oxu
         std::mutex graphicsMutex;
 
         SongManager *songManager;
+        SkinManager *skinManager;
+
+        Skin *currentSkin;
+        Beatmap *currentBeatmap;
 
         Text text;
 
@@ -54,7 +55,7 @@ namespace oxu
     public:
         ~GraphicsHandler();
 
-        bool init(SDL_Window *window, std::shared_ptr<std::thread> *graphicsThread, double *inputThreadDelta, bool *windowState, SongManager *songManager);
+        bool init(SDL_Window *window, std::shared_ptr<std::thread> *graphicsThread, double *inputThreadDelta, bool *windowState, SongManager *songManager, SkinManager *skinManager);
     
         bool render();
 

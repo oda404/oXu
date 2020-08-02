@@ -14,7 +14,7 @@ CXXSRC = $(wildcard vendor/spdlog/src/*.cpp)          \
          $(wildcard src/oXu/components/game/*.cpp)    \
          $(wildcard src/oXu/beatmap/*.cpp )           \
          $(wildcard src/oXu/handlers/*.cpp)           \
-         $(wildcard src/oXu/skin/skinManager.cpp)     \
+         $(wildcard src/oXu/skin/*.cpp)               \
 
 OBJ = $(CXXSRC:.cpp=.o)
 

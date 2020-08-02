@@ -1,11 +1,11 @@
 // Copyright (c) Olaru Alexandru <olarualexandru404@gmail.com>
 // Licensed under the MIT license found in the LICENSE file in the root of this repository.
 
-#include"graphicsHandler.hpp"
+#include"graphics.hpp"
 
 namespace oxu
 {
-    bool GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread> *graphicsThread, double *inputThreadDelta, bool *windowState, SongManager *songManager)
+    bool GraphicsHandler::init(SDL_Window *window, std::shared_ptr<std::thread> *graphicsThread, double *inputThreadDelta, bool *windowState, SongManager *songManager, SkinManager *skinManager)
     {
         this->window = window;
 
@@ -14,6 +14,8 @@ namespace oxu
         this->windowState = windowState;
 
         this->inputThreadDelta = inputThreadDelta;
+
+        this->skinManager = skinManager;
 
         /* get the current context */
         context = SDL_GL_GetCurrentContext();
@@ -56,7 +58,11 @@ namespace oxu
             return false;
         }
 
-        texturesI.createTextures(renderer);
+        currentSkin = &skinManager->getSkin(0);
+        currentSkin->loadTextures(renderer);
+        currentSkin->setCursor();
+
+        currentBeatmap = &songManager->getSong(1).getBeatmap(0);
 
         doneInit = true;
 
@@ -67,8 +73,10 @@ namespace oxu
             SDL_RenderClear(renderer);
                         
             std::unique_lock<std::mutex> lockGuard(graphicsMutex);
+
             renderThreadInfo();
             renderHitCircles();
+
             lockGuard.unlock();
 
             SDL_RenderPresent(renderer);
@@ -81,15 +89,13 @@ namespace oxu
 
     void GraphicsHandler::renderHitCircles()
     {
-        Beatmap &beatmap = songManager->getSong(1).getBeatmap(0);
-
-        for(int32_t i = beatmap.objTopCap; i >= beatmap.objBotCap; --i)
+        for(int32_t i = currentBeatmap->objTopCap; i >= currentBeatmap->objBotCap; --i)
         {
-            beatmap.hitObjects[i].approachCircle(delta, beatmap.difficulty.approachRateMs);
+            currentBeatmap->hitObjects[i].approachCircle(delta, currentBeatmap->difficulty.approachRateMs);
 
-            SDL_RenderCopy(renderer, texturesI.getHCTex(), NULL, beatmap.hitObjects[i].getHCRect());
-            SDL_RenderCopy(renderer, texturesI.getACTex(), NULL, beatmap.hitObjects[i].getACRect());
-            SDL_RenderCopy(renderer, texturesI.getHCOverlayTex(), NULL, beatmap.hitObjects[i].getHCRect());
+            SDL_RenderCopy(renderer, currentSkin->getTexture(Tex::HIT_CIRCLE), NULL, currentBeatmap->hitObjects[i].getHCRect());
+            SDL_RenderCopy(renderer, currentSkin->getTexture(Tex::APPROACH_CIRCLE), NULL, currentBeatmap->hitObjects[i].getACRect());
+            SDL_RenderCopy(renderer, currentSkin->getTexture(Tex::HIT_CIRCLE_OVERLAY), NULL, currentBeatmap->hitObjects[i].getHCRect());
         }
     }
 

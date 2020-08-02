@@ -3,22 +3,26 @@
 
 #pragma once
 
-#include<experimental/filesystem>
+#include<SDL2/SDL_image.h>
+
+#include<filesystem>
 #include<vector>
 #include<string>
 
-namespace fs = std::experimental::filesystem;
+#include<oXu/skin/skin.hpp>
+#include<oXu/utils/logger.hpp>
 
 namespace oxu
 {
     class SkinManager
     {
     private:
-        std::vector<std::string> skins;
+        std::vector<Skin> skins;
 
     public:
-        void enumSkins();
+        void enumerateSkins();
 
-        const std::string &getSkinPath(const int &index);
+        Skin &getSkin(const std::size_t &index);
+        std::size_t getSkinsSize();
     };
 }
