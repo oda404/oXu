@@ -15,16 +15,16 @@ namespace oxu
         std::vector<Beatmap> beatmaps;
 
     public:
-        std::string name;
         std::string path;
+        std::string name;
 
-        Song(const std::string &name_p, const std::string &path_p);
+        Song(const std::string &path_p);
 
         void enumerateBeatmaps();
 
-        Beatmap &getBeatmap(size_t index);
+        Beatmap &getBeatmap(const size_t &index);
 
-        int getBetmapsNumber();
+        size_t getBetmapsNumber();
     };
 
 }

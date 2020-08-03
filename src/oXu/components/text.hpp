@@ -5,9 +5,6 @@
 #include<SDL2/SDL_render.h>
 #include<SDL2/SDL_ttf.h>
 
-#include<oXu/core/statusCodes.hpp>
-#include<oXu/utils/logger.hpp>
-
 namespace oxu
 {
     struct TextBox
@@ -16,20 +13,8 @@ namespace oxu
         std::string text;
         SDL_Rect rect;
 
+        void createTexture(SDL_Renderer *targetRanderer, TTF_Font *font);
+
         ~TextBox();
-    };
-
-    class Text
-    {
-    public:
-        TTF_Font *font = NULL;
-        SDL_Texture *tex = NULL;
-
-    public:
-        bool init();
-
-        void createTexture(SDL_Renderer *renderer, TextBox &textBox);
-
-        ~Text();
     };
 }

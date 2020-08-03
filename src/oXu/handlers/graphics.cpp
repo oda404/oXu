@@ -5,8 +5,11 @@
 
 namespace oxu
 {
-    bool GraphicsHandler::init(SDL_Window *window, bool *windowState, SongManager *songManager)
+    void GraphicsHandler::init(SDL_Window *window, bool *windowState, SongManager *songManager)
     {
+        thisThread = &Threading::threads[GRAPHICS];
+        thisThread->maxFPS = 240;
+
         this->songManager = songManager;
         this->windowState = windowState;
         this->window = window;
@@ -15,13 +18,9 @@ namespace oxu
         but i'm gonna leave it here just in case */
         context = SDL_GL_GetCurrentContext();
 
-        thisThread = &Threads::instance().threads[GRAPHICS_THREAD];
-        thisThread->maxFPS = 240;
-        thisThread->thread = std::make_shared<std::thread>([this] { initThread(); });
+        thisThread->thread = std::thread([this] { initThread(); });
 
         while(!doneInit);
-
-        return true;
     }
 
     GraphicsHandler::~GraphicsHandler()
@@ -29,13 +28,18 @@ namespace oxu
         SDL_DestroyRenderer(renderer);
         renderer = NULL;
 
+        TTF_CloseFont(font);
+        font = NULL;
+
+        TTF_Quit();
+
+        IMG_Quit();
+
         SDL_GL_DeleteContext(context);
     }
 
-    bool GraphicsHandler::initThread()
+    bool GraphicsHandler::initSDL()
     {
-        thisThread->timer.start();
-
         SDL_GL_MakeCurrent(window, context);
         SDL_SetHint("SDL_RENDER_BATCHING", "1");
         SDL_SetHint("SDL_RENDER_SCALE_QUALITY", "1");
@@ -45,16 +49,44 @@ namespace oxu
         if(!renderer)
         {
             LOG_ERR(SDL_GetError());
-            StatusCodes::statusCode = StatusCodes::RENDERER_CREATE_FAIL;
+            StatusCodes::code = StatusCodes::RENDERER_CREATE_FAIL;
             return false;
         }
 
-        if(!text.init())
+        if( IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) < 0 )
+		{
+			LOG_ERR(IMG_GetError());
+			StatusCodes::code = StatusCodes::IMG_INIT_FAIL;
+			return false;
+		}
+
+        if( TTF_Init() < 0 )
+		{
+			LOG_ERR(TTF_GetError());
+			StatusCodes::code = StatusCodes::TTF_INIT_FAIL;
+			return false;
+		}
+
+        font = TTF_OpenFont("res/fonts/Hack-Regular.ttf", 20);
+        if(!font)
+        {
+            LOG_ERR(TTF_GetError());
+			StatusCodes::code = StatusCodes::FONT_LOAD_FAIL;
+			return false;
+        }
+
+        return true;
+    }
+
+    bool GraphicsHandler::initThread()
+    {
+        if(!initSDL())
         {
             return false;
         }
 
         skinManager.enumerateSkins();
+
         currentSkin = &skinManager.getSkin(0);
         currentSkin->loadTextures(renderer);
         currentSkin->setCursor();
@@ -70,13 +102,15 @@ namespace oxu
 
     void GraphicsHandler::startThread()
     {
+        thisThread->timer.start();
+
         while(!*windowState)
         {
             thisThread->calculateDelta();
-
+            
             SDL_RenderClear(renderer);
                         
-            std::unique_lock<std::mutex> lockGuard(Threads::instance().mtx);
+            std::unique_lock<std::mutex> lockGuard(Threading::mtx);
 
                 renderThreadsInfo();
                 renderHitCircles();
@@ -102,16 +136,25 @@ namespace oxu
     }
 
     void GraphicsHandler::renderThreadsInfo()
-    {        
-        graphicsThreadFPS.text = "Graphics thread: " + std::to_string(static_cast<int>(1.0 / thisThread->delta)) + " FPS";
-        text.createTexture(renderer, graphicsThreadFPS);
-        graphicsThreadFPS.rect.x = Scaling::screenSize.x - graphicsThreadFPS.rect.w - 10;
-        graphicsThreadFPS.rect.y = 10;
+    {
+        static double renderTimer = 0.0;
 
-        inputThreadFPS.text = "Input thread: " + std::to_string(static_cast<int>(1.0 / Threads::instance().threads[MAIN_THREAD].delta)) + " FPS";
-        text.createTexture(renderer, inputThreadFPS);
-        inputThreadFPS.rect.x = Scaling::screenSize.x - inputThreadFPS.rect.w - 10;
-        inputThreadFPS.rect.y = graphicsThreadFPS.rect.y + graphicsThreadFPS.rect.h + 10;
+        renderTimer += thisThread->delta;
+
+        if(renderTimer >= 0.5)
+        {
+            renderTimer = 0.0;
+
+            graphicsThreadFPS.text = "Graphics: " + std::to_string(Threading::threads[GRAPHICS].FPS) + " FPS";
+            graphicsThreadFPS.createTexture(renderer, font);
+            graphicsThreadFPS.rect.x = Scaling::screenSize.x - graphicsThreadFPS.rect.w - 10;
+            graphicsThreadFPS.rect.y = 10;
+
+            inputThreadFPS.text = "Input: " + std::to_string(Threading::threads[MAIN].FPS) + " FPS";
+            inputThreadFPS.createTexture(renderer, font);
+            inputThreadFPS.rect.x = Scaling::screenSize.x - inputThreadFPS.rect.w - 10;
+            inputThreadFPS.rect.y = graphicsThreadFPS.rect.y + graphicsThreadFPS.rect.h + 10;
+        }
 
         SDL_RenderCopy(renderer, graphicsThreadFPS.tex, NULL, &graphicsThreadFPS.rect);
         SDL_RenderCopy(renderer, inputThreadFPS.tex, NULL, &inputThreadFPS.rect);

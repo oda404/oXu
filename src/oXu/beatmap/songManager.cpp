@@ -2,15 +2,6 @@
 
 namespace oxu
 {
-    static std::string getSongName(const std::string &dirPath)
-    {
-        std::string dirName;
-
-        dirName = dirPath.substr(0, dirName.find_last_of("/\\"));
-
-        return dirName.substr(dirName.find_first_of(' ') + 1, dirName.size() - 1);
-    }
-
     void SongManager::enumerateSongs()
     {
         namespace fs = std::filesystem;
@@ -21,12 +12,12 @@ namespace oxu
         {
             if(fs::is_directory(entry))
             {
-                songs.emplace_back(getSongName(entry.path()), entry.path());
+                songs.emplace_back(entry.path());
             }
         }
     }
 
-    Song &SongManager::getSong(size_t index)
+    Song &SongManager::getSong(const size_t &index)
     {
         if(index > songs.size() - 1)
         {
@@ -37,7 +28,7 @@ namespace oxu
         return songs[index];
     }
 
-    int SongManager::getSongsNumber()
+    std::size_t SongManager::getSongsSize()
     {
         return songs.size();
     }

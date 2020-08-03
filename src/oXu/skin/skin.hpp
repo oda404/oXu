@@ -22,10 +22,10 @@ namespace oxu
 
         SDL_Cursor *customCursor = NULL;
 
-        void parseAndLoadTexture(const std::string &path, SDL_Renderer *targetRenderer);
+        void parseAndLoadTexture(const std::string &texturePath, SDL_Renderer *targetRenderer);
 
     public:
-        Skin(const std::string &path_p, const std::string &name_p);
+        Skin(const std::string &path_p);
 
         ~Skin();
 

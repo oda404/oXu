@@ -43,14 +43,14 @@ namespace oxu
         if(Mix_OpenAudio(audioRate, audioFormat, audioChannels, audioBuffers) < 0)
         {
             LOG_ERR(Mix_GetError());
-            StatusCodes::statusCode = StatusCodes::MIX_OPEN_FAIL;
+            StatusCodes::code = StatusCodes::MIX_OPEN_FAIL;
             return false;
         }
 
         if(Mix_Init(MIX_INIT_MP3) != MIX_INIT_MP3)
         {
             LOG_ERR(Mix_GetError());
-            StatusCodes::statusCode = StatusCodes::MIX_INIT_FAIL;
+            StatusCodes::code = StatusCodes::MIX_INIT_FAIL;
             return false;
         }
 

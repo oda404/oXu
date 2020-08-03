@@ -5,24 +5,14 @@
 
 namespace oxu
 {
-	int Game::init()
+	bool Game::initSDL()
 	{
-		thisThread = &Threads::instance().threads[MAIN_THREAD];
-		thisThread->maxFPS = 1000;
-
 		Logger::init();
 
 		if( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0 )
 		{
 			LOG_ERR(SDL_GetError());
-			StatusCodes::statusCode = StatusCodes::SDL_INIT_FAIL;
-			return false;
-		}
-
-		if( IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) < 0 )
-		{
-			LOG_ERR(IMG_GetError());
-			StatusCodes::statusCode = StatusCodes::IMG_INIT_FAIL;
+			StatusCodes::code = StatusCodes::SDL_INIT_FAIL;
 			return false;
 		}
 
@@ -41,7 +31,20 @@ namespace oxu
 		if(!window)
 		{
 			LOG_ERR(SDL_GetError());
-			StatusCodes::statusCode = StatusCodes::WINDOW_CREATE_FAIL;
+			StatusCodes::code = StatusCodes::WINDOW_CREATE_FAIL;
+			return false;
+		}
+
+		return true;
+	}
+
+	bool Game::init()
+	{
+		thisThread = &Threading::threads[MAIN];
+		thisThread->maxFPS = 1000;
+
+		if(!initSDL())
+		{
 			return false;
 		}
 
@@ -61,7 +64,7 @@ namespace oxu
 
 		currentBeatmap->timer.start();
 
-		soundHandler.playMusic(currentBeatmap->timer.getEllapsedTime());
+		soundHandler.playMusic(currentBeatmap->timer.getEllapsedTimeMilli());
 		
 		return true;
 	}
@@ -72,35 +75,36 @@ namespace oxu
 
 		while(!windowState)
 		{
+			thisThread->calculateDelta();
+
 			inputHandler.handleInput(windowState);
 
-			std::unique_lock<std::mutex> inputLock(Threads::instance().mtx);
+			std::unique_lock<std::mutex> inputLock(Threading::mtx);
 
-				if(currentBeatmap->hitObjects[currentBeatmap->objTopCap + 1].shouldBeAddedToPool(currentBeatmap->timer.getEllapsedTime()))
+				if(currentBeatmap->hitObjects[currentBeatmap->objTopCap + 1].shouldBeAddedToPool(currentBeatmap->timer.getEllapsedTimeMilli()))
 				{
-					currentBeatmap->hitObjects[currentBeatmap->objTopCap + 1].errorMargin = currentBeatmap->timer.getEllapsedTime() - currentBeatmap->hitObjects[currentBeatmap->objTopCap + 1].getSpawnTime();
+					currentBeatmap->hitObjects[currentBeatmap->objTopCap + 1].errorMargin = currentBeatmap->timer.getEllapsedTimeMilli() - currentBeatmap->hitObjects[currentBeatmap->objTopCap + 1].getSpawnTime();
 					++currentBeatmap->objTopCap;
 				}
 
-				if(currentBeatmap->hitObjects[currentBeatmap->objBotCap].shouldBeRemovedFromPool(currentBeatmap->timer.getEllapsedTime()))
+				if(currentBeatmap->hitObjects[currentBeatmap->objBotCap].shouldBeRemovedFromPool(currentBeatmap->timer.getEllapsedTimeMilli()))
 				{
 					++currentBeatmap->objBotCap;
 				}
 				
 			inputLock.unlock();
 
-			thisThread->calculateDelta();
 			thisThread->limitFPS();
 		}
 
-		Threads::instance().threads[GRAPHICS_THREAD].thread->join();
+		Threading::threads[GRAPHICS].thread.join();
 	};
 
 	void Game::clean()
 	{
-		if(StatusCodes::statusCode != StatusCodes::OK)
+		if(StatusCodes::code != StatusCodes::OK)
 		{
-			LOG_WARN("Exiting with return status {0}", StatusCodes::statusCode);
+			LOG_WARN("Exiting with return status {0}", StatusCodes::code);
 		}
 		else
 		{
@@ -109,8 +113,6 @@ namespace oxu
 
 		SDL_DestroyWindow(window);
 		window = NULL;
-
-		IMG_Quit();
 
 		SDL_Quit();
 	}

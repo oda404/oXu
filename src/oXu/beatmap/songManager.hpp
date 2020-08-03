@@ -17,7 +17,7 @@ namespace oxu
     public:
         void enumerateSongs();
 
-        Song &getSong(size_t index);
-        int getSongsNumber();
+        Song &getSong(const size_t &index);
+        size_t getSongsSize();
     };
 }

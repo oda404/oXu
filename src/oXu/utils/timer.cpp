@@ -11,7 +11,12 @@ namespace oxu
         running = true;
     }
 
-    uint32_t Timer::getEllapsedTime() {
+    uint32_t Timer::getEllapsedTimeMilli() {
         return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - startPoint).count();
+    }
+
+    uint32_t Timer::getEllapsedTimeMicro()
+    {
+        return std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - startPoint).count();
     }
 }

@@ -3,22 +3,21 @@
 
 #pragma once
 
-namespace oxu
+#include<cstdint>
+
+namespace oxu::StatusCodes
 {
-    struct StatusCodes
+    inline uint8_t code;
+    enum
     {
-        static int statusCode;
-        enum
-        {
-            OK,
-            SDL_INIT_FAIL,
-            IMG_INIT_FAIL,
-            WINDOW_CREATE_FAIL,
-            RENDERER_CREATE_FAIL,
-            MIX_OPEN_FAIL,
-            MIX_INIT_FAIL,
-            TTF_INIT_FAIL,
-            FONT_LOAD_FAIL,
-        };
+        OK,
+        SDL_INIT_FAIL,
+        IMG_INIT_FAIL,
+        WINDOW_CREATE_FAIL,
+        RENDERER_CREATE_FAIL,
+        MIX_OPEN_FAIL,
+        MIX_INIT_FAIL,
+        TTF_INIT_FAIL,
+        FONT_LOAD_FAIL,
     };
 }

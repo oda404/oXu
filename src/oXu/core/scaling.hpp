@@ -5,11 +5,8 @@
 
 #include<oXu/utils/vector2.hpp>
 
-namespace oxu
+namespace oxu::Scaling
 {
-    struct Scaling
-    {
-        static float oxuPx;
-        static Vector2<int> screenSize;
-    };
+    inline float oxuPx;
+    inline Vector2<int> screenSize;
 }

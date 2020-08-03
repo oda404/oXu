@@ -1,21 +1,22 @@
 #pragma once
 
-#include<memory>
 #include<cstdint>
 #include<thread>
 #include<atomic>
 
 #include<oXu/utils/timer.hpp>
+#include<oXu/utils/logger.hpp>
 
 namespace oxu
 {
     struct Thread
     {
-        std::shared_ptr<std::thread> thread;
+        std::thread thread;
 
-        uint32_t startTick = 0;
-        uint32_t lastTick = 0;
-        std::atomic<double> delta = 0.0;
+        double startTick = 0.0;
+        double lastTick = 0.0;
+        double delta = 0.0;
+        std::atomic<uint16_t> FPS = 0;
         uint16_t maxFPS = 0;
 
         Timer timer;

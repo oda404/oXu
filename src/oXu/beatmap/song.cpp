@@ -2,8 +2,8 @@
 
 namespace oxu
 {
-    Song::Song(const std::string &name_p, const std::string &path_p):
-    name(name_p), path(path_p)
+    Song::Song(const std::string &path_p):
+    path(path_p), name(path_p.substr(path_p.find_last_of('/') + 1, path_p.size() - 1))
     {
         LOG_DEBUG("Loaded song {0}", name);
         enumerateBeatmaps();
@@ -24,7 +24,7 @@ namespace oxu
         }
     }
 
-    Beatmap &Song::getBeatmap(size_t index)
+    Beatmap &Song::getBeatmap(const size_t &index)
     {
         if(index > beatmaps.size() - 1)
         {
@@ -35,7 +35,7 @@ namespace oxu
         return beatmaps[index];
     }
 
-    int Song::getBetmapsNumber()
+    size_t Song::getBetmapsNumber()
     {
         return beatmaps.size();
     }

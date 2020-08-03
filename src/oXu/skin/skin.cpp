@@ -2,8 +2,8 @@
 
 namespace oxu
 {
-    Skin::Skin(const std::string &path_p, const std::string &name_p):
-    path(path_p), name(name_p)
+    Skin::Skin(const std::string &path_p):
+    path(path_p), name(path_p.substr(path_p.find_last_of('/'), path_p.size() - 1))
     {
         
     }
@@ -16,15 +16,15 @@ namespace oxu
         }
     }
 
-    void Skin::parseAndLoadTexture(const std::string &path, SDL_Renderer *targetRenderer)
+    void Skin::parseAndLoadTexture(const std::string &texturePath, SDL_Renderer *targetRenderer)
     {
-        std::string name = path.substr(path.find_last_of('/') + 1, path.size() - 1);
+        std::string textureName = texturePath.substr(texturePath.find_last_of('/') + 1, texturePath.size() - 1);
 
-        std::map<std::string, std::uint8_t>::const_iterator pair = texNamesMap.find(name);
+        std::map<std::string, std::uint8_t>::const_iterator pair = texNamesMap.find(textureName);
 
         if(pair->first != "")
         {
-            textures[pair->second] = IMG_LoadTexture(targetRenderer, path.c_str());
+            textures[pair->second] = IMG_LoadTexture(targetRenderer, texturePath.c_str());
         }
     }
 

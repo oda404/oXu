@@ -3,24 +3,12 @@
 #include<mutex>
 #include<oXu/core/threading/thread.hpp>
 
-#define MAIN_THREAD 0
-#define GRAPHICS_THREAD 1
-#define SOUND_THREAD 2
+#define MAIN 0
+#define GRAPHICS 1
+#define SOUND 2
 
-namespace oxu
+namespace oxu::Threading
 {
-    struct Threads
-    {
-    public:
-        static Threads &instance();
-        Threads(Threads const&) = delete;
-        void operator=(Threads const&) = delete;
-
-        Thread threads[3];
-
-        std::mutex mtx;
-
-    private:
-        Threads();
-    };
+    inline Thread threads[3];
+    inline std::mutex mtx;
 }

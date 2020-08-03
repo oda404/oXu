@@ -14,7 +14,7 @@ namespace oxu
             if(fs::is_directory(entry))
             {
                 std::string path = entry.path().string();
-                skins.emplace_back(path, path.substr(path.find_last_of('/'), path.size() - 1));
+                skins.emplace_back(path);
             }
         }
     }

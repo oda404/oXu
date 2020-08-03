@@ -4,6 +4,7 @@
 #pragma once
 
 #include<SDL2/SDL_render.h>
+#include<SDL2/SDL_ttf.h>
 
 #include<atomic>
 #include<mutex>
@@ -36,7 +37,8 @@ namespace oxu
         Skin *currentSkin;
         Beatmap *currentBeatmap;
 
-        Text text;
+        TTF_Font *font = NULL;
+
         TextBox graphicsThreadFPS;
         TextBox inputThreadFPS;
 
@@ -45,9 +47,11 @@ namespace oxu
     public:
         ~GraphicsHandler();
 
-        bool init(SDL_Window *window, bool *windowState, SongManager *songManager);
+        void init(SDL_Window *window, bool *windowState, SongManager *songManager);
 
     private:
+        bool initSDL();
+
         bool initThread();
 
         void startThread();
