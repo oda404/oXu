@@ -1,4 +1,4 @@
-CXX=g++
+CXX=g++-9
 CXX_STANDARD=--std=c++17
 CXX_FLAGS=-O2 -Wall -DSPDLOG_COMPILED_LIB
 CXX_INCLUDE_PATH=-Ivendor/spdlog/include -Isrc

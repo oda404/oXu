@@ -42,14 +42,9 @@ namespace oxu
         return &ACRect;
     }
 
-    void HitObject::render(SDL_Renderer *targetRenderer)
+    bool HitObject::shouldBeAddedToPool(const uint32_t &ellapsedMapTime)
     {
-        
-    }
-
-    bool HitObject::shouldBeAddedToPool(const uint32_t &time)
-    {
-        if(time >= spawnTime)
+        if(ellapsedMapTime >= spawnTime)
         {
             return true;
         }
@@ -57,21 +52,25 @@ namespace oxu
         return false;
     }
 
-    bool HitObject::shouldBeRemovedFromPool(const uint32_t &time)
+    bool HitObject::shouldBeRemovedFromPool(const uint32_t &ellapsedMapTime)
     {
-        if(time >= hitTime)
+        if(ellapsedMapTime > hitTime)
         {
             return true;
         }
         
         return false;
+    }
+    void HitObject::setErrorMargin(const double &err,  const uint32_t &arMs)
+    {
+        ACT = (err - spawnTime) / arMs;
     }
 
     void HitObject::approachCircle(const float &delta, const float &AR)
     {
         if(ACT <= 1.f)
         {
-            ACT += delta / (AR / 1000.f - errorMargin / 1000.f);
+            ACT += delta / (AR / 1000.f);
 
             Vector2<float> newPosition = Vector2<float>::lerp(ACInitialSize, Vector2<float>(HCRect.w, HCRect.h), ACT);
 

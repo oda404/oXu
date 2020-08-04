@@ -9,12 +9,12 @@ int main(int argc, char **argv)
 	if(!game.init())
 	{
 		game.clean();
-		return oxu::StatusCodes::code;
+		return oxu::Status::code;
 	}
 
 	game.loop();
 
 	game.clean();
 
-	return oxu::StatusCodes::code;
+	return oxu::Status::code;
 }

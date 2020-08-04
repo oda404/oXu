@@ -49,21 +49,21 @@ namespace oxu
         if(!renderer)
         {
             LOG_ERR(SDL_GetError());
-            StatusCodes::code = StatusCodes::RENDERER_CREATE_FAIL;
+            Status::code = Status::RENDERER_CREATE_FAIL;
             return false;
         }
 
         if( IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) < 0 )
 		{
 			LOG_ERR(IMG_GetError());
-			StatusCodes::code = StatusCodes::IMG_INIT_FAIL;
+			Status::code = Status::IMG_INIT_FAIL;
 			return false;
 		}
 
         if( TTF_Init() < 0 )
 		{
 			LOG_ERR(TTF_GetError());
-			StatusCodes::code = StatusCodes::TTF_INIT_FAIL;
+			Status::code = Status::TTF_INIT_FAIL;
 			return false;
 		}
 
@@ -71,7 +71,7 @@ namespace oxu
         if(!font)
         {
             LOG_ERR(TTF_GetError());
-			StatusCodes::code = StatusCodes::FONT_LOAD_FAIL;
+			Status::code = Status::FONT_LOAD_FAIL;
 			return false;
         }
 
@@ -87,11 +87,11 @@ namespace oxu
 
         skinManager.enumerateSkins();
 
-        currentSkin = &skinManager.getSkin(0);
-        currentSkin->loadTextures(renderer);
-        currentSkin->setCursor();
+        skin = &skinManager.getSkin(0);
+        skin->loadTextures(renderer);
+        skin->setCursor();
 
-        currentBeatmap = &songManager->getSong(1).getBeatmap(0);
+        beatmap = &songManager->getSong(1).getBeatmap(0);
 
         doneInit = true;
 
@@ -125,13 +125,15 @@ namespace oxu
 
     void GraphicsHandler::renderHitCircles()
     {
-        for(int32_t i = currentBeatmap->objTopCap; i >= currentBeatmap->objBotCap; --i)
-        {
-            currentBeatmap->hitObjects[i].approachCircle(thisThread->delta, currentBeatmap->difficulty.approachRateMs);
+        HitObject *obj;
 
-            SDL_RenderCopy(renderer, currentSkin->getTexture(Tex::HIT_CIRCLE), NULL, currentBeatmap->hitObjects[i].getHCRect());
-            SDL_RenderCopy(renderer, currentSkin->getTexture(Tex::APPROACH_CIRCLE), NULL, currentBeatmap->hitObjects[i].getACRect());
-            SDL_RenderCopy(renderer, currentSkin->getTexture(Tex::HIT_CIRCLE_OVERLAY), NULL, currentBeatmap->hitObjects[i].getHCRect());
+        for(size_t i = beatmap->hitObjectsPool.size() - 1; i != SIZE_MAX; --i)
+        {
+            obj = beatmap->hitObjectsPool[i];
+
+            SDL_RenderCopy(renderer, skin->getTexture(Tex::HIT_CIRCLE), NULL, obj->getHCRect());
+            SDL_RenderCopy(renderer, skin->getTexture(Tex::APPROACH_CIRCLE), NULL, obj->getACRect());
+            SDL_RenderCopy(renderer, skin->getTexture(Tex::HIT_CIRCLE_OVERLAY), NULL, obj->getHCRect());
         }
     }
 

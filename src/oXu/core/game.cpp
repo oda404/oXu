@@ -12,7 +12,7 @@ namespace oxu
 		if( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0 )
 		{
 			LOG_ERR(SDL_GetError());
-			StatusCodes::code = StatusCodes::SDL_INIT_FAIL;
+			Status::code = Status::SDL_INIT_FAIL;
 			return false;
 		}
 
@@ -31,7 +31,7 @@ namespace oxu
 		if(!window)
 		{
 			LOG_ERR(SDL_GetError());
-			StatusCodes::code = StatusCodes::WINDOW_CREATE_FAIL;
+			Status::code = Status::WINDOW_CREATE_FAIL;
 			return false;
 		}
 
@@ -81,16 +81,7 @@ namespace oxu
 
 			std::unique_lock<std::mutex> inputLock(Threading::mtx);
 
-				if(currentBeatmap->hitObjects[currentBeatmap->objTopCap + 1].shouldBeAddedToPool(currentBeatmap->timer.getEllapsedTimeMilli()))
-				{
-					currentBeatmap->hitObjects[currentBeatmap->objTopCap + 1].errorMargin = currentBeatmap->timer.getEllapsedTimeMilli() - currentBeatmap->hitObjects[currentBeatmap->objTopCap + 1].getSpawnTime();
-					++currentBeatmap->objTopCap;
-				}
-
-				if(currentBeatmap->hitObjects[currentBeatmap->objBotCap].shouldBeRemovedFromPool(currentBeatmap->timer.getEllapsedTimeMilli()))
-				{
-					++currentBeatmap->objBotCap;
-				}
+				currentBeatmap->updateObjects(thisThread->delta);
 				
 			inputLock.unlock();
 
@@ -102,9 +93,9 @@ namespace oxu
 
 	void Game::clean()
 	{
-		if(StatusCodes::code != StatusCodes::OK)
+		if(Status::code != Status::OK)
 		{
-			LOG_WARN("Exiting with return status {0}", StatusCodes::code);
+			LOG_WARN("Exiting with return status {0}", Status::code);
 		}
 		else
 		{

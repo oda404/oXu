@@ -2,13 +2,13 @@
 
 #include<cstdint>
 
-#include<SDL2/SDL_render.h>
 #include<SDL2/SDL_rect.h>
 
 #include<oXu/core/scaling.hpp>
 #include<oXu/beatmap/sections/difficulty.hpp>
 #include<oXu/beatmap/components/playField.hpp>
 #include<oXu/utils/vector2.hpp>
+
 #include<oXu/utils/logger.hpp>
 
 namespace oxu
@@ -36,7 +36,7 @@ namespace oxu
             const Difficulty &difficulty
         );
 
-        int errorMargin = 0;
+        void setErrorMargin(const double &err, const uint32_t &arMs);
 
         const uint32_t &getHitTime();
 
@@ -46,11 +46,9 @@ namespace oxu
 
         const SDL_Rect *getACRect();
 
-        void render(SDL_Renderer *targetRenderer);
+        bool shouldBeAddedToPool(const uint32_t &ellapsedMapTime);
 
-        bool shouldBeAddedToPool(const uint32_t &time);
-
-        bool shouldBeRemovedFromPool(const uint32_t &time);
+        bool shouldBeRemovedFromPool(const uint32_t &ellapsedMapTime);
 
         void approachCircle(const float &delta, const float &AR);
         

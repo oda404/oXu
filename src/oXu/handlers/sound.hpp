@@ -10,7 +10,7 @@
 
 #include<oXu/utils/logger.hpp>
 
-#include<oXu/core/statusCodes.hpp>
+#include<oXu/core/status.hpp>
 
 namespace oxu
 {

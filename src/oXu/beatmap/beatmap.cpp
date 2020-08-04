@@ -18,6 +18,27 @@ namespace oxu
 
     }
 
+    void Beatmap::updateObjects(const double &delta)
+    {
+        if(hitObjects[objTopCap + 1].shouldBeAddedToPool(timer.getEllapsedTimeMilli()))
+        {
+            hitObjectsPool.push_back(&hitObjects[objTopCap + 1]);
+            hitObjects[objTopCap + 1].setErrorMargin(timer.getEllapsedTimeMicro() / 1000.0, difficulty.approachRateMs);
+            ++objTopCap;
+        }
+
+        if(hitObjects[objBotCap].shouldBeRemovedFromPool(timer.getEllapsedTimeMilli()))
+        {
+            hitObjectsPool.erase(hitObjectsPool.begin());
+            ++objBotCap;
+        }
+
+        for(HitObject *obj: hitObjectsPool)
+        {
+            obj->approachCircle(delta, difficulty.approachRateMs);
+        }
+    }
+
     void Beatmap::loadGenericInfo()
     {
         std::ifstream beatmapFile(path);

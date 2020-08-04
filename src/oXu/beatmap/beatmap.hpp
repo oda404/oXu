@@ -29,24 +29,29 @@ namespace oxu
     {
     private:
         std::string path;
+        uint8_t fileFormat;
+
+        int32_t objTopCap = -1;
+        int32_t objBotCap = 0;
+
+        std::vector<TimingPoint> timingPoints;
+        std::vector<HitObject> hitObjects;
 
     public:
         Beatmap(const std::string &path_p);
         
-        uint8_t fileFormat;
         General general;
         Editor editor;
         Metadata metadata;
         Difficulty difficulty;
         Events events;
-        std::vector<TimingPoint> timingPoints;
-        std::vector<HitObject> hitObjects;
+
+        std::vector<HitObject*> hitObjectsPool;
 
         Timer timer;
-        int32_t objTopCap = -1;
-        int32_t objBotCap = 0;
 
         void loadGenericInfo();
         void loadGameInfo();
+        void updateObjects(const double &delta);
     };
 }

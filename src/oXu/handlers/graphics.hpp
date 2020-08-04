@@ -16,7 +16,7 @@
 
 #include<oXu/utils/logger.hpp>
 
-#include<oXu/core/statusCodes.hpp>
+#include<oXu/core/status.hpp>
 #include<oXu/core/threading/threads.hpp>
 
 namespace oxu
@@ -34,8 +34,8 @@ namespace oxu
         SongManager *songManager;
         SkinManager skinManager;
 
-        Skin *currentSkin;
-        Beatmap *currentBeatmap;
+        Skin *skin;
+        Beatmap *beatmap;
 
         TTF_Font *font = NULL;
 

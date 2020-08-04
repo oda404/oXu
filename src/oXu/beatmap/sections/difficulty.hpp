@@ -12,7 +12,7 @@ namespace oxu
         float approachRate;
         float sliderMultiplier;
         float sliderTickRate;
-        uint32_t approachRateMs;
-        uint32_t circleSizePx;
+        uint16_t approachRateMs;
+        uint16_t circleSizePx;
     };
 }

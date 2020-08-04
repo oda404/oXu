@@ -5,9 +5,9 @@
 
 #include<cstdint>
 
-namespace oxu::StatusCodes
+namespace oxu::Status
 {
-    inline uint8_t code;
+    inline uint8_t code = 0;
     enum
     {
         OK,
