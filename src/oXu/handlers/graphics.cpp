@@ -67,16 +67,7 @@ namespace oxu
 			return false;
 		}
 
-        passwd *pwd;
-
-        pwd = getpwuid(getuid());
-
-        std::string dir;
-        dir = "/home/";
-        dir.append(pwd->pw_name);
-        dir.append("/.config/oXu/res/fonts/Hack-Regular.ttf");
-
-        font = TTF_OpenFont(dir.c_str(), 20);
+        font = TTF_OpenFont((Dirs::res + "/fonts/Hack-Regular.ttf").c_str(), 20);
         if(!font)
         {
             LOG_ERR(TTF_GetError());
@@ -100,7 +91,7 @@ namespace oxu
         skin->loadTextures(renderer);
         skin->setCursor();
 
-        beatmap = &songManager->getSong(1).getBeatmap(0);
+        beatmap = &songManager->getSong(0).getBeatmap(0);
 
         doneInit = true;
 

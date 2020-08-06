@@ -4,11 +4,9 @@
 #include<vector>
 #include<filesystem>
 
-#include<unistd.h>
-#include<pwd.h>
-
 #include<oXu/utils/logger.hpp>
 #include<oXu/beatmap/song.hpp>
+#include<oXu/core/dirs.hpp>
 
 namespace oxu
 {

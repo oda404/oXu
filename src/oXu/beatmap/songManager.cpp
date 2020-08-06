@@ -8,16 +8,7 @@ namespace oxu
 
         songs.clear();
 
-        passwd *pwd;
-
-        pwd = getpwuid(getuid());
-
-        std::string dir;
-        dir = "/home/";
-        dir.append(pwd->pw_name);
-        dir.append("/.config/oXu/songs");
-
-        for(auto &entry: fs::directory_iterator(dir))
+        for(auto &entry: fs::directory_iterator(Dirs::songs))
         {
             if(fs::is_directory(entry))
             {

@@ -9,11 +9,10 @@
 #include<vector>
 #include<string>
 
-#include<pwd.h>
-#include<unistd.h>
-
 #include<oXu/skin/skin.hpp>
 #include<oXu/utils/logger.hpp>
+
+#include<oXu/core/dirs.hpp>
 
 namespace oxu
 {

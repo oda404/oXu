@@ -22,6 +22,7 @@ set(OXU_HEADERS
 	${OXU_SRC_DIR}/core/game.hpp
 	${OXU_SRC_DIR}/core/scaling.hpp
 	${OXU_SRC_DIR}/core/status.hpp
+	${OXU_SRC_DIR}/core/dirs.hpp
 
 	${OXU_SRC_DIR}/core/threading/thread.hpp
 	${OXU_SRC_DIR}/core/threading/threads.hpp
@@ -67,6 +68,7 @@ add_executable(${PROJECT_NAME}
 	${OXU_SRC_DIR}/core/game.cpp
 	${OXU_SRC_DIR}/core/scaling.cpp
 	${OXU_SRC_DIR}/core/status.cpp
+	${OXU_SRC_DIR}/core/dirs.cpp
 
 	${OXU_SRC_DIR}/core/threading/thread.cpp
 	${OXU_SRC_DIR}/core/threading/threads.cpp

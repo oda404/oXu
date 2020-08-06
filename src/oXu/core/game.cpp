@@ -48,8 +48,10 @@ namespace oxu
 			return false;
 		}
 
+		Dirs::setDirs();
+
 		songManager.enumerateSongs();
-		currentBeatmap = &songManager.getSong(1).getBeatmap(0);
+		currentBeatmap = &songManager.getSong(0).getBeatmap(0);
 		currentBeatmap->loadGenericInfo();
 		currentBeatmap->loadGameInfo();
 
@@ -60,7 +62,7 @@ namespace oxu
 		soundHandler.init();
 		soundHandler.setMusicVolume(5);
 		//TODO fix extra \r and the end of audiofilename
-		soundHandler.loadMusic(songManager.getSong(1).path + '/' + songManager.getSong(1).getBeatmap(0).general.audioFilename);
+		soundHandler.loadMusic(songManager.getSong(0).path + '/' +  currentBeatmap->general.audioFilename);
 
 		currentBeatmap->timer.start();
 

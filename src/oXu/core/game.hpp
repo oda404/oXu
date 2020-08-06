@@ -20,6 +20,8 @@
 #include<oXu/beatmap/songManager.hpp>
 #include<oXu/skin/skinManager.hpp>
 
+#include<oXu/core/dirs.hpp>
+
 namespace oxu
 {
     class Game

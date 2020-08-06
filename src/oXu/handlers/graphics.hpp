@@ -9,9 +9,6 @@
 #include<atomic>
 #include<mutex>
 
-#include<unistd.h>
-#include<pwd.h>
-
 #include<oXu/components/text.hpp>
 
 #include<oXu/beatmap/songManager.hpp>
@@ -21,6 +18,7 @@
 
 #include<oXu/core/status.hpp>
 #include<oXu/core/threading/threads.hpp>
+#include<oXu/core/dirs.hpp>
 
 namespace oxu
 {
