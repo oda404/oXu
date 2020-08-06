@@ -9,7 +9,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # append cmake/sdl2 to the module path
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2)
 
-
 set(OXU_SRC_DIR src/oXu)
 set(OXU_INCLUDE_DIR src)
 
@@ -100,10 +99,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 	${OXU_INCLUDE_DIR}
 )
 
-# you may ask why i don't use spdlog::spdlog for linking since i call find_package(spdlog REQUIRED)
-# as shown in the spdlog example, that's because if i link that way the game starts loding weird textures and takes unusually long to start up, why? I don't know but that's how it is
 target_link_libraries(${PROJECT_NAME} PRIVATE
-	spdlog
+	spdlog::spdlog
 	SDL2::Main
 	SDL2::Mixer
 	SDL2::TTF

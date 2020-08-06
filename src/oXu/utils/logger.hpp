@@ -6,23 +6,12 @@
 #include<spdlog/spdlog.h>
 #include<spdlog/sinks/stdout_color_sinks.h>
 
-#include<memory>
-
-namespace oxu
+namespace oxu::Logger
 {
-    class Logger
-    {
-    private:
-        static std::shared_ptr<spdlog::logger> logger;
-
-    public:
-        static void init();
-
-        static std::shared_ptr<spdlog::logger> &getLogger();
-    };
-
-    #define LOG_INFO  Logger::getLogger()->info
-    #define LOG_WARN  Logger::getLogger()->warn
-    #define LOG_ERR   Logger::getLogger()->error
-    #define LOG_DEBUG Logger::getLogger()->debug
+    void init();
+    
+    #define LOG_INFO  spdlog::info
+    #define LOG_WARN  spdlog::warn
+    #define LOG_ERR   spdlog::error
+    #define LOG_DEBUG spdlog::debug
 }
