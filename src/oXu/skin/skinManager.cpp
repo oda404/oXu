@@ -9,7 +9,16 @@ namespace oxu
     {
         namespace fs = std::filesystem;
 
-        for(const fs::directory_entry &entry: fs::directory_iterator("skins/"))
+        passwd *pwd;
+
+        pwd = getpwuid(getuid());
+
+        std::string dir;
+        dir = "/home/";
+        dir.append(pwd->pw_name);
+        dir.append("/.config/oXu/skins");
+
+        for(const fs::directory_entry &entry: fs::directory_iterator(dir))
         {
             if(fs::is_directory(entry))
             {

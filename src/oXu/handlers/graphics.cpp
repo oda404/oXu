@@ -67,7 +67,16 @@ namespace oxu
 			return false;
 		}
 
-        font = TTF_OpenFont("res/fonts/Hack-Regular.ttf", 20);
+        passwd *pwd;
+
+        pwd = getpwuid(getuid());
+
+        std::string dir;
+        dir = "/home/";
+        dir.append(pwd->pw_name);
+        dir.append("/.config/oXu/res/fonts/Hack-Regular.ttf");
+
+        font = TTF_OpenFont(dir.c_str(), 20);
         if(!font)
         {
             LOG_ERR(TTF_GetError());

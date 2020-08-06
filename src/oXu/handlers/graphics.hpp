@@ -9,6 +9,9 @@
 #include<atomic>
 #include<mutex>
 
+#include<unistd.h>
+#include<pwd.h>
+
 #include<oXu/components/text.hpp>
 
 #include<oXu/beatmap/songManager.hpp>
