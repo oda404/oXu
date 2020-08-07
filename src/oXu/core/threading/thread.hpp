@@ -17,6 +17,7 @@ namespace oxu
         double lastTick = 0.0;
         double delta = 0.0;
         std::atomic<uint16_t> FPS = 0;
+        std::atomic<bool> doneInit = false;
         uint16_t maxFPS = 0;
 
         Timer timer;

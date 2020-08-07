@@ -1,11 +1,11 @@
 // Copyright (c) Olaru Alexandru <olarualexandru404@gmail.com>
 // Licensed under the MIT license found in the LICENSE file in the root of this repository.
 
-#include<oXu/core/game.hpp>
+#include<oXu/core/oXu.hpp>
 
 int main(int argc, char **argv)
 {
-	oxu::Game game;
+	oxu::oXu game;
 	if(!game.init())
 	{
 		game.clean();

@@ -20,7 +20,7 @@ namespace oxu
 
         thisThread->thread = std::thread([this] { initThread(); });
 
-        while(!doneInit);
+        while(!thisThread->doneInit);
     }
 
     GraphicsHandler::~GraphicsHandler()
@@ -93,7 +93,7 @@ namespace oxu
 
         beatmap = &songManager->getSong(0).getBeatmap(0);
 
-        doneInit = true;
+        thisThread->doneInit = true;
 
         startThread();
 
@@ -112,7 +112,7 @@ namespace oxu
                         
             std::unique_lock<std::mutex> lockGuard(Threading::mtx);
 
-                renderThreadsInfo();
+                renderUI();
                 renderHitCircles();
 
             lockGuard.unlock();
@@ -147,18 +147,23 @@ namespace oxu
         {
             renderTimer = 0.0;
 
-            graphicsThreadFPS.text = "Graphics: " + std::to_string(Threading::threads[GRAPHICS].FPS) + " FPS";
-            graphicsThreadFPS.createTexture(renderer, font);
-            graphicsThreadFPS.rect.x = Scaling::screenSize.x - graphicsThreadFPS.rect.w - 10;
-            graphicsThreadFPS.rect.y = 10;
+            gameUI.graphicsThreadFPS.text = "Graphics: " + std::to_string(Threading::threads[GRAPHICS].FPS) + " FPS";
+            gameUI.graphicsThreadFPS.createTexture(renderer, font);
+            gameUI.graphicsThreadFPS.rect.x = Scaling::screenSize.x - gameUI.graphicsThreadFPS.rect.w - 10;
+            gameUI.graphicsThreadFPS.rect.y = 10;
 
-            inputThreadFPS.text = "Input: " + std::to_string(Threading::threads[MAIN].FPS) + " FPS";
-            inputThreadFPS.createTexture(renderer, font);
-            inputThreadFPS.rect.x = Scaling::screenSize.x - inputThreadFPS.rect.w - 10;
-            inputThreadFPS.rect.y = graphicsThreadFPS.rect.y + graphicsThreadFPS.rect.h + 10;
+            gameUI.inputThreadFPS.text = "Input: " + std::to_string(Threading::threads[MAIN].FPS) + " FPS";
+            gameUI.inputThreadFPS.createTexture(renderer, font);
+            gameUI.inputThreadFPS.rect.x = Scaling::screenSize.x - gameUI.inputThreadFPS.rect.w - 10;
+            gameUI.inputThreadFPS.rect.y = gameUI.graphicsThreadFPS.rect.y + gameUI.graphicsThreadFPS.rect.h + 10;
         }
 
-        SDL_RenderCopy(renderer, graphicsThreadFPS.tex, NULL, &graphicsThreadFPS.rect);
-        SDL_RenderCopy(renderer, inputThreadFPS.tex, NULL, &inputThreadFPS.rect);
+        SDL_RenderCopy(renderer, gameUI.graphicsThreadFPS.tex, NULL, &gameUI.graphicsThreadFPS.rect);
+        SDL_RenderCopy(renderer, gameUI.inputThreadFPS.tex, NULL, &gameUI.inputThreadFPS.rect);
+    }
+
+    void GraphicsHandler::renderUI()
+    {
+        renderThreadsInfo();
     }
 }

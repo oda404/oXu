@@ -1,11 +1,11 @@
 // Copyright (c) Olaru Alexandru <olarualexandru404@gmail.com>
 // Licensed under the MIT license found in the LICENSE file in the root of this repository.
 
-#include "game.hpp"
+#include "oXu.hpp"
 
 namespace oxu
 {
-	bool Game::initSDL()
+	bool oXu::initSDL()
 	{
 		Logger::init();
 
@@ -38,7 +38,7 @@ namespace oxu
 		return true;
 	}
 
-	bool Game::init()
+	bool oXu::init()
 	{
 		thisThread = &Threading::threads[MAIN];
 		thisThread->maxFPS = 1000;
@@ -71,7 +71,7 @@ namespace oxu
 		return true;
 	}
 
-	void Game::loop()
+	void oXu::loop()
 	{
 		thisThread->timer.start();
 
@@ -93,7 +93,7 @@ namespace oxu
 		Threading::threads[GRAPHICS].thread.join();
 	};
 
-	void Game::clean()
+	void oXu::clean()
 	{
 		if(Status::code != Status::OK)
 		{

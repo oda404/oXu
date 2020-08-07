@@ -24,7 +24,7 @@
 
 namespace oxu
 {
-    class Game
+    class oXu
     {
     private:
         SDL_Window *window = NULL;

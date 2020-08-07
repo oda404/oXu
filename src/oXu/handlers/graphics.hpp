@@ -7,9 +7,8 @@
 #include<SDL2/SDL_ttf.h>
 
 #include<atomic>
-#include<mutex>
 
-#include<oXu/components/text.hpp>
+#include<oXu/graphics/UI/game.hpp>
 
 #include<oXu/beatmap/songManager.hpp>
 #include<oXu/skin/skinManager.hpp>
@@ -29,19 +28,15 @@ namespace oxu
         SDL_GLContext context;
         SDL_Window *window = NULL;
         bool *windowState;
-
-        std::atomic<bool> doneInit = false;
-
+        
         SongManager *songManager;
         SkinManager skinManager;
-
         Skin *skin;
         Beatmap *beatmap;
 
-        TTF_Font *font = NULL;
+        GameUI gameUI;
 
-        TextBox graphicsThreadFPS;
-        TextBox inputThreadFPS;
+        TTF_Font *font = NULL;
 
         Thread *thisThread;
 
@@ -60,5 +55,7 @@ namespace oxu
         void renderHitCircles();
 
         void renderThreadsInfo();
+
+        void renderUI();
     };
 }

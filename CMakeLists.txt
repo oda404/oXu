@@ -19,7 +19,7 @@ find_package(SDL2_mixer REQUIRED)
 find_package(spdlog REQUIRED)
 
 set(OXU_HEADERS
-	${OXU_SRC_DIR}/core/game.hpp
+	${OXU_SRC_DIR}/core/oXu.hpp
 	${OXU_SRC_DIR}/core/scaling.hpp
 	${OXU_SRC_DIR}/core/status.hpp
 	${OXU_SRC_DIR}/core/dirs.hpp
@@ -31,7 +31,8 @@ set(OXU_HEADERS
 	${OXU_SRC_DIR}/handlers/input.hpp
 	${OXU_SRC_DIR}/handlers/sound.hpp
 
-	${OXU_SRC_DIR}/components/text.hpp
+	${OXU_SRC_DIR}/graphics/components/textBox.hpp
+	${OXU_SRC_DIR}/graphics/UI/game.hpp
 
 	${OXU_SRC_DIR}/beatmap/beatmap.hpp
 	${OXU_SRC_DIR}/beatmap/beatmapParser.hpp
@@ -65,7 +66,7 @@ add_executable(${PROJECT_NAME}
 
 	${OXU_SRC_DIR}/main.cpp
 
-	${OXU_SRC_DIR}/core/game.cpp
+	${OXU_SRC_DIR}/core/oXu.cpp
 	${OXU_SRC_DIR}/core/scaling.cpp
 	${OXU_SRC_DIR}/core/status.cpp
 	${OXU_SRC_DIR}/core/dirs.cpp
@@ -77,7 +78,8 @@ add_executable(${PROJECT_NAME}
 	${OXU_SRC_DIR}/handlers/input.cpp
 	${OXU_SRC_DIR}/handlers/sound.cpp
 
-	${OXU_SRC_DIR}/components/text.cpp
+	${OXU_SRC_DIR}/graphics/components/textBox.cpp
+	${OXU_SRC_DIR}/graphics/UI/game.cpp
 
 	${OXU_SRC_DIR}/beatmap/beatmap.cpp
 	${OXU_SRC_DIR}/beatmap/beatmapParser.cpp
