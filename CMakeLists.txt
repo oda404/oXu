@@ -12,6 +12,8 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2)
 set(OXU_SRC_DIR src/oXu)
 set(OXU_INCLUDE_DIR src)
 
+set(CMAKE_CXX_FLAGS "-O2 -Wall -Wextra")
+
 find_package(SDL2 REQUIRED)
 find_package(SDL2_ttf REQUIRED)
 find_package(SDL2_image REQUIRED)

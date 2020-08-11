@@ -9,5 +9,6 @@ namespace oxu
     public:
         TextBox graphicsThreadFPS;
         TextBox inputThreadFPS;
+        TextBox soundThreadFPS;
     };
 }
