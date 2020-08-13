@@ -5,20 +5,17 @@
 
 namespace oxu
 {
-    void GraphicsHandler::init(SDL_Window *window, bool *windowState, SongManager *songManager)
+    void GraphicsHandler::init(SDL_Window *window, SongManager *songManager)
     {
-        thisThread = &Threading::threads[GRAPHICS];
-        thisThread->maxFPS = 240;
-
         this->songManager = songManager;
-        this->windowState = windowState;
         this->window = window;
 
         /* maybe redundant since I don't use the openGL context directly
         but i'm gonna leave it here just in case */
         context = SDL_GL_GetCurrentContext();
-
-        thisThread->thread = std::thread([this] { initThread(); });
+        
+        thisThread = &Threads::get(Threads::GRAPHICS);
+        thisThread->init([this]() -> bool {return initThread();}, 240);
 
         while(!thisThread->doneInit);
     }
@@ -102,15 +99,22 @@ namespace oxu
 
     void GraphicsHandler::startThread()
     {
-        thisThread->timer.start();
-
-        while(!*windowState)
+        while(true)
         {
             thisThread->calculateDelta();
+
+            while(thisThread->pipeline.pollRequest(request))
+            {
+                switch(request.instruction)
+                {
+                    case GRAPHICS_HALT_THREAD:
+                        return;
+                }
+            }
             
             SDL_RenderClear(renderer);
                         
-            std::unique_lock<std::mutex> lockGuard(Threading::mtx);
+            std::unique_lock<std::mutex> lockGuard(Threads::mtx);
 
                 renderUI();
                 renderHitCircles();
@@ -127,9 +131,9 @@ namespace oxu
     {
         HitObject *obj;
 
-        for(size_t i = beatmap->hitObjectsPool.size() - 1; i != SIZE_MAX; --i)
+        for(uint32_t i = beatmap->objBotCap; i < beatmap->objTopCap; ++i)
         {
-            obj = beatmap->hitObjectsPool[i];
+            obj = &beatmap->hitObjects[i];
 
             SDL_RenderCopy(renderer, skin->getTexture(Tex::HIT_CIRCLE), NULL, obj->getHCRect());
             SDL_RenderCopy(renderer, skin->getTexture(Tex::APPROACH_CIRCLE), NULL, obj->getACRect());
@@ -141,25 +145,31 @@ namespace oxu
     {
         static double renderTimer = 0.0;
 
-        renderTimer += thisThread->delta;
+        renderTimer += thisThread->getDelta();
 
         if(renderTimer >= 0.5)
         {
             renderTimer = 0.0;
 
-            gameUI.graphicsThreadFPS.text = "Graphics: " + std::to_string(Threading::threads[GRAPHICS].FPS) + " FPS";
+            gameUI.graphicsThreadFPS.text = "Graphics: " + std::to_string(thisThread->FPS) + " FPS";
             gameUI.graphicsThreadFPS.createTexture(renderer, font);
             gameUI.graphicsThreadFPS.rect.x = Scaling::screenSize.x - gameUI.graphicsThreadFPS.rect.w - 10;
             gameUI.graphicsThreadFPS.rect.y = 10;
 
-            gameUI.inputThreadFPS.text = "Input: " + std::to_string(Threading::threads[MAIN].FPS) + " FPS";
+            gameUI.inputThreadFPS.text = "Input: " + std::to_string(Threads::get(Threads::MAIN).FPS) + " FPS";
             gameUI.inputThreadFPS.createTexture(renderer, font);
             gameUI.inputThreadFPS.rect.x = Scaling::screenSize.x - gameUI.inputThreadFPS.rect.w - 10;
             gameUI.inputThreadFPS.rect.y = gameUI.graphicsThreadFPS.rect.y + gameUI.graphicsThreadFPS.rect.h + 10;
+
+            gameUI.soundThreadFPS.text = "Sound: " + std::to_string(Threads::get(Threads::SOUND).FPS) + " FPS";
+            gameUI.soundThreadFPS.createTexture(renderer, font);
+            gameUI.soundThreadFPS.rect.x = Scaling::screenSize.x - gameUI.soundThreadFPS.rect.w - 10;
+            gameUI.soundThreadFPS.rect.y = gameUI.inputThreadFPS.rect.y + gameUI.inputThreadFPS.rect.h + 10;
         }
 
         SDL_RenderCopy(renderer, gameUI.graphicsThreadFPS.tex, NULL, &gameUI.graphicsThreadFPS.rect);
         SDL_RenderCopy(renderer, gameUI.inputThreadFPS.tex, NULL, &gameUI.inputThreadFPS.rect);
+        SDL_RenderCopy(renderer, gameUI.soundThreadFPS.tex, NULL, &gameUI.soundThreadFPS.rect);
     }
 
     void GraphicsHandler::renderUI()

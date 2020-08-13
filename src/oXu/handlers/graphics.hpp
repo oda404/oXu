@@ -27,7 +27,8 @@ namespace oxu
         SDL_Renderer *renderer = NULL;
         SDL_GLContext context;
         SDL_Window *window = NULL;
-        bool *windowState;
+
+        Request request;
         
         SongManager *songManager;
         SkinManager skinManager;
@@ -43,7 +44,7 @@ namespace oxu
     public:
         ~GraphicsHandler();
 
-        void init(SDL_Window *window, bool *windowState, SongManager *songManager);
+        void init(SDL_Window *window, SongManager *songManager);
 
     private:
         bool initSDL();
