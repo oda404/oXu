@@ -38,15 +38,14 @@ namespace oxu
         Beatmap *currentBeatmap;
 
         Thread *thisThread;
+
+        bool initSDL();
+
+        void start();
         
     public:
+        ~oXu();
+
         bool init();
-
-        void loop();
-
-        void clean();
-
-    private:
-        bool initSDL();
     };
 }

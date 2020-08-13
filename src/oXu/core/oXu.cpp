@@ -5,6 +5,30 @@
 
 namespace oxu
 {
+	oXu::~oXu()
+	{
+		Threads::get(Threads::GRAPHICS).pipeline.makeRequest(Request(GRAPHICS_HALT_THREAD));
+		Threads::get(Threads::SOUND).pipeline.makeRequest(Request(SOUND_HALT_THREAD));
+
+		Threads::get(Threads::MAIN).join();
+		Threads::get(Threads::GRAPHICS).join();
+		Threads::get(Threads::SOUND).join();
+
+		if(Status::code != Status::OK)
+		{
+			LOG_WARN("Exiting with return status {0}", Status::code);
+		}
+		else
+		{
+			LOG_INFO("Exiting gracefully. Hai noroc!");
+		}
+
+		SDL_DestroyWindow(window);
+		window = NULL;
+
+		SDL_Quit();
+	}
+
 	bool oXu::initSDL()
 	{
 		Logger::init();
@@ -15,9 +39,6 @@ namespace oxu
 			Status::code = Status::SDL_INIT_FAIL;
 			return false;
 		}
-
-		Scaling::screenSize = { 1920, 1080 };
-		Scaling::oxuPx = Scaling::screenSize.y / 480.f;
 
 		window = SDL_CreateWindow(
 			"oXu!",
@@ -40,73 +61,51 @@ namespace oxu
 
 	bool oXu::init()
 	{
-		thisThread = &Threading::threads[MAIN];
-		thisThread->maxFPS = 1000;
+		thisThread = &Threads::get(Threads::MAIN);
+		thisThread->init([]() -> bool {return true;}, 1000);
+
+		Scaling::screenSize = { 1920, 1080 };
+		Scaling::oxuPx = Scaling::screenSize.y / 480.f;
+
+		Dirs::setDirs();
 
 		if(!initSDL())
 		{
 			return false;
 		}
 
-		Dirs::setDirs();
-
 		songManager.enumerateSongs();
+
 		currentBeatmap = &songManager.getSong(0).getBeatmap(0);
+
 		currentBeatmap->loadGenericInfo();
 		currentBeatmap->loadGameInfo();
 
-		/* Initiate the graphics handler */
-		/* This spawns another thread */
-		graphicsHandler.init(window, &windowState, &songManager);
+		graphicsHandler.init(window, &songManager);
+		soundHandler.init(&songManager);
 
-		soundHandler.init();
-		soundHandler.setMusicVolume(5);
-		//TODO fix extra \r and the end of audiofilename
-		soundHandler.loadMusic(songManager.getSong(0).path + '/' +  currentBeatmap->general.audioFilename);
+		currentBeatmap->start();
 
-		currentBeatmap->timer.start();
-
-		soundHandler.playMusic(currentBeatmap->timer.getEllapsedTimeMilli());
+		start();
 		
 		return true;
 	}
 
-	void oXu::loop()
+	void oXu::start()
 	{
-		thisThread->timer.start();
-
 		while(!windowState)
 		{
 			thisThread->calculateDelta();
 
 			inputHandler.handleInput(windowState);
 
-			std::unique_lock<std::mutex> inputLock(Threading::mtx);
+			std::unique_lock<std::mutex> inputLock(Threads::mtx);
 
-				currentBeatmap->updateObjects(thisThread->delta);
+				currentBeatmap->updateObjects(thisThread->getDelta());
 				
 			inputLock.unlock();
 
 			thisThread->limitFPS();
 		}
-
-		Threading::threads[GRAPHICS].thread.join();
 	};
-
-	void oXu::clean()
-	{
-		if(Status::code != Status::OK)
-		{
-			LOG_WARN("Exiting with return status {0}", Status::code);
-		}
-		else
-		{
-			LOG_INFO("Exiting gracefully. Hai noroc!");
-		}
-
-		SDL_DestroyWindow(window);
-		window = NULL;
-
-		SDL_Quit();
-	}
 }

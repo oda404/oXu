@@ -8,13 +8,8 @@ int main(int argc, char **argv)
 	oxu::oXu game;
 	if(!game.init())
 	{
-		game.clean();
 		return oxu::Status::code;
 	}
-
-	game.loop();
-
-	game.clean();
 
 	return oxu::Status::code;
 }
