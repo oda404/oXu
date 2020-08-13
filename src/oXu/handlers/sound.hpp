@@ -10,7 +10,10 @@
 
 #include<oXu/utils/logger.hpp>
 
+#include<oXu/core/threading/threads.hpp>
 #include<oXu/core/status.hpp>
+
+#include<oXu/beatmap/songManager.hpp>
 
 namespace oxu
 {
@@ -24,24 +27,28 @@ namespace oxu
 
 		Mix_Music *musicTrack = NULL;
 
-		Mix_Chunk *hitSound = NULL;
+		Thread *thisThread;
+		Request request;
+
+		SongManager *songManager = NULL;
+		Beatmap *currentBeatmap = NULL;
+
+		bool initSDL();
+
+		bool initThread();
+
+		void startThread();
+
+		void loadSong();
+
+		void playSongDelayed();
+
+		void setSongVolume(const uint8_t &volume);
 
 	public:
 		~SoundHandler();
 
-		bool init();
-
-		bool loadMusic(const std::string &filePath);
-
-		bool loadSoundEffects(const std::string &skinPath);
-
-		void playMusic(const uint32_t &offset);
-
-		void playHitSound();
-
-		void setMusicVolume(const uint8_t &volume);
-
-		void setEffectsVolume(const uint8_t &volume);
+		void init(SongManager *songManager_p);
 
 	};
 }

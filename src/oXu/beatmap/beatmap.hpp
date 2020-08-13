@@ -23,22 +23,21 @@
 #include<oXu/utils/timer.hpp>
 #include<oXu/utils/logger.hpp>
 
+#include<oXu/core/threading/threads.hpp>
+
 namespace oxu
 {
     class Beatmap
     {
     private:
-        std::string path;
         uint8_t fileFormat;
 
-        int32_t objTopCap = -1;
-        int32_t objBotCap = 0;
-
         std::vector<TimingPoint> timingPoints;
-        std::vector<HitObject> hitObjects;
 
     public:
         Beatmap(const std::string &path_p);
+
+        std::string path;
         
         General general;
         Editor editor;
@@ -46,12 +45,20 @@ namespace oxu
         Difficulty difficulty;
         Events events;
 
-        std::vector<HitObject*> hitObjectsPool;
+        std::vector<HitObject> hitObjects;
+
+        uint32_t objTopCap = 0;
+        uint32_t objBotCap = 0;
+
+        uint16_t startPaddingTime = 0;
 
         Timer timer;
 
         void loadGenericInfo();
         void loadGameInfo();
+
         void updateObjects(const double &delta);
+
+        void start();
     };
 }

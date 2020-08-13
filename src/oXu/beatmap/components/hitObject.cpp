@@ -3,8 +3,11 @@
 namespace oxu
 {
     HitObject::HitObject(const Vector2<float> &position_p, const uint32_t &hitTime_p, uint8_t type_p, const PlayField &playField, const Difficulty &difficulty):
-    hitTime(hitTime_p), spawnTime(hitTime_p - difficulty.approachRateMs), type(type_p)
+    realHitTime(hitTime_p), realSpawnTime(hitTime_p - difficulty.approachRateMs), type(type_p)
     {
+        localSpawnTime = realHitTime;
+        localHitTime = realHitTime + difficulty.approachRateMs;
+
         position = playField.getPlayFieldStartPoint() + position_p * Scaling::oxuPx;
 
         HCRect.w = difficulty.circleSizePx;
@@ -22,14 +25,24 @@ namespace oxu
         ACRect.y = position.y - ACRect.h / 2;
     }
 
-    const uint32_t &HitObject::getHitTime()
+    const uint32_t &HitObject::getRealHitTime()
     {
-        return hitTime;
+        return realHitTime;
     }
 
-    const uint32_t &HitObject::getSpawnTime()
+    const uint32_t &HitObject::getRealSpawnTime()
     {
-        return spawnTime;
+        return realSpawnTime;
+    }
+
+    const uint32_t &HitObject::getLocalHitTime()
+    {
+        return localHitTime;
+    }
+
+    const uint32_t &HitObject::getLocalSpawnTime()
+    {
+        return localSpawnTime;
     }
 
     const SDL_Rect *HitObject::getHCRect()
@@ -44,7 +57,7 @@ namespace oxu
 
     bool HitObject::shouldBeAddedToPool(const uint32_t &ellapsedMapTime)
     {
-        if(ellapsedMapTime >= spawnTime)
+        if(ellapsedMapTime >= localSpawnTime)
         {
             return true;
         }
@@ -54,7 +67,7 @@ namespace oxu
 
     bool HitObject::shouldBeRemovedFromPool(const uint32_t &ellapsedMapTime)
     {
-        if(ellapsedMapTime > hitTime)
+        if(ellapsedMapTime > localHitTime)
         {
             return true;
         }
@@ -63,7 +76,7 @@ namespace oxu
     }
     void HitObject::setErrorMargin(const double &err,  const uint32_t &arMs)
     {
-        ACT = (err - spawnTime) / arMs;
+        ACT = (err - localSpawnTime) / arMs;
     }
 
     void HitObject::approachCircle(const float &delta, const float &AR)

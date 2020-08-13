@@ -23,8 +23,10 @@ namespace oxu
         float ACT = 0.0f;
 
         Vector2<float> position;
-        uint32_t hitTime;
-        uint32_t spawnTime;
+        uint32_t realHitTime;
+        uint32_t realSpawnTime;
+        uint32_t localHitTime;
+        uint32_t localSpawnTime;
         uint8_t type;
 
     public:
@@ -38,9 +40,13 @@ namespace oxu
 
         void setErrorMargin(const double &err, const uint32_t &arMs);
 
-        const uint32_t &getHitTime();
+        const uint32_t &getRealHitTime();
 
-        const uint32_t &getSpawnTime();
+        const uint32_t &getRealSpawnTime();
+
+        const uint32_t &getLocalHitTime();
+
+        const uint32_t &getLocalSpawnTime();
 
         const SDL_Rect *getHCRect();
 

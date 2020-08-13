@@ -18,24 +18,31 @@ namespace oxu
 
     }
 
+    void Beatmap::start()
+    {
+        Threads::get(Threads::SOUND).pipeline.makeRequest(Request(SOUND_LOAD_SONG));
+
+        timer.start();
+
+        Threads::get(Threads::SOUND).pipeline.makeRequest(Request(SOUND_PLAY_SONG));
+    }
+
     void Beatmap::updateObjects(const double &delta)
     {
-        if(hitObjects[objTopCap + 1].shouldBeAddedToPool(timer.getEllapsedTimeMilli()))
+        if(hitObjects[objTopCap].shouldBeAddedToPool(timer.getEllapsedTimeMilli()))
         {
-            hitObjectsPool.push_back(&hitObjects[objTopCap + 1]);
-            hitObjects[objTopCap + 1].setErrorMargin(timer.getEllapsedTimeMicro() / 1000.0, difficulty.approachRateMs);
+            hitObjects[objTopCap].setErrorMargin(timer.getEllapsedTimeMicro() / 1000.0, difficulty.approachRateMs);
             ++objTopCap;
         }
 
         if(hitObjects[objBotCap].shouldBeRemovedFromPool(timer.getEllapsedTimeMilli()))
         {
-            hitObjectsPool.erase(hitObjectsPool.begin());
             ++objBotCap;
         }
 
-        for(HitObject *obj: hitObjectsPool)
+        for(uint32_t i = objBotCap; i < objTopCap; ++i)
         {
-            obj->approachCircle(delta, difficulty.approachRateMs);
+            hitObjects[i].approachCircle(delta, difficulty.approachRateMs);
         }
     }
 
@@ -78,6 +85,8 @@ namespace oxu
                 }
             }
 
+            startPaddingTime = difficulty.approachRateMs;
+            
             beatmapFile.close();
         }
         else

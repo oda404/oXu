@@ -5,35 +5,30 @@
 
 namespace oxu
 {
-    static int getNormalizedVolume(const uint8_t &volume)
+    SoundHandler::~SoundHandler()
     {
-        return volume * MIX_MAX_VOLUME / 100;
-    }
-
-    oxu::SoundHandler::~SoundHandler()
-    {
-        /* Halt all channels i think */
-        Mix_HaltChannel(-1);
-        /* Free all allocated channels */
-        Mix_AllocateChannels(0);
-
-        /* Mix and halt the music */
         Mix_PauseMusic();
         Mix_HaltMusic();
 
-        /* Free the music */
         Mix_FreeMusic(musicTrack);
         musicTrack = NULL;
 
-        /* Free the chunks */
-        Mix_FreeChunk(hitSound);
-        hitSound = NULL;
-        
         Mix_CloseAudio();
         Mix_Quit();
     }
 
-    bool oxu::SoundHandler::init()
+    void SoundHandler::init(SongManager *songManager_p)
+    {
+        songManager = songManager_p;
+        currentBeatmap = &songManager->getSong(0).getBeatmap(0);
+
+        thisThread = &Threads::get(Threads::SOUND);
+        thisThread->init([this]() -> bool {return initThread();}, 1000);
+
+        while(!thisThread->doneInit);
+    }
+
+    bool SoundHandler::initSDL()
     {
         audioRate = 44100;
         audioFormat = AUDIO_S16SYS;
@@ -54,17 +49,58 @@ namespace oxu
             return false;
         }
 
-        Mix_AllocateChannels(10);
+        setSongVolume(25);
 
         return true;
     }
 
-    bool oxu::SoundHandler::loadMusic(const std::string &fileName)
+    bool SoundHandler::initThread()
+    {
+        if(!initSDL())
+        {
+            return false;
+        }
+
+        thisThread->doneInit = true;
+
+        startThread();
+
+        return true;
+    }
+
+    void SoundHandler::startThread()
+    {
+        while(true)
+        {
+            thisThread->calculateDelta();
+
+            while(thisThread->pipeline.pollRequest(request))
+            {
+                switch(request.instruction)
+                {
+                case SOUND_LOAD_SONG:
+                    loadSong();
+                    break;
+
+                case SOUND_PLAY_SONG:
+                    playSongDelayed();
+                    break;
+
+                case SOUND_HALT_THREAD:
+                    return;
+                }
+            }
+
+            thisThread->limitFPS();
+        }
+    }
+
+    void SoundHandler::loadSong()
     {
         Mix_FreeMusic(musicTrack);
         musicTrack = NULL;
 
-        std::string temp = fileName;
+        std::string temp = currentBeatmap->path.substr(0, currentBeatmap->path.find_last_of('/')) + '/' + currentBeatmap->general.audioFilename;
 
         temp = temp.substr(0, temp.size() - 1);
 
@@ -73,42 +109,21 @@ namespace oxu
         if(!musicTrack)
         {
             LOG_ERR(Mix_GetError());
-            return false;
         }
-
-        return true;
     }
 
-    bool oxu::SoundHandler::loadSoundEffects(const std::string &skinPath)
+    void SoundHandler::playSongDelayed()
     {
-        hitSound = Mix_LoadWAV( (skinPath + "/normal-hitnormal.wav").c_str() );
-        if(!hitSound)
-        {
-            LOG_WARN(Mix_GetError());
-            return false;
-        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(currentBeatmap->startPaddingTime - currentBeatmap->timer.getEllapsedTimeMilli()));
 
-        return true;
-    }
-
-    void oxu::SoundHandler::playMusic(const uint32_t &offset)
-    {
         Mix_PlayMusic(musicTrack, 0);
-        Mix_SetMusicPosition(offset / 1000.f);
+        
+        Mix_RewindMusic();
+        Mix_SetMusicPosition((currentBeatmap->timer.getEllapsedTimeMilli() - currentBeatmap->startPaddingTime) / 1000.0);
     }
 
-    void oxu::SoundHandler::playHitSound()
+    void SoundHandler::setSongVolume(const uint8_t &volume)
     {
-        Mix_PlayChannel(-1, hitSound, 0);
-    }
-
-    void oxu::SoundHandler::setMusicVolume(const uint8_t &volume)
-    {
-        Mix_VolumeMusic(getNormalizedVolume(volume));
-    }
-
-    void oxu::SoundHandler::setEffectsVolume(const uint8_t &volume)
-    {
-        Mix_VolumeChunk(hitSound, volume);
+        Mix_VolumeMusic(volume * MIX_MAX_VOLUME / 100);
     }
 }
