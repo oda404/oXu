@@ -1,14 +1,26 @@
 #pragma once
 
 #include<mutex>
+#include<array>
+
 #include<oXu/core/threading/thread.hpp>
 
-#define MAIN 0
-#define GRAPHICS 1
-#define SOUND 2
-
-namespace oxu::Threading
+namespace oxu
 {
-    inline Thread threads[3];
-    inline std::mutex mtx;
+    struct Threads
+    {
+    private:
+        static std::array<Thread, 3> threads;
+
+    public:
+        static Thread &get(uint8_t threadEnum);
+        static std::mutex mtx;
+
+        enum
+        {
+            MAIN = 0,
+            GRAPHICS = 1,
+            SOUND = 2,
+        };
+    };
 }

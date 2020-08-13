@@ -19,4 +19,21 @@ namespace oxu
 
         FPS = 1 / delta;
     }
+
+    void Thread::init(std::function<bool()> entryPoint, const uint16_t &maxFPS_p)
+    {
+        thread = std::thread(entryPoint);
+        maxFPS = maxFPS_p;
+        timer.start();
+    }
+
+    void Thread::join()
+    {
+        thread.join();
+    }
+
+    const double &Thread::getDelta()
+    {
+        return delta;
+    }
 }
