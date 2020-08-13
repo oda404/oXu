@@ -12,7 +12,7 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sdl2)
 set(OXU_SRC_DIR src/oXu)
 set(OXU_INCLUDE_DIR src)
 
-set(CMAKE_CXX_FLAGS "-O2 -Wall -Wextra")
+set(CMAKE_CXX_FLAGS "-O2")
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_ttf REQUIRED)
@@ -28,6 +28,9 @@ set(OXU_HEADERS
 
 	${OXU_SRC_DIR}/core/threading/thread.hpp
 	${OXU_SRC_DIR}/core/threading/threads.hpp
+
+	${OXU_SRC_DIR}/core/threading/pipeline/request.hpp
+	${OXU_SRC_DIR}/core/threading/pipeline/pipeline.hpp
 
 	${OXU_SRC_DIR}/handlers/graphics.hpp
 	${OXU_SRC_DIR}/handlers/input.hpp
@@ -75,6 +78,9 @@ add_executable(${PROJECT_NAME}
 
 	${OXU_SRC_DIR}/core/threading/thread.cpp
 	${OXU_SRC_DIR}/core/threading/threads.cpp
+
+	${OXU_SRC_DIR}/core/threading/pipeline/request.cpp
+	${OXU_SRC_DIR}/core/threading/pipeline/pipeline.cpp
 
 	${OXU_SRC_DIR}/handlers/graphics.cpp
 	${OXU_SRC_DIR}/handlers/input.cpp
