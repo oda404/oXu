@@ -102,8 +102,6 @@ namespace oxu
 
         std::string temp = currentBeatmap->path.substr(0, currentBeatmap->path.find_last_of('/')) + '/' + currentBeatmap->general.audioFilename;
 
-        temp = temp.substr(0, temp.size() - 1);
-
         musicTrack = Mix_LoadMUS(temp.c_str());
 
         if(!musicTrack)
