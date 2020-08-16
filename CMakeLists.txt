@@ -66,10 +66,7 @@ set(OXU_HEADERS
 	${OXU_SRC_DIR}/utils/vector2.hpp
 )
 
-
-add_executable(${PROJECT_NAME}
-	${OXU_HEADERS}
-
+set(OXU_SRC
 	${OXU_SRC_DIR}/main.cpp
 
 	${OXU_SRC_DIR}/core/oXu.cpp
@@ -109,6 +106,12 @@ add_executable(${PROJECT_NAME}
 	${OXU_SRC_DIR}/utils/timer.cpp
 )
 
+
+add_executable(${PROJECT_NAME}
+	${OXU_HEADERS}
+	${OXU_SRC}
+)
+
 target_include_directories(${PROJECT_NAME} PRIVATE
 	${OXU_INCLUDE_DIR}
 )
@@ -120,4 +123,3 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	SDL2::TTF
 	SDL2::Image
 )
-
