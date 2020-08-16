@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -17,6 +16,8 @@ jobs:
       with:
         submodules: recursive 
     - name: configure
-      run: ./deps.sh
+      run: ./configure.sh
+    - name: cmake
+      run: cd build && cmake ..
     - name: make
-      run: make
+      run: make -j4
