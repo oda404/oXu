@@ -17,7 +17,7 @@
 
 namespace oxu
 {
-	class SoundHandler
+	class AudioHandler
 	{
 	private:
 		int audioRate;
@@ -46,7 +46,7 @@ namespace oxu
 		void setSongVolume(const uint8_t &volume);
 
 	public:
-		~SoundHandler();
+		~AudioHandler();
 
 		void init(SongManager *songManager_p);
 

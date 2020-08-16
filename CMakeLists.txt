@@ -32,12 +32,13 @@ set(OXU_HEADERS
 	${OXU_SRC_DIR}/core/threading/pipeline/request.hpp
 	${OXU_SRC_DIR}/core/threading/pipeline/pipeline.hpp
 
-	${OXU_SRC_DIR}/handlers/graphics.hpp
-	${OXU_SRC_DIR}/handlers/input.hpp
-	${OXU_SRC_DIR}/handlers/sound.hpp
-
 	${OXU_SRC_DIR}/graphics/components/textBox.hpp
 	${OXU_SRC_DIR}/graphics/UI/game.hpp
+	${OXU_SRC_DIR}/graphics/handler.hpp
+
+	${OXU_SRC_DIR}/audio/handler.hpp
+
+	${OXU_SRC_DIR}/input/handler.hpp
 
 	${OXU_SRC_DIR}/beatmap/beatmap.hpp
 	${OXU_SRC_DIR}/beatmap/beatmapParser.hpp
@@ -82,12 +83,13 @@ add_executable(${PROJECT_NAME}
 	${OXU_SRC_DIR}/core/threading/pipeline/request.cpp
 	${OXU_SRC_DIR}/core/threading/pipeline/pipeline.cpp
 
-	${OXU_SRC_DIR}/handlers/graphics.cpp
-	${OXU_SRC_DIR}/handlers/input.cpp
-	${OXU_SRC_DIR}/handlers/sound.cpp
-
 	${OXU_SRC_DIR}/graphics/components/textBox.cpp
 	${OXU_SRC_DIR}/graphics/UI/game.cpp
+	${OXU_SRC_DIR}/graphics/handler.cpp
+
+	${OXU_SRC_DIR}/audio/handler.cpp
+
+	${OXU_SRC_DIR}/input/handler.cpp
 
 	${OXU_SRC_DIR}/beatmap/beatmap.cpp
 	${OXU_SRC_DIR}/beatmap/beatmapParser.cpp

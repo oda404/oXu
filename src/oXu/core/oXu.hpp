@@ -7,9 +7,9 @@
 
 #include<mutex>
 
-#include<oXu/handlers/graphics.hpp>
-#include<oXu/handlers/input.hpp>
-#include<oXu/handlers/sound.hpp>
+#include<oXu/graphics/handler.hpp>
+#include<oXu/audio/handler.hpp>
+#include<oXu/input/handler.hpp>
 
 #include<oXu/utils/logger.hpp>
 
@@ -32,7 +32,7 @@ namespace oxu
 
         GraphicsHandler graphicsHandler;
         InputHandler inputHandler;
-        SoundHandler soundHandler;
+        AudioHandler audioHandler;
 
         SongManager songManager;
         Beatmap *currentBeatmap;

@@ -82,7 +82,7 @@ namespace oxu
 		currentBeatmap->loadGameInfo();
 
 		graphicsHandler.init(window, &songManager);
-		soundHandler.init(&songManager);
+		audioHandler.init(&songManager);
 
 		currentBeatmap->start();
 

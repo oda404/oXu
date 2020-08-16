@@ -1,11 +1,11 @@
 // Copyright (c) Olaru Alexandru <olarualexandru404@gmail.com>
 // Licensed under the MIT license found in the LICENSE file in the root of this repository.
 
-#include"sound.hpp"
+#include"handler.hpp"
 
 namespace oxu
 {
-    SoundHandler::~SoundHandler()
+    AudioHandler::~AudioHandler()
     {
         Mix_PauseMusic();
         Mix_HaltMusic();
@@ -17,7 +17,7 @@ namespace oxu
         Mix_Quit();
     }
 
-    void SoundHandler::init(SongManager *songManager_p)
+    void AudioHandler::init(SongManager *songManager_p)
     {
         songManager = songManager_p;
         currentBeatmap = &songManager->getSong(0).getBeatmap(0);
@@ -28,7 +28,7 @@ namespace oxu
         while(!thisThread->doneInit);
     }
 
-    bool SoundHandler::initSDL()
+    bool AudioHandler::initSDL()
     {
         audioRate = 44100;
         audioFormat = AUDIO_S16SYS;
@@ -54,7 +54,7 @@ namespace oxu
         return true;
     }
 
-    bool SoundHandler::initThread()
+    bool AudioHandler::initThread()
     {
         if(!initSDL())
         {
@@ -68,7 +68,7 @@ namespace oxu
         return true;
     }
 
-    void SoundHandler::startThread()
+    void AudioHandler::startThread()
     {
         while(true)
         {
@@ -95,7 +95,7 @@ namespace oxu
         }
     }
 
-    void SoundHandler::loadSong()
+    void AudioHandler::loadSong()
     {
         Mix_FreeMusic(musicTrack);
         musicTrack = NULL;
@@ -112,7 +112,7 @@ namespace oxu
         }
     }
 
-    void SoundHandler::playSongDelayed()
+    void AudioHandler::playSongDelayed()
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(currentBeatmap->startPaddingTime - currentBeatmap->timer.getEllapsedTimeMilli()));
 
@@ -122,7 +122,7 @@ namespace oxu
         Mix_SetMusicPosition((currentBeatmap->timer.getEllapsedTimeMilli() - currentBeatmap->startPaddingTime) / 1000.0);
     }
 
-    void SoundHandler::setSongVolume(const uint8_t &volume)
+    void AudioHandler::setSongVolume(const uint8_t &volume)
     {
         Mix_VolumeMusic(volume * MIX_MAX_VOLUME / 100);
     }

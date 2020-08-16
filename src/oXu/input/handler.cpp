@@ -1,7 +1,7 @@
 // Copyright (c) Olaru Alexandru <olarualexandru404@gmail.com>
 // Licensed under the MIT license found in the LICENSE file in the root of this repository.
 
-#include"input.hpp"
+#include"handler.hpp"
 
 int eventWatch(void *userdata, SDL_Event *event)
 {
