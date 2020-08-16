@@ -2,6 +2,7 @@
 
 #include<string>
 #include<vector>
+#include<sstream>
 
 #include<oXu/beatmap/sections/general.hpp>
 #include<oXu/beatmap/sections/editor.hpp>
@@ -10,6 +11,7 @@
 #include<oXu/beatmap/sections/events.hpp>
 #include<oXu/beatmap/sections/timingPoint.hpp>
 #include<oXu/beatmap/sections/color.hpp>
+
 #include<oXu/beatmap/components/hitObject.hpp>
 #include<oXu/beatmap/components/playField.hpp>
 

@@ -2,38 +2,24 @@
 
 namespace oxu
 {
-    static std::string getAttribute(const std::string &line)
+       
+    static void sanitizeStr(std::string &str)
     {
-        std::string result = line.substr(line.find_first_of(':') + 1, line.size());
-        if(result[0] == ' ')
+        if(str[0] == ' ')
         {
-            result.erase(0, 1);
+            str.erase(str.begin());
         }
 
-        return result;
+        for(size_t i = 0; i < str.size(); ++i)
+        {
+            if(strchr("\r\n", str[i]))
+            {
+                str.erase(str.begin() + i);
+            }
+        }
     }
 
-    static std::string parseAttributeStr(const std::string &line)
-    {
-        return getAttribute(line);
-    }
-
-    static int parseAttributeInt(const std::string &line)
-    {
-        return std::stoi(getAttribute(line));
-    }
-
-    static float parseAttributeFloat(const std::string &line)
-    {
-        return std::stof(getAttribute(line));
-    }
-
-    static std::string parseAttributeName(const std::string &line)
-    {
-        return line.substr(0, line.find_first_of(':'));
-    }
-
-    static std::vector<std::string> split(const std::string &line, const char &ch)
+    static std::vector<std::string> getSplitStr(const std::string &line, const char &ch)
     {
         std::vector<std::string> result;
         std::string segment = "";
@@ -55,47 +41,75 @@ namespace oxu
         return result;
     }
 
+    template<typename T>
+    static bool setAttr(const std::string &line, T &destAttr)
+    {
+        std::stringstream ss(line);
+
+        if(!(ss >> destAttr))
+        {
+            destAttr = 0;
+            return false;
+        }
+
+        return true;
+    }
+
+    static std::string stripAttr(const std::string &line)
+    {
+        std::string result = line.substr(line.find_first_of(':') + 1, line.size());
+
+        sanitizeStr(result);
+
+        return result;
+    }
+
+    static std::string getAttrName(const std::string &line)
+    {
+        return line.substr(0, line.find_first_of(':'));
+    }
+
     void parseGeneral(const std::string &line, General &general)
     {
+        std::string attrName = getAttrName(line);
+        std::string strippedAttr = stripAttr(line);
+
         /* This shit hurts my brain and it's probably pretty bad but I can't think of another way of doing it */
-
-        std::string attrName = parseAttributeName(line);
-
         if(attrName == "AudioFilename")
         {
-            general.audioFilename = parseAttributeStr(line);
+            general.audioFilename = stripAttr(line);
         }
         else if(attrName == "AudioLeadIn")
         {
-            general.audioLeadIn = parseAttributeInt(line);
+            setAttr<int>(strippedAttr, general.audioLeadIn);
         }
         else if(attrName == "PreviewTime")
         {
-            general.previewTime = parseAttributeInt(line);
+            setAttr<int>(strippedAttr, general.previewTime);
         }
         else if(attrName == "Countdown")
         {
-            general.countdown = parseAttributeInt(line);
+            setAttr<int>(strippedAttr, general.countdown);
         }
         else if(attrName == "SampleSet")
         {
-            general.sampleSet = parseAttributeStr(line);
+            general.sampleSet = stripAttr(line);
         }
         else if(attrName == "StackLeniency")
         {
-            general.stackLeniency = parseAttributeFloat(line);
+            setAttr<float>(strippedAttr, general.stackLeniency);
         }
         else if(attrName == "Mode")
         {
-            general.mode = parseAttributeInt(line);
+            setAttr<uint8_t>(strippedAttr, general.mode);
         }
         else if(attrName == "LetterboxInBreaks")
         {
-            general.letterboxInBreaks = parseAttributeInt(line);
+            setAttr<int>(strippedAttr, general.letterboxInBreaks);
         }
         else if(attrName == "WidescreenStoryboard")
         {
-            general.widescreenStoryboard = parseAttributeInt(line);
+            setAttr<int>(strippedAttr, general.widescreenStoryboard);
         }
     }
 
@@ -106,35 +120,36 @@ namespace oxu
 
     void parseMetadata(const std::string &line, Metadata &metadata)
     {
-        std::string attrName = parseAttributeName(line);
+        std::string attrName = getAttrName(line);
+        std::string strippedAttr = stripAttr(line);
 
         if(attrName == "Title")
         {
-            metadata.title = parseAttributeStr(line);
+            metadata.title = stripAttr(line);
         }
         else if(attrName == "TitleUnicode")
         {
-            metadata.titleUnicode = parseAttributeStr(line);
+            metadata.titleUnicode = stripAttr(line);
         }
         else if(attrName == "Artist")
         {
-            metadata.artist = parseAttributeStr(line);
+            metadata.artist = stripAttr(line);
         }
         else if(attrName == "ArtistUnicode")
         {
-            metadata.artistUnicode = parseAttributeStr(line);
+            metadata.artistUnicode = stripAttr(line);
         }
         else if(attrName == "Creator")
         {
-            metadata.creator = parseAttributeStr(line);
+            metadata.creator = stripAttr(line);
         }
         else if(attrName == "Version")
         {
-            metadata.version = parseAttributeStr(line);
+            metadata.version = stripAttr(line);
         }
         else if(attrName == "Source")
         {
-            metadata.source = parseAttributeStr(line);
+            metadata.source = stripAttr(line);
         }
         else if(attrName == "Tags")
         {
@@ -142,43 +157,44 @@ namespace oxu
         }
         else if(attrName == "BeatmapID")
         {
-            metadata.beatmapID = parseAttributeInt(line);
+            setAttr<int>(strippedAttr, metadata.beatmapID);
         }
         else if(attrName == "BeatmapSetID")
         {
-            metadata.beatmapSetID = parseAttributeInt(line);
+            setAttr<int>(strippedAttr, metadata.beatmapSetID);
         }
     }
 
     void parseDifficulty(const std::string &line, Difficulty &difficulty)
     {
-        std::string attrName = parseAttributeName(line);
+        std::string attrName = getAttrName(line);
+        std::string strippedAttr = stripAttr(line);
 
         if(attrName == "HPDrainRate")
         {
-            difficulty.HPDrainRate = parseAttributeFloat(line);
+            setAttr<float>(strippedAttr, difficulty.HPDrainRate);
         }
         else if(attrName == "CircleSize")
         {
-            difficulty.circleSize = parseAttributeFloat(line);
+            setAttr<float>(strippedAttr, difficulty.circleSize);
             difficulty.circleSizePx = (23.05f - (difficulty.circleSize - 7.0f) * 4.4825f) * 2.0f * Scaling::oxuPx;
         }
         else if(attrName == "OverallDifficulty")
         {
-            difficulty.overallDifficulty = parseAttributeFloat(line);
+            setAttr<float>(strippedAttr, difficulty.overallDifficulty);
         }
         else if(attrName == "ApproachRate")
         {
-            difficulty.approachRate = parseAttributeFloat(line);
+            setAttr<float>(strippedAttr, difficulty.approachRate);
             difficulty.approachRateMs = difficulty.approachRate <= 5 ? 1800 - difficulty.approachRate * 120 : 1200 - (difficulty.approachRate - 5) * 150;
         }
         else if(attrName == "SliderMultiplier")
         {
-            difficulty.sliderMultiplier = parseAttributeFloat(line);
+            setAttr<float>(strippedAttr, difficulty.sliderMultiplier);
         }
         else if(attrName == "SliderTickRate")
         {
-            difficulty.sliderTickRate = parseAttributeFloat(line);
+            setAttr<float>(strippedAttr, difficulty.sliderTickRate);
         }
     }
 
@@ -199,9 +215,24 @@ namespace oxu
 
     void parseObjects(const std::string &line, std::vector<HitObject> &hitObjects, const PlayField &playField, const Difficulty &difficulty)
     {
-        // TODO: check if parsed info is valid
-        std::vector<std::string> info = split(line, ',');
+        std::vector<std::string> strInfo = getSplitStr(line, ',');
 
-        hitObjects.emplace_back(Vector2<float>(std::stoi(info[0]), std::stoi(info[1])), std::stoi(info[2]), std::stoi(info[3]), playField, difficulty);
+        Vector2<float> pos;
+        uint32_t hitTime;
+        uint8_t type;
+
+        if(!setAttr<float>(strInfo[0], pos.x) || !setAttr<float>(strInfo[1], pos.y))
+        {
+            LOG_WARN("Skipped object {0} since it's invalid.", line);
+            return;
+        }
+
+        if(!setAttr<uint32_t>(strInfo[2], hitTime) || !setAttr<uint8_t>(strInfo[3], type))
+        {
+            LOG_WARN("Skipped object {0} since it's invalid.", line);
+            return;
+        }
+
+        hitObjects.emplace_back(pos, hitTime, type, playField, difficulty);
     }
 }
