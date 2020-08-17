@@ -122,4 +122,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	SDL2::Mixer
 	SDL2::TTF
 	SDL2::Image
+	stdc++fs
 )
