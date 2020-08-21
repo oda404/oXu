@@ -6,14 +6,10 @@
 #include<SDL2/SDL_mixer.h>
 
 #include<cstdint>
-#include<string>
-
-#include<oXu/utils/logger.hpp>
 
 #include<oXu/core/threading/threads.hpp>
-#include<oXu/core/status.hpp>
-
 #include<oXu/beatmap/songManager.hpp>
+#include<oXu/beatmap/beatmap.hpp>
 
 namespace oxu
 {

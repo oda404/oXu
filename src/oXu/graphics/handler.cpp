@@ -3,6 +3,14 @@
 
 #include"handler.hpp"
 
+#include<SDL2/SDL_image.h>
+
+#include<oXu/core/scaling.hpp>
+#include<oXu/core/dirs.hpp>
+#include<oXu/core/status.hpp>
+#include<oXu/skin/config.hpp>
+#include<oXu/utils/logger.hpp>
+
 namespace oxu
 {
     void GraphicsHandler::init(SDL_Window *window, SongManager *songManager)

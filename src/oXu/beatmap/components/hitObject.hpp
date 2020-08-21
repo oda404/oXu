@@ -1,15 +1,13 @@
 #pragma once
 
 #include<cstdint>
+#include<vector>
 
 #include<SDL2/SDL_rect.h>
 
-#include<oXu/core/scaling.hpp>
 #include<oXu/beatmap/sections/difficulty.hpp>
 #include<oXu/beatmap/components/playField.hpp>
 #include<oXu/utils/vector2.hpp>
-
-#include<oXu/utils/logger.hpp>
 
 namespace oxu
 {
@@ -23,11 +21,15 @@ namespace oxu
         float ACT = 0.0f;
 
         Vector2<float> position;
+
         uint32_t realHitTime;
         uint32_t realSpawnTime;
         uint32_t localHitTime;
         uint32_t localSpawnTime;
+
         uint8_t type;
+
+        std::vector<Vector2<float>> controlPoints;
 
     public:
         HitObject(
@@ -57,6 +59,5 @@ namespace oxu
         bool shouldBeRemovedFromPool(const uint32_t &ellapsedMapTime);
 
         void approachCircle(const float &delta, const float &AR);
-        
     };
 }

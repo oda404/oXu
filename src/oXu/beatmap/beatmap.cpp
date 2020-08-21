@@ -1,5 +1,13 @@
 #include "beatmap.hpp"
 
+#include<fstream>
+
+#include<oXu/core/threading/threads.hpp>
+#include<oXu/beatmap/beatmapParser.hpp>
+#include<oXu/beatmap/sections/config.hpp>
+#include<oXu/beatmap/components/playField.hpp>
+#include<oXu/utils/logger.hpp>
+
 namespace oxu
 {
     static void setSection(const std::string &line, uint8_t &section)
@@ -84,8 +92,6 @@ namespace oxu
                     }
                 }
             }
-
-            startPaddingTime = difficulty.approachRateMs;
             
             beatmapFile.close();
         }
@@ -118,7 +124,7 @@ namespace oxu
                     switch(section)
                     {
                         case Sections::TIMING_SECTION:
-                            parseTimingPoints(line, timingPoints);
+                            
                             break;
 
                         case Sections::OBJECTS_SECTION:

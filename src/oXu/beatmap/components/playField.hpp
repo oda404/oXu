@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include<oXu/core/scaling.hpp>
 #include<oXu/utils/vector2.hpp>
 
 namespace oxu

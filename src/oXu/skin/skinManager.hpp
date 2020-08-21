@@ -3,16 +3,9 @@
 
 #pragma once
 
-#include<SDL2/SDL_image.h>
-
-#include<filesystem>
 #include<vector>
-#include<string>
 
 #include<oXu/skin/skin.hpp>
-#include<oXu/utils/logger.hpp>
-
-#include<oXu/core/dirs.hpp>
 
 namespace oxu
 {

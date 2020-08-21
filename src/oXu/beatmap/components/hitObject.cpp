@@ -1,9 +1,27 @@
 #include"hitObject.hpp"
 
+#include<oXu/core/scaling.hpp>
+#include<oXu/beatmap/components/types.hpp>
+#include<oXu/utils/logger.hpp>
+
 namespace oxu
 {
+    static uint8_t getHitObjectType(uint8_t &type)
+    {
+        if( type  & (1 << 0) )
+        {
+            return Types::CIRCLE;
+        }
+        else if( type & (1 << 1) )
+        {
+            return Types::SLIDER;
+        }
+
+        return Types::SPINNER;
+    }
+    
     HitObject::HitObject(const Vector2<float> &position_p, const uint32_t &hitTime_p, uint8_t type_p, const PlayField &playField, const Difficulty &difficulty):
-    realHitTime(hitTime_p), realSpawnTime(hitTime_p - difficulty.approachRateMs), type(type_p)
+    realHitTime(hitTime_p), realSpawnTime(hitTime_p - difficulty.approachRateMs)
     {
         localSpawnTime = realHitTime;
         localHitTime = realHitTime + difficulty.approachRateMs;
@@ -23,6 +41,19 @@ namespace oxu
 
         ACRect.x = position.x - ACRect.w / 2;
         ACRect.y = position.y - ACRect.h / 2;
+
+        type = getHitObjectType(type_p);
+
+        switch(type)
+        {
+        case Types::SLIDER:
+            
+            break;
+
+        case Types::SPINNER:
+
+            break;
+        }
     }
 
     const uint32_t &HitObject::getRealHitTime()

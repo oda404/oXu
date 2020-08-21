@@ -1,5 +1,10 @@
 #include"beatmapParser.hpp"
 
+#include<sstream>
+
+#include<oXu/core/scaling.hpp>
+#include<oXu/utils/logger.hpp>
+
 namespace oxu
 {
        
@@ -213,21 +218,34 @@ namespace oxu
 
     }
 
+    #define X 0
+    #define Y 1
+    #define HIT_TIME 2
+    #define TYPE 3
+    #define HIT_SOUND 4
+    #define PARAMS 5
+
     void parseObjects(const std::string &line, std::vector<HitObject> &hitObjects, const PlayField &playField, const Difficulty &difficulty)
     {
         std::vector<std::string> strInfo = getSplitStr(line, ',');
 
-        Vector2<float> pos;
-        uint32_t hitTime;
-        uint8_t type;
-
-        if(!setAttr<float>(strInfo[0], pos.x) || !setAttr<float>(strInfo[1], pos.y))
+        if(strInfo.size() < 6)
         {
             LOG_WARN("Skipped object {0} since it's invalid.", line);
             return;
         }
 
-        if(!setAttr<uint32_t>(strInfo[2], hitTime) || !setAttr<uint8_t>(strInfo[3], type))
+        Vector2<float> pos;
+        uint32_t hitTime;
+        uint8_t type;
+
+        if(!setAttr<float>(strInfo[X], pos.x) || !setAttr<float>(strInfo[Y], pos.y))
+        {
+            LOG_WARN("Skipped object {0} since it's invalid.", line);
+            return;
+        }
+
+        if(!setAttr<uint32_t>(strInfo[HIT_TIME], hitTime) || !setAttr<uint8_t>(strInfo[TYPE], type))
         {
             LOG_WARN("Skipped object {0} since it's invalid.", line);
             return;

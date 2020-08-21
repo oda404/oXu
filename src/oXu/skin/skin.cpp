@@ -1,5 +1,12 @@
 #include"skin.hpp"
 
+#include<filesystem>
+
+#include<SDL2/SDL_image.h>
+
+#include<oXu/utils/logger.hpp>
+#include<oXu/skin/config.hpp>
+
 namespace oxu
 {
     Skin::Skin(const std::string &path_p):

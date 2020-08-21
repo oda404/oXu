@@ -5,22 +5,14 @@
 
 #include<SDL2/SDL.h>
 
-#include<mutex>
-
 #include<oXu/graphics/handler.hpp>
 #include<oXu/audio/handler.hpp>
 #include<oXu/input/handler.hpp>
 
-#include<oXu/utils/logger.hpp>
-
 #include<oXu/core/threading/threads.hpp>
-#include<oXu/core/status.hpp>
-#include<oXu/core/scaling.hpp>
 
 #include<oXu/beatmap/songManager.hpp>
 #include<oXu/skin/skinManager.hpp>
-
-#include<oXu/core/dirs.hpp>
 
 namespace oxu
 {

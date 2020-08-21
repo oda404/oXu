@@ -1,13 +1,9 @@
 #pragma once
 
 #include<SDL2/SDL_render.h>
-#include<SDL2/SDL_image.h>
+#include<SDL2/SDL_mouse.h>
 
-#include<filesystem>
 #include<string>
-
-#include<oXu/utils/logger.hpp>
-#include<oXu/skin/config.hpp>
 
 namespace oxu
 {

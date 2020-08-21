@@ -1,9 +1,8 @@
 #pragma once
 
-#include<filesystem>
+#include<string>
 #include<vector>
 
-#include<oXu/utils/logger.hpp>
 #include<oXu/beatmap/beatmap.hpp>
 
 namespace oxu
@@ -23,7 +22,6 @@ namespace oxu
         void enumerateBeatmaps();
 
         Beatmap &getBeatmap(const size_t &index);
-
         size_t getBetmapsNumber();
     };
 

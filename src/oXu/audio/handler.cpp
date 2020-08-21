@@ -3,6 +3,11 @@
 
 #include"handler.hpp"
 
+#include<string>
+
+#include<oXu/core/status.hpp>
+#include<oXu/utils/logger.hpp>
+
 namespace oxu
 {
     AudioHandler::~AudioHandler()
@@ -112,12 +117,12 @@ namespace oxu
 
     void AudioHandler::playSongDelayed()
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(currentBeatmap->startPaddingTime - currentBeatmap->timer.getEllapsedTimeMilli()));
+        std::this_thread::sleep_for(std::chrono::milliseconds(currentBeatmap->difficulty.approachRateMs - currentBeatmap->timer.getEllapsedTimeMilli()));
 
         Mix_PlayMusic(musicTrack, 0);
         
         Mix_RewindMusic();
-        Mix_SetMusicPosition((currentBeatmap->timer.getEllapsedTimeMilli() - currentBeatmap->startPaddingTime) / 1000.0);
+        Mix_SetMusicPosition((currentBeatmap->timer.getEllapsedTimeMilli() - currentBeatmap->difficulty.approachRateMs) / 1000.0);
     }
 
     void AudioHandler::setSongVolume(const uint8_t &volume)

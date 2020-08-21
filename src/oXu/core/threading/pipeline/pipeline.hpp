@@ -1,11 +1,9 @@
 #pragma once
 
-#include<stack>
+#include<mutex>
 #include<vector>
 
 #include<oXu/core/threading/pipeline/request.hpp>
-
-#include<oXu/utils/logger.hpp>
 
 namespace oxu
 {

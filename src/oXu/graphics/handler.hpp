@@ -6,18 +6,12 @@
 #include<SDL2/SDL_render.h>
 #include<SDL2/SDL_ttf.h>
 
-#include<atomic>
-
 #include<oXu/graphics/UI/game.hpp>
 
 #include<oXu/beatmap/songManager.hpp>
 #include<oXu/skin/skinManager.hpp>
 
-#include<oXu/utils/logger.hpp>
-
-#include<oXu/core/status.hpp>
 #include<oXu/core/threading/threads.hpp>
-#include<oXu/core/dirs.hpp>
 
 namespace oxu
 {

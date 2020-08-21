@@ -3,6 +3,8 @@
 
 #include"logger.hpp"
 
+#include<spdlog/sinks/stdout_color_sinks.h>
+
 void oxu::Logger::init()
 {
     spdlog::set_pattern("%^[%T] %v%$");

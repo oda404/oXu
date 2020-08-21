@@ -3,6 +3,11 @@
 
 #include"skinManager.hpp"
 
+#include<filesystem>
+
+#include<oXu/utils/logger.hpp>
+#include<oXu/core/dirs.hpp>
+
 namespace oxu
 {
     void SkinManager::enumerateSkins()
@@ -13,8 +18,7 @@ namespace oxu
         {
             if(fs::is_directory(entry))
             {
-                std::string path = entry.path().string();
-                skins.emplace_back(path);
+                skins.emplace_back(entry.path().string());
             }
         }
     }

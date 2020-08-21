@@ -1,5 +1,9 @@
 #include "song.hpp"
 
+#include<filesystem>
+
+#include<oXu/utils/logger.hpp>
+
 namespace oxu
 {
     Song::Song(const std::string &path_p):

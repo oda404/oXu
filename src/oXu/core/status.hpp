@@ -5,19 +5,22 @@
 
 #include<cstdint>
 
-namespace oxu::Status
+namespace oxu
 {
-    inline uint8_t code = 0;
-    enum
+    struct Status
     {
-        OK,
-        SDL_INIT_FAIL,
-        IMG_INIT_FAIL,
-        WINDOW_CREATE_FAIL,
-        RENDERER_CREATE_FAIL,
-        MIX_OPEN_FAIL,
-        MIX_INIT_FAIL,
-        TTF_INIT_FAIL,
-        FONT_LOAD_FAIL,
+        static uint8_t code;
+        enum
+        {
+            OK,
+            SDL_INIT_FAIL,
+            IMG_INIT_FAIL,
+            WINDOW_CREATE_FAIL,
+            RENDERER_CREATE_FAIL,
+            MIX_OPEN_FAIL,
+            MIX_INIT_FAIL,
+            TTF_INIT_FAIL,
+            FONT_LOAD_FAIL,
+        };
     };
 }

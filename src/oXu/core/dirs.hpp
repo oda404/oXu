@@ -2,11 +2,6 @@
 
 #include<string>
 
-#ifdef __linux__
-#include<pwd.h>
-#include<unistd.h>
-#endif // __linux__
-
 namespace oxu
 {
     struct Dirs

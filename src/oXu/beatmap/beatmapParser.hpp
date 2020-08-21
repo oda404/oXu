@@ -2,7 +2,6 @@
 
 #include<string>
 #include<vector>
-#include<sstream>
 
 #include<oXu/beatmap/sections/general.hpp>
 #include<oXu/beatmap/sections/editor.hpp>
@@ -14,8 +13,6 @@
 
 #include<oXu/beatmap/components/hitObject.hpp>
 #include<oXu/beatmap/components/playField.hpp>
-
-#include<oXu/utils/logger.hpp>
 
 namespace oxu
 {

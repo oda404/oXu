@@ -1,5 +1,10 @@
 #include"songManager.hpp"
 
+#include<filesystem>
+
+#include<oXu/core/dirs.hpp>
+#include<oXu/utils/logger.hpp>
+
 namespace oxu
 {
     void SongManager::enumerateSongs()

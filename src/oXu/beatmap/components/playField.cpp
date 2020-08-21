@@ -3,6 +3,8 @@
 
 #include"playField.hpp"
 
+#include<oXu/core/scaling.hpp>
+
 oxu::PlayField::PlayField()
 {
     playFieldStartPoint = { 

@@ -3,6 +3,13 @@
 
 #include "oXu.hpp"
 
+#include<mutex>
+
+#include<oXu/core/status.hpp>
+#include<oXu/core/scaling.hpp>
+#include<oXu/core/dirs.hpp>
+#include<oXu/utils/logger.hpp>
+
 namespace oxu
 {
 	oXu::~oXu()

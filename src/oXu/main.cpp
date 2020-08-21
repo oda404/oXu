@@ -2,6 +2,7 @@
 // Licensed under the MIT license found in the LICENSE file in the root of this repository.
 
 #include<oXu/core/oXu.hpp>
+#include<oXu/core/status.hpp>
 
 int main(int argc, char **argv)
 {

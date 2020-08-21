@@ -6,9 +6,7 @@
 #include<functional>
 
 #include<oXu/core/threading/pipeline/pipeline.hpp>
-
 #include<oXu/utils/timer.hpp>
-#include<oXu/utils/logger.hpp>
 
 namespace oxu
 {

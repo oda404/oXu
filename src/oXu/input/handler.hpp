@@ -5,8 +5,6 @@
 
 #include<SDL2/SDL_events.h>
 
-#include<oXu/utils/vector2.hpp>
-
 namespace oxu
 {
     class InputHandler
