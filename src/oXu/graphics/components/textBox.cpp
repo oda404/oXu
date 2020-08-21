@@ -4,7 +4,7 @@ namespace oxu
 {
     void TextBox::createTexture(SDL_Renderer *targetRenderer, TTF_Font *font)
     {
-        SDL_Surface *surface = TTF_RenderText_Solid(font, text.c_str(), {255, 255, 255});
+        SDL_Surface *surface = TTF_RenderText_Solid(font, text.c_str(), {255, 255, 255, 255});
 
         rect.w = surface->w;
         rect.h = surface->h;

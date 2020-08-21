@@ -95,37 +95,17 @@ namespace oxu
             return result;
         }
 
-        void operator=(const Vector2<T> &v)
-        {
-            x = v.x;
-            y = v.y;
-        }
-
         void operator+=(const Vector2<T> &v)
         {
             x += v.x;
             y += v.y;
         }
 
-        const Vector2<T> operator+(const Vector2<T> &v) const
+        Vector2<T> operator+(const Vector2<T> &v) const
         {
             Vector2<T> result = *this;
             result += v;
 
-            return result;
-        }
-
-        void operator-=(const Vector2<T> &v)
-        {
-            x -= v.x;
-            y -= v.y;
-        }
-
-        const Vector2<T> operator-(const Vector2<T> &v) const
-        {
-            Vector2<T> result = *this;
-            result -= v;
-            
             return result;
         }
 
@@ -157,12 +137,12 @@ namespace oxu
             return result;
         }
 
-        const bool operator==(const Vector2<T> &v) const
+        bool operator==(const Vector2<T> &v) const
         {
             return x == v.x && y == v.y ? true : false;
         }
 
-        const bool operator!=(const Vector2<T> &v) const
+        bool operator!=(const Vector2<T> &v) const
         {
             return *this == v ? false : true;
         }

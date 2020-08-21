@@ -3,13 +3,6 @@
 
 #include"handler.hpp"
 
-int eventWatch(void *userdata, SDL_Event *event)
-{
-    
-
-    return 1;
-}
-
 void oxu::InputHandler::init()
 {
     /* Add an event watch to check if a key is pressed */

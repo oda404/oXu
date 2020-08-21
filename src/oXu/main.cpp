@@ -4,7 +4,7 @@
 #include<oXu/core/oXu.hpp>
 #include<oXu/core/status.hpp>
 
-int main(int argc, char **argv)
+int main()
 {
 	oxu::oXu game;
 	if(!game.init())

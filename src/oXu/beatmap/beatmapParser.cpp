@@ -118,11 +118,6 @@ namespace oxu
         }
     }
 
-    void parseEditor(const std::string &line, Editor &editor)
-    {
-        
-    }
-
     void parseMetadata(const std::string &line, Metadata &metadata)
     {
         std::string attrName = getAttrName(line);
@@ -201,21 +196,6 @@ namespace oxu
         {
             setAttr<float>(strippedAttr, difficulty.sliderTickRate);
         }
-    }
-
-    void parseEvents(const std::string &line, Events &events)
-    {
-
-    }
-
-    void parseTimingPoints(const std::string &line, std::vector<TimingPoint> &timingPoints)
-    {
-        //LOG_DEBUG(line);
-    }
-
-    void parseColors(const std::string &line, std::vector<Color> &colors)
-    {
-
     }
 
     #define X 0
