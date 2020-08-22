@@ -79,15 +79,15 @@ namespace oxu
                     switch(section)
                     {
                         case Sections::GENERAL_SECTION:
-                            parseGeneral(line, general);
+                            parseAndSetGeneral(line, general);
                             break;
 
                         case Sections::METADATA_SECTION:
-                            parseMetadata(line, metadata);
+                            parseAndSetMetadata(line, metadata);
                             break;
 
                         case Sections::DIFFICULTY_SECTION:
-                            parseDifficulty(line, difficulty);
+                            parseAndSetDifficulty(line, difficulty);
                             break;
                     }
                 }
@@ -108,6 +108,8 @@ namespace oxu
         if(beatmapFile.is_open())
         {
             hitObjects.clear();
+            /* hardcoded value for now */
+            hitObjects.reserve(4000);
 
             std::string line;
             uint8_t section = SECTIONS_COUNT;
@@ -128,7 +130,7 @@ namespace oxu
                             break;
 
                         case Sections::OBJECTS_SECTION:
-                            parseObjects(line, hitObjects, playField, difficulty);
+                            parseAndAddHitObject(line, hitObjects, playField, difficulty);
                             break;
                     }
                 }
