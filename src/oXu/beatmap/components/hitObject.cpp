@@ -1,69 +1,48 @@
 #include"hitObject.hpp"
 
 #include<oXu/core/scaling.hpp>
-#include<oXu/beatmap/components/types.hpp>
 #include<oXu/utils/logger.hpp>
 
 namespace oxu
-{
-    static uint8_t getHitObjectType(uint8_t &type)
+{   
+    HitObject::HitObject(const Vector2<float> &position_p, const uint32_t &hitTime_p, uint8_t type_p, const Difficulty &difficulty):
+    position(position_p), localSpawnTime(hitTime_p), localHitTime(hitTime_p + difficulty.approachRateMs), type(type_p)
     {
-        if( type  & (1 << 0) )
-        {
-            return Types::CIRCLE;
-        }
-        else if( type & (1 << 1) )
-        {
-            return Types::SLIDER;
-        }
-
-        return Types::SPINNER;
-    }
-    
-    HitObject::HitObject(const Vector2<float> &position_p, const uint32_t &hitTime_p, uint8_t type_p, const PlayField &playField, const Difficulty &difficulty):
-    realHitTime(hitTime_p), realSpawnTime(hitTime_p - difficulty.approachRateMs)
-    {
-        localSpawnTime = realHitTime;
-        localHitTime = realHitTime + difficulty.approachRateMs;
-
-        position = playField.getPlayFieldStartPoint() + position_p * Scaling::oxuPx;
-
         HCRect.w = difficulty.circleSizePx;
         HCRect.h = HCRect.w;
-
         HCRect.x = position.x - HCRect.w / 2;
         HCRect.y = position.y - HCRect.h / 2;
 
         ACRect.w = HCRect.w * 2.75f;
         ACRect.h = ACRect.w;
-
-        ACInitialSize.setVector(ACRect.w, ACRect.h);
-
         ACRect.x = position.x - ACRect.w / 2;
         ACRect.y = position.y - ACRect.h / 2;
 
-        type = getHitObjectType(type_p);
-
-        switch(type)
-        {
-        case Types::SLIDER:
-            
-            break;
-
-        case Types::SPINNER:
-
-            break;
-        }
+        ACInitialSize.setVector(ACRect.w, ACRect.h);
     }
 
-    const uint32_t &HitObject::getRealHitTime()
+    HitObject::HitObject(const Vector2<float> &position_p, const uint32_t &hitTime_p, uint8_t type_p, const SliderParams &sliderParams_p, const Difficulty &difficulty):
+    position(position_p), localSpawnTime(hitTime_p), localHitTime(hitTime_p + difficulty.approachRateMs), type(type_p)
     {
-        return realHitTime;
+        HCRect.w = difficulty.circleSizePx;
+        HCRect.h = HCRect.w;
+        HCRect.x = position.x - HCRect.w / 2;
+        HCRect.y = position.y - HCRect.h / 2;
+
+        ACRect.w = HCRect.w * 2.75f;
+        ACRect.h = ACRect.w;
+        ACRect.x = position.x - ACRect.w / 2;
+        ACRect.y = position.y - ACRect.h / 2;
+
+        ACInitialSize.setVector(ACRect.w, ACRect.h);
+
+        sliderParams = new SliderParams;
+        *sliderParams = sliderParams_p;
     }
 
-    const uint32_t &HitObject::getRealSpawnTime()
+    HitObject::~HitObject()
     {
-        return realSpawnTime;
+        delete sliderParams;
     }
 
     const uint32_t &HitObject::getLocalHitTime()
@@ -114,8 +93,6 @@ namespace oxu
     {
         if(ACT <= 1.f)
         {
-            ACT += delta / (AR / 1000.f);
-
             Vector2<float> newPosition = Vector2<float>::lerp(ACInitialSize, Vector2<float>(HCRect.w, HCRect.h), ACT);
 
             ACRect.w = newPosition.x;
@@ -123,6 +100,8 @@ namespace oxu
 
             ACRect.x = position.x - ACRect.w / 2;
             ACRect.y = position.y - ACRect.h / 2;
+
+            ACT += delta / (AR / 1000.f);
         }
     }
 }

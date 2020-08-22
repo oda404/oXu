@@ -16,19 +16,19 @@
 
 namespace oxu
 {
-    void parseGeneral(const std::string &line, General &general);
+    void parseAndSetGeneral(const std::string &line, General &general);
 
-    void parseEditor(const std::string &line, Editor &editor);
+    void parseAndSetEditor(const std::string &line, Editor &editor);
 
-    void parseMetadata(const std::string &line, Metadata &metadata);
+    void parseAndSetMetadata(const std::string &line, Metadata &metadata);
 
-    void parseDifficulty(const std::string &line, Difficulty &diffictulty);
+    void parseAndSetDifficulty(const std::string &line, Difficulty &diffictulty);
 
-    void parseEvents(const std::string &line, Events &events);
+    void parseAndSetEvents(const std::string &line, Events &events);
 
-    void parseTimingPoints(const std::string &line, std::vector<TimingPoint> &timingPoints);
+    void parseAndAddTimingPoint(const std::string &line, std::vector<TimingPoint> &timingPoints);
 
-    void parseColors(const std::string &line, std::vector<Color> &colors);
+    void parseAndSetColors(const std::string &line, std::vector<Color> &colors);
 
-    void parseObjects(const std::string &line, std::vector<HitObject> &hitObjects, const PlayField &playField, const Difficulty &difficulty);
+    void parseAndAddHitObject(const std::string &line, std::vector<HitObject> &hitObjects, const PlayField &playField, const Difficulty &difficulty);
 }

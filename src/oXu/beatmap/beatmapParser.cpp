@@ -3,11 +3,11 @@
 #include<sstream>
 
 #include<oXu/core/scaling.hpp>
+#include<oXu/beatmap/components/types.hpp>
 #include<oXu/utils/logger.hpp>
 
 namespace oxu
 {
-       
     static void sanitizeStr(std::string &str)
     {
         if(str[0] == ' ')
@@ -74,7 +74,7 @@ namespace oxu
         return line.substr(0, line.find_first_of(':'));
     }
 
-    void parseGeneral(const std::string &line, General &general)
+    void parseAndSetGeneral(const std::string &line, General &general)
     {
         std::string attrName = getAttrName(line);
         std::string strippedAttr = stripAttr(line);
@@ -118,7 +118,7 @@ namespace oxu
         }
     }
 
-    void parseMetadata(const std::string &line, Metadata &metadata)
+    void parseAndSetMetadata(const std::string &line, Metadata &metadata)
     {
         std::string attrName = getAttrName(line);
         std::string strippedAttr = stripAttr(line);
@@ -165,7 +165,7 @@ namespace oxu
         }
     }
 
-    void parseDifficulty(const std::string &line, Difficulty &difficulty)
+    void parseAndSetDifficulty(const std::string &line, Difficulty &difficulty)
     {
         std::string attrName = getAttrName(line);
         std::string strippedAttr = stripAttr(line);
@@ -198,39 +198,157 @@ namespace oxu
         }
     }
 
-    #define X 0
-    #define Y 1
-    #define HIT_TIME 2
-    #define TYPE 3
-    #define HIT_SOUND 4
-    #define PARAMS 5
-
-    void parseObjects(const std::string &line, std::vector<HitObject> &hitObjects, const PlayField &playField, const Difficulty &difficulty)
+    static uint8_t getParsedHitObjectType(uint8_t &type)
     {
-        std::vector<std::string> strInfo = getSplitStr(line, ',');
-
-        if(strInfo.size() < 6)
+        if( type  & (1 << 0) )
         {
-            LOG_WARN("Skipped object {0} since it's invalid.", line);
+            return Types::CIRCLE;
+        }
+        else if( type & (1 << 1) )
+        {
+            return Types::SLIDER;
+        }
+
+        return Types::SPINNER;
+    }
+
+    static bool parseControlPoints(const std::string &line, std::vector<Vector2<float>> &controlPoints)
+    {
+        std::string strX = "", strY = "";
+        float x, y;
+        bool readX = true;
+        
+        if(line[1] != '|')
+        {
+            return false;
+        }
+
+        for(size_t i = 2; i < line.size(); ++i)
+        {
+            if(line[i] == ':')
+            {
+                readX = false;
+            }
+            else if(line[i] == '|')
+            {
+                readX = true;
+
+                if(!setAttr<float>(strX, x) || !setAttr<float>(strY, y))
+                {
+                    return false;
+                }
+                controlPoints.emplace_back(x, y);
+
+                strX = "";
+                strY = "";
+            }
+            else
+            {
+                if(readX)
+                {
+                    strX += line[i];
+                }
+                else
+                {
+                    strY += line[i];
+                }
+            }
+        }
+
+        if(!setAttr<float>(strX, x) || !setAttr<float>(strY, y))
+        {
+            return false;
+        }
+        controlPoints.emplace_back(x, y);
+
+        return true;
+    }
+
+    static void logWarnInvalidObject(const std::string &line)
+    {
+        LOG_WARN("Skipped invalid object {0}", line);
+    }
+
+#define OBJ_X 0
+#define OBJ_Y 1
+#define OBJ_HIT_TIME 2
+#define OBJ_TYPE 3
+#define OBJ_HIT_SOUND 4
+#define OBJ_PARAMS 5
+#define SLIDER_REPEATS 6
+#define SLIDER_EXPECTED_LEN 7
+
+    void parseAndAddHitObject(const std::string &line, std::vector<HitObject> &hitObjects, const PlayField &playField, const Difficulty &difficulty)
+    {
+        std::vector<std::string> objInfo = getSplitStr(line, ',');
+
+        if(objInfo.size() < 6)
+        {
+            logWarnInvalidObject(line);
             return;
         }
 
-        Vector2<float> pos;
+        Vector2<float> position;
+        if(!setAttr<float>(objInfo[OBJ_X], position.x) || !setAttr<float>(objInfo[OBJ_Y], position.y))
+        {
+            logWarnInvalidObject(line);
+            return;
+        }
+
         uint32_t hitTime;
         uint8_t type;
-
-        if(!setAttr<float>(strInfo[X], pos.x) || !setAttr<float>(strInfo[Y], pos.y))
+        if(!setAttr<uint32_t>(objInfo[OBJ_HIT_TIME], hitTime) || !setAttr<uint8_t>(objInfo[OBJ_TYPE], type))
         {
-            LOG_WARN("Skipped object {0} since it's invalid.", line);
+            logWarnInvalidObject(line);
             return;
         }
 
-        if(!setAttr<uint32_t>(strInfo[HIT_TIME], hitTime) || !setAttr<uint8_t>(strInfo[TYPE], type))
-        {
-            LOG_WARN("Skipped object {0} since it's invalid.", line);
-            return;
-        }
+        /* scale the position */
+        position = playField.getStartPoint() + position * Scaling::oxuPx;
 
-        hitObjects.emplace_back(pos, hitTime, type, playField, difficulty);
+        type = getParsedHitObjectType(type);
+
+        switch(type)
+        {
+        case Types::CIRCLE:
+            hitObjects.emplace_back(position, hitTime, type, difficulty);
+            break;
+
+        case Types::SLIDER:
+            {
+                std::string objParams = objInfo[OBJ_PARAMS];
+                SliderParams sliderParams;
+
+                // Linear Bezier PerfectCircle
+                if(!strchr("LBP", objParams[0]))
+                {
+                    logWarnInvalidObject(line);
+                    return;
+                }
+
+                sliderParams.type = objParams[0];
+
+                if(
+                    !setAttr<int>(objInfo[SLIDER_REPEATS], sliderParams.repeats) || 
+                    !setAttr<double>(objInfo[SLIDER_EXPECTED_LEN], sliderParams.expectedLength)
+                  )
+                {
+                    logWarnInvalidObject(line);
+                    return;
+                }
+
+                if(!parseControlPoints(objParams, sliderParams.controlPoints))
+                {
+                    logWarnInvalidObject(line);
+                    return;
+                }
+
+                hitObjects.emplace_back(position, hitTime, type, sliderParams, difficulty);
+            }
+            break;
+
+        case Types::SPINNER:
+            break;
+        }
     }
 }
