@@ -7,7 +7,7 @@
 
 oxu::PlayField::PlayField()
 {
-    playFieldStartPoint = { 
+    startPoint = { 
         Scaling::screenSize.x / 2.f - 256.f * Scaling::oxuPx, 
         Scaling::screenSize.y / 2.f - 192.f * Scaling::oxuPx 
     };

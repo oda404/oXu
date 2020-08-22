@@ -10,14 +10,14 @@ namespace oxu
 	class PlayField
 	{
 	private:
-		Vector2<float> playFieldStartPoint;
+		Vector2<float> startPoint;
 		
 	public:
 		PlayField();
 
-		inline const Vector2<float> &getPlayFieldStartPoint() const
+		inline const Vector2<float> &getStartPoint() const
 		{
-			return playFieldStartPoint;
+			return startPoint;
 		}
 		
 	};
