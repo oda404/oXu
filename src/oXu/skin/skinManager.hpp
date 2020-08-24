@@ -14,10 +14,16 @@ namespace oxu
     private:
         std::vector<Skin> skins;
 
+        Skin *currentSkin = NULL;
+
     public:
         void enumerateSkins();
 
-        Skin &getSkin(const std::size_t &index);
+        void setCurrentSkin(const size_t &index);
+
+        Skin *getCurrentSkin();
+
+        Skin *getSkin(const std::size_t &index);
         std::size_t getSkinsSize();
     };
 }

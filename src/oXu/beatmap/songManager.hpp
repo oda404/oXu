@@ -11,10 +11,19 @@ namespace oxu
     private:
         std::vector<Song> songs;
 
+        Song *currentSong = NULL;
+        Beatmap *currentBeatmap = NULL;
+
     public:
         void enumerateSongs();
 
-        Song &getSong(const size_t &index);
+        void setCurrentSong(size_t index);
+        void setCurrentBeatmap(size_t index);
+
+        Song *getCurrentSong();
+        Beatmap *getCurrentBeatmap();
+
+        Song *getSong(const size_t &index);
         size_t getSongsSize();
     };
 }

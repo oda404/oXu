@@ -26,8 +26,6 @@ namespace oxu
         
         SongManager *songManager;
         SkinManager skinManager;
-        Skin *skin;
-        Beatmap *beatmap;
 
         GameUI gameUI;
 

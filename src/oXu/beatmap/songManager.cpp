@@ -20,17 +20,59 @@ namespace oxu
                 songs.emplace_back(entry.path());
             }
         }
+
+        if(songs.size() == 0)
+        {
+            LOG_ERR("No songs were found in {}", Dirs::songs);
+        }
     }
 
-    Song &SongManager::getSong(const size_t &index)
+    void SongManager::setCurrentSong(std::size_t index)
     {
-        if(index > songs.size() - 1)
+        currentSong = getSong(index);
+        if(currentSong == NULL)
         {
-            LOG_DEBUG("Tried to access a non extistent song, returned last song in vector");
-            return songs[songs.size() - 1];
+            LOG_WARN("SongManager::setCurrentSong({}): See above warning ^",index);
+        }
+    }
+
+    void SongManager::setCurrentBeatmap(std::size_t index)
+    {
+        if(currentSong == NULL)
+        {
+            LOG_WARN("SongManager::setCurrentBeatmap({}): currentSong is NULL, currentBeatmap will also be NULL!", index);
+            currentBeatmap = NULL;
+        }
+        else
+        {
+            currentBeatmap = currentSong->getBeatmap(index);
+        }
+    }
+
+    Song *SongManager::getCurrentSong()
+    {
+        return currentSong;
+    }
+
+    Beatmap *SongManager::getCurrentBeatmap()
+    {
+        return currentBeatmap;
+    }
+
+    Song *SongManager::getSong(const size_t &index)
+    {
+        if(songs.size() == 0)
+        {
+            LOG_WARN("SongManager::getSong({}): No songs were found, returned NULL!", index);
+            return NULL;
+        }
+        else if(index >= songs.size())
+        {
+            LOG_WARN("SongManager::getSong({}): Tried to access a non existent song, returned last song in vector!", index);
+            return &songs[songs.size() - 1];
         }
 
-        return songs[index];
+        return &songs[index];
     }
 
     std::size_t SongManager::getSongsSize()

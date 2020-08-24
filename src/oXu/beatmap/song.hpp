@@ -21,7 +21,7 @@ namespace oxu
 
         void enumerateBeatmaps();
 
-        Beatmap &getBeatmap(const size_t &index);
+        Beatmap *getBeatmap(const size_t &index);
         size_t getBetmapsNumber();
     };
 

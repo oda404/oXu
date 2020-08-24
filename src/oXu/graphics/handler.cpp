@@ -91,12 +91,13 @@ namespace oxu
         }
 
         skinManager.enumerateSkins();
+        skinManager.setCurrentSkin(0);
 
-        skin = &skinManager.getSkin(0);
-        skin->loadTextures(renderer);
-        skin->setCursor();
-
-        beatmap = &songManager->getSong(0).getBeatmap(0);
+        if(skinManager.getCurrentSkin() != NULL)
+        {
+            skinManager.getCurrentSkin()->loadTextures(renderer);
+            skinManager.getCurrentSkin()->setCursor();
+        }
 
         thisThread->doneInit = true;
 
@@ -137,15 +138,18 @@ namespace oxu
 
     void GraphicsHandler::renderHitCircles()
     {
-        HitObject *obj;
-
-        for(uint32_t i = beatmap->objBotCap; i < beatmap->objTopCap; ++i)
+        if(songManager->getCurrentBeatmap() != NULL && skinManager.getCurrentSkin() != NULL)
         {
-            obj = &beatmap->hitObjects[i];
+            HitObject *obj;
 
-            SDL_RenderCopy(renderer, skin->getTexture(Tex::HIT_CIRCLE), NULL, obj->getHCRect());
-            SDL_RenderCopy(renderer, skin->getTexture(Tex::APPROACH_CIRCLE), NULL, obj->getACRect());
-            SDL_RenderCopy(renderer, skin->getTexture(Tex::HIT_CIRCLE_OVERLAY), NULL, obj->getHCRect());
+            for(uint32_t i = songManager->getCurrentBeatmap()->objBotCap; i < songManager->getCurrentBeatmap()->objTopCap; ++i)
+            {
+                obj = &songManager->getCurrentBeatmap()->hitObjects[i];
+
+                SDL_RenderCopy(renderer, skinManager.getCurrentSkin()->getTexture(Tex::HIT_CIRCLE), NULL, obj->getHCRect());
+                SDL_RenderCopy(renderer, skinManager.getCurrentSkin()->getTexture(Tex::APPROACH_CIRCLE), NULL, obj->getACRect());
+                SDL_RenderCopy(renderer, skinManager.getCurrentSkin()->getTexture(Tex::HIT_CIRCLE_OVERLAY), NULL, obj->getHCRect());
+            }
         }
     }
 

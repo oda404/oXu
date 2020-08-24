@@ -10,9 +10,9 @@
 namespace oxu
 {
     Skin::Skin(const std::string &path_p):
-    path(path_p), name(path_p.substr(path_p.find_last_of('/'), path_p.size() - 1))
+    path(path_p), name(path_p.substr(path_p.find_last_of('/') + 1, path_p.size() - 1))
     {
-        
+        LOG_DEBUG("Found skin {}", name);
     }
 
     Skin::~Skin()

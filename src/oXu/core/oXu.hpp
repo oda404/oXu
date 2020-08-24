@@ -27,7 +27,6 @@ namespace oxu
         AudioHandler audioHandler;
 
         SongManager songManager;
-        Beatmap *currentBeatmap;
 
         Thread *thisThread;
 

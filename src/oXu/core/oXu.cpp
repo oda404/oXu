@@ -17,7 +17,7 @@ namespace oxu
 		Threads::get(Threads::GRAPHICS).pipeline.makeRequest(Request(GRAPHICS_HALT_THREAD));
 		Threads::get(Threads::SOUND).pipeline.makeRequest(Request(SOUND_HALT_THREAD));
 
-		Threads::get(Threads::MAIN).join();
+		Threads::get(Threads::MAIN).join(); //redundant will be removed
 		Threads::get(Threads::GRAPHICS).join();
 		Threads::get(Threads::SOUND).join();
 
@@ -83,15 +83,18 @@ namespace oxu
 
 		songManager.enumerateSongs();
 
-		currentBeatmap = &songManager.getSong(0).getBeatmap(0);
-
-		currentBeatmap->loadGenericInfo();
-		currentBeatmap->loadGameInfo();
+		songManager.setCurrentSong(0);
+		songManager.setCurrentBeatmap(0);
 
 		graphicsHandler.init(window, &songManager);
 		audioHandler.init(&songManager);
 
-		currentBeatmap->start();
+		if(songManager.getCurrentBeatmap() != NULL)
+		{
+			songManager.getCurrentBeatmap()->loadGenericInfo();
+			songManager.getCurrentBeatmap()->loadGameInfo();
+			songManager.getCurrentBeatmap()->start();
+		}
 
 		start();
 		
@@ -108,7 +111,10 @@ namespace oxu
 
 			std::unique_lock<std::mutex> inputLock(Threads::mtx);
 
-				currentBeatmap->updateObjects(thisThread->getDelta());
+				if(songManager.getCurrentBeatmap() != NULL)
+				{
+					songManager.getCurrentBeatmap()->updateObjects(thisThread->getDelta());
+				}
 				
 			inputLock.unlock();
 

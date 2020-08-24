@@ -25,7 +25,6 @@ namespace oxu
     void AudioHandler::init(SongManager *songManager_p)
     {
         songManager = songManager_p;
-        currentBeatmap = &songManager->getSong(0).getBeatmap(0);
 
         thisThread = &Threads::get(Threads::SOUND);
         thisThread->init([this]() -> bool {return initThread();}, 1000);
@@ -105,7 +104,7 @@ namespace oxu
         Mix_FreeMusic(musicTrack);
         musicTrack = NULL;
 
-        std::string temp = currentBeatmap->path.substr(0, currentBeatmap->path.find_last_of('/')) + '/' + currentBeatmap->general.audioFilename;
+        std::string temp = songManager->getCurrentBeatmap()->path.substr(0, songManager->getCurrentBeatmap()->path.find_last_of('/')) + '/' + songManager->getCurrentBeatmap()->general.audioFilename;
 
         musicTrack = Mix_LoadMUS(temp.c_str());
 
@@ -117,12 +116,12 @@ namespace oxu
 
     void AudioHandler::playSongDelayed()
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(currentBeatmap->difficulty.approachRateMs - currentBeatmap->timer.getEllapsedTimeMilli()));
+        std::this_thread::sleep_for(std::chrono::milliseconds(songManager->getCurrentBeatmap()->difficulty.approachRateMs - songManager->getCurrentBeatmap()->timer.getEllapsedTimeMilli()));
 
         Mix_PlayMusic(musicTrack, 0);
         
         Mix_RewindMusic();
-        Mix_SetMusicPosition((currentBeatmap->timer.getEllapsedTimeMilli() - currentBeatmap->difficulty.approachRateMs) / 1000.0);
+        Mix_SetMusicPosition((songManager->getCurrentBeatmap()->timer.getEllapsedTimeMilli() - songManager->getCurrentBeatmap()->difficulty.approachRateMs) / 1000.0);
     }
 
     void AudioHandler::setSongVolume(const uint8_t &volume)
