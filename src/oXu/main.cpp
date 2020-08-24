@@ -7,10 +7,7 @@
 int main()
 {
 	oxu::oXu game;
-	if(!game.init())
-	{
-		return oxu::Status::code;
-	}
+	game.init();
 
 	return oxu::Status::code;
 }
