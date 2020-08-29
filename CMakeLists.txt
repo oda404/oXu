@@ -46,6 +46,8 @@ set(OXU_HEADERS
 	${OXU_SRC_DIR}/beatmap/songManager.hpp
 
 	${OXU_SRC_DIR}/beatmap/components/hitObject.hpp
+	${OXU_SRC_DIR}/beatmap/components/hitCircle.hpp
+	${OXU_SRC_DIR}/beatmap/components/approachCircle.hpp
 	${OXU_SRC_DIR}/beatmap/components/playField.hpp
 
 	${OXU_SRC_DIR}/beatmap/sections/config.hpp
@@ -94,6 +96,8 @@ set(OXU_SRC
 	${OXU_SRC_DIR}/beatmap/songManager.cpp
 
 	${OXU_SRC_DIR}/beatmap/components/hitObject.cpp
+	${OXU_SRC_DIR}/beatmap/components/hitCircle.cpp
+	${OXU_SRC_DIR}/beatmap/components/approachCircle.cpp
 	${OXU_SRC_DIR}/beatmap/components/playField.cpp
 
 	${OXU_SRC_DIR}/beatmap/sections/config.cpp
