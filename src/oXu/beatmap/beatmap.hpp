@@ -3,6 +3,7 @@
 #include<string>
 #include<vector>
 #include<cstdint>
+#include<memory>
 
 #include<oXu/beatmap/sections/general.hpp>
 #include<oXu/beatmap/sections/editor.hpp>
@@ -30,7 +31,7 @@ namespace oxu
         Metadata metadata;
         Difficulty difficulty;
 
-        std::vector<HitObject> hitObjects;
+        std::vector<std::unique_ptr<HitObject>> hitObjects;
 
         uint32_t objTopCap = 0;
         uint32_t objBotCap = 0;

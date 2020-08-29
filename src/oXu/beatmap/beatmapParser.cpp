@@ -4,6 +4,7 @@
 
 #include<oXu/core/scaling.hpp>
 #include<oXu/beatmap/components/types.hpp>
+#include<oXu/beatmap/components/hitCircle.hpp>
 #include<oXu/utils/logger.hpp>
 
 namespace oxu
@@ -212,7 +213,7 @@ namespace oxu
         return Types::SPINNER;
     }
 
-    static bool parseControlPoints(const std::string &line, std::vector<Vector2<float>> &controlPoints)
+    /*static bool parseControlPoints(const std::string &line, std::vector<Vector2<float>> &controlPoints)
     {
         std::string strX = "", strY = "";
         float x, y;
@@ -262,7 +263,7 @@ namespace oxu
         controlPoints.emplace_back(x, y);
 
         return true;
-    }
+    }*/
 
     static void logWarnInvalidObject(const std::string &line)
     {
@@ -278,7 +279,7 @@ namespace oxu
 #define SLIDER_REPEATS 6
 #define SLIDER_EXPECTED_LEN 7
 
-    void parseAndAddHitObject(const std::string &line, std::vector<HitObject> &hitObjects, const PlayField &playField, const Difficulty &difficulty)
+    void parseAndAddHitObject(const std::string &line, std::vector<std::unique_ptr<HitObject>> &hitObjects, const PlayField &playField, const Difficulty &difficulty)
     {
         std::vector<std::string> objInfo = getSplitStr(line, ',');
 
@@ -308,7 +309,9 @@ namespace oxu
 
         type = getParsedHitObjectType(type);
 
-        switch(type)
+        hitObjects.emplace_back(std::make_unique<HitCircle>(position, hitTime, type, difficulty));
+
+        /*switch(type)
         {
         case Types::CIRCLE:
             hitObjects.emplace_back(position, hitTime, type, difficulty);
@@ -349,6 +352,6 @@ namespace oxu
 
         case Types::SPINNER:
             break;
-        }
+        }*/
     }
 }

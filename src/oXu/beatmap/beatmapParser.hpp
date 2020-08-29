@@ -2,6 +2,7 @@
 
 #include<string>
 #include<vector>
+#include<memory>
 
 #include<oXu/beatmap/sections/general.hpp>
 #include<oXu/beatmap/sections/editor.hpp>
@@ -30,5 +31,5 @@ namespace oxu
 
     void parseAndSetColors(const std::string &line, std::vector<Color> &colors);
 
-    void parseAndAddHitObject(const std::string &line, std::vector<HitObject> &hitObjects, const PlayField &playField, const Difficulty &difficulty);
+    void parseAndAddHitObject(const std::string &line, std::vector<std::unique_ptr<HitObject>> &hitObjects, const PlayField &playField, const Difficulty &difficulty);
 }

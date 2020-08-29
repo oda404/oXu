@@ -140,15 +140,9 @@ namespace oxu
     {
         if(songManager->getCurrentBeatmap() != NULL && skinManager.getCurrentSkin() != NULL)
         {
-            HitObject *obj;
-
             for(uint32_t i = songManager->getCurrentBeatmap()->objBotCap; i < songManager->getCurrentBeatmap()->objTopCap; ++i)
             {
-                obj = &songManager->getCurrentBeatmap()->hitObjects[i];
-
-                SDL_RenderCopy(renderer, skinManager.getCurrentSkin()->getTexture(Tex::HIT_CIRCLE), NULL, obj->getHCRect());
-                SDL_RenderCopy(renderer, skinManager.getCurrentSkin()->getTexture(Tex::APPROACH_CIRCLE), NULL, obj->getACRect());
-                SDL_RenderCopy(renderer, skinManager.getCurrentSkin()->getTexture(Tex::HIT_CIRCLE_OVERLAY), NULL, obj->getHCRect());
+                songManager->getCurrentBeatmap()->hitObjects[i].get()->render(renderer, skinManager.getCurrentSkin());
             }
         }
     }

@@ -37,20 +37,20 @@ namespace oxu
 
     void Beatmap::updateObjects(const double &delta)
     {
-        if(hitObjects[objTopCap].shouldBeAddedToPool(timer.getEllapsedTimeMilli()))
+        if(hitObjects[objTopCap]->shouldBeAddedToPool(timer.getEllapsedTimeMilli()))
         {
-            hitObjects[objTopCap].setErrorMargin(timer.getEllapsedTimeMicro() / 1000.0, difficulty.approachRateMs);
+            hitObjects[objTopCap]->setErrorMargin(timer.getEllapsedTimeMicro() / 1000.0, difficulty.approachRateMs);
             ++objTopCap;
         }
 
-        if(hitObjects[objBotCap].shouldBeRemovedFromPool(timer.getEllapsedTimeMilli()))
+        if(hitObjects[objBotCap]->shouldBeRemovedFromPool(timer.getEllapsedTimeMilli()))
         {
             ++objBotCap;
         }
 
         for(uint32_t i = objBotCap; i < objTopCap; ++i)
         {
-            hitObjects[i].approachCircle(delta, difficulty.approachRateMs);
+            hitObjects[i]->update(delta, difficulty);
         }
     }
 
