@@ -5,6 +5,7 @@
 #include<oXu/core/scaling.hpp>
 #include<oXu/beatmap/components/types.hpp>
 #include<oXu/beatmap/components/hitCircle.hpp>
+#include<oXu/beatmap/components/slider.hpp>
 #include<oXu/utils/logger.hpp>
 
 namespace oxu
@@ -213,7 +214,7 @@ namespace oxu
         return Types::SPINNER;
     }
 
-    /*static bool parseControlPoints(const std::string &line, std::vector<Vector2<float>> &controlPoints)
+    static bool parseControlPoints(const std::string &line, std::vector<Vector2<float>> &controlPoints)
     {
         std::string strX = "", strY = "";
         float x, y;
@@ -263,7 +264,7 @@ namespace oxu
         controlPoints.emplace_back(x, y);
 
         return true;
-    }*/
+    }
 
     static void logWarnInvalidObject(const std::string &line)
     {
@@ -309,18 +310,21 @@ namespace oxu
 
         type = getParsedHitObjectType(type);
 
-        hitObjects.emplace_back(std::make_unique<HitCircle>(position, hitTime, type, difficulty));
-
-        /*switch(type)
+        switch(type)
         {
         case Types::CIRCLE:
-            hitObjects.emplace_back(position, hitTime, type, difficulty);
+            hitObjects.emplace_back(std::make_unique<HitCircle>(
+                position, 
+                hitTime, 
+                type, 
+                difficulty
+            ));
             break;
 
         case Types::SLIDER:
             {
                 std::string objParams = objInfo[OBJ_PARAMS];
-                SliderParams sliderParams;
+                char sType;
 
                 // Linear Bezier PerfectCircle
                 if(!strchr("LBP", objParams[0]))
@@ -329,29 +333,43 @@ namespace oxu
                     return;
                 }
 
-                sliderParams.type = objParams[0];
+                sType = objParams[0];
+
+                int repeats;
+                double expectedLength;
 
                 if(
-                    !setAttr<int>(objInfo[SLIDER_REPEATS], sliderParams.repeats) || 
-                    !setAttr<double>(objInfo[SLIDER_EXPECTED_LEN], sliderParams.expectedLength)
+                    !setAttr<int>(objInfo[SLIDER_REPEATS], repeats) || 
+                    !setAttr<double>(objInfo[SLIDER_EXPECTED_LEN], expectedLength)
                   )
                 {
                     logWarnInvalidObject(line);
                     return;
                 }
 
-                if(!parseControlPoints(objParams, sliderParams.controlPoints))
+                std::vector<Vector2<float>> controlPoints;
+
+                if(!parseControlPoints(objParams, controlPoints))
                 {
                     logWarnInvalidObject(line);
                     return;
                 }
 
-                hitObjects.emplace_back(position, hitTime, type, sliderParams, difficulty);
+                hitObjects.emplace_back(std::make_unique<Slider>(
+                    position,
+                    hitTime,
+                    type,
+                    controlPoints,
+                    sType,
+                    repeats,
+                    expectedLength,
+                    difficulty
+                ));
             }
             break;
 
         case Types::SPINNER:
             break;
-        }*/
+        }
     }
 }

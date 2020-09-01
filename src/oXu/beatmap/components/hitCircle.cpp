@@ -30,7 +30,7 @@ namespace oxu
 
     void HitCircle::update(const double &delta, const Difficulty &difficulty)
     {
-        approachCircle.closeIn(delta, position, {rect.w, rect.h}, difficulty.approachRateMs);
+        approachCircle.closeIn(delta, position, {static_cast<float>(rect.w), static_cast<float>(rect.h)}, difficulty.approachRateMs);
     }
 
     void HitCircle::render(SDL_Renderer *targetRenderer, Skin *currentSkin)
