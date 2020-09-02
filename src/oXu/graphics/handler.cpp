@@ -25,6 +25,7 @@ namespace oxu
         thisThread = &Threads::get(Threads::GRAPHICS);
         thisThread->init([this]() -> bool {return initThread();}, 240);
 
+        thisThread->doneInit = false;
         while(!thisThread->doneInit);
     }
 

@@ -86,14 +86,13 @@ namespace oxu
 		songManager.setCurrentSong(0);
 		songManager.setCurrentBeatmap(0);
 
-		graphicsHandler.init(window, &songManager);
-		audioHandler.init(&songManager);
-
 		if(songManager.getCurrentBeatmap() != NULL)
 		{
 			songManager.getCurrentBeatmap()->loadGenericInfo();
 			songManager.getCurrentBeatmap()->loadGameInfo();
-			songManager.getCurrentBeatmap()->start();
+
+			audioHandler.init(&songManager);
+			graphicsHandler.init(window, &songManager);
 		}
 
 		start();
@@ -103,6 +102,8 @@ namespace oxu
 
 	void oXu::start()
 	{
+		songManager.getCurrentBeatmap()->start();
+
 		while(!windowState)
 		{
 			thisThread->calculateDelta();
