@@ -37,12 +37,12 @@ namespace oxu
     {
         if(beatmaps.size() == 0)
         {
-            LOG_WARN("Song::getBeatmap({}): No beatmaps were found, returned NULL!", index);
+            LOG_WARN_EXT("No beatmaps were found, returned NULL!");
             return NULL;
         }
         else if(index >= beatmaps.size())
         {
-            LOG_WARN("Song::getBeatmap({}): Tried to access a non existent beatmap, returned last beatmap in vector!", index);
+            LOG_WARN_EXT("Tried to access a non existent beatmap, returned last beatmap in vector!");
             return &beatmaps[beatmaps.size() - 1];
         }
 

@@ -32,7 +32,8 @@ namespace oxu
         currentSong = getSong(index);
         if(currentSong == NULL)
         {
-            LOG_WARN("SongManager::setCurrentSong({}): See above warning ^",index);
+            LOG_WARN_EXT("Can't set currentSong (NULL)");
+            currentSong = NULL;
         }
     }
 
@@ -40,7 +41,7 @@ namespace oxu
     {
         if(currentSong == NULL)
         {
-            LOG_WARN("SongManager::setCurrentBeatmap({}): currentSong is NULL, currentBeatmap will also be NULL!", index);
+            LOG_WARN_EXT("currentSong is NULL, currentBeatmap will also be NULL!");
             currentBeatmap = NULL;
         }
         else
