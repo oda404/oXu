@@ -1,5 +1,5 @@
 # oXu!
-oXu! is an osu! client written in C++. The project is made mainly as a learning excersise.
+oXu! is a custom osu! client written in C++. The project is made mainly as a learning excersise.
 oXu! is still in a pre-alpha state and under heavy development.
 
 ## Features
@@ -10,17 +10,16 @@ The game is missing a lot of features that are standard in osu!, so don't expect
 ```console
 git clone --recursive https://github.com/oda404/oXu
 cd oXu
-sudo ./deps.sh
-make
+sudo ./configure.sh
+cd build
+cmake ..
+make -j#
 ```
-The -j# flag can used to speed up the build process. Where # is the number of threads used to make.<br>
-A new file named oXu will pop up, which you can execute using ./oXu.<br>
-Before trying to play oXu you should add some beatmaps to the songs folder(oXu! supports osu! beatmaps).
-
-## Dev info
-- The game uses SDL2 for graphics and events, and SDL_Mixer for the sound.
-- To clean the build tree of oXu! specific compiled objs do: make clean
-- To clean the build tree completely (including 3rdParty compiled objs) do: make clean-all
+Skins and beatmaps can be added into the /home/user/.config/oXu/
 
 ### 3rd Party libs
-- The game uses spdlog for the logging system.
+- SDL2
+- SDL2_Mixer
+- SDL2_TTF
+- SDL2_Image
+- spdlog
