@@ -1,6 +1,5 @@
 #pragma once
 
-#include<SDL2/SDL_rect.h>
 #include<oXu/utils/vector2.hpp>
 
 namespace oxu
@@ -8,7 +7,8 @@ namespace oxu
     struct ApproachCircle
     {
     public:
-        SDL_Rect rect;
+        Vector2<float> size;
+        Vector2<float> position;
         Vector2<float> initialSize = {0.f, 0.f};
         double lerpT = 0.0;
 

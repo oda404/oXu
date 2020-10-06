@@ -3,52 +3,24 @@
 
 #pragma once
 
-#include<SDL2/SDL_render.h>
-#include<SDL2/SDL_ttf.h>
-
-#include<oXu/graphics/UI/game.hpp>
+#include<SDL2/SDL.h>
 
 #include<oXu/beatmap/songManager.hpp>
 #include<oXu/skin/skinManager.hpp>
-
-#include<oXu/core/threading/threads.hpp>
 
 namespace oxu
 {
     class GraphicsHandler 
     {
     private:
-        SDL_Renderer *renderer = NULL;
-        SDL_GLContext context;
-        SDL_Window *window = NULL;
-
-        Request request;
-        
-        SongManager *songManager;
-        SkinManager skinManager;
-
-        GameUI gameUI;
-
-        TTF_Font *font = NULL;
-
-        Thread *thisThread;
-
-    public:
-        ~GraphicsHandler();
-
-        void init(SDL_Window *window, SongManager *songManager);
-
-    private:
-        bool initSDL();
+        SDL_Window *mp_window = NULL;
+        SongManager *mp_songManager;
+        SkinManager *mp_skinManager;
 
         bool initThread();
+        void updateThread();
 
-        void startThread();
-
-        void renderHitCircles();
-
-        void renderThreadsInfo();
-
-        void renderUI();
+    public:
+        void init(SDL_Window *window, SongManager *songManager_p, SkinManager *skinManager_p);
     };
 }

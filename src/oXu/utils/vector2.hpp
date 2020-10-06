@@ -109,6 +109,20 @@ namespace oxu
             return result;
         }
 
+        void operator-=(const Vector2<T> &v)
+        {
+            x -= v.x;
+            y -= v.y;
+        }
+
+        Vector2<T> operator-(const Vector2<T> &v) const
+        {
+            Vector2<T> result = *this;
+            result -= v;
+
+            return result;
+        }
+
         void operator*=(const T &n)
         {
             x *= n;

@@ -2,76 +2,63 @@
 
 #include<filesystem>
 
-#include<SDL2/SDL_image.h>
-
 #include<oXu/utils/logger.hpp>
 #include<oXu/skin/config.hpp>
+
+#include<oXu/graphics/utils/img.hpp>
 
 namespace oxu
 {
     Skin::Skin(const std::string &path_p):
     path(path_p), name(path_p.substr(path_p.find_last_of('/') + 1, path_p.size() - 1))
     {
-        LOG_DEBUG("Found skin {}", name);
+        OXU_LOG_DEBUG("Found skin {}", name);
     }
-
-    Skin::~Skin()
+    
+    void Skin::loadTextures()
     {
-        if(texturesAreAllocated)
-        {
-            unloadTextures();
-        }
-    }
-
-    void Skin::parseAndLoadTexture(const std::string &texturePath, SDL_Renderer *targetRenderer)
-    {
-        std::string textureName = texturePath.substr(texturePath.find_last_of('/') + 1, texturePath.size() - 1);
-
-        std::map<std::string, std::uint8_t>::const_iterator pair = texNamesMap.find(textureName);
-
-        if(pair->first != "")
-        {
-            textures[pair->second] = IMG_LoadTexture(targetRenderer, texturePath.c_str());
-        }
-    }
-
-    void Skin::loadTextures(SDL_Renderer *renderer)
-    {
-        if(texturesAreAllocated)
-        {
-            unloadTextures();
-        }
-
-        textures = new SDL_Texture*[MAX_TEX_COUNT]{NULL};
-        texturesAreAllocated = true;
-
         namespace fs = std::filesystem;
+
+        // free textures
 
         for(const fs::directory_entry &entry: fs::directory_iterator(path))
         {
             if(entry.path().extension() == ".png")
             {
-                parseAndLoadTexture(entry.path(), renderer);
+                std::string textureName = entry.path().string().substr(entry.path().string().find_last_of('/') + 1, entry.path().string().size() - 1);
+
+                std::map<std::string, std::uint8_t>::const_iterator pair = texNamesMap.find(textureName);
+
+                if(pair->first != "")
+                {
+                    textures[pair->second].load(entry.path().string());
+                }
             }
         }
     }
 
-    void Skin::unloadTextures()
-    {
-        for(uint8_t i = 0; i < MAX_TEX_COUNT; ++i)
-        {
-            SDL_DestroyTexture(textures[i]);
-        }
-
-        delete[] textures;
-    }
-
     void Skin::setCursor()
     {
-        SDL_Surface *cursorSurface = IMG_Load((path + "/cursor.png").c_str());
+        Image image;
+        image.load((path + "/cursor.png").c_str());
+
+        SDL_Surface *cursorSurface = 
+        SDL_CreateRGBSurfaceFrom(
+            &image.getBuffer()[0], 
+            image.getWidth(), 
+            image.getHeight(), 
+            image.getBPP(), 
+            4 * image.getWidth(), 
+            0x000000ff, 
+            0x0000ff00, 
+            0x00ff0000, 
+            0xff000000
+        );
+
         if(!cursorSurface)
         {
-            LOG_WARN(IMG_GetError());
+            OXU_LOG_WARN(SDL_GetError());
+            return;
         }
 
         if(customCursor)
@@ -87,11 +74,11 @@ namespace oxu
         SDL_SetCursor(customCursor);
     }
 
-    SDL_Texture *Skin::getTexture(uint8_t texNum)
+    const Texture &Skin::getTexture(uint8_t texNum) const
     {
         if(texNum >= MAX_TEX_COUNT)
         {
-            LOG_WARN("Tried to access a non existent texture, returned last texture in array!");
+            OXU_LOG_WARN("Tried to access a non existent texture, returned last texture in array!");
             return textures[MAX_TEX_COUNT - 1];
         }
 

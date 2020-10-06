@@ -3,31 +3,34 @@
 
 #include "oXu.hpp"
 
-#include<mutex>
-
 #include<oXu/core/status.hpp>
 #include<oXu/core/scaling.hpp>
 #include<oXu/core/dirs.hpp>
 #include<oXu/utils/logger.hpp>
 
+#include<oXu/core/threading/threadsManager.hpp>
+
+#include<oXu/skin/skinManager.hpp>
+#include<oXu/beatmap/songManager.hpp>
+
 namespace oxu
 {
+	static Thread *thisThread;
+	SkinManager skinManager;
+	SongManager songManager;
+
 	oXu::~oXu()
 	{
-		Threads::get(Threads::GRAPHICS).pipeline.makeRequest(Request(GRAPHICS_HALT_THREAD));
-		Threads::get(Threads::SOUND).pipeline.makeRequest(Request(SOUND_HALT_THREAD));
-
-		Threads::get(Threads::MAIN).join(); //redundant will be removed
-		Threads::get(Threads::GRAPHICS).join();
-		Threads::get(Threads::SOUND).join();
+		ThreadsManager::get(Threads::GRAPHICS).pipeline.makeRequest(Graphics::HALT_THREAD);
+		ThreadsManager::get(Threads::GRAPHICS).join();
 
 		if(Status::code != Status::OK)
 		{
-			LOG_WARN("Exiting with return status {0}", Status::code);
+			OXU_LOG_WARN("Exiting with return status {0}", Status::code);
 		}
 		else
 		{
-			LOG_INFO("Exiting gracefully. Hai noroc!");
+			OXU_LOG_INFO("Exiting gracefully. Hai noroc!");
 		}
 
 		SDL_DestroyWindow(window);
@@ -36,13 +39,20 @@ namespace oxu
 		SDL_Quit();
 	}
 
-	bool oXu::initSDL()
+	bool oXu::init()
 	{
-		Logger::init();
+		thisThread = &ThreadsManager::get(Threads::MAIN);
+		thisThread->setMaxFPS(1000);
 
-		if( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0 )
+		Scaling::screenSize = { 1920, 1080 };
+		Scaling::oxuPx = Scaling::screenSize.y / 480.f;
+
+		Logger::init();
+		Dirs::setDirs();
+
+		if( SDL_Init(SDL_INIT_VIDEO) != 0 )
 		{
-			LOG_ERR(SDL_GetError());
+			OXU_LOG_ERR(SDL_GetError());
 			Status::code = Status::SDL_INIT_FAIL;
 			return false;
 		}
@@ -53,73 +63,38 @@ namespace oxu
 			SDL_WINDOWPOS_CENTERED,
 			Scaling::screenSize.x,
 			Scaling::screenSize.y,
-			0
+			SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL
 		);
 
 		if(!window)
 		{
-			LOG_ERR(SDL_GetError());
+			OXU_LOG_ERR(SDL_GetError());
 			Status::code = Status::WINDOW_CREATE_FAIL;
 			return false;
 		}
 
-		return true;
-	}
-
-	bool oXu::init()
-	{
-		thisThread = &Threads::get(Threads::MAIN);
-		thisThread->init([]() -> bool {return true;}, 1000);
-
-		Scaling::screenSize = { 1920, 1080 };
-		Scaling::oxuPx = Scaling::screenSize.y / 480.f;
-
-		Dirs::setDirs();
-
-		if(!initSDL())
-		{
-			return false;
-		}
+		graphicsHandler.init(window, &songManager, &skinManager);
 
 		songManager.enumerateSongs();
-
 		songManager.setCurrentSong(0);
 		songManager.setCurrentBeatmap(0);
+		songManager.getCurrentBeatmap()->loadGenericInfo();
+		songManager.getCurrentBeatmap()->loadGameInfo();
 
-		if(songManager.getCurrentBeatmap() != NULL)
-		{
-			songManager.getCurrentBeatmap()->loadGenericInfo();
-			songManager.getCurrentBeatmap()->loadGameInfo();
-
-			audioHandler.init(&songManager);
-			graphicsHandler.init(window, &songManager);
-		}
-
-		start();
-		
 		return true;
 	}
 
-	void oXu::start()
+	void oXu::update()
 	{
+		thisThread->start();
 		songManager.getCurrentBeatmap()->start();
-
 		while(!windowState)
 		{
-			thisThread->calculateDelta();
-
-			inputHandler.handleInput(windowState);
-
-			std::unique_lock<std::mutex> inputLock(Threads::mtx);
-
-				if(songManager.getCurrentBeatmap() != NULL)
-				{
-					songManager.getCurrentBeatmap()->updateObjects(thisThread->getDelta());
-				}
-				
-			inputLock.unlock();
-
 			thisThread->limitFPS();
+
+			songManager.getCurrentBeatmap()->updateObjects(thisThread->getDelta());
+			
+			inputHandler.handleInput(windowState);
 		}
 	};
 }

@@ -6,18 +6,12 @@ namespace oxu
     {
         if(lerpT <= 1.f)
         {
-            Vector2<float> newPosition = Vector2<float>::lerp(
+            size = Vector2<float>::lerp(
                 initialSize,
-                Vector2<float>(targetSize.x, targetSize.y),
+                targetSize,
                 lerpT
             );
-
-            rect.w = newPosition.x;
-            rect.h = newPosition.y;
-
-            rect.x = origin.x - rect.w / 2;
-            rect.y = origin.y - rect.h / 2;
-
+            position = origin - size / 2;
             lerpT += delta / (approachRateMs / 1000.0);
         }
     }

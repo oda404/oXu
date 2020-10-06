@@ -1,8 +1,9 @@
 #include "beatmap.hpp"
 
 #include<fstream>
+#include<mutex>
 
-#include<oXu/core/threading/threads.hpp>
+#include<oXu/core/threading/threadsManager.hpp>
 #include<oXu/beatmap/beatmapParser.hpp>
 #include<oXu/beatmap/sections/config.hpp>
 #include<oXu/beatmap/components/playField.hpp>
@@ -10,6 +11,8 @@
 
 namespace oxu
 {
+    static std::mutex mtx;
+
     static void setSection(const std::string &line, uint8_t &section)
     {
         std::map<std::string, std::uint8_t>::const_iterator pair = sectionsMap.find(line);
@@ -21,42 +24,53 @@ namespace oxu
     }
 
     Beatmap::Beatmap(const std::string &path_p):
-    path(path_p)
+    m_path(path_p)
     {
 
     }
 
     void Beatmap::start()
     {
-        Threads::get(Threads::SOUND).pipeline.makeRequest(Request(SOUND_LOAD_SONG));
-
-        timer.start();
-
-        Threads::get(Threads::SOUND).pipeline.makeRequest(Request(SOUND_PLAY_SONG));
+        m_objI = 0;
+        m_hitObjectsPool.clear();
+        m_timer.start();
     }
 
     void Beatmap::updateObjects(const double &delta)
     {
-        if(hitObjects[objTopCap]->shouldBeAddedToPool(timer.getEllapsedTimeMilli()))
-        {
-            hitObjects[objTopCap]->setErrorMargin(timer.getEllapsedTimeMicro() / 1000.0, difficulty.approachRateMs);
-            ++objTopCap;
-        }
+        static uint32_t ellapsedMs;
+        ellapsedMs = m_timer.getEllapsedMs();
 
-        if(hitObjects[objBotCap]->shouldBeRemovedFromPool(timer.getEllapsedTimeMilli()))
+        mtx.lock();
+        while(m_hitObjects[m_objI]->shouldBeAddedToPool(ellapsedMs))
         {
-            ++objBotCap;
+            m_hitObjectsPool.push_back(m_hitObjects[m_objI].get());
+            ++m_objI;
         }
+        while(m_hitObjectsPool.size() > 0 && m_hitObjectsPool[0]->shouldBeRemovedFromPool(ellapsedMs))
+        {
+            m_hitObjectsPool.erase(m_hitObjectsPool.begin());
+        }
+        for(HitObject *ho: m_hitObjectsPool)
+        {
+            ho->update(delta, difficulty);
+        }
+        mtx.unlock();
+    }
 
-        for(uint32_t i = objBotCap; i < objTopCap; ++i)
+    void Beatmap::renderObjects(const Skin &skin)
+    {
+        mtx.lock();
+        for(HitObject *ho: m_hitObjectsPool)
         {
-            hitObjects[i]->update(delta, difficulty);
+            ho->render(skin);
         }
+        mtx.unlock();
     }
 
     void Beatmap::loadGenericInfo()
     {
-        std::ifstream beatmapFile(path);
+        std::ifstream beatmapFile(m_path);
 
         if(beatmapFile.is_open())
         {
@@ -78,38 +92,38 @@ namespace oxu
                 {
                     switch(section)
                     {
-                        case Sections::GENERAL_SECTION:
-                            parseAndSetGeneral(line, general);
-                            break;
+                    case Sections::GENERAL_SECTION:
+                        parseAndSetGeneral(line, general);
+                        break;
 
-                        case Sections::METADATA_SECTION:
-                            parseAndSetMetadata(line, metadata);
-                            break;
+                    case Sections::METADATA_SECTION:
+                        parseAndSetMetadata(line, metadata);
+                        break;
 
-                        case Sections::DIFFICULTY_SECTION:
-                            parseAndSetDifficulty(line, difficulty);
-                            break;
+                    case Sections::DIFFICULTY_SECTION:
+                        parseAndSetDifficulty(line, difficulty);
+                        break;
                     }
                 }
             }
-            
+
             beatmapFile.close();
         }
         else
         {
-            LOG_WARN("Could not open file {0}", path);
+            OXU_LOG_WARN("Could not open file {0}", m_path);
         }
     }
 
     void Beatmap::loadGameInfo()
     {
-        std::ifstream beatmapFile(path);
+        std::ifstream beatmapFile(m_path);
 
         if(beatmapFile.is_open())
         {
-            hitObjects.clear();
+            m_hitObjects.clear();
             /* hardcoded value for now */
-            hitObjects.reserve(4000);
+            m_hitObjects.reserve(4000);
 
             std::string line;
             uint8_t section = SECTIONS_COUNT;
@@ -126,11 +140,11 @@ namespace oxu
                     switch(section)
                     {
                         case Sections::TIMING_SECTION:
-                            
+
                             break;
 
                         case Sections::OBJECTS_SECTION:
-                            parseAndAddHitObject(line, hitObjects, playField, difficulty);
+                            parseAndAddHitObject(line, m_hitObjects, playField, difficulty);
                             break;
                     }
                 }
@@ -140,7 +154,12 @@ namespace oxu
         }
         else
         {
-            LOG_WARN("Could not open file {0}", path);
+            OXU_LOG_WARN("Could not open file {0}", m_path);
         }
+    }
+
+    const std::string &Beatmap::getPath()
+    {
+        return m_path;
     }
 }

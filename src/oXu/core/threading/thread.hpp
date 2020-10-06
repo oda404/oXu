@@ -13,26 +13,26 @@ namespace oxu
     struct Thread
     {
     private:
-        std::thread thread;
+        std::thread m_thread;
+        double m_startTick = 0.0;
+        double m_lastTick = 0.0;
+        double m_delta = 0.0;
+        uint16_t m_maxFPS = 0;
+        std::atomic<uint16_t> m_FPS = 0;
+        Timer m_timer;
 
-        double startTick = 0.0;
-        double lastTick = 0.0;
-        double delta = 0.0;
-        uint16_t maxFPS = 0;
-    
+        void calculateDelta();
+
     public:
-        std::atomic<uint16_t> FPS = 0;
+        Pipeline pipeline;
         std::atomic<bool> doneInit = false;
 
-        Timer timer;
-        Pipeline pipeline;
-
-        void init(std::function<bool()> entryPoint, const uint16_t &maxFPS_p);
-        // wrapper so i don't have to call Thrad::thread.join()
+        void start(std::function<bool()> entryPoint);
+        void start();
         void join();
-        void calculateDelta();
         void limitFPS();
-
+        void setMaxFPS(const uint16_t &maxFPS);
         const double &getDelta();
+        uint32_t getRunningTimeMs();
     };
 }

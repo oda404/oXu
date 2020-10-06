@@ -23,7 +23,7 @@ namespace oxu
 
         if(songs.size() == 0)
         {
-            LOG_ERR("No songs were found in {}", Dirs::songs);
+            OXU_LOG_WARN("No songs were found in {}", Dirs::songs);
         }
     }
 
@@ -32,7 +32,7 @@ namespace oxu
         currentSong = getSong(index);
         if(currentSong == NULL)
         {
-            LOG_WARN_EXT("Can't set currentSong (NULL)");
+            OXU_LOG_WARN_EXT("Can't set currentSong (NULL)");
             currentSong = NULL;
         }
     }
@@ -41,7 +41,7 @@ namespace oxu
     {
         if(currentSong == NULL)
         {
-            LOG_WARN_EXT("currentSong is NULL, currentBeatmap will also be NULL!");
+            OXU_LOG_WARN_EXT("currentSong is NULL, currentBeatmap will also be NULL!");
             currentBeatmap = NULL;
         }
         else
@@ -64,12 +64,12 @@ namespace oxu
     {
         if(songs.size() == 0)
         {
-            LOG_WARN("SongManager::getSong({}): No songs were found, returned NULL!", index);
+            OXU_LOG_WARN("SongManager::getSong({}): No songs were found, returned NULL!", index);
             return NULL;
         }
         else if(index >= songs.size())
         {
-            LOG_WARN("SongManager::getSong({}): Tried to access a non existent song, returned last song in vector!", index);
+            OXU_LOG_WARN("SongManager::getSong({}): Tried to access a non existent song, returned last song in vector!", index);
             return &songs[songs.size() - 1];
         }
 

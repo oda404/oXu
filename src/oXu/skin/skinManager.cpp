@@ -26,7 +26,7 @@ namespace oxu
 
         if(skins.size() == 0)
         {
-            LOG_ERR("No skins were found in {}", Dirs::skins);
+            OXU_LOG_ERR("No skins were found in {}", Dirs::skins);
         }
     }
 
@@ -35,7 +35,7 @@ namespace oxu
         currentSkin = getSkin(index);
         if(currentSkin == NULL)
         {
-            LOG_WARN_EXT("Can't set current skin (NULL)!");
+            OXU_LOG_WARN_EXT("Can't set current skin (NULL)!");
             currentSkin = NULL;
         }
     }
@@ -49,13 +49,13 @@ namespace oxu
     {
         if(skins.size() == 0)
         {
-            LOG_WARN_EXT("No skins were found returned NULL!");
+            OXU_LOG_WARN_EXT("No skins were found returned NULL!");
             return NULL;
         }
         else if(index >= skins.size())
         {
             //TODO: check if there are any skins at all in the vector
-            LOG_WARN_EXT("Tried to access a non extistent skin, returned last skin in vector!");
+            OXU_LOG_WARN_EXT("Tried to access a non extistent skin, returned last skin in vector!");
             return &skins[skins.size() - 1];
         }
 

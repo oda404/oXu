@@ -18,8 +18,8 @@ namespace oxu
         void start();
 
         /* as milliseconds */
-        uint32_t getEllapsedTimeMilli();
+        uint32_t getEllapsedMs();
 
-        uint32_t getEllapsedTimeMicro();
+        uint32_t getEllapsedUs();
     };
 }

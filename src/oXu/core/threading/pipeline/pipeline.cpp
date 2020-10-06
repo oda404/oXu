@@ -4,13 +4,14 @@ namespace oxu
 {
     void Pipeline::makeRequest(Request request)
     {
-        std::unique_lock<std::mutex> lock(mtx);
+        mtx.lock();
         pipeline.push_back(request);
+        mtx.unlock();
     }
 
     bool Pipeline::pollRequest(Request &targetRequest)
     {
-        std::unique_lock<std::mutex> lock(mtx);
+        mtx.lock();
         bool ret = static_cast<bool>(pipeline.size());
 
         if(pipeline.size() > 0)
@@ -18,6 +19,8 @@ namespace oxu
             targetRequest = pipeline[0];
             pipeline.erase(pipeline.begin());
         }
+
+        mtx.unlock();
 
         return ret;
     }

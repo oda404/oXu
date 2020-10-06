@@ -24,19 +24,19 @@ namespace oxu
 
     }
 
-    void Slider::render(SDL_Renderer *targetRenderer, Skin *currentSkin)
+    void Slider::render(const Skin &skin)
     {
 
     }
 
     void Slider::setErrorMargin(const long double &err, const std::uint32_t &approachRateMs)
     {
-        approachCircle.lerpT = (err - spawnTime) / approachRateMs;
+        mx_approachCircle.lerpT = (err - mx_spawnTime) / approachRateMs;
     }
 
     bool Slider::shouldBeAddedToPool(const std::uint32_t &mapTimeMs)
     {
-        if(mapTimeMs >= spawnTime)
+        if(mapTimeMs >= mx_spawnTime)
         {
             return true;
         }
@@ -46,11 +46,11 @@ namespace oxu
 
     bool Slider::shouldBeRemovedFromPool(const std::uint32_t &mapTimeMs)
     {
-        if(mapTimeMs > hitTime)
+        if(mapTimeMs > mx_hitTime)
         {
             return true;
         }
-        
+
         return false;
     }
 }

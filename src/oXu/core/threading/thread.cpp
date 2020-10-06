@@ -1,39 +1,57 @@
 #include"thread.hpp"
 
+#include<oXu/utils/logger.hpp>
+
 namespace oxu
 {
     void Thread::calculateDelta()
     {
-        lastTick = startTick;
-        startTick = timer.getEllapsedTimeMicro() / 1000.0;
+        m_lastTick = m_startTick;
+        m_startTick = m_timer.getEllapsedUs() / 1000.0;
         
-        delta = (startTick - lastTick) / 1000.0;
+        m_delta = (m_startTick - m_lastTick) / 1000.0;
     }
 
     void Thread::limitFPS()
     {
-        if(1000000.0 / maxFPS > timer.getEllapsedTimeMicro() - startTick * 1000.0)
+        if(1000000.0 / m_maxFPS > m_timer.getEllapsedUs() - m_startTick * 1000.0)
         {
-            std::this_thread::sleep_for(std::chrono::microseconds(static_cast<uint32_t>(1000000.0 / maxFPS - timer.getEllapsedTimeMicro() + startTick * 1000.0)));
+            std::this_thread::sleep_for(std::chrono::microseconds(static_cast<uint32_t>(1000000.0 / m_maxFPS - m_timer.getEllapsedUs() + m_startTick * 1000.0)));
         }
 
-        FPS = 1 / delta;
+        m_FPS = 1 / m_delta;
+
+        calculateDelta();
     }
 
-    void Thread::init(std::function<bool()> entryPoint, const uint16_t &maxFPS_p)
+    void Thread::start(std::function<bool()> entryPoint)
     {
-        thread = std::thread(entryPoint);
-        maxFPS = maxFPS_p;
-        timer.start();
+        m_thread = std::thread(entryPoint);
+        m_timer.start();
+    }
+    
+    void Thread::start()
+    {
+        m_timer.start();
+    }
+
+    void Thread::setMaxFPS(const uint16_t &maxFPS)
+    {
+        m_maxFPS = maxFPS;
     }
 
     void Thread::join()
     {
-        thread.join();
+        m_thread.join();
     }
 
     const double &Thread::getDelta()
     {
-        return delta;
+        return m_delta;
+    }
+
+    uint32_t Thread::getRunningTimeMs()
+    {
+        return m_timer.getEllapsedMs();
     }
 }

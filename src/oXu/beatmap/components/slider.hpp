@@ -30,7 +30,7 @@ namespace oxu
         );
 
         void update(const double &delta, const Difficulty &difficulty) override;
-        void render(SDL_Renderer *targetRenderer, Skin *currentSkin) override;
+        void render(const Skin &skin) override;
         void setErrorMargin(const long double &err, const std::uint32_t &approachRateMs) override;
         bool shouldBeAddedToPool(const std::uint32_t &mapTimeMs) override;
         bool shouldBeRemovedFromPool(const std::uint32_t &mapTimeMs) override;

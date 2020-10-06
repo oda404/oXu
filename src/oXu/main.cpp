@@ -7,7 +7,10 @@
 int main()
 {
 	oxu::oXu game;
+	
 	game.init();
+
+	game.update();
 
 	return oxu::Status::code;
 }

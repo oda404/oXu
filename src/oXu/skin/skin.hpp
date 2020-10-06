@@ -1,9 +1,11 @@
 #pragma once
 
-#include<SDL2/SDL_render.h>
 #include<SDL2/SDL_mouse.h>
 
 #include<string>
+
+#include<oXu/graphics/texture.hpp>
+#include<oXu/skin/config.hpp>
 
 namespace oxu
 {
@@ -12,25 +14,14 @@ namespace oxu
     private:
         std::string path;
         std::string name;
-
-        SDL_Texture **textures;
-        bool texturesAreAllocated = false;
-
+        Texture textures[MAX_TEX_COUNT];
         SDL_Cursor *customCursor = NULL;
-
-        void parseAndLoadTexture(const std::string &texturePath, SDL_Renderer *targetRenderer);
 
     public:
         Skin(const std::string &path_p);
-
-        ~Skin();
-
-        SDL_Texture *getTexture(uint8_t texEnum);
-
+        const Texture &getTexture(uint8_t texEnum) const;
         void setCursor();
-
-        void loadTextures(SDL_Renderer *renderer);
-
-        void unloadTextures();
+        /* Required the renderer to be initiated */
+        void loadTextures();
     };
 }

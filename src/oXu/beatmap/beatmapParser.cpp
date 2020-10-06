@@ -268,7 +268,7 @@ namespace oxu
 
     static void logWarnInvalidObject(const std::string &line)
     {
-        LOG_WARN("Skipped invalid object {0}", line);
+        OXU_LOG_WARN("Skipped invalid object {0}", line);
     }
 
 #define OBJ_X 0
