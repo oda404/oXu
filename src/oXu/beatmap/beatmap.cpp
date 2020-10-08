@@ -3,7 +3,6 @@
 #include<fstream>
 #include<mutex>
 
-#include<oXu/core/threading/threadsManager.hpp>
 #include<oXu/beatmap/beatmapParser.hpp>
 #include<oXu/beatmap/sections/config.hpp>
 #include<oXu/beatmap/components/playField.hpp>

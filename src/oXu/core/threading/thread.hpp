@@ -27,7 +27,7 @@ namespace oxu
         Pipeline pipeline;
         std::atomic<bool> doneInit = false;
 
-        void start(std::function<bool()> entryPoint);
+        void start(std::function<void()> entryPoint);
         void start();
         void join();
         void limitFPS();

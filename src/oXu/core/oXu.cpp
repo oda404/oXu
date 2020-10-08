@@ -6,26 +6,26 @@
 #include<oXu/core/status.hpp>
 #include<oXu/core/scaling.hpp>
 #include<oXu/core/dirs.hpp>
+#include<oXu/core/threading/thread.hpp>
 #include<oXu/utils/logger.hpp>
-
-#include<oXu/core/threading/threadsManager.hpp>
 
 #include<oXu/skin/skinManager.hpp>
 #include<oXu/beatmap/songManager.hpp>
 
 #include<oXu/graphics/handler.hpp>
+#include<oXu/audio/handler.hpp>
 #include<oXu/input/handler.hpp>
 
 namespace oxu
 {
-	static Thread *cp_thisThread;
-	SkinManager c_skinManager;
-	SongManager c_songManager;
+	static Thread c_selfThread;
+	static SkinManager c_skinManager;
+	static SongManager c_songManager;
 
 	oXu::~oXu()
 	{
-		ThreadsManager::get(Threads::GRAPHICS).pipeline.makeRequest(Graphics::HALT_THREAD);
-		ThreadsManager::get(Threads::GRAPHICS).join();
+		AudioHandler::shutDown();
+		GraphicsHandler::shutDown();
 
 		if(Status::code != Status::OK)
 		{
@@ -44,8 +44,7 @@ namespace oxu
 
 	bool oXu::init()
 	{
-		cp_thisThread = &ThreadsManager::get(Threads::MAIN);
-		cp_thisThread->setMaxFPS(1000);
+		c_selfThread.setMaxFPS(1000);
 
 		Scaling::screenSize = { 1920, 1080 };
 		Scaling::oxuPx = Scaling::screenSize.y / 480.f;
@@ -76,27 +75,28 @@ namespace oxu
 			return false;
 		}
 
-		GraphicsHandler::init(window, &c_songManager, &c_skinManager);
-
 		c_songManager.enumerateSongs();
 		c_songManager.setCurrentSong(0);
 		c_songManager.setCurrentBeatmap(0);
 		c_songManager.getCurrentBeatmap()->loadGenericInfo();
 		c_songManager.getCurrentBeatmap()->loadGameInfo();
 
+		AudioHandler::init();
+		GraphicsHandler::init(window, &c_songManager, &c_skinManager);
+
 		return true;
 	}
 
 	void oXu::update()
 	{
-		cp_thisThread->start();
+		c_selfThread.start();
 		c_songManager.getCurrentBeatmap()->start();
 
 		while(!windowState)
 		{
-			cp_thisThread->limitFPS();
+			c_selfThread.limitFPS();
 
-			c_songManager.getCurrentBeatmap()->updateObjects(cp_thisThread->getDelta());
+			c_songManager.getCurrentBeatmap()->updateObjects(c_selfThread.getDelta());
 			
 			InputHandler::handleInput(windowState);
 		}

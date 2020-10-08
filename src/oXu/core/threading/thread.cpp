@@ -24,7 +24,7 @@ namespace oxu
         calculateDelta();
     }
 
-    void Thread::start(std::function<bool()> entryPoint)
+    void Thread::start(std::function<void()> entryPoint)
     {
         m_thread = std::thread(entryPoint);
         m_timer.start();

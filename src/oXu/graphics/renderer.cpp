@@ -7,7 +7,7 @@ namespace oxu
 {
     SDL_Window *cp_window;
 
-    Renderer::~Renderer()
+    void Renderer::destroy()
     {
         OpenGL::Renderer::destroy();
     }

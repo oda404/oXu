@@ -5,12 +5,12 @@
 
 #include<oXu/core/status.hpp>
 #include<oXu/utils/logger.hpp>
-#include<oXu/core/threading/threadsManager.hpp>
 #include<oXu/graphics/renderer.hpp>
+#include<oXu/core/threading/thread.hpp>
 
 namespace oxu::GraphicsHandler
 {
-    static Thread *cp_thisThread;
+    static Thread c_selfThread;
     static SDL_Window *cp_window = NULL;
     static SongManager *cp_songManager;
     static SkinManager *cp_skinManager;
@@ -21,9 +21,9 @@ namespace oxu::GraphicsHandler
 
         while(true)
         {
-            cp_thisThread->limitFPS();
+            c_selfThread.limitFPS();
             
-            while(cp_thisThread->pipeline.pollRequest(l_request))
+            while(c_selfThread.pipeline.pollRequest(l_request))
             {
                 switch(l_request.instruction)
                 {
@@ -40,20 +40,18 @@ namespace oxu::GraphicsHandler
         }
     }
 
-    static bool initThread()
+    static void initThread()
     {
         Renderer::init(cp_window);
 
         cp_skinManager->enumerateSkins();
 		cp_skinManager->setCurrentSkin(0);
 		cp_skinManager->getCurrentSkin()->setCursor();
-		cp_skinManager->getCurrentSkin()->loadTextures();
+        cp_skinManager->getCurrentSkin()->loadTextures();
 
-        cp_thisThread->doneInit = true;
+        c_selfThread.doneInit = true;
 
         updateThread();
-
-        return true;
     }
 
     void init(SDL_Window *window_p, SongManager *songManager_p, SkinManager *skinManager_p)
@@ -62,10 +60,17 @@ namespace oxu::GraphicsHandler
         cp_skinManager = skinManager_p;
         cp_window = window_p;
 
-        cp_thisThread = &ThreadsManager::get(Threads::GRAPHICS);
-        cp_thisThread->setMaxFPS(240);
-        cp_thisThread->start([]() -> bool { return initThread(); });
-        cp_thisThread->doneInit = false;
-        while(!cp_thisThread->doneInit);
+        c_selfThread.setMaxFPS(240);
+        /* paranoia */
+        c_selfThread.doneInit = false;
+        c_selfThread.start([] { initThread(); });
+        while(!c_selfThread.doneInit);
+    }
+
+    void shutDown()
+    {
+        c_selfThread.pipeline.makeRequest(Graphics::HALT_THREAD);
+        c_selfThread.join();
+        Renderer::destroy();
     }
 }

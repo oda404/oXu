@@ -11,4 +11,5 @@
 namespace oxu::GraphicsHandler
 {
     void init(SDL_Window *window_p, SongManager *songManager_p, SkinManager *skinManager_p);
+    void shutDown();
 }

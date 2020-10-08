@@ -23,7 +23,6 @@ set(OXU_HEADERS
 
     #core/threading/
     ${OXU_SRC_DIR}/core/threading/thread.hpp
-	${OXU_SRC_DIR}/core/threading/threadsManager.hpp
 
 	${OXU_SRC_DIR}/core/threading/pipeline/request.hpp
 	${OXU_SRC_DIR}/core/threading/pipeline/pipeline.hpp
@@ -49,6 +48,8 @@ set(OXU_HEADERS
 
     #audio/
     ${OXU_SRC_DIR}/audio/handler.hpp
+    ${OXU_SRC_DIR}/audio/player.hpp
+    ${OXU_SRC_DIR}/audio/sound.hpp
 
     #input/
     ${OXU_SRC_DIR}/input/handler.hpp
@@ -98,7 +99,6 @@ set(OXU_SRC
 
     #core/threading/
     ${OXU_SRC_DIR}/core/threading/thread.cpp
-    ${OXU_SRC_DIR}/core/threading/threadsManager.cpp
 
     ${OXU_SRC_DIR}/core/threading/pipeline/request.cpp
     ${OXU_SRC_DIR}/core/threading/pipeline/pipeline.cpp
@@ -124,6 +124,8 @@ set(OXU_SRC
 
     #audio/
     ${OXU_SRC_DIR}/audio/handler.cpp
+    ${OXU_SRC_DIR}/audio/player.cpp
+    ${OXU_SRC_DIR}/audio/sound.cpp
 
     #input/
     ${OXU_SRC_DIR}/input/handler.cpp

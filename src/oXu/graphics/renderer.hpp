@@ -13,8 +13,8 @@ namespace oxu
     class Renderer
     {
     public:
-        ~Renderer();
         static void init(SDL_Window *window);
+        static void destroy();
         static void clear();
         static void render();
         static void drawTexture(
