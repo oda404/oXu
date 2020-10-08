@@ -8,19 +8,7 @@
 #include<oXu/beatmap/songManager.hpp>
 #include<oXu/skin/skinManager.hpp>
 
-namespace oxu
+namespace oxu::GraphicsHandler
 {
-    class GraphicsHandler 
-    {
-    private:
-        SDL_Window *mp_window = NULL;
-        SongManager *mp_songManager;
-        SkinManager *mp_skinManager;
-
-        bool initThread();
-        void updateThread();
-
-    public:
-        void init(SDL_Window *window, SongManager *songManager_p, SkinManager *skinManager_p);
-    };
+    void init(SDL_Window *window_p, SongManager *songManager_p, SkinManager *skinManager_p);
 }

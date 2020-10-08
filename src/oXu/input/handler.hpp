@@ -3,20 +3,7 @@
 
 #pragma once
 
-#include<SDL2/SDL_events.h>
-
-namespace oxu
+namespace oxu::InputHandler
 {
-    class InputHandler
-    {
-    private:
-        SDL_Event event;
-
-    public:        
-        void init();
-
-        void handleInput(bool &w_isClosed);
-
-        void handleEvents();
-    };
+    void handleInput(bool &w_isClosed);
 }

@@ -3,20 +3,23 @@
 
 #include"handler.hpp"
 
-void oxu::InputHandler::init()
-{
-    /* Add an event watch to check if a key is pressed */
-}
+#include<SDL2/SDL_events.h>
 
-void oxu::InputHandler::handleInput(bool &w_isClosed)
+namespace oxu::InputHandler
 {
-    while(SDL_PollEvent(&event))
+    static SDL_Event c_event;
+
+    void handleInput(bool &w_isClosed)
     {
-        switch(event.type)
+        while(SDL_PollEvent(&c_event))
         {
-            case SDL_QUIT:
-                w_isClosed = true;
-                break;
+            switch(c_event.type)
+            {
+                case SDL_QUIT:
+                    w_isClosed = true;
+                    break;
+            }
         }
     }
+
 }

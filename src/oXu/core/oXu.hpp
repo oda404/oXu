@@ -5,12 +5,6 @@
 
 #include<SDL2/SDL.h>
 
-#include<oXu/graphics/handler.hpp>
-#include<oXu/input/handler.hpp>
-
-#include<oXu/beatmap/songManager.hpp>
-#include<oXu/skin/skinManager.hpp>
-
 namespace oxu
 {
     class oXu
@@ -18,9 +12,6 @@ namespace oxu
     private:
         SDL_Window *window = NULL;
         bool windowState = false;
-
-        GraphicsHandler graphicsHandler;
-        InputHandler inputHandler;
         
     public:
         ~oXu();

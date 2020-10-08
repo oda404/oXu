@@ -8,50 +8,24 @@
 #include<oXu/core/threading/threadsManager.hpp>
 #include<oXu/graphics/renderer.hpp>
 
-namespace oxu
+namespace oxu::GraphicsHandler
 {
-    static Thread *thisThread;
+    static Thread *cp_thisThread;
+    static SDL_Window *cp_window = NULL;
+    static SongManager *cp_songManager;
+    static SkinManager *cp_skinManager;
 
-    void GraphicsHandler::init(SDL_Window *window_p, SongManager *songManager_p, SkinManager *skinManager_p)
+    static void updateThread()
     {
-        mp_songManager = songManager_p;
-        mp_skinManager = skinManager_p;
-        mp_window = window_p;
-
-        thisThread = &ThreadsManager::get(Threads::GRAPHICS);
-        thisThread->setMaxFPS(240);
-        thisThread->start([this]() -> bool { return initThread(); });
-        thisThread->doneInit = false;
-        while(!thisThread->doneInit);
-    }
-
-    bool GraphicsHandler::initThread()
-    {
-        Renderer::init(mp_window);
-
-        mp_skinManager->enumerateSkins();
-		mp_skinManager->setCurrentSkin(0);
-		mp_skinManager->getCurrentSkin()->setCursor();
-		mp_skinManager->getCurrentSkin()->loadTextures();
-
-        thisThread->doneInit = true;
-
-        updateThread();
-
-        return true;
-    }
-
-    void GraphicsHandler::updateThread()
-    {
-        Request request;
+        Request l_request;
 
         while(true)
         {
-            thisThread->limitFPS();
+            cp_thisThread->limitFPS();
             
-            while(thisThread->pipeline.pollRequest(request))
+            while(cp_thisThread->pipeline.pollRequest(l_request))
             {
-                switch(request.instruction)
+                switch(l_request.instruction)
                 {
                 case Graphics::HALT_THREAD:
                     return;
@@ -60,9 +34,38 @@ namespace oxu
 
             Renderer::clear();
 
-            mp_songManager->getCurrentBeatmap()->renderObjects(*mp_skinManager->getCurrentSkin());
+            cp_songManager->getCurrentBeatmap()->renderObjects(*cp_skinManager->getCurrentSkin());
 
             Renderer::render();
         }
+    }
+
+    static bool initThread()
+    {
+        Renderer::init(cp_window);
+
+        cp_skinManager->enumerateSkins();
+		cp_skinManager->setCurrentSkin(0);
+		cp_skinManager->getCurrentSkin()->setCursor();
+		cp_skinManager->getCurrentSkin()->loadTextures();
+
+        cp_thisThread->doneInit = true;
+
+        updateThread();
+
+        return true;
+    }
+
+    void init(SDL_Window *window_p, SongManager *songManager_p, SkinManager *skinManager_p)
+    {
+        cp_songManager = songManager_p;
+        cp_skinManager = skinManager_p;
+        cp_window = window_p;
+
+        cp_thisThread = &ThreadsManager::get(Threads::GRAPHICS);
+        cp_thisThread->setMaxFPS(240);
+        cp_thisThread->start([]() -> bool { return initThread(); });
+        cp_thisThread->doneInit = false;
+        while(!cp_thisThread->doneInit);
     }
 }

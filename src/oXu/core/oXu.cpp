@@ -13,11 +13,14 @@
 #include<oXu/skin/skinManager.hpp>
 #include<oXu/beatmap/songManager.hpp>
 
+#include<oXu/graphics/handler.hpp>
+#include<oXu/input/handler.hpp>
+
 namespace oxu
 {
-	static Thread *thisThread;
-	SkinManager skinManager;
-	SongManager songManager;
+	static Thread *cp_thisThread;
+	SkinManager c_skinManager;
+	SongManager c_songManager;
 
 	oXu::~oXu()
 	{
@@ -41,8 +44,8 @@ namespace oxu
 
 	bool oXu::init()
 	{
-		thisThread = &ThreadsManager::get(Threads::MAIN);
-		thisThread->setMaxFPS(1000);
+		cp_thisThread = &ThreadsManager::get(Threads::MAIN);
+		cp_thisThread->setMaxFPS(1000);
 
 		Scaling::screenSize = { 1920, 1080 };
 		Scaling::oxuPx = Scaling::screenSize.y / 480.f;
@@ -73,28 +76,29 @@ namespace oxu
 			return false;
 		}
 
-		graphicsHandler.init(window, &songManager, &skinManager);
+		GraphicsHandler::init(window, &c_songManager, &c_skinManager);
 
-		songManager.enumerateSongs();
-		songManager.setCurrentSong(0);
-		songManager.setCurrentBeatmap(0);
-		songManager.getCurrentBeatmap()->loadGenericInfo();
-		songManager.getCurrentBeatmap()->loadGameInfo();
+		c_songManager.enumerateSongs();
+		c_songManager.setCurrentSong(0);
+		c_songManager.setCurrentBeatmap(0);
+		c_songManager.getCurrentBeatmap()->loadGenericInfo();
+		c_songManager.getCurrentBeatmap()->loadGameInfo();
 
 		return true;
 	}
 
 	void oXu::update()
 	{
-		thisThread->start();
-		songManager.getCurrentBeatmap()->start();
+		cp_thisThread->start();
+		c_songManager.getCurrentBeatmap()->start();
+
 		while(!windowState)
 		{
-			thisThread->limitFPS();
+			cp_thisThread->limitFPS();
 
-			songManager.getCurrentBeatmap()->updateObjects(thisThread->getDelta());
+			c_songManager.getCurrentBeatmap()->updateObjects(cp_thisThread->getDelta());
 			
-			inputHandler.handleInput(windowState);
+			InputHandler::handleInput(windowState);
 		}
 	};
 }
