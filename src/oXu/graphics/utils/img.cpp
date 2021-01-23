@@ -1,7 +1,12 @@
 #include"img.hpp"
 
 #include<stdio.h>
-#include<libpng/png.h>
+
+#if __has_include("libpng/png.h")
+    #include<libpng/png.h>
+#elif __has_include("libpng16/png.h")
+    #include<libpng16/png.h>
+#endif
 
 #include<oXu/utils/logger.hpp>
 
