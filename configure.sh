@@ -1,14 +1,13 @@
-sudo apt update && 
-sudo apt install -y   \
-    libsdl2-dev       \
-    libpng-dev        \
-    build-essential   \
-    cmake
+#!/bin/bash
 
-# create oXu dir the user's .config
-user_config_oXu_dir=/home/$USER/.config/oXu
+if [ -f "/bin/apt-get" ]; then
+    sudo apt-get update
+    sudo apt-get install libsdl2-dev libpng-dev build-essential cmake
+elif [ -f "/bin/pacman" ]; then
+    sudo pacman -S sdl2 libpng base-devel cmake
+fi
 
-mkdir build $user_config_oXu_dir $user_config_oXu_dir/songs $user_config_oXu_dir/skins
-cp -r res $user_config_oXu_dir 
+USER_OXU_CONFIG_DIR=/home/$USER/.config/oxu
 
-echo Done!
+mkdir $USER_OXU_CONFIG_DIR $USER_OXU_CONFIG_DIR/songs $USER_OXU_CONFIG_DIR/skins
+cp -r res/ $USER_OXU_CONFIG_DIR/res/
