@@ -33,7 +33,6 @@ namespace oxu
         if(m_currentSong == nullptr)
         {
             OXU_LOG_WARN("Tried to set currentSong to index {}, is null", index);
-            m_currentSong = nullptr;
         }
     }
 
