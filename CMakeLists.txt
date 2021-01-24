@@ -18,7 +18,7 @@ set(OXU_HEADERS
     #core/
 	${OXU_SRC_DIR}/core/oXu.hpp
 	${OXU_SRC_DIR}/core/scaling.hpp
-	${OXU_SRC_DIR}/core/dirs.hpp
+	${OXU_SRC_DIR}/core/fs.hpp
     ${OXU_SRC_DIR}/core/status.hpp
     ${OXU_SRC_DIR}/core/logger.hpp
 
@@ -95,7 +95,7 @@ set(OXU_SRC
     ${OXU_SRC_DIR}/core/status.cpp
     ${OXU_SRC_DIR}/core/oXu.cpp
 	${OXU_SRC_DIR}/core/scaling.cpp
-    ${OXU_SRC_DIR}/core/dirs.cpp
+    ${OXU_SRC_DIR}/core/fs.cpp
     ${OXU_SRC_DIR}/core/logger.cpp
 
     #core/threading/

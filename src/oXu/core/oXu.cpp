@@ -5,7 +5,7 @@
 
 #include<oXu/core/status.hpp>
 #include<oXu/core/scaling.hpp>
-#include<oXu/core/dirs.hpp>
+#include<oXu/core/fs.hpp>
 #include<oXu/core/threading/thread.hpp>
 #include<oXu/core/logger.hpp>
 
@@ -50,7 +50,8 @@ namespace oxu
 		Scaling::oxuPx = Scaling::screenSize.y / 480.f;
 
 		Logger::init();
-		Dirs::setDirs();
+		fs::set_skins_dir();
+		fs::set_songs_dir();
 
 		if( SDL_Init(SDL_INIT_VIDEO) != 0 )
 		{

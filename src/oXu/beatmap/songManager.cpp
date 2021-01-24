@@ -2,7 +2,7 @@
 
 #include<filesystem>
 
-#include<oXu/core/dirs.hpp>
+#include<oXu/core/fs.hpp>
 #include<oXu/core/logger.hpp>
 
 namespace oxu
@@ -10,10 +10,11 @@ namespace oxu
     void SongManager::enumerateSongs()
     {
         namespace fs = std::filesystem;
+        namespace oxufs = oxu::fs;
 
         m_songs.clear();
 
-        for(auto &entry: fs::directory_iterator(Dirs::songs))
+        for(auto &entry: fs::directory_iterator(oxufs::get_songs_dir()))
         {
             if(fs::is_directory(entry))
             {
@@ -23,7 +24,7 @@ namespace oxu
 
         if(m_songs.size() == 0)
         {
-            OXU_LOG_WARN("No songs were found in {}", Dirs::songs);
+            OXU_LOG_WARN("No songs were found in {}", oxufs::get_songs_dir());
         }
     }
 
