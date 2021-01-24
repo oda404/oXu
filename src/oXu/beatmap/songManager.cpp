@@ -11,17 +11,17 @@ namespace oxu
     {
         namespace fs = std::filesystem;
 
-        songs.clear();
+        m_songs.clear();
 
         for(auto &entry: fs::directory_iterator(Dirs::songs))
         {
             if(fs::is_directory(entry))
             {
-                songs.emplace_back(entry.path());
+                m_songs.emplace_back(entry.path());
             }
         }
 
-        if(songs.size() == 0)
+        if(m_songs.size() == 0)
         {
             OXU_LOG_WARN("No songs were found in {}", Dirs::songs);
         }
@@ -29,55 +29,49 @@ namespace oxu
 
     void SongManager::setCurrentSong(std::size_t index)
     {
-        currentSong = getSong(index);
-        if(currentSong == NULL)
+        m_currentSong = getSong(index);
+        if(m_currentSong == nullptr)
         {
-            OXU_LOG_WARN_EXT("Can't set currentSong (NULL)");
-            currentSong = NULL;
+            OXU_LOG_WARN("Tried to set currentSong to index {}, is null", index);
+            m_currentSong = nullptr;
         }
     }
 
     void SongManager::setCurrentBeatmap(std::size_t index)
     {
-        if(currentSong == NULL)
+        if(m_currentSong == nullptr)
         {
-            OXU_LOG_WARN_EXT("currentSong is NULL, currentBeatmap will also be NULL!");
-            currentBeatmap = NULL;
+            OXU_LOG_WARN("Tried to set currentBeatmap but currentSong is null");
+            m_currentBeatmap = nullptr;
         }
         else
         {
-            currentBeatmap = currentSong->getBeatmap(index);
+            m_currentBeatmap = m_currentSong->getBeatmap(index);
         }
     }
 
-    Song *SongManager::getCurrentSong()
+    Song *SongManager::getCurrentSong() const
     {
-        return currentSong;
+        return m_currentSong;
     }
 
-    Beatmap *SongManager::getCurrentBeatmap()
+    Beatmap *SongManager::getCurrentBeatmap() const
     {
-        return currentBeatmap;
+        return m_currentBeatmap;
     }
 
     Song *SongManager::getSong(const size_t &index)
     {
-        if(songs.size() == 0)
+        if(m_songs.size() == 0)
         {
-            OXU_LOG_WARN("SongManager::getSong({}): No songs were found, returned NULL!", index);
-            return NULL;
-        }
-        else if(index >= songs.size())
-        {
-            OXU_LOG_WARN("SongManager::getSong({}): Tried to access a non existent song, returned last song in vector!", index);
-            return &songs[songs.size() - 1];
+            return nullptr;
         }
 
-        return &songs[index];
+        return &m_songs[std::min(index, m_songs.size() -1)];
     }
 
-    std::size_t SongManager::getSongsSize()
+    std::size_t SongManager::getSongsSize() const
     {
-        return songs.size();
+        return m_songs.size();
     }
 }

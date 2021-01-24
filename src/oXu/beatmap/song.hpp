@@ -11,18 +11,18 @@ namespace oxu
     class Song
     {
     private:
-        std::vector<Beatmap> beatmaps;
+        std::vector<Beatmap> m_beatmaps;
 
     public:
-        std::string path;
-        std::string name;
+        std::string m_path;
+        std::string m_name;
 
-        Song(const std::string &path_p);
+        Song(const std::string &path);
 
         void enumerateBeatmaps();
 
         Beatmap *getBeatmap(const size_t &index);
-        size_t getBetmapsNumber();
+        size_t getBeatmapsCount() const;
     };
 
 }

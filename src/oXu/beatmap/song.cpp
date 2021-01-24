@@ -6,10 +6,10 @@
 
 namespace oxu
 {
-    Song::Song(const std::string &path_p):
-    path(path_p), name(path_p.substr(path_p.find_last_of('/') + 1, path_p.size() - 1))
+    Song::Song(const std::string &path):
+    m_path(path), m_name(path.substr(path.find_last_of('/') + 1, path.size() - 1))
     {
-        OXU_LOG_DEBUG("Found song {}", name);
+        OXU_LOG_DEBUG("Found song {}", m_name);
         enumerateBeatmaps();
     }
 
@@ -17,40 +17,34 @@ namespace oxu
     {
         namespace fs = std::filesystem;
 
-        beatmaps.clear();
+        m_beatmaps.clear();
 
-        for(auto &entry: fs::directory_iterator(path))
+        for(auto &entry: fs::directory_iterator(m_path))
         {
             if(entry.path().extension() == ".osu")
             {
-                beatmaps.emplace_back(entry.path());
+                m_beatmaps.emplace_back(entry.path());
             }
         }
 
-        if(beatmaps.size() == 0)
+        if(m_beatmaps.size() == 0)
         {
-            OXU_LOG_WARN("No .osu files (beatmaps) were found in {}", path);
+            OXU_LOG_WARN("No .osu files were found in song {}", m_path);
         }
     }
 
     Beatmap *Song::getBeatmap(const size_t &index)
     {
-        if(beatmaps.size() == 0)
+        if(m_beatmaps.size() == 0)
         {
-            OXU_LOG_WARN_EXT("No beatmaps were found, returned NULL!");
-            return NULL;
-        }
-        else if(index >= beatmaps.size())
-        {
-            OXU_LOG_WARN_EXT("Tried to access a non existent beatmap, returned last beatmap in vector!");
-            return &beatmaps[beatmaps.size() - 1];
+            return nullptr;
         }
 
-        return &beatmaps[index];
+        return &m_beatmaps[std::min(index, m_beatmaps.size() - 1)];
     }
 
-    size_t Song::getBetmapsNumber()
+    size_t Song::getBeatmapsCount() const
     {
-        return beatmaps.size();
+        return m_beatmaps.size();
     }
 }

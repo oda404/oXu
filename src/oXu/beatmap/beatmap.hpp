@@ -4,6 +4,7 @@
 #include<vector>
 #include<cstdint>
 #include<memory>
+#include<unordered_map>
 
 #include<oXu/beatmap/sections/general.hpp>
 #include<oXu/beatmap/sections/editor.hpp>
