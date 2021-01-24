@@ -34,7 +34,10 @@ namespace oxu::GraphicsHandler
 
             Renderer::clear();
 
-            cp_songManager->getCurrentBeatmap()->renderObjects(*cp_skinManager->getCurrentSkin());
+            if(cp_songManager->getCurrentBeatmap() != nullptr)
+            {
+                cp_songManager->getCurrentBeatmap()->renderObjects(*cp_skinManager->getCurrentSkin());
+            }
 
             Renderer::render();
         }
@@ -46,8 +49,11 @@ namespace oxu::GraphicsHandler
 
         cp_skinManager->enumerateSkins();
 		cp_skinManager->setCurrentSkin(0);
-		cp_skinManager->getCurrentSkin()->setCursor();
-        cp_skinManager->getCurrentSkin()->loadTextures();
+        if(cp_skinManager->getCurrentSkin() != nullptr)
+        {
+            cp_skinManager->getCurrentSkin()->setCursor();
+            cp_skinManager->getCurrentSkin()->loadTextures();
+        }
 
         c_selfThread.doneInit = true;
 

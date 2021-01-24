@@ -12,18 +12,14 @@ namespace oxu
     class SkinManager
     {
     private:
-        std::vector<Skin> skins;
-
-        Skin *currentSkin = NULL;
+        std::vector<Skin> m_skins;
+        Skin *m_currentSkin = nullptr;
 
     public:
         void enumerateSkins();
-
         void setCurrentSkin(const size_t &index);
-
-        Skin *getCurrentSkin();
-
+        Skin *getCurrentSkin() const;
         Skin *getSkin(const std::size_t &index);
-        std::size_t getSkinsSize();
+        std::size_t getSkinsCount() const;
     };
 }

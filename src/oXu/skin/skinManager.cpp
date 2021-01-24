@@ -14,56 +14,48 @@ namespace oxu
     {
         namespace fs = std::filesystem;
 
-        skins.clear();
+        m_skins.clear();
 
-        for(const fs::directory_entry &entry: fs::directory_iterator(Dirs::skins))
+        for(auto &entry: fs::directory_iterator(Dirs::skins))
         {
             if(fs::is_directory(entry))
             {
-                skins.emplace_back(entry.path().string());
+                m_skins.emplace_back(entry.path().string());
             }
         }
 
-        if(skins.size() == 0)
+        if(m_skins.size() == 0)
         {
-            OXU_LOG_ERR("No skins were found in {}", Dirs::skins);
+            OXU_LOG_WARN("No skins were found in {}", Dirs::skins);
         }
     }
 
     void SkinManager::setCurrentSkin(const size_t &index)
     {
-        currentSkin = getSkin(index);
-        if(currentSkin == NULL)
+        m_currentSkin = getSkin(index);
+        if(m_currentSkin == nullptr)
         {
-            OXU_LOG_WARN_EXT("Can't set current skin (NULL)!");
-            currentSkin = NULL;
+            OXU_LOG_WARN("Tried to set currentSkin to index {}, is null", index);
         }
     }
 
-    Skin *SkinManager::getCurrentSkin()
+    Skin *SkinManager::getCurrentSkin() const
     {
-        return currentSkin;
+        return m_currentSkin;
     }
     
     Skin *SkinManager::getSkin(const std::size_t &index)
     {
-        if(skins.size() == 0)
+        if(m_skins.size() == 0)
         {
-            OXU_LOG_WARN_EXT("No skins were found returned NULL!");
-            return NULL;
-        }
-        else if(index >= skins.size())
-        {
-            //TODO: check if there are any skins at all in the vector
-            OXU_LOG_WARN_EXT("Tried to access a non extistent skin, returned last skin in vector!");
-            return &skins[skins.size() - 1];
+            return nullptr;
         }
 
-        return &skins[index];
+        return &m_skins[std::min(index, m_skins.size() - 1)];
     }
 
-    std::size_t SkinManager::getSkinsSize()
+    std::size_t SkinManager::getSkinsCount() const
     {
-        return skins.size();
+        return m_skins.size();
     }
 }

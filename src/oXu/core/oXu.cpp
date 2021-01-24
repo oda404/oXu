@@ -78,8 +78,11 @@ namespace oxu
 		c_songManager.enumerateSongs();
 		c_songManager.setCurrentSong(0);
 		c_songManager.setCurrentBeatmap(0);
-		c_songManager.getCurrentBeatmap()->loadGenericInfo();
-		c_songManager.getCurrentBeatmap()->loadGameInfo();
+		if(c_songManager.getCurrentBeatmap() != nullptr)
+		{
+			c_songManager.getCurrentBeatmap()->loadGenericInfo();
+			c_songManager.getCurrentBeatmap()->loadGameInfo();
+		}
 
 		AudioHandler::init();
 		GraphicsHandler::init(window, &c_songManager, &c_skinManager);
@@ -90,13 +93,19 @@ namespace oxu
 	void oXu::update()
 	{
 		c_selfThread.start();
-		c_songManager.getCurrentBeatmap()->start();
+		if(c_songManager.getCurrentBeatmap() != nullptr)
+		{
+			c_songManager.getCurrentBeatmap()->start();
+		}
 
 		while(!windowState)
 		{
 			c_selfThread.limitFPS();
-
-			c_songManager.getCurrentBeatmap()->updateObjects(c_selfThread.getDelta());
+			
+			if(c_songManager.getCurrentBeatmap() != nullptr)
+			{
+				c_songManager.getCurrentBeatmap()->updateObjects(c_selfThread.getDelta());
+			}
 			
 			InputHandler::handleInput(windowState);
 		}
