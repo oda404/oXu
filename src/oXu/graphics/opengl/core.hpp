@@ -1,10 +1,8 @@
 #pragma once
 
-#include<assert.h>
-
 #include<glad/glad.h>
 
-#include<oXu/utils/logger.hpp>
+#include<oXu/core/logger.hpp>
 
 #define oxu_glCall_Log(x) glClearErrors();\
     x;\

@@ -158,7 +158,7 @@ namespace oxu
 
         bool operator!=(const Vector2<T> &v) const
         {
-            return *this == v ? false : true;
+            return !(*this == v);
         }
     };
 }

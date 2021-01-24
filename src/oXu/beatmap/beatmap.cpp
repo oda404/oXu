@@ -6,7 +6,7 @@
 #include<oXu/beatmap/beatmapParser.hpp>
 #include<oXu/beatmap/sections/config.hpp>
 #include<oXu/beatmap/components/playField.hpp>
-#include<oXu/utils/logger.hpp>
+#include<oXu/core/logger.hpp>
 
 namespace oxu
 {

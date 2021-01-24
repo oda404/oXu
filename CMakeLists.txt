@@ -20,6 +20,7 @@ set(OXU_HEADERS
 	${OXU_SRC_DIR}/core/scaling.hpp
 	${OXU_SRC_DIR}/core/dirs.hpp
     ${OXU_SRC_DIR}/core/status.hpp
+    ${OXU_SRC_DIR}/core/logger.hpp
 
     #core/threading/
     ${OXU_SRC_DIR}/core/threading/thread.hpp
@@ -55,7 +56,6 @@ set(OXU_HEADERS
     ${OXU_SRC_DIR}/input/handler.hpp
 
     #utils/
-    ${OXU_SRC_DIR}/utils/logger.hpp
     ${OXU_SRC_DIR}/utils/timer.hpp
     ${OXU_SRC_DIR}/utils/vector2.hpp
 
@@ -95,7 +95,8 @@ set(OXU_SRC
     ${OXU_SRC_DIR}/core/status.cpp
     ${OXU_SRC_DIR}/core/oXu.cpp
 	${OXU_SRC_DIR}/core/scaling.cpp
-	${OXU_SRC_DIR}/core/dirs.cpp
+    ${OXU_SRC_DIR}/core/dirs.cpp
+    ${OXU_SRC_DIR}/core/logger.cpp
 
     #core/threading/
     ${OXU_SRC_DIR}/core/threading/thread.cpp
@@ -131,7 +132,6 @@ set(OXU_SRC
     ${OXU_SRC_DIR}/input/handler.cpp
 
     #utils/
-    ${OXU_SRC_DIR}/utils/logger.cpp
     ${OXU_SRC_DIR}/utils/timer.cpp
 
     #beatmap/

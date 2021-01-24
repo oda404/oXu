@@ -6,7 +6,7 @@
 #include<oXu/beatmap/components/types.hpp>
 #include<oXu/beatmap/components/hitCircle.hpp>
 #include<oXu/beatmap/components/slider.hpp>
-#include<oXu/utils/logger.hpp>
+#include<oXu/core/logger.hpp>
 
 namespace oxu
 {

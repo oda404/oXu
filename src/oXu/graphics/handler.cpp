@@ -4,7 +4,7 @@
 #include"handler.hpp"
 
 #include<oXu/core/status.hpp>
-#include<oXu/utils/logger.hpp>
+#include<oXu/core/logger.hpp>
 #include<oXu/graphics/renderer.hpp>
 #include<oXu/core/threading/thread.hpp>
 

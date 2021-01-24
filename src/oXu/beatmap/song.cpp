@@ -2,7 +2,7 @@
 
 #include<filesystem>
 
-#include<oXu/utils/logger.hpp>
+#include<oXu/core/logger.hpp>
 
 namespace oxu
 {

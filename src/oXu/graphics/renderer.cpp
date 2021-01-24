@@ -1,7 +1,7 @@
 #include"renderer.hpp"
 
 #include<oXu/graphics/opengl/renderer.hpp>
-#include<oXu/utils/logger.hpp>
+#include<oXu/core/logger.hpp>
 
 namespace oxu
 {

@@ -1,7 +1,7 @@
 #include"vertexArrayObject.hpp"
 
 #include<oXu/graphics/opengl/core.hpp>
-#include<oXu/utils/logger.hpp>
+#include<oXu/core/logger.hpp>
 
 namespace oxu::OpenGL
 {

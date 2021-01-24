@@ -6,7 +6,7 @@
 #include<sstream>
 
 #include<oXu/graphics/opengl/core.hpp>
-#include<oXu/utils/logger.hpp>
+#include<oXu/core/logger.hpp>
 
 #define FILE_BUFF_MAX_SIZE 64
 

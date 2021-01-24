@@ -1,7 +1,5 @@
 #include"thread.hpp"
 
-#include<oXu/utils/logger.hpp>
-
 namespace oxu
 {
     void Thread::calculateDelta()

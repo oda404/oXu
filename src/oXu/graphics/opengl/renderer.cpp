@@ -11,8 +11,7 @@
 #include<oXu/graphics/opengl/vertexLayout.hpp>
 #include<oXu/graphics/opengl/texture.hpp>
 #include<oXu/core/scaling.hpp>
-
-#include<oXu/utils/logger.hpp>
+#include<oXu/core/logger.hpp>
 
 #define SCREEN_START_COORD -1.0f
 #define SCREEN_END_COORD 1.0f

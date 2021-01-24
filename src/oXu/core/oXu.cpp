@@ -7,7 +7,7 @@
 #include<oXu/core/scaling.hpp>
 #include<oXu/core/dirs.hpp>
 #include<oXu/core/threading/thread.hpp>
-#include<oXu/utils/logger.hpp>
+#include<oXu/core/logger.hpp>
 
 #include<oXu/skin/skinManager.hpp>
 #include<oXu/beatmap/songManager.hpp>

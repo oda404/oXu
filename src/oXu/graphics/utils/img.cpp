@@ -8,7 +8,7 @@
     #include<libpng16/png.h>
 #endif
 
-#include<oXu/utils/logger.hpp>
+#include<oXu/core/logger.hpp>
 
 #define PNG_SIG_BYTES_CNT 8
 

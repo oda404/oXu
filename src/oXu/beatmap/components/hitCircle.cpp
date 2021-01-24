@@ -1,7 +1,7 @@
 #include"hitCircle.hpp"
 
 #include<oXu/skin/config.hpp>
-#include<oXu/utils/logger.hpp>
+#include<oXu/core/logger.hpp>
 #include<oXu/graphics/renderer.hpp>
 
 namespace oxu

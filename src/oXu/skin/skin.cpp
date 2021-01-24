@@ -2,7 +2,7 @@
 
 #include<filesystem>
 
-#include<oXu/utils/logger.hpp>
+#include<oXu/core/logger.hpp>
 #include<oXu/skin/config.hpp>
 
 #include<oXu/graphics/utils/img.hpp>
