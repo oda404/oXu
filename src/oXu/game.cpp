@@ -5,6 +5,7 @@
 #include<oXu/core/window.hpp>
 #include<oXu/graphics/handler.hpp>
 #include<oXu/audio/handler.hpp>
+#include<oXu/skin/skinManager.hpp>
 #include<oXu/beatmap/songManager.hpp>
 #include<oXu/core/threading/thread.hpp>
 
@@ -57,6 +58,8 @@ namespace oxu
 			cp_song_manager->getCurrentBeatmap()->loadGenericInfo();
 			cp_song_manager->getCurrentBeatmap()->loadGameInfo();
 		}
+
+        c_this_thread.setMaxFPS(1000);
 
         GraphicsHandler::init(cp_game_window, cp_song_manager, cp_skin_manager);
         AudioHandler::init();
