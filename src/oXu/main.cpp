@@ -22,5 +22,5 @@ int main(void)
 
 	oxu::clean();
 
-	return oxu::Status::code;
+	return oxu::status::get();
 }

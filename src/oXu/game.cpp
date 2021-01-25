@@ -24,7 +24,7 @@ namespace oxu
         if(SDL_Init(SDL_INIT_VIDEO) != 0)
         {
             OXU_LOG_ERR(SDL_GetError());
-            Status::code = Status::SDL_INIT_FAIL;
+            status::set(status::SDL_INIT_FAIL);
             return false;
         }
 
@@ -40,7 +40,7 @@ namespace oxu
         if(!cp_game_window)
         {
             OXU_LOG_ERR(SDL_GetError());
-            Status::code = Status::WINDOW_CREATE_FAIL;
+            status::set(status::WINDOW_CREATE_FAIL);
 		    return false;
         }
 

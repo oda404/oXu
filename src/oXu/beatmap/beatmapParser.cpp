@@ -2,7 +2,7 @@
 
 #include<sstream>
 
-#include<oXu/core/scaling.hpp>
+#include<oXu/core/window.hpp>
 #include<oXu/beatmap/components/types.hpp>
 #include<oXu/beatmap/components/hitCircle.hpp>
 #include<oXu/beatmap/components/slider.hpp>
@@ -179,7 +179,7 @@ namespace oxu
         else if(attrName == "CircleSize")
         {
             setAttr<float>(strippedAttr, difficulty.circleSize);
-            difficulty.circleSizePx = (23.05f - (difficulty.circleSize - 7.0f) * 4.4825f) * 2.0f * Scaling::oxuPx;
+            difficulty.circleSizePx = (23.05f - (difficulty.circleSize - 7.0f) * 4.4825f) * 2.0f * window::get_oxu_px();
         }
         else if(attrName == "OverallDifficulty")
         {
@@ -306,7 +306,7 @@ namespace oxu
         }
 
         /* scale the position */
-        position = playField.getStartPoint() + position * Scaling::oxuPx;
+        position = playField.getStartPoint() + position * window::get_oxu_px();
 
         type = getParsedHitObjectType(type);
 

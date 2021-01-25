@@ -3,12 +3,12 @@
 
 #include"playField.hpp"
 
-#include<oXu/core/scaling.hpp>
+#include<oXu/core/window.hpp>
 
 oxu::PlayField::PlayField()
 {
     startPoint = { 
-        Scaling::screenSize.x / 2.f - 256.f * Scaling::oxuPx, 
-        Scaling::screenSize.y / 2.f - 192.f * Scaling::oxuPx 
+        window::get_window_size().x / 2.f - 256.f * window::get_oxu_px(), 
+        window::get_window_size().y / 2.f - 192.f * window::get_oxu_px() 
     };
 }

@@ -3,4 +3,17 @@
 
 #include"status.hpp"
 
-std::uint8_t oxu::Status::code = 0;
+namespace oxu::status
+{
+    static uint8_t c_status_code;
+
+    void set(uint8_t code)
+    {
+        c_status_code = code;
+    }
+
+    const uint8_t &get()
+    {
+        return c_status_code;
+    }
+}

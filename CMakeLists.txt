@@ -18,7 +18,6 @@ set(OXU_HEADERS
     ${OXU_SRC_DIR}/game.hpp
 
     #core/
-	${OXU_SRC_DIR}/core/scaling.hpp
 	${OXU_SRC_DIR}/core/fs.hpp
     ${OXU_SRC_DIR}/core/status.hpp
     ${OXU_SRC_DIR}/core/logger.hpp
@@ -96,7 +95,6 @@ set(OXU_SRC
 
 	#core/
     ${OXU_SRC_DIR}/core/status.cpp
-	${OXU_SRC_DIR}/core/scaling.cpp
     ${OXU_SRC_DIR}/core/fs.cpp
     ${OXU_SRC_DIR}/core/logger.cpp
     ${OXU_SRC_DIR}/core/window.cpp

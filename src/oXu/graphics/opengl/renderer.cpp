@@ -10,7 +10,7 @@
 #include<oXu/graphics/opengl/vertexArrayObject.hpp>
 #include<oXu/graphics/opengl/vertexLayout.hpp>
 #include<oXu/graphics/opengl/texture.hpp>
-#include<oXu/core/scaling.hpp>
+#include<oXu/core/window.hpp>
 #include<oXu/core/logger.hpp>
 
 #define SCREEN_START_COORD -1.0f
@@ -28,7 +28,9 @@ namespace oxu::OpenGL::Renderer
 
     static float getNormalizedScreenCoord(float coord, bool xAxis)
     {
-        return SCREEN_START_COORD + (coord * (SCREEN_END_COORD -  SCREEN_START_COORD)) / (xAxis ? (float)Scaling::screenSize.x : (float)Scaling::screenSize.y);
+        return SCREEN_START_COORD + 
+        (coord * (SCREEN_END_COORD -  SCREEN_START_COORD)) / 
+        (xAxis ? (float)window::get_window_size().x : (float)window::get_window_size().y);
     }
 
     bool init(SDL_Window *p_window_p)
