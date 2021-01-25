@@ -6,7 +6,7 @@
 #include<spdlog/spdlog.h>
 #include<spdlog/sinks/sink.h>
 
-namespace oxu::Logger
+namespace oxu::logger
 {
     void init();
 

@@ -5,7 +5,7 @@
 
 #include<spdlog/sinks/stdout_color_sinks.h>
 
-void oxu::Logger::init()
+void oxu::logger::init()
 {
     auto debugSink = std::make_shared<spdlog::sinks::stdout_color_sink_st>();
     debugSink->set_level(spdlog::level::off);

@@ -15,12 +15,14 @@ add_subdirectory(vendor/glad)
 add_subdirectory(vendor/spdlog)
 
 set(OXU_HEADERS
+    ${OXU_SRC_DIR}/game.hpp
+
     #core/
-	${OXU_SRC_DIR}/core/oXu.hpp
 	${OXU_SRC_DIR}/core/scaling.hpp
 	${OXU_SRC_DIR}/core/fs.hpp
     ${OXU_SRC_DIR}/core/status.hpp
     ${OXU_SRC_DIR}/core/logger.hpp
+    ${OXU_SRC_DIR}/core/window.hpp
 
     #core/threading/
     ${OXU_SRC_DIR}/core/threading/thread.hpp
@@ -89,14 +91,15 @@ set(OXU_HEADERS
 )
 
 set(OXU_SRC
-	${OXU_SRC_DIR}/main.cpp
+    ${OXU_SRC_DIR}/main.cpp
+    ${OXU_SRC_DIR}/game.cpp
 
 	#core/
     ${OXU_SRC_DIR}/core/status.cpp
-    ${OXU_SRC_DIR}/core/oXu.cpp
 	${OXU_SRC_DIR}/core/scaling.cpp
     ${OXU_SRC_DIR}/core/fs.cpp
     ${OXU_SRC_DIR}/core/logger.cpp
+    ${OXU_SRC_DIR}/core/window.cpp
 
     #core/threading/
     ${OXU_SRC_DIR}/core/threading/thread.cpp
