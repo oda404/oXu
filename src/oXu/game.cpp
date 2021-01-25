@@ -96,6 +96,8 @@ namespace oxu
     {
         GraphicsHandler::shutDown();
         AudioHandler::shutDown();
+        delete cp_song_manager;
+        delete cp_skin_manager;
         SDL_DestroyWindow(cp_game_window);
         cp_game_window = nullptr;
         SDL_Quit();
