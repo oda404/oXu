@@ -8,24 +8,25 @@
 #include<oXu/graphics/renderer.hpp>
 #include<oXu/core/threading/thread.hpp>
 
-namespace oxu::GraphicsHandler
+namespace oxu::graphics::handler
 {
-    static Thread c_selfThread;
-    static SDL_Window *cp_window = NULL;
-    static SongManager *cp_songManager;
-    static SkinManager *cp_skinManager;
+    static Thread c_this_thread;
+    static SDL_Window *cp_game_window = nullptr;
+    static SongManager *cp_song_manager;
+    static SkinManager *cp_skin_manager;
 
-    static void updateThread()
+    static void start_thread()
     {
-        Request l_request;
+        Request request;
+        Beatmap *p_current_beatmap = cp_song_manager->getCurrentBeatmap();
 
         while(true)
         {
-            c_selfThread.limitFPS();
+            c_this_thread.limitFPS();
             
-            while(c_selfThread.pipeline.pollRequest(l_request))
+            while(c_this_thread.pipeline.pollRequest(request))
             {
-                switch(l_request.instruction)
+                switch(request.instruction)
                 {
                 case Graphics::HALT_THREAD:
                     return;
@@ -34,49 +35,48 @@ namespace oxu::GraphicsHandler
 
             Renderer::clear();
 
-            if(cp_songManager->getCurrentBeatmap() != nullptr)
+            if(p_current_beatmap)
             {
-                cp_songManager->getCurrentBeatmap()->renderObjects(*cp_skinManager->getCurrentSkin());
+                p_current_beatmap->renderObjects(*cp_skin_manager->getCurrentSkin());
             }
 
             Renderer::render();
         }
     }
 
-    static void initThread()
+    static void init_thread()
     {
-        Renderer::init(cp_window);
+        /* Initiate the renderer here because it needs the new thread context */
+        Renderer::init(cp_game_window);
 
-        cp_skinManager->enumerateSkins();
-		cp_skinManager->setCurrentSkin(0);
-        if(cp_skinManager->getCurrentSkin() != nullptr)
+        if(cp_skin_manager->getCurrentSkin())
         {
-            cp_skinManager->getCurrentSkin()->setCursor();
-            cp_skinManager->getCurrentSkin()->loadTextures();
+            cp_skin_manager->getCurrentSkin()->setCursor();
+            cp_skin_manager->getCurrentSkin()->loadTextures();
         }
 
-        c_selfThread.doneInit = true;
-
-        updateThread();
+        c_this_thread.doneInit = true;
+        start_thread();
     }
 
     void init(SDL_Window *window_p, SongManager *songManager_p, SkinManager *skinManager_p)
     {
-        cp_songManager = songManager_p;
-        cp_skinManager = skinManager_p;
-        cp_window = window_p;
+        cp_song_manager = songManager_p;
+        cp_skin_manager = skinManager_p;
+        cp_game_window = window_p;
 
-        c_selfThread.setMaxFPS(240);
+        c_this_thread.setMaxFPS(240);
         /* paranoia */
-        c_selfThread.doneInit = false;
-        c_selfThread.start([] { initThread(); });
-        while(!c_selfThread.doneInit);
+        c_this_thread.doneInit = false;
+        c_this_thread.start([] { init_thread(); });
+        /* wait for the thread to initiate */
+        while(!c_this_thread.doneInit);
     }
 
-    void shutDown()
+    void shut_down()
     {
-        c_selfThread.pipeline.makeRequest(Graphics::HALT_THREAD);
-        c_selfThread.join();
+        c_this_thread.pipeline.makeRequest(Graphics::HALT_THREAD);
+        c_this_thread.join();
         Renderer::destroy();
     }
 }

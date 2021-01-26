@@ -31,10 +31,7 @@ namespace oxu
 
         cp_game_window = SDL_CreateWindow(
             "oXu!",
-            SDL_WINDOWPOS_CENTERED,
-            SDL_WINDOWPOS_CENTERED,
-            0,
-            0,
+            0, 0, 0, 0,
             SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL
         );
 
@@ -48,8 +45,6 @@ namespace oxu
         window::set_window_size(cp_game_window, { 800, 600 });
 
         cp_song_manager = new SongManager();
-        cp_skin_manager = new SkinManager();
-
         cp_song_manager->enumerateSongs();
         cp_song_manager->setCurrentSong(0);
 		cp_song_manager->setCurrentBeatmap(0);
@@ -59,9 +54,13 @@ namespace oxu
 			cp_song_manager->getCurrentBeatmap()->loadGameInfo();
 		}
 
+        cp_skin_manager = new SkinManager();
+        cp_skin_manager->enumerateSkins();
+        cp_skin_manager->setCurrentSkin(0);
+
         c_this_thread.setMaxFPS(1000);
 
-        GraphicsHandler::init(cp_game_window, cp_song_manager, cp_skin_manager);
+        graphics::handler::init(cp_game_window, cp_song_manager, cp_skin_manager);
         AudioHandler::init();
 
         return true;
@@ -72,6 +71,10 @@ namespace oxu
         SDL_Event sdl_event;
         bool window_open = true;
         Beatmap *p_current_beatmap = cp_song_manager->getCurrentBeatmap();
+        if(p_current_beatmap)
+        {
+            p_current_beatmap->start();
+        }
 
         while(window_open)
         {
@@ -97,7 +100,7 @@ namespace oxu
 
     void clean()
     {
-        GraphicsHandler::shutDown();
+        graphics::handler::shut_down();
         AudioHandler::shutDown();
         delete cp_song_manager;
         delete cp_skin_manager;

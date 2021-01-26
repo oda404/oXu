@@ -4,12 +4,19 @@
 #pragma once
 
 #include<SDL2/SDL.h>
-
 #include<oXu/beatmap/songManager.hpp>
 #include<oXu/skin/skinManager.hpp>
 
-namespace oxu::GraphicsHandler
+/*
+Once initiated the graphics handler
+spawns a new thread, initiates the renderer
+and loads any given skin;
+After that it sits in a loop and renders any
+available hit objects. 
+*/
+
+namespace oxu::graphics::handler
 {
     void init(SDL_Window *window_p, SongManager *songManager_p, SkinManager *skinManager_p);
-    void shutDown();
+    void shut_down();
 }
