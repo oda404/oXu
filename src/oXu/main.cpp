@@ -3,6 +3,7 @@
 
 #include<oXu/game.hpp>
 #include<oXu/core/status.hpp>
+#include<oXu/core/logger.hpp>
 
 /*
 Variables prefixes:
@@ -15,12 +16,18 @@ Variable suffixes:
 
 int main(void)
 {
-	if(oxu::init())
-	{
-		oxu::start();
-	}
+	if(oxu::init()) oxu::start();
 
 	oxu::clean();
+
+	if(oxu::status::get() == oxu::status::OK)
+	{
+		OXU_LOG_INFO("Exiting gracefully.");
+	}
+	else
+	{
+		OXU_LOG_INFO("Multiple memory leaks probably happened. exit code is {}", oxu::status::get());
+	}
 
 	return oxu::status::get();
 }
