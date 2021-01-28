@@ -11,3 +11,5 @@ USER_OXU_CONFIG_DIR=/home/$USER/.config/oxu
 
 mkdir $USER_OXU_CONFIG_DIR $USER_OXU_CONFIG_DIR/songs $USER_OXU_CONFIG_DIR/skins
 cp -r res/ $USER_OXU_CONFIG_DIR/res/
+
+mkdir build
