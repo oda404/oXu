@@ -6,7 +6,7 @@
 #include<oXu/graphics/genericBackend.hpp>
 #include<oXu/graphics/opengl/renderer.hpp>
 
-namespace oxu::Renderer
+namespace oxu::graphics::Renderer
 {
     static SDL_Window *cp_window;
     static std::unique_ptr<graphics::GenericBackend> 

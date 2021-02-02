@@ -5,7 +5,7 @@
 
 #include<oXu/graphics/opengl/texture.hpp>
 
-namespace oxu
+namespace oxu::graphics
 {
     class Texture
     {

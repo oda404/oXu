@@ -74,7 +74,7 @@ namespace oxu
         SDL_SetCursor(customCursor);
     }
 
-    const Texture &Skin::getTexture(uint8_t texNum) const
+    const graphics::Texture &Skin::getTexture(uint8_t texNum) const
     {
         if(texNum >= MAX_TEX_COUNT)
         {

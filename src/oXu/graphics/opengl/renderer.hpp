@@ -17,7 +17,7 @@ namespace oxu::OpenGL
         void copy_texture(
             const Vector2<float> &position, 
             const Vector2<float> &size, 
-            const oxu::Texture &GL_tex
+            const graphics::Texture &GL_tex
         ) override;
     };
 }

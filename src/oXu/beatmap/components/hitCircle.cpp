@@ -23,9 +23,21 @@ namespace oxu
 
     void HitCircle::render(const Skin &skin_p)
     {
-        Renderer::copy_texture(mx_position, mx_size, skin_p.getTexture(Tex::HIT_CIRCLE));
-        Renderer::copy_texture(mx_position, mx_size, skin_p.getTexture(Tex::HIT_CIRCLE_OVERLAY));
-        Renderer::copy_texture(mx_approachCircle.position, mx_approachCircle.size, skin_p.getTexture(Tex::APPROACH_CIRCLE));
+        graphics::Renderer::copy_texture(
+            mx_position, 
+            mx_size, 
+            skin_p.getTexture(Tex::HIT_CIRCLE)
+        );
+        graphics::Renderer::copy_texture(
+            mx_position, 
+            mx_size, 
+            skin_p.getTexture(Tex::HIT_CIRCLE_OVERLAY)
+        );
+        graphics::Renderer::copy_texture(
+            mx_approachCircle.position, 
+            mx_approachCircle.size, 
+            skin_p.getTexture(Tex::APPROACH_CIRCLE)
+        );
     }
 
     void HitCircle::setErrorMargin(const long double &err, const std::uint32_t &approachRateMs)

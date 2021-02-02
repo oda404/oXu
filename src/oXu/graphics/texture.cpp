@@ -2,7 +2,7 @@
 
 #include<oXu/graphics/renderer.hpp>
 
-namespace oxu
+namespace oxu::graphics
 {
     Texture::Texture(const std::string &path)
     {

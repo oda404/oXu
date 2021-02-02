@@ -8,7 +8,7 @@
 #include<oXu/graphics/texture.hpp>
 #include<oXu/graphics/opengl/renderer.hpp>
 
-namespace oxu::Renderer
+namespace oxu::graphics::Renderer
 {
     enum Backends
     {

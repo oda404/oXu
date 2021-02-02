@@ -75,7 +75,7 @@ namespace oxu::OpenGL
     void Renderer::copy_texture(
         const Vector2<float> &position,
         const Vector2<float> &size,
-        const oxu::Texture &tex
+        const graphics::Texture &tex
     )
     {
         float normX = getNormalizedScreenCoord(position.x, true);
