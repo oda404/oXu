@@ -21,6 +21,10 @@ namespace oxu
         logger::init();
         fs::set_songs_dir();
         fs::set_skins_dir();
+        if(!fs::are_user_dirs_valid())
+        {
+            fs::validate_user_dirs();
+        }
 
         if(SDL_Init(SDL_INIT_VIDEO) != 0)
         {

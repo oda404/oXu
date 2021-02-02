@@ -1,6 +1,7 @@
 #include"fs.hpp"
 
 #include<oXu/core/logger.hpp>
+#include<filesystem>
 
 #if defined(__linux__)
 #include<pwd.h>
@@ -62,13 +63,19 @@ namespace oxu::fs
         return songs_dir_cache;
     }
 
+    namespace stdfs = std::filesystem;
+
     bool are_user_dirs_valid()
     {
+        if(!stdfs::exists(songs_dir_cache)) return false;
+        if(!stdfs::exists(skins_dir_cache)) return false;
 
+        return true;
     }
 
     void validate_user_dirs()
     {
-
+        stdfs::create_directories(songs_dir_cache);
+        stdfs::create_directories(skins_dir_cache);
     }
 }
