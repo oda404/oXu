@@ -5,7 +5,7 @@
 #include<string>
 #include<vector>
 
-namespace oxu::OpenGL
+namespace oxu::graphics::opengl
 {
     class Texture
     {

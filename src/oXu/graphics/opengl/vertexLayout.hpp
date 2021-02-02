@@ -4,7 +4,7 @@
 
 #include<oXu/graphics/opengl/vertexLayoutElement.hpp>
 
-namespace oxu::OpenGL
+namespace oxu::graphics::opengl
 {
     class VertexLayout
     {

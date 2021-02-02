@@ -10,7 +10,7 @@
 
 #define FILE_BUFF_MAX_SIZE 64
 
-namespace oxu::OpenGL
+namespace oxu::graphics::opengl
 {
     enum ShaderTypes
     {

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace oxu::OpenGL
+namespace oxu::graphics::opengl
 {
     struct VertexLayoutElement
     {

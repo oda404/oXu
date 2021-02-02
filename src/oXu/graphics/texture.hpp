@@ -10,7 +10,7 @@ namespace oxu::graphics
     class Texture
     {
     public:
-        std::unique_ptr<OpenGL::Texture> m_GL_tex;
+        std::unique_ptr<opengl::Texture> m_GL_tex;
 
     public:
         Texture(const std::string &path);

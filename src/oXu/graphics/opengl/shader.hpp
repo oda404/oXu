@@ -2,7 +2,7 @@
 
 #include<string>
 
-namespace oxu::OpenGL
+namespace oxu::graphics::opengl
 {
     struct ShadersInfo
     {

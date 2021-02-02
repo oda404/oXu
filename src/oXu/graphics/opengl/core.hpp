@@ -14,7 +14,7 @@
     { unsigned int glErr;\
     if( glHasError(glErr) ) { OXU_LOG_ERR_EXT("OpenGL error [{}]!", glErr); abort(); } } 
 
-namespace oxu::OpenGL
+namespace oxu::graphics::opengl
 {
     void glClearErrors();
     bool glHasError(unsigned int &err);

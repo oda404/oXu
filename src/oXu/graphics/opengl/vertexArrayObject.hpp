@@ -6,7 +6,7 @@
 #include<oXu/graphics/opengl/vertexBuffer.hpp>
 #include<oXu/graphics/opengl/vertexLayout.hpp>
 
-namespace oxu::OpenGL
+namespace oxu::graphics::opengl
 {
     class VertexArrayObject
     {

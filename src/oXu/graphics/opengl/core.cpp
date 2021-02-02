@@ -1,6 +1,6 @@
 #include"core.hpp"
 
-namespace oxu::OpenGL
+namespace oxu::graphics::opengl
 {
     void glClearErrors()
     {

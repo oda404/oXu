@@ -28,7 +28,7 @@ namespace oxu::graphics::Renderer
         {
         case Backends::OPENGL:
             cp_current_backend = 
-                std::make_unique<OpenGL::Renderer>();
+                std::make_unique<opengl::Renderer>();
             break;
 
         default:

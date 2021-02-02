@@ -6,7 +6,7 @@ namespace oxu::graphics
 {
     Texture::Texture(const std::string &path)
     {
-        m_GL_tex = std::make_unique<OpenGL::Texture>(path);
+        m_GL_tex = std::make_unique<opengl::Texture>(path);
     }
 
     Texture::Texture()
@@ -16,6 +16,6 @@ namespace oxu::graphics
 
     void Texture::load(const std::string &path)
     {
-        m_GL_tex = std::make_unique<OpenGL::Texture>(path);
+        m_GL_tex = std::make_unique<opengl::Texture>(path);
     }
 }

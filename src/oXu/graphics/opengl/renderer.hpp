@@ -6,7 +6,7 @@
 #include<oXu/graphics/texture.hpp>
 #include<oXu/graphics/genericBackend.hpp>
 
-namespace oxu::OpenGL
+namespace oxu::graphics::opengl
 {
     class Renderer : public graphics::GenericBackend
     {

@@ -2,7 +2,7 @@
 
 #include<oXu/graphics/opengl/core.hpp>
 
-namespace oxu::OpenGL
+namespace oxu::graphics::opengl
 {
     template<>
     void VertexLayout::pushElement<float>(unsigned int count)

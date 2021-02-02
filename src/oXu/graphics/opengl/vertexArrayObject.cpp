@@ -3,7 +3,7 @@
 #include<oXu/graphics/opengl/core.hpp>
 #include<oXu/core/logger.hpp>
 
-namespace oxu::OpenGL
+namespace oxu::graphics::opengl
 {
     static unsigned int getGlTypeSize(unsigned int type)
     {

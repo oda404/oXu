@@ -4,7 +4,7 @@
 
 #include<oXu/graphics/utils/img.hpp>
 
-namespace oxu::OpenGL
+namespace oxu::graphics::opengl
 {
     Texture::Texture(const std::string &path)
     {

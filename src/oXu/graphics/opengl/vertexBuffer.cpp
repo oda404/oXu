@@ -2,7 +2,7 @@
 
 #include<oXu/graphics/opengl/core.hpp>
 
-namespace oxu::OpenGL
+namespace oxu::graphics::opengl
 {
     VertexBuffer::VertexBuffer(const void *data, unsigned int size)
     {

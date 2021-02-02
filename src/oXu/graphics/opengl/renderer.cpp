@@ -16,7 +16,7 @@
 #define SCREEN_START_COORD -1.0f
 #define SCREEN_END_COORD 1.0f
 
-namespace oxu::OpenGL
+namespace oxu::graphics::opengl
 {
     enum Shaders
     {

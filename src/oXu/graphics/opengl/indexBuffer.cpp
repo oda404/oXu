@@ -2,7 +2,7 @@
 
 #include<oXu/graphics/opengl/core.hpp>
 
-namespace oxu::OpenGL
+namespace oxu::graphics::opengl
 {
     IndexBuffer::IndexBuffer(const unsigned int *indices, unsigned int count)
     {
