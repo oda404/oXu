@@ -18,7 +18,7 @@ set(OXU_HEADERS
     ${OXU_SRC_DIR}/game.hpp
 
     #core/
-	${OXU_SRC_DIR}/core/fs.hpp
+    ${OXU_SRC_DIR}/core/fs.hpp
     ${OXU_SRC_DIR}/core/status.hpp
     ${OXU_SRC_DIR}/core/logger.hpp
     ${OXU_SRC_DIR}/core/window.hpp
@@ -26,8 +26,8 @@ set(OXU_HEADERS
     #core/threading/
     ${OXU_SRC_DIR}/core/threading/thread.hpp
 
-	${OXU_SRC_DIR}/core/threading/pipeline/request.hpp
-	${OXU_SRC_DIR}/core/threading/pipeline/pipeline.hpp
+    ${OXU_SRC_DIR}/core/threading/pipeline/request.hpp
+    ${OXU_SRC_DIR}/core/threading/pipeline/pipeline.hpp
 
     #graphics/
     ${OXU_SRC_DIR}/graphics/handler.hpp
@@ -62,38 +62,38 @@ set(OXU_HEADERS
 
     #beatmap/
     ${OXU_SRC_DIR}/beatmap/beatmap.hpp
-	${OXU_SRC_DIR}/beatmap/beatmapParser.hpp
-	${OXU_SRC_DIR}/beatmap/song.hpp
-	${OXU_SRC_DIR}/beatmap/songManager.hpp
+    ${OXU_SRC_DIR}/beatmap/beatmapParser.hpp
+    ${OXU_SRC_DIR}/beatmap/song.hpp
+    ${OXU_SRC_DIR}/beatmap/songManager.hpp
 
     #beatmap/components/
-	${OXU_SRC_DIR}/beatmap/components/hitObject.hpp
-	${OXU_SRC_DIR}/beatmap/components/hitCircle.hpp
-	${OXU_SRC_DIR}/beatmap/components/approachCircle.hpp
-	${OXU_SRC_DIR}/beatmap/components/slider.hpp
-	${OXU_SRC_DIR}/beatmap/components/playField.hpp
+    ${OXU_SRC_DIR}/beatmap/components/hitObject.hpp
+    ${OXU_SRC_DIR}/beatmap/components/hitCircle.hpp
+    ${OXU_SRC_DIR}/beatmap/components/approachCircle.hpp
+    ${OXU_SRC_DIR}/beatmap/components/slider.hpp
+    ${OXU_SRC_DIR}/beatmap/components/playField.hpp
 
     #beatmap/sections/
-	${OXU_SRC_DIR}/beatmap/sections/config.hpp
-	${OXU_SRC_DIR}/beatmap/sections/color.hpp
-	${OXU_SRC_DIR}/beatmap/sections/difficulty.hpp
-	${OXU_SRC_DIR}/beatmap/sections/editor.hpp
-	${OXU_SRC_DIR}/beatmap/sections/events.hpp
-	${OXU_SRC_DIR}/beatmap/sections/general.hpp
-	${OXU_SRC_DIR}/beatmap/sections/metadata.hpp
-	${OXU_SRC_DIR}/beatmap/sections/timingPoint.hpp
+    ${OXU_SRC_DIR}/beatmap/sections/config.hpp
+    ${OXU_SRC_DIR}/beatmap/sections/color.hpp
+    ${OXU_SRC_DIR}/beatmap/sections/difficulty.hpp
+    ${OXU_SRC_DIR}/beatmap/sections/editor.hpp
+    ${OXU_SRC_DIR}/beatmap/sections/events.hpp
+    ${OXU_SRC_DIR}/beatmap/sections/general.hpp
+    ${OXU_SRC_DIR}/beatmap/sections/metadata.hpp
+    ${OXU_SRC_DIR}/beatmap/sections/timingPoint.hpp
 
     #skin/
     ${OXU_SRC_DIR}/skin/skin.hpp
-	${OXU_SRC_DIR}/skin/skinManager.hpp
-	${OXU_SRC_DIR}/skin/config.hpp
+    ${OXU_SRC_DIR}/skin/skinManager.hpp
+    ${OXU_SRC_DIR}/skin/config.hpp
 )
 
 set(OXU_SRC
     ${OXU_SRC_DIR}/main.cpp
     ${OXU_SRC_DIR}/game.cpp
 
-	#core/
+    #core/
     ${OXU_SRC_DIR}/core/status.cpp
     ${OXU_SRC_DIR}/core/fs.cpp
     ${OXU_SRC_DIR}/core/logger.cpp
@@ -137,8 +137,8 @@ set(OXU_SRC
 
     #beatmap/
     ${OXU_SRC_DIR}/beatmap/beatmap.cpp
-	${OXU_SRC_DIR}/beatmap/beatmapParser.cpp
-	${OXU_SRC_DIR}/beatmap/song.cpp
+    ${OXU_SRC_DIR}/beatmap/beatmapParser.cpp
+    ${OXU_SRC_DIR}/beatmap/song.cpp
     ${OXU_SRC_DIR}/beatmap/songManager.cpp
 
     #beatmap/components/
@@ -158,8 +158,8 @@ set(OXU_SRC
 )
 
 add_executable(${PROJECT_NAME}
-	${OXU_HEADERS}
-	${OXU_SRC}
+    ${OXU_HEADERS}
+    ${OXU_SRC}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
