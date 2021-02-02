@@ -91,14 +91,15 @@ namespace oxu::graphics::opengl
             normX, normYH, 0.0f, 1.0f
         };
 
-        unsigned int indices[] = {
+        static unsigned int indices[] = {
             0, 1, 2,
             2, 3, 0
         };
-        
-        tex.m_GL_tex->getVao().bind();
-        tex.m_GL_tex->getVao().modifyVertexBuffer<float>(vbData, 16);
-        tex.m_GL_tex->bind(0);
+
+        const opengl::VertexArrayObject &vao = tex.getGLTexture()->getVao();
+        vao.bind();
+        vao.modifyVertexBuffer<float>(vbData, 16);
+        tex.getGLTexture()->bind(0);
         
         c_shaders[Shaders::TEXTURE].bind();
         c_shaders[Shaders::TEXTURE].setUniform1i("u_textureSlot", 0);

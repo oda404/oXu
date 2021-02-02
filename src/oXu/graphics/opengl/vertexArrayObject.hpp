@@ -22,7 +22,7 @@ namespace oxu::graphics::opengl
         void setVertexBuffer(const void *data, unsigned int count);
 
         template<typename T>
-        void modifyVertexBuffer(const void *data, unsigned int count);
+        void modifyVertexBuffer(const void *data, unsigned int count) const;
 
         void setVertexLayout(const VertexLayout &vertexLayout);
 

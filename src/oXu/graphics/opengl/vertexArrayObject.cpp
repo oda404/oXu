@@ -35,7 +35,7 @@ namespace oxu::graphics::opengl
     }
 
     template<>
-    void VertexArrayObject::modifyVertexBuffer<float>(const void *data, unsigned int count)
+    void VertexArrayObject::modifyVertexBuffer<float>(const void *data, unsigned int count) const
     {
         m_vertexBuffer->modifyData(data, count * sizeof(float));
     }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include<string>
-#include<memory>
 
 #include<oXu/graphics/opengl/texture.hpp>
 
@@ -9,12 +8,14 @@ namespace oxu::graphics
 {
     class Texture
     {
-    public:
-        std::unique_ptr<opengl::Texture> m_GL_tex;
+    private:
+        opengl::Texture *m_GL_tex = nullptr;
 
     public:
+        ~Texture();
         Texture(const std::string &path);
         Texture();
-        void load(const std::string &path);
+        bool load(const std::string &path);
+        const opengl::Texture *getGLTexture() const;
     };
 }

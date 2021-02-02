@@ -14,6 +14,7 @@ namespace oxu::graphics::Renderer
         OPENGL
     };
 
+    std::uint8_t get_current_backend_enum();
     bool init(SDL_Window *window, std::uint8_t backend);
     void destroy();
     void clear();

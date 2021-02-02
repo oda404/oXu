@@ -58,7 +58,7 @@ namespace oxu::graphics::opengl
         return image.getHeight();
     }
 
-    VertexArrayObject &Texture::getVao()
+    const VertexArrayObject &Texture::getVao() const
     {
         return m_vao;
     }

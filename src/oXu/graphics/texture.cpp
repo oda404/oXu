@@ -1,21 +1,42 @@
 #include"texture.hpp"
 
+#include<oXu/core/logger.hpp>
 #include<oXu/graphics/renderer.hpp>
 
 namespace oxu::graphics
 {
     Texture::Texture(const std::string &path)
     {
-        m_GL_tex = std::make_unique<opengl::Texture>(path);
+        m_GL_tex = new opengl::Texture(path);
     }
 
-    Texture::Texture()
-    {
+    Texture::Texture() {  }
 
+    Texture::~Texture()
+    {
+        delete m_GL_tex;
     }
 
-    void Texture::load(const std::string &path)
+    bool Texture::load(const std::string &path)
     {
-        m_GL_tex = std::make_unique<opengl::Texture>(path);
+        using namespace Renderer;
+        std::uint8_t current_backend_enum = get_current_backend_enum();
+
+        switch(current_backend_enum)
+        {
+        case Backends::OPENGL:
+            m_GL_tex = new opengl::Texture(path);
+            break;
+        default:
+            OXU_LOG_ERR("Tried to load a texture but current backend {} is unknown", current_backend_enum);
+            return false;
+        }
+
+        return m_GL_tex ? true : false;
+    }
+
+    const opengl::Texture *Texture::getGLTexture() const
+    {
+        return m_GL_tex;
     }
 }

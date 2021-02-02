@@ -22,6 +22,6 @@ namespace oxu::graphics::opengl
         void unbind() const;
         const uint32_t &getWidth() const;
         const uint32_t &getHeight() const;
-        VertexArrayObject &getVao();
+        const VertexArrayObject &getVao() const;
     };
 }
