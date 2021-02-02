@@ -2,7 +2,7 @@
 
 #include<oXu/graphics/opengl/core.hpp>
 
-#include<oXu/graphics/utils/img.hpp>
+#include<oXu/graphics/utils/png.hpp>
 
 namespace oxu::graphics::opengl
 {
@@ -48,12 +48,12 @@ namespace oxu::graphics::opengl
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
-    const uint32_t &Texture::getWidth() const
+    uint32_t Texture::getWidth() const
     {
         return image.getWidth();
     }
 
-    const uint32_t &Texture::getHeight() const
+    uint32_t Texture::getHeight() const
     {
         return image.getHeight();
     }

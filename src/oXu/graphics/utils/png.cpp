@@ -1,6 +1,7 @@
-#include"img.hpp"
+#include"png.hpp"
 
 #include<stdio.h>
+#include<oXu/core/logger.hpp>
 
 #if __has_include("libpng/png.h")
     #include<libpng/png.h>
@@ -8,24 +9,59 @@
     #include<libpng16/png.h>
 #endif
 
-#include<oXu/core/logger.hpp>
-
 #define PNG_SIG_BYTES_CNT 8
 
-namespace oxu
+namespace oxu::graphics
 {
-    static void customPngReadFn(png_structp l_pngStruct, unsigned char* buffer, std::size_t count)
+    static void custom_png_read_func(png_structp l_pngStruct, unsigned char* buffer, std::size_t count)
     {
         FILE *file = reinterpret_cast<FILE*>(png_get_io_ptr(l_pngStruct));
         fread(buffer, sizeof(unsigned char), count, file);
     }
 
-    bool Image::load(const char* path)
+    Png::Png() {  }
+
+    Png::Png(const std::string &path)
     {
-        FILE *file = fopen(path, "rb");
+        load(path.c_str());
+    }
+
+    Png::~Png()
+    {
+        delete[] m_buffer;
+    }
+
+    const std::uint8_t *Png::getBuffer() const
+    {
+        return m_buffer;
+    }
+
+    std::uint32_t Png::getWidth() const
+    {
+        return m_width;
+    }
+
+    std::uint32_t Png::getHeight() const
+    {
+        return m_height;
+    }
+
+    int Png::getBPP() const
+    {
+        return m_BPP;
+    }
+
+    int Png::getColorType() const
+    {
+        return m_colorType;
+    }
+
+    bool Png::load(const std::string &path)
+    {
+        FILE *file = fopen(path.c_str(), "rb");
         if(!file)
         {
-            OXU_LOG_ERR("[libpng] Can't open {}", path);
+            OXU_LOG_WARN("[libpng] Can't open {}", path);
             return false;
         }
 
@@ -37,7 +73,7 @@ namespace oxu
         if(png_sig_cmp(header, 0, PNG_SIG_BYTES_CNT))
         {
             fclose(file);
-            OXU_LOG_ERR("[libpng] Bad signature for {}", path);
+            OXU_LOG_WARN("[libpng] Bad signature for {}", path);
             return false;
         }
 
@@ -45,7 +81,7 @@ namespace oxu
         if(!l_pngStruct)
         {
             fclose(file);
-            OXU_LOG_ERR("[libpng] Couldn't create png_struct for {}", path);
+            OXU_LOG_WARN("[libpng] Couldn't create png_struct for {}", path);
             return false;
         }
 
@@ -54,7 +90,7 @@ namespace oxu
         {
             fclose(file);
             png_destroy_read_struct(&l_pngStruct, nullptr, nullptr);
-            OXU_LOG_ERR("[libpng] Couldn't create png_info for {}", path);
+            OXU_LOG_WARN("[libpng] Couldn't create png_info for {}", path);
             return false;
         }
 
@@ -62,14 +98,14 @@ namespace oxu
         {
             fclose(file);
             png_destroy_read_struct(&l_pngStruct, &l_pngInfo, nullptr);
-            OXU_LOG_ERR("[libpng] Couldn't setjump pointer for {}", path);
+            OXU_LOG_WARN("[libpng] Couldn't setjmp for {}", path);
             return false;
         }
 
         png_init_io(l_pngStruct, file);
 
         png_set_sig_bytes(l_pngStruct, PNG_SIG_BYTES_CNT);
-        png_set_read_fn(l_pngStruct, file, customPngReadFn);
+        png_set_read_fn(l_pngStruct, file, custom_png_read_func);
         png_read_info(l_pngStruct, l_pngInfo);
 
         png_get_IHDR(l_pngStruct, l_pngInfo, &m_width, &m_height, NULL, &m_colorType, NULL, NULL, NULL);
@@ -114,18 +150,14 @@ namespace oxu
             break;
 
         default:
-            OXU_LOG_ERR("[libpng] Unsupported png color type {}", m_colorType);
+            OXU_LOG_WARN("[libpng] Unsupported png color type {}", m_colorType);
             return false;
         }
 
         png_read_update_info(l_pngStruct, l_pngInfo);
 
-        m_buffer.clear();
-        m_buffer.resize(m_width * m_height * 4);
-        if(m_buffer.capacity() > m_buffer.size())
-        {
-            m_buffer.shrink_to_fit();
-        }
+        delete[] m_buffer;
+        m_buffer = new unsigned char[m_width * m_height * 4];
         
         unsigned char **lpp_rows = new unsigned char*[m_height];
 

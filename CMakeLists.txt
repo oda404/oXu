@@ -36,7 +36,7 @@ set(OXU_HEADERS
     ${OXU_SRC_DIR}/graphics/genericBackend.hpp
 
     #graphics/utils/
-    ${OXU_SRC_DIR}/graphics/utils/img.hpp
+    ${OXU_SRC_DIR}/graphics/utils/png.hpp
 
     #graphics/opengl/
     ${OXU_SRC_DIR}/graphics/opengl/core.hpp
@@ -112,7 +112,7 @@ set(OXU_SRC
     ${OXU_SRC_DIR}/graphics/texture.cpp
 
     #graphics/utils/
-    ${OXU_SRC_DIR}/graphics/utils/img.cpp
+    ${OXU_SRC_DIR}/graphics/utils/png.cpp
 
     #graphics/opengl/
     ${OXU_SRC_DIR}/graphics/opengl/core.cpp

@@ -5,7 +5,7 @@
 #include<oXu/core/logger.hpp>
 #include<oXu/skin/config.hpp>
 
-#include<oXu/graphics/utils/img.hpp>
+#include<oXu/graphics/utils/png.hpp>
 
 namespace oxu
 {
@@ -39,12 +39,11 @@ namespace oxu
 
     void Skin::setCursor()
     {
-        Image image;
-        image.load((path + "/cursor.png").c_str());
+        graphics::Png image(path + "/cursor.png");
 
         SDL_Surface *cursorSurface = 
         SDL_CreateRGBSurfaceFrom(
-            &image.getBuffer()[0], 
+            (void*)image.getBuffer(), 
             image.getWidth(), 
             image.getHeight(), 
             image.getBPP(), 

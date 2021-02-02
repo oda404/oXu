@@ -1,7 +1,7 @@
 #pragma once
 
 #include<oXu/graphics/opengl/vertexArrayObject.hpp>
-#include<oXu/graphics/utils/img.hpp>
+#include<oXu/graphics/utils/png.hpp>
 #include<string>
 #include<vector>
 
@@ -12,7 +12,7 @@ namespace oxu::graphics::opengl
     private:
         VertexArrayObject m_vao;
         unsigned int m_id;
-        Image image;
+        Png image;
 
     public:
         Texture(const std::string &path);
@@ -20,8 +20,8 @@ namespace oxu::graphics::opengl
 
         void bind(const unsigned int slot) const;
         void unbind() const;
-        const uint32_t &getWidth() const;
-        const uint32_t &getHeight() const;
+        std::uint32_t getWidth() const;
+        std::uint32_t getHeight() const;
         const VertexArrayObject &getVao() const;
     };
 }
