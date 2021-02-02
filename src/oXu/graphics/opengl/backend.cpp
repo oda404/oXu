@@ -1,4 +1,4 @@
-#include"renderer.hpp"
+#include"backend.hpp"
 
 #include<glad/glad.h>
 
@@ -33,7 +33,7 @@ namespace oxu::graphics::opengl
         (xAxis ? (float)window::get_window_size().x : (float)window::get_window_size().y);
     }
 
-    bool Renderer::init(SDL_Window *p_window_p)
+    bool Backend::init(SDL_Window *p_window_p)
     {
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -57,22 +57,22 @@ namespace oxu::graphics::opengl
         return true;
     }
 
-    void Renderer::destroy()
+    void Backend::destroy()
     {
         SDL_GL_DeleteContext(c_GL_context);
     }
 
-    void Renderer::clear()
+    void Backend::clear()
     {
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
-    void Renderer::render(SDL_Window *game_window)
+    void Backend::render(SDL_Window *game_window)
     {
         SDL_GL_SwapWindow(game_window);
     }
 
-    void Renderer::copy_texture(
+    void Backend::copy_texture(
         const Vector2<float> &position,
         const Vector2<float> &size,
         const graphics::Texture &tex

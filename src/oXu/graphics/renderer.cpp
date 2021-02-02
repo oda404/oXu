@@ -2,9 +2,8 @@
 
 #include<memory>
 #include<oXu/core/logger.hpp>
-#include<oXu/graphics/opengl/renderer.hpp>
+#include<oXu/graphics/opengl/backend.hpp>
 #include<oXu/graphics/genericBackend.hpp>
-#include<oXu/graphics/opengl/renderer.hpp>
 
 namespace oxu::graphics::Renderer
 {
@@ -28,7 +27,7 @@ namespace oxu::graphics::Renderer
         {
         case Backends::OPENGL:
             cp_current_backend = 
-                std::make_unique<opengl::Renderer>();
+                std::make_unique<opengl::Backend>();
             break;
 
         default:

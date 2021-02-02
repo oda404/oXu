@@ -6,7 +6,6 @@
 
 #include<oXu/utils/vector2.hpp>
 #include<oXu/graphics/texture.hpp>
-#include<oXu/graphics/opengl/renderer.hpp>
 
 namespace oxu::graphics::Renderer
 {

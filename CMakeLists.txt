@@ -40,7 +40,7 @@ set(OXU_HEADERS
 
     #graphics/opengl/
     ${OXU_SRC_DIR}/graphics/opengl/core.hpp
-    ${OXU_SRC_DIR}/graphics/opengl/renderer.hpp
+    ${OXU_SRC_DIR}/graphics/opengl/backend.hpp
     ${OXU_SRC_DIR}/graphics/opengl/shader.hpp
     ${OXU_SRC_DIR}/graphics/opengl/vertexBuffer.hpp
     ${OXU_SRC_DIR}/graphics/opengl/indexBuffer.hpp
@@ -116,7 +116,7 @@ set(OXU_SRC
 
     #graphics/opengl/
     ${OXU_SRC_DIR}/graphics/opengl/core.cpp
-    ${OXU_SRC_DIR}/graphics/opengl/renderer.cpp
+    ${OXU_SRC_DIR}/graphics/opengl/backend.cpp
     ${OXU_SRC_DIR}/graphics/opengl/shader.cpp
     ${OXU_SRC_DIR}/graphics/opengl/vertexBuffer.cpp
     ${OXU_SRC_DIR}/graphics/opengl/indexBuffer.cpp

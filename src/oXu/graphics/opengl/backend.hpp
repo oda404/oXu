@@ -8,7 +8,7 @@
 
 namespace oxu::graphics::opengl
 {
-    class Renderer : public graphics::GenericBackend
+    class Backend : public graphics::GenericBackend
     {
         bool init(SDL_Window *p_window) override;
         void destroy() override;
