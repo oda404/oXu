@@ -153,7 +153,7 @@ namespace oxu
 
         bool operator==(const Vector2<T> &v) const
         {
-            return x == v.x && y == v.y ? true : false;
+            return x == v.x && y == v.y;
         }
 
         bool operator!=(const Vector2<T> &v) const
