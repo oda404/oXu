@@ -47,7 +47,11 @@ namespace oxu::graphics::handler
     static void init_thread()
     {
         /* Initiate the renderer here because it needs the new thread context */
-        Renderer::init(cp_game_window);
+        if(!Renderer::init(cp_game_window, Renderer::Backends::OPENGL))
+        {
+            c_this_thread.doneInit = true;
+            return;
+        }
 
         if(cp_skin_manager->getCurrentSkin())
         {

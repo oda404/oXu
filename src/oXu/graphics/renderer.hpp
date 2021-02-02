@@ -8,19 +8,20 @@
 #include<oXu/graphics/texture.hpp>
 #include<oXu/graphics/opengl/renderer.hpp>
 
-namespace oxu
+namespace oxu::Renderer
 {
-    class Renderer
+    enum Backends
     {
-    public:
-        static void init(SDL_Window *window);
-        static void destroy();
-        static void clear();
-        static void render();
-        static void drawTexture(
-            const Vector2<float> &position, 
-            const Vector2<float> &size, 
-            const Texture &tex
-        );
+        OPENGL
     };
+
+    bool init(SDL_Window *window, std::uint8_t backend);
+    void destroy();
+    void clear();
+    void render();
+    void copy_texture(
+        const Vector2<float> &position, 
+        const Vector2<float> &size, 
+        const Texture &tex
+    );
 }

@@ -10,14 +10,14 @@ namespace oxu::graphics
     {
     public:
         ~GenericBackend() { destroy(); }
-        virtual bool init(SDL_Window *game_window);
-        virtual void destroy();
-        virtual void clear();
-        virtual void render(SDL_Window *game_window);
+        virtual bool init(SDL_Window *game_window) { return false; };
+        virtual void destroy() {  };
+        virtual void clear() {  };
+        virtual void render(SDL_Window *game_window) {  };
         virtual void copy_texture(
             const Vector2<float> &position,
             const Vector2<float> &size,
-            Texture &tex
-        );
+            const Texture &tex
+        ) {  };
     };
 }

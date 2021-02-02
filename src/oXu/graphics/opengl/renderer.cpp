@@ -16,7 +16,7 @@
 #define SCREEN_START_COORD -1.0f
 #define SCREEN_END_COORD 1.0f
 
-namespace oxu::OpenGL::Renderer
+namespace oxu::OpenGL
 {
     enum Shaders
     {
@@ -33,7 +33,7 @@ namespace oxu::OpenGL::Renderer
         (xAxis ? (float)window::get_window_size().x : (float)window::get_window_size().y);
     }
 
-    bool init(SDL_Window *p_window_p)
+    bool Renderer::init(SDL_Window *p_window_p)
     {
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -57,20 +57,25 @@ namespace oxu::OpenGL::Renderer
         return true;
     }
 
-    void destroy()
+    void Renderer::destroy()
     {
         SDL_GL_DeleteContext(c_GL_context);
     }
 
-    void clear()
+    void Renderer::clear()
     {
         glClear(GL_COLOR_BUFFER_BIT);
     }
 
-    void drawTexture(
+    void Renderer::render(SDL_Window *game_window)
+    {
+        SDL_GL_SwapWindow(game_window);
+    }
+
+    void Renderer::copy_texture(
         const Vector2<float> &position,
         const Vector2<float> &size,
-        OpenGL::Texture &GL_tex
+        const oxu::Texture &tex
     )
     {
         float normX = getNormalizedScreenCoord(position.x, true);
@@ -90,10 +95,10 @@ namespace oxu::OpenGL::Renderer
             0, 1, 2,
             2, 3, 0
         };
-
-        GL_tex.getVao().bind();
-        GL_tex.getVao().modifyVertexBuffer<float>(vbData, 16);
-        GL_tex.bind(0);
+        
+        tex.m_GL_tex->getVao().bind();
+        tex.m_GL_tex->getVao().modifyVertexBuffer<float>(vbData, 16);
+        tex.m_GL_tex->bind(0);
         
         c_shaders[Shaders::TEXTURE].bind();
         c_shaders[Shaders::TEXTURE].setUniform1i("u_textureSlot", 0);

@@ -10,7 +10,6 @@ namespace oxu
     class Texture
     {
     public:
-        friend class Renderer;
         std::unique_ptr<OpenGL::Texture> m_GL_tex;
 
     public:

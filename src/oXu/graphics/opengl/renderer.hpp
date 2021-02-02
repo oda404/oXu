@@ -3,16 +3,21 @@
 #include<SDL2/SDL.h>
 
 #include<oXu/utils/vector2.hpp>
-#include<oXu/graphics/opengl/texture.hpp>
+#include<oXu/graphics/texture.hpp>
+#include<oXu/graphics/genericBackend.hpp>
 
-namespace oxu::OpenGL::Renderer
+namespace oxu::OpenGL
 {
-    bool init(SDL_Window *p_window);
-    void destroy();
-    void clear();
-    void drawTexture(
-        const Vector2<float> &position, 
-        const Vector2<float> &size, 
-        OpenGL::Texture &GL_tex
-    );
+    class Renderer : public graphics::GenericBackend
+    {
+        bool init(SDL_Window *p_window) override;
+        void destroy() override;
+        void clear() override;
+        void render(SDL_Window *game_window) override;
+        void copy_texture(
+            const Vector2<float> &position, 
+            const Vector2<float> &size, 
+            const oxu::Texture &GL_tex
+        ) override;
+    };
 }

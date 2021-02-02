@@ -33,6 +33,7 @@ set(OXU_HEADERS
     ${OXU_SRC_DIR}/graphics/handler.hpp
     ${OXU_SRC_DIR}/graphics/renderer.hpp
     ${OXU_SRC_DIR}/graphics/texture.hpp
+    ${OXU_SRC_DIR}/graphics/genericBackend.hpp
 
     #graphics/utils/
     ${OXU_SRC_DIR}/graphics/utils/img.hpp

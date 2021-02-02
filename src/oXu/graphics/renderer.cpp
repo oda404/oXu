@@ -1,35 +1,65 @@
 #include"renderer.hpp"
 
-#include<oXu/graphics/opengl/renderer.hpp>
+#include<memory>
 #include<oXu/core/logger.hpp>
+#include<oXu/graphics/opengl/renderer.hpp>
+#include<oXu/graphics/genericBackend.hpp>
+#include<oXu/graphics/opengl/renderer.hpp>
 
-namespace oxu
+namespace oxu::Renderer
 {
-    SDL_Window *cp_window;
+    static SDL_Window *cp_window;
+    static std::unique_ptr<graphics::GenericBackend> 
+    cp_current_backend = nullptr;
+    static std::uint8_t 
+    c_current_backend_enum;
 
-    void Renderer::destroy()
+    std::uint8_t get_current_backend_enum()
     {
-        OpenGL::Renderer::destroy();
+        return c_current_backend_enum;
     }
 
-    void Renderer::init(SDL_Window *window)
+    bool init(SDL_Window *window, std::uint8_t backend)
     {
         cp_window = window;
-        OpenGL::Renderer::init(cp_window);
+        c_current_backend_enum = backend;
+
+        switch(backend)
+        {
+        case Backends::OPENGL:
+            cp_current_backend = 
+                std::make_unique<OpenGL::Renderer>();
+            break;
+
+        default:
+            OXU_LOG_ERR("Tried to init renderer with unknown enum {}", backend);
+            return false;
+        }
+
+        return cp_current_backend->init(cp_window);
     }
 
-    void Renderer::drawTexture(const Vector2<float> &position, const Vector2<float> &size, const Texture &tex)
+    void destroy()
     {
-        OpenGL::Renderer::drawTexture(position, size, *tex.m_GL_tex.get());
+        cp_current_backend->destroy();
     }
 
-    void Renderer::clear()
+    void clear()
     {
-        OpenGL::Renderer::clear();
+        cp_current_backend->clear();
     }
 
-    void Renderer::render()
+    void render()
     {
-        SDL_GL_SwapWindow(cp_window);
+        cp_current_backend->render(cp_window);
+    }
+
+    void copy_texture(
+        const Vector2<float> &position, 
+        const Vector2<float> &size, 
+        const Texture &tex
+    )
+    {
+        cp_current_backend->copy_texture(position, size, tex);
     }
 }
