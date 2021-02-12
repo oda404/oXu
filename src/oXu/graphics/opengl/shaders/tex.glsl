@@ -24,5 +24,6 @@ uniform float u_alpha;
 
 void main()
 {
-    color = vec4(1.0f, 1.0f, 1.0f, u_alpha) * texture(u_textureSlot, v_texCoord);
+    color = texture(u_textureSlot, v_texCoord);
+    color *= u_alpha;
 }
