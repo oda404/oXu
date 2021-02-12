@@ -44,13 +44,8 @@ namespace oxu
         return false;
     }
 
-    bool Slider::shouldBeRemovedFromPool(const std::uint32_t &mapTimeMs)
+    bool Slider::shouldBeRemovedFromPool()
     {
-        if(mapTimeMs > mx_hitTime)
-        {
-            return true;
-        }
-
-        return false;
+        return true;
     }
 }

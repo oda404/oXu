@@ -12,6 +12,12 @@ namespace oxu
         Vector2<float> initialSize = {0.f, 0.f};
         double lerpT = 0.0;
 
-        void closeIn(const double &delta, const Vector2<float> &origin, const Vector2<float> &targetSize, const float &approachRateMs);
+        /* returns true if the circle is done closing in or false otherwise */
+        bool closeIn(
+            const double &delta, 
+            const Vector2<float> &origin, 
+            const Vector2<float> &targetSize, 
+            const float &approachRateMs
+        );
     };
 }

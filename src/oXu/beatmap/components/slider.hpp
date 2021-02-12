@@ -33,6 +33,6 @@ namespace oxu
         void render(const Skin &skin) override;
         void setErrorMargin(const long double &err, const std::uint32_t &approachRateMs) override;
         bool shouldBeAddedToPool(const std::uint32_t &mapTimeMs) override;
-        bool shouldBeRemovedFromPool(const std::uint32_t &mapTimeMs) override;
+        bool shouldBeRemovedFromPool() override;
     };
 }

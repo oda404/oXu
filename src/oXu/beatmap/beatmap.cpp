@@ -46,7 +46,7 @@ namespace oxu
             m_hitObjectsPool.push_back(m_hitObjects[m_objI].get());
             ++m_objI;
         }
-        while(m_hitObjectsPool.size() > 0 && m_hitObjectsPool[0]->shouldBeRemovedFromPool(ellapsedMs))
+        while(m_hitObjectsPool.size() > 0 && m_hitObjectsPool[0]->shouldBeRemovedFromPool())
         {
             m_hitObjectsPool.erase(m_hitObjectsPool.begin());
         }
@@ -60,9 +60,9 @@ namespace oxu
     void Beatmap::renderObjects(const Skin &skin)
     {
         mtx.lock();
-        for(HitObject *ho: m_hitObjectsPool)
+        for(std::int32_t i = m_hitObjectsPool.size() - 1; i >= 0; --i)
         {
-            ho->render(skin);
+            m_hitObjectsPool[i]->render(skin);
         }
         mtx.unlock();
     }

@@ -4,6 +4,9 @@
 #include<oXu/core/logger.hpp>
 #include<oXu/graphics/renderer.hpp>
 
+#define FADE_IN_MULT 10.5f
+#define FADE_OUT_MULT 21.f
+
 namespace oxu
 {
     HitCircle::HitCircle(
@@ -18,7 +21,20 @@ namespace oxu
 
     void HitCircle::update(const double &delta, const Difficulty &difficulty)
     {
-        mx_approachCircle.closeIn(delta, mx_originPosition, mx_size, difficulty.approachRateMs);
+        if(mx_alpha < 1.f)
+        {
+            mx_alpha += FADE_IN_MULT * delta;
+        }
+
+        if(mx_approachCircle.closeIn(
+            delta,
+            mx_originPosition, 
+            mx_size, 
+            difficulty.approachRateMs
+        ))
+        {
+            mx_alpha -= FADE_OUT_MULT * delta;
+        }
     }
 
     void HitCircle::render(const Skin &skin_p)
@@ -26,17 +42,20 @@ namespace oxu
         graphics::Renderer::copy_texture(
             mx_position, 
             mx_size, 
-            skin_p.getTexture(Tex::HIT_CIRCLE)
+            skin_p.getTexture(Tex::HIT_CIRCLE),
+            mx_alpha
         );
         graphics::Renderer::copy_texture(
             mx_position, 
             mx_size, 
-            skin_p.getTexture(Tex::HIT_CIRCLE_OVERLAY)
+            skin_p.getTexture(Tex::HIT_CIRCLE_OVERLAY),
+            mx_alpha
         );
         graphics::Renderer::copy_texture(
             mx_approachCircle.position, 
             mx_approachCircle.size, 
-            skin_p.getTexture(Tex::APPROACH_CIRCLE)
+            skin_p.getTexture(Tex::APPROACH_CIRCLE),
+            mx_alpha
         );
     }
 
@@ -47,11 +66,12 @@ namespace oxu
 
     bool HitCircle::shouldBeAddedToPool(const std::uint32_t &mapTimeMs)
     {
-      return mapTimeMs >= mx_spawnTime ? true : false;
+        return mapTimeMs >= mx_spawnTime;
     }
 
-    bool HitCircle::shouldBeRemovedFromPool(const std::uint32_t &mapTimeMs)
+    bool HitCircle::shouldBeRemovedFromPool()
     {
-      return mapTimeMs > mx_hitTime ? true : false;
+        if(mx_alpha > 0.f) return false;
+        return true;
     }
 }

@@ -20,6 +20,7 @@ namespace oxu
         std::uint32_t mx_hitTime;
         std::uint32_t mx_spawnTime;
         std::uint8_t mx_type;
+        float mx_alpha = 0.1f;
 
     public:
         HitObject(
@@ -33,7 +34,7 @@ namespace oxu
         virtual void render(const Skin &skin) = 0;
         virtual void setErrorMargin(const long double &err, const std::uint32_t &approachRateMs) = 0;
         virtual bool shouldBeAddedToPool(const std::uint32_t &mapTimeMs) = 0;
-        virtual bool shouldBeRemovedFromPool(const std::uint32_t &mapTimeMs) = 0;
+        virtual bool shouldBeRemovedFromPool() = 0;
         double getApproachCircleDonePercentage();
         const Vector2<float> &getPosition();
         const std::uint32_t &getHitTime();
