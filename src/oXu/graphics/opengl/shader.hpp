@@ -26,8 +26,8 @@ namespace oxu::graphics::opengl
         Shader(const std::string &path);
         ~Shader();
 
-        void setUniform4f(const std::string &name, float v0, float v1, float v2, float v3);
         void setUniform1i(const std::string &name, int v0);
+        void setUniform1f(const std::string &name, float v0);
         void bind() const;
         void unbind() const;
         void deleteProgram() const;

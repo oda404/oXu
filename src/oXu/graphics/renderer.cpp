@@ -56,9 +56,10 @@ namespace oxu::graphics::Renderer
     void copy_texture(
         const Vector2<float> &position, 
         const Vector2<float> &size, 
-        const Texture &tex
+        const Texture &tex,
+        float alpha
     )
     {
-        cp_current_backend->copy_texture(position, size, tex);
+        cp_current_backend->copy_texture(position, size, tex, alpha);
     }
 }

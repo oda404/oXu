@@ -75,7 +75,8 @@ namespace oxu::graphics::opengl
     void Backend::copy_texture(
         const Vector2<float> &position,
         const Vector2<float> &size,
-        const graphics::Texture &tex
+        const graphics::Texture &tex,
+        float alpha
     )
     {
         float normX = getNormalizedScreenCoord(position.x, true);
@@ -103,7 +104,10 @@ namespace oxu::graphics::opengl
         
         c_shaders[Shaders::TEXTURE].bind();
         c_shaders[Shaders::TEXTURE].setUniform1i("u_textureSlot", 0);
+        c_shaders[Shaders::TEXTURE].setUniform1f("u_alpha", alpha);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indices);
+
+        c_shaders[Shaders::TEXTURE].unbind();
     }
 }

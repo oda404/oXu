@@ -167,14 +167,14 @@ namespace oxu::graphics::opengl
         }
     }
 
-    void Shader::setUniform4f(const std::string &name, float v0, float v1, float v2, float v3)
-    {
-        oxu_glCall_Log(glUniform4f(getUniformLocation(m_id, name), v0, v1, v2, v3));
-    }
-
     void Shader::setUniform1i(const std::string &name, int v0)
     {
         oxu_glCall_Log(glUniform1i(getUniformLocation(m_id, name), v0));
+    }
+
+    void Shader::setUniform1f(const std::string &name, float v0)
+    {
+        oxu_glCall_Log(glUniform1f(getUniformLocation(m_id, name), v0));
     }
 
     const bool &Shader::isValid() const
