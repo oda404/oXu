@@ -27,12 +27,12 @@ namespace oxu::fs
         return "";
     }
 
-    /* If no argument is provided it will default to /home/$USER/.config/oXu/songs */
+    /* If no argument is provided it will default to /home/$USER/.config/oxu/songs */
     void set_songs_dir(const char *p_songs_dir_p)
     {
         if(p_songs_dir_p == nullptr)
         {
-            songs_dir_cache = "/home/" + get_current_username() + "/.config/oXu/songs";
+            songs_dir_cache = "/home/" + get_current_username() + "/.config/oxu/songs";
         }
         else
         {
@@ -40,12 +40,12 @@ namespace oxu::fs
         }
     }
 
-    /* If no argument is provided it will default to /home/$USER/.config/oXu/skins */
+    /* If no argument is provided it will default to /home/$USER/.config/oxu/skins */
     void set_skins_dir(const char *p_skins_dir_p)
     {
         if(p_skins_dir_p == nullptr)
         {
-            skins_dir_cache = "/home/" + get_current_username() + "/.config/oXu/skins";
+            skins_dir_cache = "/home/" + get_current_username() + "/.config/oxu/skins";
         }
         else
         {
