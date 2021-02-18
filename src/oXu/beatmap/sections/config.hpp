@@ -10,14 +10,14 @@ namespace oxu
 {
     enum Sections
     {
-        GENERAL_SECTION = 0,
-        EDITOR_SECTION = 1,
-        METADATA_SECTION = 2,
-        DIFFICULTY_SECTION = 3,
-        EVENTS_SECTION = 4,
-        TIMING_SECTION = 5,
-        COLORS_SECTION = 6,
-        OBJECTS_SECTION = 7
+        GENERAL = 0,
+        EDITOR = 1,
+        METADATA = 2,
+        DIFFICULTY = 3,
+        EVENTS = 4,
+        TIMING = 5,
+        COLORS = 6,
+        OBJECTS = 7
     };
 
     extern const std::map<std::string, std::uint8_t> sectionsMap;

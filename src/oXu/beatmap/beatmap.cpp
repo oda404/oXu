@@ -60,9 +60,10 @@ namespace oxu
     void Beatmap::renderObjects(const Skin &skin)
     {
         mtx.lock();
-        for(std::int32_t i = m_hitObjectsPool.size() - 1; i >= 0; --i)
+        std::uint32_t i = m_hitObjectsPool.size(); 
+        for(; i > 0; --i)
         {
-            m_hitObjectsPool[i]->render(skin);
+            m_hitObjectsPool[i - 1]->render(skin);
         }
         mtx.unlock();
     }
@@ -80,7 +81,7 @@ namespace oxu
             {
                 if(line[0] == '[')
                 {
-                    if(section == Sections::DIFFICULTY_SECTION)
+                    if(section == Sections::DIFFICULTY)
                     {
                         break;
                     }
@@ -91,15 +92,15 @@ namespace oxu
                 {
                     switch(section)
                     {
-                    case Sections::GENERAL_SECTION:
+                    case Sections::GENERAL:
                         parseAndSetGeneral(line, general);
                         break;
 
-                    case Sections::METADATA_SECTION:
+                    case Sections::METADATA:
                         parseAndSetMetadata(line, metadata);
                         break;
 
-                    case Sections::DIFFICULTY_SECTION:
+                    case Sections::DIFFICULTY:
                         parseAndSetDifficulty(line, difficulty);
                         break;
                     }
@@ -138,11 +139,11 @@ namespace oxu
                 {
                     switch(section)
                     {
-                        case Sections::TIMING_SECTION:
+                        case Sections::TIMING:
 
                             break;
 
-                        case Sections::OBJECTS_SECTION:
+                        case Sections::OBJECTS:
                             parseAndAddHitObject(line, m_hitObjects, playField, difficulty);
                             break;
                     }
