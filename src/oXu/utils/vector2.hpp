@@ -109,6 +109,22 @@ namespace oxu
             return result;
         }
 
+        void operator+=(const T &n)
+        {
+            x += n;
+            y += n;
+        }
+
+        Vector2<T> operator+(const T &n) const
+        {
+            Vector2<T> out = *this;
+
+            out.x += n;
+            out.y += n;
+            
+            return out;
+        }
+
         void operator-=(const Vector2<T> &v)
         {
             x -= v.x;
@@ -129,7 +145,7 @@ namespace oxu
             y *= n;
         }
 
-        const Vector2<T> operator*(const T &n) const
+        Vector2<T> operator*(const T &n) const
         {
             Vector2<T> result = *this;
             result *= n;
@@ -143,7 +159,7 @@ namespace oxu
             y /= n;
         }
 
-        const Vector2<T> operator/(const T &n) const
+        Vector2<T> operator/(const T &n) const
         {
             Vector2<T> result = *this;
             result /= n;
@@ -161,4 +177,10 @@ namespace oxu
             return !(*this == v);
         }
     };
+
+    template<typename T>
+    Vector2<T> operator+(T n, const Vector2<T> &v)
+    {
+        return v + n;
+    }
 }
