@@ -10,7 +10,7 @@
 
 namespace oxu
 {
-    static std::mutex mtx;
+    static std::mutex c_beatmap_mtx;
 
     static void setSection(const std::string &line, uint8_t &section)
     {
@@ -30,42 +30,46 @@ namespace oxu
 
     void Beatmap::start()
     {
-        m_objI = 0;
-        m_hitObjectsPool.clear();
+        m_current_obj_i = 0;
+        m_active_hit_objs.clear();
         m_timer.start();
     }
 
     void Beatmap::updateObjects(const double &delta)
     {
-        static uint32_t ellapsedMs;
-        ellapsedMs = m_timer.getEllapsedMs();
+        const std::uint32_t ellapsedMs = m_timer.getEllapsedMs();
 
-        mtx.lock();
-        while(m_hitObjects[m_objI]->shouldBeAddedToPool(ellapsedMs))
+        c_beatmap_mtx.lock();
+        while(m_hit_objs[m_current_obj_i]->shouldBeAddedToPool(ellapsedMs))
         {
-            m_hitObjectsPool.push_back(m_hitObjects[m_objI].get());
-            ++m_objI;
+            m_active_hit_objs.push_back(m_hit_objs[m_current_obj_i].get());
+            ++m_current_obj_i;
         }
-        while(m_hitObjectsPool.size() > 0 && m_hitObjectsPool[0]->shouldBeRemovedFromPool())
+        
+        while(
+            m_active_hit_objs.size() > 0 && 
+            m_active_hit_objs[0]->shouldBeRemovedFromPool()
+        )
         {
-            m_hitObjectsPool.erase(m_hitObjectsPool.begin());
+            m_active_hit_objs.erase(m_active_hit_objs.begin());
         }
-        for(HitObject *ho: m_hitObjectsPool)
+
+        for(HitObject *ho: m_active_hit_objs)
         {
             ho->update(delta, difficulty);
         }
-        mtx.unlock();
+        c_beatmap_mtx.unlock();
     }
 
     void Beatmap::renderObjects(const Skin &skin)
     {
-        mtx.lock();
-        std::uint32_t i = m_hitObjectsPool.size(); 
+        c_beatmap_mtx.lock();
+        std::uint32_t i = m_active_hit_objs.size(); 
         for(; i > 0; --i)
         {
-            m_hitObjectsPool[i - 1]->render(skin);
+            m_active_hit_objs[i - 1]->render(skin);
         }
-        mtx.unlock();
+        c_beatmap_mtx.unlock();
     }
 
     void Beatmap::loadGenericInfo()
@@ -121,9 +125,9 @@ namespace oxu
 
         if(beatmapFile.is_open())
         {
-            m_hitObjects.clear();
+            m_hit_objs.clear();
             /* hardcoded value for now */
-            m_hitObjects.reserve(4000);
+            m_hit_objs.reserve(4000);
 
             std::string line;
             uint8_t section = SECTIONS_COUNT;
@@ -144,7 +148,7 @@ namespace oxu
                             break;
 
                         case Sections::OBJECTS:
-                            parseAndAddHitObject(line, m_hitObjects, playField, difficulty);
+                            parseAndAddHitObject(line, m_hit_objs, playField, difficulty);
                             break;
                     }
                 }
