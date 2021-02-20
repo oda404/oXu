@@ -33,6 +33,11 @@ namespace oxu::graphics::opengl
         (xAxis ? (float)window::get_window_size().x : (float)window::get_window_size().y);
     }
 
+    Backend::~Backend()
+    {
+        destroy();
+    }
+
     bool Backend::init(SDL_Window *p_window_p)
     {
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);

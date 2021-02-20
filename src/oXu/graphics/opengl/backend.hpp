@@ -10,6 +10,7 @@ namespace oxu::graphics::opengl
 {
     class Backend : public graphics::GenericBackend
     {
+    public:
         bool init(SDL_Window *p_window) override;
         void destroy() override;
         void clear() override;
@@ -20,5 +21,7 @@ namespace oxu::graphics::opengl
             const graphics::Texture &GL_tex,
             float alpha = 1.0f
         ) override;
+        
+        virtual ~Backend();
     };
 }

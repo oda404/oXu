@@ -8,8 +8,8 @@
 namespace oxu::graphics::Renderer
 {
     static SDL_Window *cp_window;
-    static std::unique_ptr<graphics::GenericBackend> 
-    cp_current_backend = nullptr;
+    static GenericBackend
+    *cp_current_backend = nullptr;
     static std::uint8_t 
     c_current_backend_enum;
 
@@ -26,8 +26,8 @@ namespace oxu::graphics::Renderer
         switch(backend)
         {
         case Backends::OPENGL:
-            cp_current_backend = 
-                std::make_unique<opengl::Backend>();
+            destroy();
+            cp_current_backend = new opengl::Backend();
             break;
 
         default:
@@ -40,7 +40,11 @@ namespace oxu::graphics::Renderer
 
     void destroy()
     {
-        cp_current_backend->destroy();
+        if(cp_current_backend)
+        {
+            delete cp_current_backend;
+            cp_current_backend = nullptr;
+        }
     }
 
     void clear()

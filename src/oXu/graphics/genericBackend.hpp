@@ -9,16 +9,16 @@ namespace oxu::graphics
     class GenericBackend
     {
     public:
-        ~GenericBackend() { destroy(); }
-        virtual bool init(SDL_Window *game_window) { return false; };
-        virtual void destroy() {  };
-        virtual void clear() {  };
-        virtual void render(SDL_Window *game_window) {  };
+        virtual ~GenericBackend() = default;
+        virtual bool init(SDL_Window *game_window) = 0;
+        virtual void destroy() = 0;
+        virtual void clear() = 0;
+        virtual void render(SDL_Window *game_window) = 0;
         virtual void copy_texture(
             const Vector2<float> &position,
             const Vector2<float> &size,
             const Texture &tex,
             float alpha = 1.0f
-        ) {  };
+        ) = 0;
     };
 }
