@@ -13,9 +13,6 @@
 #include<oXu/core/window.hpp>
 #include<oXu/core/logger.hpp>
 
-#define SCREEN_START_COORD -1.0f
-#define SCREEN_END_COORD 1.0f
-
 namespace oxu::graphics::opengl
 {
     enum Shaders
@@ -23,14 +20,19 @@ namespace oxu::graphics::opengl
         TEXTURE = 0
     };
 
-    std::vector<Shader> c_shaders;
-    SDL_GLContext c_GL_context;
+    static std::vector<Shader> c_shaders;
+    static SDL_GLContext c_GL_context;
 
-    static float getNormalizedScreenCoord(float coord, bool xAxis)
+    inline static Vector2<float>
+    get_normalized_x_coords(Vector2<float> coords)
     {
-        return SCREEN_START_COORD + 
-        (coord * (SCREEN_END_COORD -  SCREEN_START_COORD)) / 
-        (xAxis ? (float)window::get_window_size().x : (float)window::get_window_size().y);
+        return -1.0f + coords * 2.0f / window::get_window_size().x;
+    }
+
+    inline static Vector2<float>
+    get_normalized_y_coords(const Vector2<float> &coords)
+    {
+        return (-1.0f + coords * 2.0f / window::get_window_size().y) * -1.0f;
     }
 
     Backend::~Backend()
@@ -51,7 +53,7 @@ namespace oxu::graphics::opengl
             return false;
         }
 
-        OXU_LOG_DEBUG("OpenGL {}.{}", GLVersion.major, GLVersion.minor);
+        OXU_LOG_DEBUG("Using OpenGL {}.{}", GLVersion.major, GLVersion.minor);
 
         oxu_glCall_Assert(glEnable(GL_BLEND));
         oxu_glCall_Assert(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
@@ -64,6 +66,7 @@ namespace oxu::graphics::opengl
 
     void Backend::destroy()
     {
+        c_shaders.clear();
         SDL_GL_DeleteContext(c_GL_context);
     }
 
@@ -84,17 +87,17 @@ namespace oxu::graphics::opengl
         float alpha
     )
     {
-        float normX = getNormalizedScreenCoord(position.x, true);
-        float normY = getNormalizedScreenCoord(position.y + size.y, false) * SCREEN_START_COORD;
+        const Vector2<float> x_coords = 
+        get_normalized_x_coords({ position.x, position.x + size.x });
 
-        float normXW = getNormalizedScreenCoord(position.x + size.x, true);
-        float normYH = getNormalizedScreenCoord(position.y, false) * SCREEN_START_COORD;
+        const Vector2<float> y_coords = 
+        get_normalized_y_coords({ position.y, position.y + size.y });
 
         float vbData[] = {
-            normX, normY, 0.0f, 0.0f,
-            normXW, normY, 1.0f, 0.0f,
-            normXW, normYH, 1.0f, 1.0f,
-            normX, normYH, 0.0f, 1.0f
+            x_coords.x, y_coords.x, 0.0f, 0.0f,
+            x_coords.y, y_coords.x, 1.0f, 0.0f,
+            x_coords.y, y_coords.y, 1.0f, 1.0f,
+            x_coords.x, y_coords.y, 0.0f, 1.0f
         };
 
         static unsigned int indices[] = {
@@ -102,9 +105,12 @@ namespace oxu::graphics::opengl
             2, 3, 0
         };
 
-        const opengl::VertexArrayObject &vao = tex.getGLTexture()->getVao();
+        const opengl::VertexArrayObject &vao = 
+        tex.getGLTexture()->getVao();
+
         vao.bind();
         vao.modifyVertexBuffer<float>(vbData, 16);
+
         tex.getGLTexture()->bind(0);
         
         c_shaders[Shaders::TEXTURE].bind();
@@ -114,5 +120,7 @@ namespace oxu::graphics::opengl
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indices);
 
         c_shaders[Shaders::TEXTURE].unbind();
+        vao.unbind();
+        tex.getGLTexture()->unbind();
     }
 }
