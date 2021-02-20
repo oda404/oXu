@@ -34,9 +34,4 @@ namespace oxu::graphics
 
         return m_GL_tex ? true : false;
     }
-
-    const opengl::Texture *Texture::getGLTexture() const
-    {
-        return m_GL_tex;
-    }
 }

@@ -106,12 +106,12 @@ namespace oxu::graphics::opengl
         };
 
         const opengl::VertexArrayObject &vao = 
-        tex.getGLTexture()->getVao();
+        tex.m_GL_tex->getVao();
 
         vao.bind();
         vao.modifyVertexBuffer<float>(vbData, 16);
 
-        tex.getGLTexture()->bind(0);
+        tex.m_GL_tex->bind(0);
         
         c_shaders[Shaders::TEXTURE].bind();
         c_shaders[Shaders::TEXTURE].setUniform1i("u_textureSlot", 0);
@@ -121,6 +121,6 @@ namespace oxu::graphics::opengl
 
         c_shaders[Shaders::TEXTURE].unbind();
         vao.unbind();
-        tex.getGLTexture()->unbind();
+        tex.m_GL_tex->unbind();
     }
 }
