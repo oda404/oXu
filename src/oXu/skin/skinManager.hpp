@@ -4,7 +4,7 @@
 #pragma once
 
 #include<vector>
-
+#include<string>
 #include<oXu/skin/skin.hpp>
 
 namespace oxu
@@ -14,8 +14,10 @@ namespace oxu
     private:
         std::vector<Skin> m_skins;
         Skin *m_currentSkin = nullptr;
+        const std::string m_skins_dir_path;
 
     public:
+        SkinManager(const std::string &config_dir_path);
         void enumerateSkins();
         void setCurrentSkin(const size_t &index);
         Skin *getCurrentSkin() const;

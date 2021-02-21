@@ -4,6 +4,13 @@
 #include<oXu/game.hpp>
 #include<oXu/core/status.hpp>
 #include<oXu/core/logger.hpp>
+#include<oXu/utils/vector2.hpp>
+
+#if defined(__linux__)
+#define USERNAME_MAX_LEN 50
+#include<unistd.h>
+#include<pwd.h>
+#endif //__linux__
 
 /*
 Variables prefixes:
@@ -14,11 +21,23 @@ Variable suffixes:
 	_p - parameter
 */
 
-int main(void)
+static std::string get_user_name()
 {
-	if(oxu::init()) oxu::start();
+	char buf[USERNAME_MAX_LEN];
+	getlogin_r(buf, USERNAME_MAX_LEN);
+	return std::string(buf);
+}
 
-	oxu::clean();
+#define DEFAULT_CONFIG_DIR_PATH "/home/" + get_user_name() + "/.config/oxu"
+#define DEFAULT_WINDOW_SIZE oxu::Vector2<std::uint16_t>({ 800, 600 })
+
+int main(int argc, char **argv)
+{
+	oxu::Config config;
+	config.configDirPath = DEFAULT_CONFIG_DIR_PATH;
+	config.screenSize = DEFAULT_WINDOW_SIZE;
+
+	oxu::init(config);
 
 	if(oxu::status::get() == oxu::status::OK)
 	{

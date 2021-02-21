@@ -1,7 +1,7 @@
 #pragma once
 
 #include<vector>
-
+#include<string>
 #include<oXu/beatmap/song.hpp>
 
 namespace oxu
@@ -10,11 +10,13 @@ namespace oxu
     {
     private:
         std::vector<Song> m_songs;
-
         Song *m_currentSong = nullptr;
         Beatmap *m_currentBeatmap = nullptr;
+        const std::string m_songs_dir_path;
 
     public:
+        SongManager(const std::string &config_dir_path);
+
         void enumerateSongs();
 
         void setCurrentSong(size_t index);

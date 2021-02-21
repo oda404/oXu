@@ -4,20 +4,25 @@
 #include"skinManager.hpp"
 
 #include<filesystem>
-
 #include<oXu/core/logger.hpp>
-#include<oXu/core/fs.hpp>
 
 namespace oxu
 {
+    SkinManager::SkinManager(const std::string &config_dir_path):
+    m_skins_dir_path(
+        std::filesystem::path(config_dir_path) / "skins"
+    )
+    {
+
+    }
+
     void SkinManager::enumerateSkins()
     {
         namespace fs = std::filesystem;
-        namespace oxufs = oxu::fs;
 
         m_skins.clear();
 
-        for(auto &entry: fs::directory_iterator(oxufs::get_skins_dir()))
+        for(auto &entry: fs::directory_iterator(m_skins_dir_path))
         {
             if(fs::is_directory(entry))
             {
@@ -27,7 +32,7 @@ namespace oxu
 
         if(m_skins.size() == 0)
         {
-            OXU_LOG_WARN("No skins were found in {}", oxufs::get_skins_dir());
+            OXU_LOG_WARN("No skins were found in {}", m_skins_dir_path);
         }
     }
 
