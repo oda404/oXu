@@ -3,6 +3,8 @@
 
 #include"handler.hpp"
 
+#include<string>
+
 #include<oXu/core/status.hpp>
 #include<oXu/core/logger.hpp>
 #include<oXu/graphics/renderer.hpp>
@@ -44,10 +46,16 @@ namespace oxu::graphics::handler
         }
     }
 
-    static void init_thread()
+    static void init_thread(std::string config_dir_path_p)
     {
         /* Initiate the renderer here because it needs the new thread context */
-        if(!Renderer::init(cp_game_window, Renderer::Backends::OPENGL))
+        if(
+            !Renderer::init(
+                cp_game_window, 
+                Renderer::Backends::OPENGL,
+                config_dir_path_p
+            )
+        )
         {
             c_this_thread.doneInit = true;
             return;
@@ -63,7 +71,12 @@ namespace oxu::graphics::handler
         start_thread();
     }
 
-    void init(SDL_Window *window_p, SongManager *songManager_p, SkinManager *skinManager_p)
+    void init(
+        SDL_Window *window_p, 
+        SongManager *songManager_p, 
+        SkinManager *skinManager_p,
+        std::string config_dir_path_p
+    )
     {
         cp_song_manager = songManager_p;
         cp_skin_manager = skinManager_p;
@@ -72,7 +85,12 @@ namespace oxu::graphics::handler
         c_this_thread.setMaxFPS(240);
         /* paranoia */
         c_this_thread.doneInit = false;
-        c_this_thread.start([] { init_thread(); });
+        c_this_thread.start(
+            [config_dir_path_p]
+            { 
+                init_thread(config_dir_path_p); 
+            }
+        );
         /* wait for the thread to initiate */
         while(!c_this_thread.doneInit);
     }

@@ -18,7 +18,11 @@ namespace oxu::graphics::Renderer
         return c_current_backend_enum;
     }
 
-    bool init(SDL_Window *window, std::uint8_t backend)
+    bool init(
+        SDL_Window *window, 
+        std::uint8_t backend,
+        std::string config_dir_path
+    )
     {
         cp_window = window;
         c_current_backend_enum = backend;
@@ -35,7 +39,7 @@ namespace oxu::graphics::Renderer
             return false;
         }
 
-        return cp_current_backend->init(cp_window);
+        return cp_current_backend->init(cp_window, config_dir_path);
     }
 
     void destroy()

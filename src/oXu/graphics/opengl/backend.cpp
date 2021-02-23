@@ -1,8 +1,8 @@
 #include"backend.hpp"
 
 #include<glad/glad.h>
-
 #include<vector>
+#include<filesystem>
 
 #include<oXu/graphics/opengl/core.hpp>
 #include<oXu/graphics/opengl/shader.hpp>
@@ -40,7 +40,7 @@ namespace oxu::graphics::opengl
         destroy();
     }
 
-    bool Backend::init(SDL_Window *p_window_p)
+    bool Backend::init(SDL_Window *p_window_p, std::string configDirPath)
     {
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -59,7 +59,9 @@ namespace oxu::graphics::opengl
         oxu_glCall_Assert(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
         oxu_glCall_Assert(glClearColor(0.f, 0.f, 0.f, 1.0f));
 
-        c_shaders.emplace_back("../src/oXu/graphics/opengl/shaders/tex.glsl");
+        namespace stdfs = std::filesystem;
+
+        c_shaders.emplace_back(stdfs::path(configDirPath) / "res/shaders/tex.glsl");
 
         return true;
     }

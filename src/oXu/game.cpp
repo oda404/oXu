@@ -109,7 +109,12 @@ namespace oxu
         Thread this_thread;
         this_thread.setMaxFPS(1000);
 
-        graphics::handler::init(p_game_window, &song_manager, &skin_manager);
+        graphics::handler::init(
+            p_game_window, 
+            &song_manager, 
+            &skin_manager,
+            config.configDirPath
+        );
         AudioHandler::init();
 
         game_loop(song_manager, skin_manager, this_thread);

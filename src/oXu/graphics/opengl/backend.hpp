@@ -11,7 +11,7 @@ namespace oxu::graphics::opengl
     class Backend : public graphics::GenericBackend
     {
     public:
-        bool init(SDL_Window *p_window) override;
+        bool init(SDL_Window *p_window, std::string configDirPath) override;
         void destroy() override;
         void clear() override;
         void render(SDL_Window *game_window) override;

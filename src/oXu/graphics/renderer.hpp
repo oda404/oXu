@@ -15,7 +15,11 @@ namespace oxu::graphics::Renderer
     };
 
     std::uint8_t get_current_backend_enum();
-    bool init(SDL_Window *window, std::uint8_t backend);
+    bool init(
+        SDL_Window *window, 
+        std::uint8_t backend,
+        std::string config_dir_path
+    );
     void destroy();
     void clear();
     void render();
