@@ -13,6 +13,7 @@ set(CMAKE_CXX_FLAGS "-O2 -Wall -Wextra")
 
 add_subdirectory(vendor/glad)
 add_subdirectory(vendor/spdlog)
+add_subdirectory(vendor/argparser)
 
 set(OXU_HEADERS
     ${OXU_SRC_DIR}/game.hpp
@@ -169,6 +170,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
     spdlog
+    argparser
     glad
     png
     SDL2
