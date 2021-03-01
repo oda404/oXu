@@ -3,8 +3,9 @@
 #include<fstream>
 #include<mutex>
 
+#include<oXu/core/window.hpp>
 #include<oXu/beatmap/beatmapParser.hpp>
-#include<oXu/beatmap/sections/config.hpp>
+#include<oXu/beatmap/beatmapParser.hpp>
 #include<oXu/beatmap/components/playField.hpp>
 #include<oXu/core/logger.hpp>
 
@@ -12,14 +13,15 @@ namespace oxu
 {
     static std::mutex c_beatmap_mtx;
 
-    static void setSection(const std::string &line, uint8_t &section)
+    static float get_circle_size_to_px(float circle_size)
     {
-        std::map<std::string, std::uint8_t>::const_iterator pair = sectionsMap.find(line);
+        return (23.05f - (circle_size - 7.0f) * 4.4825f) * 2.0f;
+    }
 
-        if(pair->first != "")
-        {
-            section = pair->second;
-        }
+    static float get_approach_rate_to_ms(float approach_rate)
+    {
+        return approach_rate <= 5 ? 1800 - approach_rate * 120 : 
+        1200 - (approach_rate - 5) * 150;
     }
 
     Beatmap::Beatmap(const std::string &path_p):
@@ -56,7 +58,7 @@ namespace oxu
 
         for(HitObject *ho: m_active_hit_objs)
         {
-            ho->update(delta, difficulty);
+            ho->update(delta, m_difficulty);
         }
         c_beatmap_mtx.unlock();
     }
@@ -72,98 +74,170 @@ namespace oxu
         c_beatmap_mtx.unlock();
     }
 
-    void Beatmap::loadGenericInfo()
+    void Beatmap::loadGeneralSection()
     {
-        std::ifstream beatmapFile(m_path);
-
-        if(beatmapFile.is_open())
+        std::ifstream beatmap_file(m_path);
+        if(!beatmap_file.is_open())
         {
-            std::string line;
-            uint8_t section = SECTIONS_COUNT;
+            OXU_LOG_WARN("Could not open beatmap file {0} for parsing.", m_path);
+            return;
+        }
 
-            while(std::getline(beatmapFile, line))
+        std::string line;
+        Section section = Section::INVALID;
+
+        while(std::getline(beatmap_file, line))
+        {
+            if(line[0] == '[')
             {
-                if(line[0] == '[')
-                {
-                    if(section == Sections::DIFFICULTY)
-                    {
-                        break;
-                    }
-
-                    setSection(line, section);
-                }
-                else if(line[0] != '\r')
-                {
-                    switch(section)
-                    {
-                    case Sections::GENERAL:
-                        parseAndSetGeneral(line, general);
-                        break;
-
-                    case Sections::METADATA:
-                        parseAndSetMetadata(line, metadata);
-                        break;
-
-                    case Sections::DIFFICULTY:
-                        parseAndSetDifficulty(line, difficulty);
-                        break;
-                    }
-                }
+                section = get_section_enum_from_str(line);
+                continue;
             }
 
-            beatmapFile.close();
+            if(section == Section::GENERAL)
+            {
+                parse_and_set_general_field(line, m_general);
+            }
         }
-        else
-        {
-            OXU_LOG_WARN("Could not open file {0}", m_path);
-        }
+
+        beatmap_file.close();
     }
 
-    void Beatmap::loadGameInfo()
+    void Beatmap::loadEditorSection()
     {
-        std::ifstream beatmapFile(m_path);
-
-        if(beatmapFile.is_open())
+        std::ifstream beatmap_file(m_path);
+        if(!beatmap_file.is_open())
         {
-            m_hit_objs.clear();
-            /* hardcoded value for now */
-            m_hit_objs.reserve(4000);
+            OXU_LOG_WARN("Could not open beatmap file {0} for parsing.", m_path);
+            return;
+        }
 
-            std::string line;
-            uint8_t section = SECTIONS_COUNT;
-            PlayField playField;
+        std::string line;
+        Section section = Section::INVALID;
 
-            while(std::getline(beatmapFile, line))
+        while(std::getline(beatmap_file, line))
+        {
+            if(line[0] == '[')
             {
-                if(line[0] == '[')
-                {
-                    setSection(line, section);
-                }
-                else if(line[0] != '\r')
-                {
-                    switch(section)
-                    {
-                        case Sections::TIMING:
-
-                            break;
-
-                        case Sections::OBJECTS:
-                            parseAndAddHitObject(line, m_hit_objs, playField, difficulty);
-                            break;
-                    }
-                }
+                section = get_section_enum_from_str(line);
+                continue;
             }
 
-            beatmapFile.close();
+            if(section == Section::EDITOR)
+            {
+                parse_and_set_editor_field(line, m_editor);
+            }
         }
-        else
-        {
-            OXU_LOG_WARN("Could not open file {0}", m_path);
-        }
+
+        beatmap_file.close();
     }
 
-    const std::string &Beatmap::getPath()
+    void Beatmap::loadMetadataSection()
     {
-        return m_path;
+        std::ifstream beatmap_file(m_path);
+        if(!beatmap_file.is_open())
+        {
+            OXU_LOG_WARN("Could not open beatmap file {0} for parsing.", m_path);
+            return;
+        }
+
+        std::string line;
+        Section section = Section::INVALID;
+
+        while(std::getline(beatmap_file, line))
+        {
+            if(line[0] == '[')
+            {
+                section = get_section_enum_from_str(line);
+                continue;
+            }
+
+            if(section == Section::METADATA)
+            {
+                parse_and_set_metadata_field(line, m_metadata);
+            }
+        }
+
+        beatmap_file.close();
+    }
+
+    void Beatmap::loadDifficultySection()
+    {
+        std::ifstream beatmap_file(m_path);
+        if(!beatmap_file.is_open())
+        {
+            OXU_LOG_WARN("Could not open beatmap file {0} for parsing.", m_path);
+            return;
+        }
+
+        std::string line;
+        Section section = Section::INVALID;
+
+        while(std::getline(beatmap_file, line))
+        {
+            if(line[0] == '[')
+            {
+                section = get_section_enum_from_str(line);
+                continue;
+            }
+
+            if(section == Section::DIFFICULTY)
+            {
+                parse_and_set_difficulty_field(line, m_difficulty);
+            }
+        }
+
+        beatmap_file.close();
+
+        m_difficulty.approachRateMs = 
+        get_approach_rate_to_ms(m_difficulty.approachRate);
+
+        m_difficulty.circleSizePx = 
+        get_circle_size_to_px(m_difficulty.circleSize) * window::get_oxu_px();
+    }
+
+    void Beatmap::loadHitObjects()
+    {
+        std::ifstream beatmap_file(m_path);
+        if(!beatmap_file.is_open())
+        {
+            OXU_LOG_WARN("Could not open beatmap file {0} for parsing.", m_path);
+            return;
+        }
+
+        std::string line;
+        Section section = Section::INVALID;
+
+        PlayField p;
+
+        while(std::getline(beatmap_file, line))
+        {
+            if(line[0] == '[')
+            {
+                section = get_section_enum_from_str(line);
+                continue;
+            }
+
+            if(section == Section::OBJECTS)
+            {
+                parse_and_set_hit_object(
+                    line, 
+                    m_hit_objs,
+                    p,
+                    m_difficulty
+                );
+            }
+        }
+
+        beatmap_file.close();
+    }
+
+    void Beatmap::loadAllSections()
+    {
+        loadGeneralSection();
+        loadEditorSection();
+        loadMetadataSection();
+        loadDifficultySection();
+        loadHitObjects();
     }
 }

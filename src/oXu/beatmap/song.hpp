@@ -2,8 +2,8 @@
 
 #include<string>
 #include<vector>
-
 #include<oXu/beatmap/beatmap.hpp>
+#include<oXu/core/window.hpp>
 
 namespace oxu
 {
@@ -12,12 +12,15 @@ namespace oxu
     {
     private:
         std::vector<Beatmap> m_beatmaps;
-
-    public:
         std::string m_path;
         std::string m_name;
+        const window::Window &mr_window;
 
-        Song(const std::string &path);
+    public:
+        Song(
+            const window::Window &window,
+            const std::string &path
+        );
 
         void enumerateBeatmaps();
 

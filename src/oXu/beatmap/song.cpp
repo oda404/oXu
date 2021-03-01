@@ -6,8 +6,13 @@
 
 namespace oxu
 {
-    Song::Song(const std::string &path):
-    m_path(path), m_name(path.substr(path.find_last_of('/') + 1, path.size() - 1))
+    Song::Song(
+        const window::Window &window,
+        const std::string &path
+    ):
+    m_path(path), 
+    m_name(path.substr(path.find_last_of('/') + 1, path.size() - 1)),
+    mr_window(window)
     {
         OXU_LOG_DEBUG("Found song {}", m_name);
         enumerateBeatmaps();

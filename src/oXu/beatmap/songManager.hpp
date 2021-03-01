@@ -3,6 +3,7 @@
 #include<vector>
 #include<string>
 #include<oXu/beatmap/song.hpp>
+#include<oXu/core/window.hpp>
 
 namespace oxu
 {
@@ -13,9 +14,13 @@ namespace oxu
         Song *m_currentSong = nullptr;
         Beatmap *m_currentBeatmap = nullptr;
         const std::string m_songs_dir_path;
+        const window::Window &mr_window;
 
     public:
-        SongManager(const std::string &config_dir_path);
+        SongManager(
+            const window::Window &window,
+            const std::string &config_dir_path
+        );
 
         void enumerateSongs();
 

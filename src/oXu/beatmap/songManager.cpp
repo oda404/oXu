@@ -5,10 +5,14 @@
 
 namespace oxu
 {
-    SongManager::SongManager(const std::string &config_dir_path):
+    SongManager::SongManager(
+        const window::Window &window,
+        const std::string &config_dir_path
+    ):
     m_songs_dir_path(
         std::filesystem::path(config_dir_path) / "songs"
-    )
+    ),
+    mr_window(window)
     {
 
     }
@@ -23,7 +27,7 @@ namespace oxu
         {
             if(fs::is_directory(entry))
             {
-                m_songs.emplace_back(entry.path());
+                m_songs.emplace_back(mr_window, entry.path());
             }
         }
 

@@ -17,19 +17,86 @@
 
 namespace oxu
 {
-    void parseAndSetGeneral(const std::string &line, General &general);
+    enum class Section
+    {
+        GENERAL    = 0,
+        EDITOR     = 1,
+        METADATA   = 2,
+        DIFFICULTY = 3,
+        EVENTS     = 4,
+        TIMING     = 5,
+        COLORS     = 6,
+        OBJECTS    = 7,
+        INVALID    = 255
+    };
 
-    void parseAndSetEditor(const std::string &line, Editor &editor);
+    enum class FieldStatus
+    {
+        /* field was parsed and set correctly */
+        OK = 1,
+        /* the field's name was invalid and not set */
+        INVALID_NAME = 2,
+        /* the field's value was invalid and not set */
+        INVALID_VALUE = 3,
+        /* the field was ignored. e.g. empty string */
+        IGNORED = 4
+    };
 
-    void parseAndSetMetadata(const std::string &line, Metadata &metadata);
+    template<typename T>
+    struct FieldParseStatus
+    {
+        FieldParseStatus(T field_enum, FieldStatus status):
+        field_enum(field_enum), status(status) {  }
 
-    void parseAndSetDifficulty(const std::string &line, Difficulty &diffictulty);
+        T field_enum;
+        FieldStatus status;
+    };
 
-    void parseAndSetEvents(const std::string &line, Events &events);
+    Section get_section_enum_from_str(std::string str);
 
-    void parseAndAddTimingPoint(const std::string &line, std::vector<TimingPoint> &timingPoints);
+    FieldParseStatus<GeneralField> 
+    parse_and_set_general_field(
+        const std::string &field, 
+        General &general
+    );
 
-    void parseAndSetColors(const std::string &line, std::vector<Color> &colors);
+    FieldParseStatus<EditorField> 
+    parse_and_set_editor_field(
+        const std::string &field, 
+        Editor &editor
+    );
 
-    void parseAndAddHitObject(const std::string &line, std::vector<std::unique_ptr<HitObject>> &hitObjects, const PlayField &playField, const Difficulty &difficulty);
+    FieldParseStatus<MetadataField> 
+    parse_and_set_metadata_field(
+        const std::string &field, 
+        Metadata &metadata
+    );
+
+    FieldParseStatus<DifficultyField> 
+    parse_and_set_difficulty_field(
+        const std::string &field, 
+        Difficulty &diffictulty
+    );
+
+    void parse_and_set_event(
+        const std::string &field, 
+        Events &events
+    );
+
+    void parse_and_set_timing_point(
+        const std::string &field, 
+        std::vector<TimingPoint> &timingPoints
+    );
+
+    void parse_and_set_color(
+        const std::string &field, 
+        std::vector<Color> &colors
+    );
+
+    void parse_and_set_hit_object(
+        const std::string &field, 
+        std::vector<std::unique_ptr<HitObject>> &hitObjects, 
+        const PlayField &playField, 
+        const Difficulty &difficulty
+    );
 }

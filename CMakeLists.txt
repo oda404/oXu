@@ -76,7 +76,6 @@ set(OXU_HEADERS
     ${OXU_SRC_DIR}/beatmap/components/playField.hpp
 
     #beatmap/sections/
-    ${OXU_SRC_DIR}/beatmap/sections/config.hpp
     ${OXU_SRC_DIR}/beatmap/sections/color.hpp
     ${OXU_SRC_DIR}/beatmap/sections/difficulty.hpp
     ${OXU_SRC_DIR}/beatmap/sections/editor.hpp
@@ -149,9 +148,6 @@ set(OXU_SRC
     ${OXU_SRC_DIR}/beatmap/components/approachCircle.cpp
     ${OXU_SRC_DIR}/beatmap/components/slider.cpp
     ${OXU_SRC_DIR}/beatmap/components/playField.cpp
-
-    #beatmap/sections
-    ${OXU_SRC_DIR}/beatmap/sections/config.cpp
 
     #skin/
     ${OXU_SRC_DIR}/skin/skin.cpp

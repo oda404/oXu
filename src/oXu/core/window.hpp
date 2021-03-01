@@ -6,6 +6,11 @@
 
 namespace oxu::window
 {
+    struct Window
+    {
+
+    };
+    
     Vector2<std::uint16_t> get_window_size();
     float get_oxu_px();
     /* Resizes the target_window and also recalculates oxu_px. */

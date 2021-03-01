@@ -75,6 +75,8 @@ namespace oxu
             return false;
         }
 
+        window::Window window;
+
         SDL_Window *p_game_window = nullptr;
 
         p_game_window = SDL_CreateWindow(
@@ -92,14 +94,13 @@ namespace oxu
 
         window::set_window_size(p_game_window, config.screenSize);
 
-        SongManager song_manager(config.configDirPath);
+        SongManager song_manager(window, config.configDirPath);
         song_manager.enumerateSongs();
         song_manager.setCurrentSong(0);
 		song_manager.setCurrentBeatmap(0);
 		if(song_manager.getCurrentBeatmap())
 		{
-			song_manager.getCurrentBeatmap()->loadGenericInfo();
-			song_manager.getCurrentBeatmap()->loadGameInfo();
+			song_manager.getCurrentBeatmap()->loadAllSections();
 		}
 
         SkinManager skin_manager(config.configDirPath);
