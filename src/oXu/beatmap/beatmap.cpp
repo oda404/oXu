@@ -40,8 +40,8 @@ namespace oxu
     void Beatmap::updateObjects(const double &delta)
     {
         const std::uint32_t ellapsedMs = m_timer.getEllapsedMs();
-
-        c_beatmap_mtx.lock();
+        
+        std::lock_guard<std::mutex> guard(c_beatmap_mtx);
         while(m_hit_objs[m_current_obj_i]->shouldBeAddedToPool(ellapsedMs))
         {
             m_active_hit_objs.push_back(m_hit_objs[m_current_obj_i].get());
@@ -60,18 +60,16 @@ namespace oxu
         {
             ho->update(delta, m_difficulty);
         }
-        c_beatmap_mtx.unlock();
     }
 
     void Beatmap::renderObjects(const Skin &skin)
     {
-        c_beatmap_mtx.lock();
+        std::lock_guard<std::mutex> guard(c_beatmap_mtx);
         std::uint32_t i = m_active_hit_objs.size(); 
         for(; i > 0; --i)
         {
             m_active_hit_objs[i - 1]->render(skin);
         }
-        c_beatmap_mtx.unlock();
     }
 
     void Beatmap::loadGeneralSection()
