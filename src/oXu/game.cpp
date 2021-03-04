@@ -26,9 +26,10 @@ namespace oxu
             p_current_beatmap->start();
         }
 
+        this_thread_p.start();
         while(window_open)
         {
-            this_thread_p.limitFPS();
+            this_thread_p.capFPS();
 
             if(p_current_beatmap)
             {
@@ -107,9 +108,6 @@ namespace oxu
         skin_manager.enumerateSkins();
         skin_manager.setCurrentSkin(0);
 
-        Thread this_thread;
-        this_thread.setMaxFPS(1000);
-
         graphics::handler::init(
             p_game_window, 
             &song_manager, 
@@ -117,6 +115,9 @@ namespace oxu
             config.configDirPath
         );
         AudioHandler::init();
+
+        Thread this_thread;
+        this_thread.setMaxFPS(1000);
 
         game_loop(song_manager, skin_manager, this_thread);
 

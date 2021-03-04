@@ -11,7 +11,7 @@ namespace oxu::AudioHandler
         Request l_request;
         while(true)
         {
-            c_selfThread.limitFPS();
+            c_selfThread.capFPS();
 
             while(c_selfThread.pipeline.pollRequest(l_request))
             {

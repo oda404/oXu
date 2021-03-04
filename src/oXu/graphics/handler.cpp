@@ -24,7 +24,7 @@ namespace oxu::graphics::handler
 
         while(true)
         {
-            c_this_thread.limitFPS();
+            c_this_thread.capFPS();
             
             while(c_this_thread.pipeline.pollRequest(request))
             {

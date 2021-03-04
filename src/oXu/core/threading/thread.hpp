@@ -2,26 +2,31 @@
 
 #include<cstdint>
 #include<thread>
+#include<chrono>
 #include<atomic>
 #include<functional>
-
 #include<oXu/core/threading/pipeline/pipeline.hpp>
-#include<oXu/utils/timer.hpp>
 
 namespace oxu
 {
+    using sys_clock = std::chrono::system_clock;
+    using sys_clock_time_point = std::chrono::system_clock::time_point;
+    using milliseconds = std::chrono::milliseconds;
+
     struct Thread
     {
     private:
         std::thread m_thread;
-        double m_startTick = 0.0;
-        double m_lastTick = 0.0;
         double m_delta = 0.0;
-        uint16_t m_maxFPS = 0;
-        std::atomic<uint16_t> m_FPS = 0;
-        Timer m_timer;
+        std::uint16_t m_max_fps = 0;
+        std::uint16_t m_max_fps_ratio = 0;
+        std::uint16_t m_current_fps = 0;
+        
+        sys_clock_time_point m_next_frame;
+        sys_clock_time_point m_last_frame;
 
         void calculateDelta();
+        void calculateFPS();
 
     public:
         Pipeline pipeline;
@@ -30,9 +35,12 @@ namespace oxu
         void start(std::function<void()> entryPoint);
         void start();
         void join();
-        void limitFPS();
+        /* cap the fps to whatever was set with setMaxFPS */
+        void capFPS();
         void setMaxFPS(const uint16_t &maxFPS);
-        const double &getDelta();
-        uint32_t getRunningTimeMs();
+        const double &getDelta() const;
+        const std::uint16_t &getCurrentFPS() const;
+        /* returns the std::thread */
+        const std::thread &getThread() const;
     };
 }
