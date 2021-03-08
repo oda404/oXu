@@ -3,20 +3,15 @@
 namespace oxu
 {
     Slider::Slider(
-        const Vector2<float> &position_p,
-        const std::uint32_t &hitTime_p,
-        const std::uint8_t &type_p,
-        const std::vector<Vector2<float>> &controlPoints_p,
-        const char &sType_p,
-        const int &repeats_p,
-        const double &expectedLength_p,
+        const ObjectInfo &obj_info_p,
+        const SliderInfo &slider_info_p,
         const Difficulty &difficulty_p
-    ) : HitCircle(position_p, hitTime_p, type_p, difficulty_p)
+    ) : HitCircle(obj_info_p, difficulty_p)
     {
-        controlPoints = controlPoints_p;
-        sType = sType_p;
-        repeats = repeats_p;
-        expectedLength = expectedLength_p;
+        m_curve_points = slider_info_p.curve_points;
+        m_curve_type = slider_info_p.curve_type;
+        m_slides = slider_info_p.slides;
+        m_length = slider_info_p.length;
     }
 
     void Slider::update(const double &delta, const Difficulty &difficulty)
@@ -29,22 +24,17 @@ namespace oxu
 
     }
 
-    void Slider::setErrorMargin(const long double &err, const std::uint32_t &approachRateMs)
+    void Slider::setErrorMargin(const long double &err, const Difficulty &difficulty_p)
     {
-        mx_approachCircle.lerpT = (err - mx_spawnTime) / approachRateMs;
+        mxp_approach_circle->m_lerp_t = (err - (mx_hit_time_ms - difficulty_p.approachRateMs)) / difficulty_p.approachRateMs;
     }
 
-    bool Slider::shouldBeAddedToPool(const std::uint32_t &mapTimeMs)
+    bool Slider::shouldAddToPool(const std::uint32_t &map_time_ms, const std::uint16_t &approach_rate_ms) const
     {
-        if(mapTimeMs >= mx_spawnTime)
-        {
-            return true;
-        }
-
-        return false;
+        return map_time_ms >= (mx_hit_time_ms - approach_rate_ms);
     }
 
-    bool Slider::shouldBeRemovedFromPool()
+    bool Slider::shouldRemoveFromPool() const
     {
         return true;
     }

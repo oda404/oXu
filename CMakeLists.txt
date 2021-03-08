@@ -71,7 +71,6 @@ set(OXU_HEADERS
     #beatmap/components/
     ${OXU_SRC_DIR}/beatmap/components/hitObject.hpp
     ${OXU_SRC_DIR}/beatmap/components/hitCircle.hpp
-    ${OXU_SRC_DIR}/beatmap/components/approachCircle.hpp
     ${OXU_SRC_DIR}/beatmap/components/slider.hpp
     ${OXU_SRC_DIR}/beatmap/components/playField.hpp
 
@@ -145,7 +144,6 @@ set(OXU_SRC
     #beatmap/components/
     ${OXU_SRC_DIR}/beatmap/components/hitObject.cpp
     ${OXU_SRC_DIR}/beatmap/components/hitCircle.cpp
-    ${OXU_SRC_DIR}/beatmap/components/approachCircle.cpp
     ${OXU_SRC_DIR}/beatmap/components/slider.cpp
     ${OXU_SRC_DIR}/beatmap/components/playField.cpp
 

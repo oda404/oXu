@@ -13,16 +13,14 @@ namespace oxu
     {   
     public:
         HitCircle(
-            const Vector2<float> &position_p,
-            const std::uint32_t &hitTime_p,
-            const std::uint8_t &type_p,
-            const Difficulty &difficulty_p
+            const ObjectInfo &obj_info,
+            const Difficulty &difficulty
         );
 
         void update(const double &delta, const Difficulty &difficulty) override;
         void render(const Skin &skin) override;
-        void setErrorMargin(const long double &err, const std::uint32_t &approachRateMs) override;
-        bool shouldBeAddedToPool(const std::uint32_t &mapTimeMs) override;
-        bool shouldBeRemovedFromPool() override;
+        void setErrorMargin(const long double &err, const Difficulty &difficulty) override;
+        bool shouldAddToPool(const std::uint32_t &map_time_ms, const std::uint16_t &approach_rate_ms) const override;
+        bool shouldRemoveFromPool() const override;
     };
 }

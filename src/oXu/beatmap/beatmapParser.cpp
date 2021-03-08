@@ -562,103 +562,106 @@ namespace oxu
         OXU_LOG_WARN("Ignoring invalid hit object \'{0}\'", obj);
     }
 
-#define OBJ_X 0
-#define OBJ_Y 1
-#define OBJ_HIT_TIME 2
-#define OBJ_TYPE 3
+#define OBJ_X         0
+#define OBJ_Y         1
+#define OBJ_TIME      2
+#define OBJ_TYPE      3
 #define OBJ_HIT_SOUND 4
-#define OBJ_PARAMS 5
-#define SLIDER_REPEATS 6
-#define SLIDER_EXPECTED_LEN 7
+#define OBJ_PARAMS    5
+#define SLD_REPEATS   6
+#define SLD_LENGTH    7
+
+#define MIN_EXPECTED_CIRCLE_TOKS 6
+#define MIN_EXPECTED_SLD_TOKS 7
 
     void parse_and_set_hit_object(
         const std::string &line, 
-        std::vector<std::unique_ptr<HitObject>> &hitObjects, 
+        std::vector<std::unique_ptr<HitObject>> &hit_objects_p, 
         const PlayField &playField, 
         const Difficulty &difficulty
     )
     {
-        const std::vector<std::string> objInfo = split_str(line, ',');
-
-        if(objInfo.size() < 6)
+        const std::vector<std::string> obj_tokens = split_str(line, ',');
+        if(obj_tokens.size() < MIN_EXPECTED_CIRCLE_TOKS)
         {
             warn_invalid_object(line);
             return;
         }
 
-        Vector2<float> position;
-        if(!cast_str_and_set<float>(objInfo[OBJ_X], position.x) || !cast_str_and_set<float>(objInfo[OBJ_Y], position.y))
-        {
-            warn_invalid_object(line);
-            return;
-        }
+        ObjectInfo obj_info;
 
-        std::uint32_t hitTime;
-        std::uint8_t type;
-        if(!cast_str_and_set<uint32_t>(objInfo[OBJ_HIT_TIME], hitTime) || !cast_str_and_set<uint8_t>(objInfo[OBJ_TYPE], type))
+        if(
+            !cast_str_and_set<float>(obj_tokens[OBJ_X], obj_info.position.x)      || 
+            !cast_str_and_set<float>(obj_tokens[OBJ_Y], obj_info.position.y)      ||
+            !cast_str_and_set<std::uint32_t>(obj_tokens[OBJ_TIME], obj_info.time) ||
+            !cast_str_and_set<std::uint8_t>(obj_tokens[OBJ_TYPE], obj_info.type)
+        )
         {
             warn_invalid_object(line);
             return;
         }
 
         /* scale the position */
-        position = playField.getStartPoint() + position * window::get_oxu_px();
+        obj_info.position = 
+        playField.getStartPoint() + obj_info.position * window::get_oxu_px();
 
-        const ObjectType parse_obj_type = parse_hit_obj_type(type);
+        const ObjectType parsed_obj_type = parse_hit_obj_type(obj_info.type);
 
-        switch(parse_obj_type)
+        switch(parsed_obj_type)
         {
         case ObjectType::CIRCLE:
-            hitObjects.emplace_back(std::make_unique<HitCircle>(
-                position, 
-                hitTime, 
-                type, 
+            hit_objects_p.emplace_back(std::make_unique<HitCircle>(
+                obj_info,
                 difficulty
             ));
             break;
 
         case ObjectType::SLIDER:
             {
-                std::string objParams = objInfo[OBJ_PARAMS];
-                char sType;
-
-                // Linear Bezier PerfectCircle
-                if(!strchr("LBP", objParams[0]))
+                if(obj_tokens.size() < MIN_EXPECTED_SLD_TOKS)
                 {
                     warn_invalid_object(line);
                     return;
                 }
 
-                sType = objParams[0];
+                SliderInfo slider_info;
 
-                int repeats;
-                double expectedLength;
+                /* set curve type */
+                if(obj_tokens[OBJ_PARAMS].length() < 5) /* min can be ?|X:Y */
+                {
+                    warn_invalid_object(line);
+                    return;
+                }
+
+                switch(obj_tokens[OBJ_PARAMS][0])
+                {
+                case 'P': /* perfect circle */ 
+                    slider_info.curve_type = SliderCurveType::CIRCLE;
+                    break;
+                case 'B': /* bezier */
+                    slider_info.curve_type = SliderCurveType::BEZIER;
+                    break;
+                case 'L': /* linear */
+                    slider_info.curve_type = SliderCurveType::LINEAR;
+                    break;
+                default:
+                    warn_invalid_object(line);
+                    return;
+                }
 
                 if(
-                    !cast_str_and_set<int>(objInfo[SLIDER_REPEATS], repeats) || 
-                    !cast_str_and_set<double>(objInfo[SLIDER_EXPECTED_LEN], expectedLength)
-                  )
+                    !parse_and_set_control_points(obj_tokens[OBJ_PARAMS], slider_info.curve_points) ||
+                    !cast_str_and_set<std::uint16_t>(obj_tokens[SLD_REPEATS], slider_info.slides)   ||
+                    !cast_str_and_set<double>(obj_tokens[SLD_LENGTH], slider_info.length)
+                )
                 {
                     warn_invalid_object(line);
                     return;
                 }
 
-                std::vector<Vector2<float>> controlPoints;
-
-                if(!parse_and_set_control_points(objParams, controlPoints))
-                {
-                    warn_invalid_object(line);
-                    return;
-                }
-
-                hitObjects.emplace_back(std::make_unique<Slider>(
-                    position,
-                    hitTime,
-                    type,
-                    controlPoints,
-                    sType,
-                    repeats,
-                    expectedLength,
+                hit_objects_p.emplace_back(std::make_unique<Slider>(
+                    obj_info,
+                    slider_info,
                     difficulty
                 ));
             }
