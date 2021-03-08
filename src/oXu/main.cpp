@@ -110,7 +110,7 @@ int main(int argc, char **argv)
 	}
 
 	oxu::Config config;
-	char *tmp;
+	char *tmp = nullptr;
 
 	if(args_out_str("config-dir-path", &tmp, &args) == ARG_OK)
 		config.configDirPath = tmp;
