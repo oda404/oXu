@@ -2,33 +2,44 @@
 
 #include<oXu/graphics/opengl/core.hpp>
 
-#include<oXu/graphics/utils/png.hpp>
-
 namespace oxu::graphics::opengl
 {
     Texture::Texture(const std::string &path)
     {
-        image.load(path.c_str());
-        oxu_glCall_Assert(glGenTextures(1, &m_id));
+        m_png.load(path.c_str());
+        glGenTextures(1, &m_id);
 
         bind(0);
-            oxu_glCall_Assert(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-            oxu_glCall_Assert(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-            oxu_glCall_Assert(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-            oxu_glCall_Assert(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
-
-            oxu_glCall_Assert(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, image.getWidth(), image.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, &image.getBuffer()[0]));
+        GL_CALL_ASSERT(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+        GL_CALL_ASSERT(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+        GL_CALL_ASSERT(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+        GL_CALL_ASSERT(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+        GL_CALL_ASSERT(
+            glTexImage2D(
+                GL_TEXTURE_2D, 
+                0, 
+                GL_RGBA8, 
+                m_png.getWidth(), 
+                m_png.getHeight(), 
+                0, 
+                GL_RGBA, 
+                GL_UNSIGNED_BYTE, 
+                m_png.getBuffer()
+            )
+        );
         unbind();
 
         m_vao.bind();
-            m_vao.setVertexBuffer<float>(NULL, 16);
 
-            VertexLayout vertexLayout;
-            /* position */
-            vertexLayout.pushElement<float>(2);
-            /* tex coords */
-            vertexLayout.pushElement<float>(2);
-            m_vao.setVertexLayout(vertexLayout);
+        m_vao.setVertexBuffer<float>(NULL, 16);
+
+        VertexLayout vertexLayout;
+        /* position */
+        vertexLayout.pushElement<float>(2);
+        /* tex coords */
+        vertexLayout.pushElement<float>(2);
+        m_vao.setVertexLayout(vertexLayout);
+
         m_vao.unbind();
     }
 
@@ -39,8 +50,8 @@ namespace oxu::graphics::opengl
 
     void Texture::bind(const unsigned int slot) const
     {
-        oxu_glCall_Assert(glActiveTexture(GL_TEXTURE0 + slot));
-        oxu_glCall_Assert(glBindTexture(GL_TEXTURE_2D, m_id));
+        GL_CALL_ASSERT(glActiveTexture(GL_TEXTURE0 + slot));
+        glBindTexture(GL_TEXTURE_2D, m_id);
     }
 
     void Texture::unbind() const
@@ -48,14 +59,14 @@ namespace oxu::graphics::opengl
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
-    uint32_t Texture::getWidth() const
+    std::uint32_t Texture::getWidth() const
     {
-        return image.getWidth();
+        return m_png.getWidth();
     }
 
-    uint32_t Texture::getHeight() const
+    std::uint32_t Texture::getHeight() const
     {
-        return image.getHeight();
+        return m_png.getHeight();
     }
 
     const VertexArrayObject &Texture::getVao() const

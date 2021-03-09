@@ -2,10 +2,17 @@
 
 #include<vector>
 
-#include<oXu/graphics/opengl/vertexLayoutElement.hpp>
-
 namespace oxu::graphics::opengl
 {
+    struct VertexLayoutElement
+    {
+    public:
+        const unsigned int type;
+        const unsigned int count;
+
+        VertexLayoutElement(const unsigned int &type, const unsigned int &count);
+    };
+
     class VertexLayout
     {
     private:

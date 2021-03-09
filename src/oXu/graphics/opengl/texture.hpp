@@ -3,7 +3,6 @@
 #include<oXu/graphics/opengl/vertexArrayObject.hpp>
 #include<oXu/graphics/utils/png.hpp>
 #include<string>
-#include<vector>
 
 namespace oxu::graphics::opengl
 {
@@ -12,7 +11,7 @@ namespace oxu::graphics::opengl
     private:
         VertexArrayObject m_vao;
         unsigned int m_id;
-        Png image;
+        Png m_png;
 
     public:
         Texture(const std::string &path);

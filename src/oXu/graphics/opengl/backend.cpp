@@ -53,11 +53,11 @@ namespace oxu::graphics::opengl
             return false;
         }
 
-        OXU_LOG_DEBUG("Using OpenGL {}.{}", GLVersion.major, GLVersion.minor);
+        OXU_LOG_DEBUG("[OpenGL] Version: {}.{}", GLVersion.major, GLVersion.minor);
 
-        oxu_glCall_Assert(glEnable(GL_BLEND));
-        oxu_glCall_Assert(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-        oxu_glCall_Assert(glClearColor(0.f, 0.f, 0.f, 1.0f));
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glClearColor(0.f, 0.f, 0.f, 1.0f);
 
         namespace stdfs = std::filesystem;
 

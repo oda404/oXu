@@ -4,15 +4,26 @@
 
 #include<oXu/core/logger.hpp>
 
-#define oxu_glCall_Log(x) glClearErrors();\
-    x;\
-    { unsigned int glErr;\
-    if( glHasError(glErr) ) OXU_LOG_ERR_EXT("OpenGL error [{}]!", glErr); } 
+#define GL_CALL_LOG(func)\
+glClearErrors();\
+func;\
+{\
+unsigned int err;\
+if(glHasError(err)) {\
+    OXU_LOG_ERR_EXT("[OpenGL] Error: {}", err);\
+}\
+}
 
-#define oxu_glCall_Assert(x) glClearErrors();\
-    x;\
-    { unsigned int glErr;\
-    if( glHasError(glErr) ) { OXU_LOG_ERR_EXT("OpenGL error [{}]!", glErr); abort(); } } 
+#define GL_CALL_ASSERT(func)\
+glClearErrors();\
+func;\
+{\
+unsigned int err;\
+if(glHasError(err)) {\
+    OXU_LOG_ERR_EXT("[OpenGL] Error: {}", err);\
+    abort();\
+}\
+}
 
 namespace oxu::graphics::opengl
 {

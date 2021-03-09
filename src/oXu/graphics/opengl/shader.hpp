@@ -20,7 +20,7 @@ namespace oxu::graphics::opengl
         unsigned int m_id;
         ShadersInfo m_shadersInfo;
 
-        void createAndLinkProgram();
+        int createAndLinkProgram();
 
     public:
         Shader(const std::string &path);

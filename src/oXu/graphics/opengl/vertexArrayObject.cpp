@@ -1,11 +1,10 @@
 #include"vertexArrayObject.hpp"
 
 #include<oXu/graphics/opengl/core.hpp>
-#include<oXu/core/logger.hpp>
 
 namespace oxu::graphics::opengl
 {
-    static unsigned int getGlTypeSize(unsigned int type)
+    static unsigned int get_sizeof_gl_type(unsigned int type)
     {
         switch(type)
         {
@@ -13,14 +12,14 @@ namespace oxu::graphics::opengl
             return sizeof(float);
         case GL_INT:
             return sizeof(int);
+        default:
+            return 0;
         }
-
-        return 0;
     }
 
     VertexArrayObject::VertexArrayObject()
     {
-        oxu_glCall_Assert(glGenVertexArrays(1, &m_id));
+        glGenVertexArrays(1, &m_id);
     }
 
     VertexArrayObject::~VertexArrayObject()
@@ -50,10 +49,10 @@ namespace oxu::graphics::opengl
         {
             const VertexLayoutElement &element = vertexLayout.getElements()[i];
             
-            oxu_glCall_Assert(glEnableVertexAttribArray(i));
-            oxu_glCall_Assert(glVertexAttribPointer(i, element.count, element.type, false, vertexLayout.getStride(), (const void*)pointer));
+            GL_CALL_ASSERT(glEnableVertexAttribArray(i));
+            GL_CALL_ASSERT(glVertexAttribPointer(i, element.count, element.type, false, vertexLayout.getStride(), (const void*)pointer));
 
-            pointer += element.count * getGlTypeSize(element.type);
+            pointer += element.count * get_sizeof_gl_type(element.type);
         }
 
         m_vertexBuffer->unbind();
@@ -61,7 +60,7 @@ namespace oxu::graphics::opengl
 
     void VertexArrayObject::bind() const
     {
-        oxu_glCall_Assert(glBindVertexArray(m_id));
+        glBindVertexArray(m_id);
     }
 
     void VertexArrayObject::unbind() const

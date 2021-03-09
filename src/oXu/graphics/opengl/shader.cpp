@@ -18,14 +18,14 @@ namespace oxu::graphics::opengl
         FRAGMENT = 1,
     };
 
-    static void parseShaders(const std::string &path, ShadersInfo &sInfo)
+    static int parse_shaders(const std::string &path, ShadersInfo &sInfo)
     {
         FILE *file = fopen(path.c_str(), "r");
 
         if(!file)
         {
-            OXU_LOG_WARN("Can't open shader file {}", path);
-            return;
+            OXU_LOG_WARN("[OpenGL] Couldn't open shader: {}", path);
+            return 1;
         }
 
         char buff[FILE_BUFF_MAX_SIZE];
@@ -55,48 +55,71 @@ namespace oxu::graphics::opengl
 
         sInfo.vertexSource = ss[ShaderTypes::VERTEX].str();
         sInfo.fragmentSource = ss[ShaderTypes::FRAGMENT].str();
+
+        return 0;
     }
 
-    static unsigned int compileShader(unsigned int type, const std::string &source)
+    static unsigned int compile_shader(unsigned int type, const std::string &source)
     {
-        unsigned int shaderId = glCreateShader(type);
-        const char *cStrSource = source.c_str();
+        unsigned int shader_id;
+        GL_CALL_ASSERT(shader_id = glCreateShader(type));
 
-        glShaderSource(shaderId, 1, &cStrSource, NULL);
-        glCompileShader(shaderId);
+        const char *c_str_source = source.c_str();
 
-        int compileStatus = 0;
-        glGetShaderiv(shaderId, GL_COMPILE_STATUS, &compileStatus);
+        GL_CALL_ASSERT(glShaderSource(shader_id, 1, &c_str_source, nullptr));
+        GL_CALL_ASSERT(glCompileShader(shader_id));
 
-        if(!compileStatus)
+        int compile_status = 0;
+        GL_CALL_ASSERT(glGetShaderiv(shader_id, GL_COMPILE_STATUS, &compile_status));
+
+        if(!compile_status)
         {
-            int logSize = 0;
-            glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &logSize);
+            int log_buff_len = 0;
+            GL_CALL_ASSERT(glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &log_buff_len));
 
-            char *logMsgBuff = new char[logSize];
+            char *log_buff = new char[log_buff_len + 1];
 
-            glGetShaderInfoLog(shaderId, logSize, nullptr, logMsgBuff);
-            OXU_LOG_WARN(logMsgBuff);
+            GL_CALL_ASSERT(glGetShaderInfoLog(shader_id, log_buff_len, nullptr, log_buff));
+            OXU_LOG_WARN("[OpenGL] {}", log_buff);
 
-            delete[] logMsgBuff;
+            delete[] log_buff;
         }
 
-        return shaderId;
+        return shader_id;
     }
 
-    static int getUniformLocation(const unsigned int &m_id, const std::string &name)
+    static int get_uniform_location(const unsigned int &id, const std::string &name)
     {
         int loc = -1;
-        oxu_glCall_Log(loc = glGetUniformLocation(m_id, name.c_str()));
+        GL_CALL_LOG(loc = glGetUniformLocation(id, name.c_str()));
         return loc;
+    }
+
+    static void print_shader_info_log()
+    {
+
+    }
+
+    static void print_program_info_log(unsigned int &id)
+    {
+        int log_buff_len = 0;
+        GL_CALL_ASSERT(glGetProgramiv(id, GL_INFO_LOG_LENGTH, &log_buff_len));
+
+        char *log_buff = new char[log_buff_len + 1];
+
+        GL_CALL_ASSERT(glGetProgramInfoLog(id, log_buff_len, nullptr, log_buff));
+        OXU_LOG_WARN("[OpenGL] {}", log_buff);
+
+        delete[] log_buff;
     }
 
     Shader::Shader(const std::string &path)
     {
-        parseShaders(path, m_shadersInfo);
+        if(parse_shaders(path, m_shadersInfo) != 0)
+            return;
 
-        m_shadersInfo.vertexId = compileShader(GL_VERTEX_SHADER, m_shadersInfo.vertexSource);
-        m_shadersInfo.fragmentId = compileShader(GL_FRAGMENT_SHADER, m_shadersInfo.fragmentSource);
+        m_shadersInfo.vertexId = compile_shader(GL_VERTEX_SHADER, m_shadersInfo.vertexSource);
+        m_shadersInfo.fragmentId = compile_shader(GL_FRAGMENT_SHADER, m_shadersInfo.fragmentSource);
 
         createAndLinkProgram();
     }
@@ -106,75 +129,54 @@ namespace oxu::graphics::opengl
         deleteProgram();
     }
 
-    void Shader::createAndLinkProgram()
+    int Shader::createAndLinkProgram()
     {
-        oxu_glCall_Assert(m_id = glCreateProgram());
+        GL_CALL_ASSERT(m_id = glCreateProgram());
 
-        /* Attach shaders */
-        oxu_glCall_Log(glAttachShader(m_id, m_shadersInfo.vertexId));
-        oxu_glCall_Log(glAttachShader(m_id, m_shadersInfo.fragmentId));
+        GL_CALL_ASSERT(glAttachShader(m_id, m_shadersInfo.vertexId));
+        GL_CALL_ASSERT(glAttachShader(m_id, m_shadersInfo.fragmentId));
 
-        /* Link m_id */
-        oxu_glCall_Log(glLinkProgram(m_id));
+        GL_CALL_ASSERT(glLinkProgram(m_id));
 
-        /* Check m_id link status */
-        int linked = 0;
-        glGetProgramiv(m_id, GL_LINK_STATUS, &linked);
-        if(!linked)
+        int link_status = 0;
+        GL_CALL_ASSERT(glGetProgramiv(m_id, GL_LINK_STATUS, &link_status));
+
+        if(!link_status)
         {
             m_programValid = false;
-
-            int logSize = 0;
-            glGetProgramiv(m_id, GL_INFO_LOG_LENGTH, &logSize);
-
-            char *logMsgBuff = new char[logSize];
-
-            glGetProgramInfoLog(m_id, logSize, nullptr, logMsgBuff);
-            OXU_LOG_WARN(logMsgBuff);
-
+            print_program_info_log(m_id);
             deleteProgram();
-
-            delete[] logMsgBuff;
+            return 1;
         }
         
-        oxu_glCall_Log(glValidateProgram(m_id));
+        GL_CALL_ASSERT(glValidateProgram(m_id));
 
         /* Check m_id validity */
-        int valid = 0;
-        glGetProgramiv(m_id, GL_VALIDATE_STATUS, &valid);
-        if(!valid)
+        int validate_status = 0;
+        GL_CALL_ASSERT(glGetProgramiv(m_id, GL_VALIDATE_STATUS, &validate_status));
+        if(!validate_status)
         {
             m_programValid = false;
-
-            int logSize = 0;
-            glGetProgramiv(m_id, GL_INFO_LOG_LENGTH, &logSize);
-
-            char *logMsgBuff = new char[logSize];
-
-            glGetProgramInfoLog(m_id, logSize, nullptr, logMsgBuff);
-            OXU_LOG_WARN(logMsgBuff);
-
+            print_program_info_log(m_id);
             deleteProgram();
-
-            delete[] logMsgBuff;
+            return 2;
         }
 
-        if(linked && valid)
-        {
-            m_programValid = true;
-            glDetachShader(m_id, m_shadersInfo.vertexId);
-            glDetachShader(m_id, m_shadersInfo.fragmentId);
-        }
+        m_programValid = true;
+        glDetachShader(m_id, m_shadersInfo.vertexId);
+        glDetachShader(m_id, m_shadersInfo.fragmentId);
+
+        return 0;
     }
 
     void Shader::setUniform1i(const std::string &name, int v0)
     {
-        oxu_glCall_Log(glUniform1i(getUniformLocation(m_id, name), v0));
+        GL_CALL_ASSERT(glUniform1i(get_uniform_location(m_id, name), v0));
     }
 
     void Shader::setUniform1f(const std::string &name, float v0)
     {
-        oxu_glCall_Log(glUniform1f(getUniformLocation(m_id, name), v0));
+        GL_CALL_ASSERT(glUniform1f(get_uniform_location(m_id, name), v0));
     }
 
     const bool &Shader::isValid() const
@@ -184,7 +186,7 @@ namespace oxu::graphics::opengl
 
     void Shader::bind() const
     {
-        oxu_glCall_Assert(glUseProgram(m_id));
+        glUseProgram(m_id);
     }
 
     void Shader::unbind() const
@@ -194,8 +196,8 @@ namespace oxu::graphics::opengl
 
     void Shader::deleteProgram() const
     {
-        oxu_glCall_Assert(glDeleteShader(m_shadersInfo.vertexId));
-        oxu_glCall_Assert(glDeleteShader(m_shadersInfo.fragmentId));
-        oxu_glCall_Assert(glDeleteProgram(m_id));
+        GL_CALL_ASSERT(glDeleteShader(m_shadersInfo.vertexId));
+        GL_CALL_ASSERT(glDeleteShader(m_shadersInfo.fragmentId));
+        GL_CALL_ASSERT(glDeleteProgram(m_id));
     }
 }
