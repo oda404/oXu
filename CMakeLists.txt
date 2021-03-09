@@ -9,7 +9,24 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(OXU_SRC_DIR src/oXu)
 set(OXU_INCLUDE_DIR src)
 
-set(CMAKE_CXX_FLAGS "-O2 -Wall -Wextra")
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug)
+endif()
+
+# paranoia
+unset(CMAKE_CXX_FLAGS)
+unset(CMAKE_CXX_FLAGS_DEBUG)
+unset(CMAKE_CXX_FLAGS_RELEASE)
+
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+    set(CMAKE_CXX_FLAGS_DEBUG "-g")
+    add_definitions(-DOXU_DEBUG)
+elseif(CMAKE_BUILD_TYPE MATCHES Release)
+    set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+    add_definitions(-D_FORTIFY_SOURCE=2)
+endif()
+
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wformat-security -Wpedantic -fstack-protector-strong")
 
 add_subdirectory(vendor/glad)
 add_subdirectory(vendor/spdlog)
@@ -47,7 +64,6 @@ set(OXU_HEADERS
     ${OXU_SRC_DIR}/graphics/opengl/indexBuffer.hpp
     ${OXU_SRC_DIR}/graphics/opengl/vertexArrayObject.hpp
     ${OXU_SRC_DIR}/graphics/opengl/vertexLayout.hpp
-    ${OXU_SRC_DIR}/graphics/opengl/vertexLayoutElement.hpp
     ${OXU_SRC_DIR}/graphics/opengl/texture.hpp
 
     #audio/
@@ -121,7 +137,6 @@ set(OXU_SRC
     ${OXU_SRC_DIR}/graphics/opengl/indexBuffer.cpp
     ${OXU_SRC_DIR}/graphics/opengl/vertexArrayObject.cpp
     ${OXU_SRC_DIR}/graphics/opengl/vertexLayout.cpp
-    ${OXU_SRC_DIR}/graphics/opengl/vertexLayoutElement.cpp
     ${OXU_SRC_DIR}/graphics/opengl/texture.cpp
 
     #audio/
