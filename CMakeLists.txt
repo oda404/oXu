@@ -5,8 +5,8 @@ project(oxu)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SRC_DIR src/oXu)
-set(INCLUDE_DIR src)
+set(SRC_DIR src)
+set(INCLUDE_DIR include)
 
 set(CMAKE_CXX_FLAGS_RELEASE 
     "-O2 -DOXU_RELEASE"
@@ -29,76 +29,76 @@ add_subdirectory(vendor/spdlog)
 add_subdirectory(vendor/argx)
 
 set(OXU_HEADERS
-    ${SRC_DIR}/game.hpp
+    ${INCLUDE_DIR}/oxu/game.hpp
 
     #core/
-    ${SRC_DIR}/core/fs.hpp
-    ${SRC_DIR}/core/status.hpp
-    ${SRC_DIR}/core/logger.hpp
-    ${SRC_DIR}/core/window.hpp
+    ${INCLUDE_DIR}/oxu/core/fs.hpp
+    ${INCLUDE_DIR}/oxu/core/status.hpp
+    ${INCLUDE_DIR}/oxu/core/logger.hpp
+    ${INCLUDE_DIR}/oxu/core/window.hpp
 
     #core/threading/
-    ${SRC_DIR}/core/threading/thread.hpp
+    ${INCLUDE_DIR}/oxu/core/threading/thread.hpp
 
-    ${SRC_DIR}/core/threading/pipeline/request.hpp
-    ${SRC_DIR}/core/threading/pipeline/pipeline.hpp
+    ${INCLUDE_DIR}/oxu/core/threading/pipeline/request.hpp
+    ${INCLUDE_DIR}/oxu/core/threading/pipeline/pipeline.hpp
 
     #graphics/
-    ${SRC_DIR}/graphics/handler.hpp
-    ${SRC_DIR}/graphics/renderer.hpp
-    ${SRC_DIR}/graphics/texture.hpp
-    ${SRC_DIR}/graphics/genericBackend.hpp
+    ${INCLUDE_DIR}/oxu/graphics/handler.hpp
+    ${INCLUDE_DIR}/oxu/graphics/renderer.hpp
+    ${INCLUDE_DIR}/oxu/graphics/texture.hpp
+    ${INCLUDE_DIR}/oxu/graphics/genericBackend.hpp
 
     #graphics/utils/
-    ${SRC_DIR}/graphics/utils/png.hpp
+    ${INCLUDE_DIR}/oxu/graphics/utils/png.hpp
 
     #graphics/opengl/
-    ${SRC_DIR}/graphics/opengl/core.hpp
-    ${SRC_DIR}/graphics/opengl/backend.hpp
-    ${SRC_DIR}/graphics/opengl/shader.hpp
-    ${SRC_DIR}/graphics/opengl/vertexBuffer.hpp
-    ${SRC_DIR}/graphics/opengl/indexBuffer.hpp
-    ${SRC_DIR}/graphics/opengl/vertexArrayObject.hpp
-    ${SRC_DIR}/graphics/opengl/vertexLayout.hpp
-    ${SRC_DIR}/graphics/opengl/texture.hpp
+    ${INCLUDE_DIR}/oxu/graphics/opengl/core.hpp
+    ${INCLUDE_DIR}/oxu/graphics/opengl/backend.hpp
+    ${INCLUDE_DIR}/oxu/graphics/opengl/shader.hpp
+    ${INCLUDE_DIR}/oxu/graphics/opengl/vertexBuffer.hpp
+    ${INCLUDE_DIR}/oxu/graphics/opengl/indexBuffer.hpp
+    ${INCLUDE_DIR}/oxu/graphics/opengl/vertexArrayObject.hpp
+    ${INCLUDE_DIR}/oxu/graphics/opengl/vertexLayout.hpp
+    ${INCLUDE_DIR}/oxu/graphics/opengl/texture.hpp
 
     #audio/
-    ${SRC_DIR}/audio/handler.hpp
-    ${SRC_DIR}/audio/player.hpp
-    ${SRC_DIR}/audio/sound.hpp
+    ${INCLUDE_DIR}/oxu/audio/handler.hpp
+    ${INCLUDE_DIR}/oxu/audio/player.hpp
+    ${INCLUDE_DIR}/oxu/audio/sound.hpp
 
     #input/
-    ${SRC_DIR}/input/handler.hpp
+    ${INCLUDE_DIR}/oxu/input/handler.hpp
 
     #utils/
-    ${SRC_DIR}/utils/timer.hpp
-    ${SRC_DIR}/utils/vector2.hpp
+    ${INCLUDE_DIR}/oxu/utils/timer.hpp
+    ${INCLUDE_DIR}/oxu/utils/vector2.hpp
 
     #beatmap/
-    ${SRC_DIR}/beatmap/beatmap.hpp
-    ${SRC_DIR}/beatmap/beatmapParser.hpp
-    ${SRC_DIR}/beatmap/song.hpp
-    ${SRC_DIR}/beatmap/songManager.hpp
+    ${INCLUDE_DIR}/oxu/beatmap/beatmap.hpp
+    ${INCLUDE_DIR}/oxu/beatmap/beatmapParser.hpp
+    ${INCLUDE_DIR}/oxu/beatmap/song.hpp
+    ${INCLUDE_DIR}/oxu/beatmap/songManager.hpp
 
     #beatmap/components/
-    ${SRC_DIR}/beatmap/components/hitObject.hpp
-    ${SRC_DIR}/beatmap/components/hitCircle.hpp
-    ${SRC_DIR}/beatmap/components/slider.hpp
-    ${SRC_DIR}/beatmap/components/playField.hpp
+    ${INCLUDE_DIR}/oxu/beatmap/components/hitObject.hpp
+    ${INCLUDE_DIR}/oxu/beatmap/components/hitCircle.hpp
+    ${INCLUDE_DIR}/oxu/beatmap/components/slider.hpp
+    ${INCLUDE_DIR}/oxu/beatmap/components/playField.hpp
 
     #beatmap/sections/
-    ${SRC_DIR}/beatmap/sections/color.hpp
-    ${SRC_DIR}/beatmap/sections/difficulty.hpp
-    ${SRC_DIR}/beatmap/sections/editor.hpp
-    ${SRC_DIR}/beatmap/sections/events.hpp
-    ${SRC_DIR}/beatmap/sections/general.hpp
-    ${SRC_DIR}/beatmap/sections/metadata.hpp
-    ${SRC_DIR}/beatmap/sections/timingPoint.hpp
+    ${INCLUDE_DIR}/oxu/beatmap/sections/color.hpp
+    ${INCLUDE_DIR}/oxu/beatmap/sections/difficulty.hpp
+    ${INCLUDE_DIR}/oxu/beatmap/sections/editor.hpp
+    ${INCLUDE_DIR}/oxu/beatmap/sections/events.hpp
+    ${INCLUDE_DIR}/oxu/beatmap/sections/general.hpp
+    ${INCLUDE_DIR}/oxu/beatmap/sections/metadata.hpp
+    ${INCLUDE_DIR}/oxu/beatmap/sections/timingPoint.hpp
 
     #skin/
-    ${SRC_DIR}/skin/skin.hpp
-    ${SRC_DIR}/skin/skinManager.hpp
-    ${SRC_DIR}/skin/config.hpp
+    ${INCLUDE_DIR}/oxu/skin/skin.hpp
+    ${INCLUDE_DIR}/oxu/skin/skinManager.hpp
+    ${INCLUDE_DIR}/oxu/skin/config.hpp
 )
 
 set(OXU_SRC
