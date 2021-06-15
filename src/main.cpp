@@ -92,6 +92,10 @@ int main(int argc, char **argv)
 		config.screenSize = parse_window_size_arg(arg_str);
 		delete[] arg_str;
 	}
+	else
+	{
+		config.screenSize = DEFAULT_WINDOW_SIZE;
+	}
 
 	if(argx_arg_get_str_len("config-dir-path", &arg_len, &argx) == ARGX_GET_OK)
 	{
