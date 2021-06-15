@@ -30,7 +30,7 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wformat-security -Wpedantic -fstack-protecto
 
 add_subdirectory(vendor/glad)
 add_subdirectory(vendor/spdlog)
-add_subdirectory(vendor/argparser)
+add_subdirectory(vendor/argx)
 
 set(OXU_HEADERS
     ${OXU_SRC_DIR}/game.hpp
@@ -179,7 +179,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
     spdlog
-    argparser
+    argx
     glad
     png
     SDL2

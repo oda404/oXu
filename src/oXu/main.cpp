@@ -15,7 +15,7 @@ bruh moment #2
 #include<oXu/core/status.hpp>
 #include<oXu/core/logger.hpp>
 #include<oXu/utils/vector2.hpp>
-#include<argparser/argparser.h>
+#include<argx/argx.h>
 
 /*
 Variables prefixes:
@@ -33,99 +33,79 @@ static std::string get_user_name()
 	return std::string(buf);
 }
 
-static void print_help()
-{
-std::cout << "\n\
-Usage:\n\
-  oXu [options]\n\
-\n\
-Start oXu.\n\
-\n\
-Options:\n\
-  -h, --help                          Show this message and exit.\n\
-  -c, --config-dir-path <path>        Change the config dir path (beatmaps, skins, shaders). Default is /home/$USER/.config/oxu\n\
-  -w, --window-size <width>x<height>  Change the initial window size. Default is 800x600.\n\
-";
-}
-
-static bool is_number(const std::string &str)
-{
-	for(const char &c: str)
-	{
-		if(!isdigit(c))
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-static bool is_window_size_arg_valid(const std::string &arg)
-{
-	std::size_t split_i = arg.find("x");
-	if(split_i == std::string::npos)
-		return false;
-
-	if(
-		!is_number(arg.substr(0, split_i)) || 
-		!is_number(arg.substr(split_i + 1))
-	)
-		return false;
-
-	return true;
-}
+#define DEFAULT_CONFIG_DIR_PATH "/home/" + get_user_name() + "/.config/oxu"
+#define DEFAULT_WINDOW_SIZE oxu::Vector2<std::uint16_t>({ 800, 600 })
 
 static oxu::Vector2<std::uint16_t>
 parse_window_size_arg(const std::string &arg)
 {
 	std::size_t split_i = arg.find("x");
-	oxu::Vector2<std::uint16_t> out;
+	if(split_i == std::string::npos)
+		return DEFAULT_WINDOW_SIZE;
+	
+	oxu::Vector2<std::uint16_t> ret;
 
-	out.x = atoi(arg.substr(0, split_i).c_str());
-	out.y = atoi(arg.substr(split_i + 1).c_str());
+	const std::string x = arg.substr(0, split_i).c_str();
+	const std::string y = arg.substr(split_i + 1).c_str();
 
-	return out;
+	try
+	{
+		ret.x = std::stoul(x);		
+		ret.y = std::stoul(y);
+	}
+	catch(...)
+	{
+		return DEFAULT_WINDOW_SIZE;
+	}
+
+	return ret;
 }
 
-#define DEFAULT_CONFIG_DIR_PATH "/home/" + get_user_name() + "/.config/oxu"
-#define DEFAULT_WINDOW_SIZE oxu::Vector2<std::uint16_t>({ 800, 600 })
 
 int main(int argc, char **argv)
 {
-	Args args;
-	args_init(&args);
+	Argx argx;
+	argx_init(&argx);
 
-	args_add("help", "-h", "--help", true, &args);
-	args_add("config-dir-path", "-c", "--config-dir-path", false, &args);
-	args_add("window-size", "-w", "--window-size", false, &args);
+	argx_arg_add("help", "-h", "--help", "Show this message and exit.", true, &argx);
+	argx_arg_add("config-dir-path", "-c", "--config-dir-path", "Path to the oxu config directory.", false, &argx);
+	argx_arg_add("window-size", "-w", "--window-size", "Window size in the format of <width>x<height>.", false, &argx);
+	argx_help_msg_gen("Usage: oxu [options]", "Starts the oxu client.", &argx);
 
-	args_parse(argc, argv, &args);
+	argx_args_parse(argv, argc, &argx);
 
-	if(args_get_bool("help", &args))
+	if(argx_arg_present("help", &argx))
 	{
-		print_help();
-		args_free(&args);
+		std::cout << argx_help_msg_get(&argx);
+		argx_destroy(&argx);
 		return 0;
 	}
 
 	oxu::Config config;
-	char *tmp = nullptr;
+	size_t arg_len = 0;
+	char *arg_str = nullptr;
 
-	if(args_out_str("config-dir-path", &tmp, &args) == ARG_OK)
-		config.configDirPath = tmp;
+	if(argx_arg_get_str_len("window-size", &arg_len, &argx) == ARGX_GET_OK)
+	{
+		arg_str = new char[arg_len + 1];
+		argx_arg_get_str("window-size", arg_str, &argx);
+		config.screenSize = parse_window_size_arg(arg_str);
+		delete[] arg_str;
+	}
+
+	if(argx_arg_get_str_len("config-dir-path", &arg_len, &argx) == ARGX_GET_OK)
+	{
+		arg_str = new char[arg_len + 1];
+		argx_arg_get_str("config-dir-path", arg_str, &argx);
+		config.configDirPath = arg_str;
+		delete[] arg_str;
+	}
 	else
+	{
 		config.configDirPath = DEFAULT_CONFIG_DIR_PATH;
+	}
 
-	if(
-		args_out_str("window-size", &tmp, &args) == ARG_OK &&
-		is_window_size_arg_valid(tmp)
-	)
-		config.screenSize = parse_window_size_arg(tmp);
-	else
-		config.screenSize = DEFAULT_WINDOW_SIZE;
-
-	args_free(&args);
+	argx_destroy(&argx);
 
 	oxu::init(config);
 
