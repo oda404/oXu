@@ -1,18 +1,19 @@
 
 #include<filesystem>
 #include<oxu/beatmap/songManager.hpp>
-#include<oxu/core/logger.hpp>
+#include<oxu/framework/logger.hpp>
 
 namespace oxu
 {
+
+using namespace framework;
+
     SongManager::SongManager(
-        const window::Window &window,
         const std::string &config_dir_path
     ):
     m_songs_dir_path(
         std::filesystem::path(config_dir_path) / "songs"
-    ),
-    mr_window(window)
+    )
     {
 
     }
@@ -27,7 +28,7 @@ namespace oxu
         {
             if(fs::is_directory(entry))
             {
-                m_songs.emplace_back(mr_window, entry.path());
+                m_songs.emplace_back(entry.path());
             }
         }
 

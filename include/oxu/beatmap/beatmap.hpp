@@ -15,7 +15,7 @@
 #include<oxu/skin/skin.hpp>
 #include<oxu/beatmap/components/hitObject.hpp>
 
-#include<oxu/utils/timer.hpp>
+#include<oxu/framework/utils/timer.hpp>
 
 namespace oxu
 {
@@ -27,7 +27,7 @@ namespace oxu
         std::vector<std::unique_ptr<HitObject>> m_hit_objs;
         std::vector<HitObject*> m_active_hit_objs;
         std::uint32_t m_current_obj_i = 0;
-        Timer m_timer;
+        framework::Timer m_timer;
         General m_general;
         Editor m_editor;
         Metadata m_metadata;

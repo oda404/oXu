@@ -1,12 +1,15 @@
 
 #include<filesystem>
 #include<oxu/skin/skin.hpp>
-#include<oxu/core/logger.hpp>
+#include<oxu/framework/logger.hpp>
 #include<oxu/skin/config.hpp>
-#include<oxu/graphics/utils/png.hpp>
+#include<oxu/framework/graphics/png.hpp>
 
 namespace oxu
 {
+
+using namespace framework;
+
     Skin::Skin(const std::string &path_p):
     path(path_p), name(path_p.substr(path_p.find_last_of('/') + 1, path_p.size() - 1))
     {

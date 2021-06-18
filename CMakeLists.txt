@@ -9,7 +9,7 @@ set(SRC_DIR src)
 set(INCLUDE_DIR include)
 
 set(CMAKE_CXX_FLAGS_RELEASE 
-    "-O2 -DOXU_RELEASE"
+    "-O2 -D_FORTIFY_SOURCE=2 -DOXU_RELEASE"
 )
 set(CMAKE_CXX_FLAGS_DEBUG 
     "-g -DOXU_DEBUG"
@@ -21,7 +21,7 @@ set(CXX_WARNINGS
 
 set(CMAKE_CXX_FLAGS 
     "${CXX_WARNINGS} \
-    -D_FORTIFY_SOURCE=2 -fstack-protector-strong"
+    -fstack-protector-strong"
 )
 
 add_subdirectory(vendor/glad)
@@ -33,46 +33,44 @@ set(OXU_HEADERS
 
     #core/
     ${INCLUDE_DIR}/oxu/core/fs.hpp
-    ${INCLUDE_DIR}/oxu/core/status.hpp
-    ${INCLUDE_DIR}/oxu/core/logger.hpp
-    ${INCLUDE_DIR}/oxu/core/window.hpp
+
+    ${INCLUDE_DIR}/oxu/framework/framework.hpp
+    ${INCLUDE_DIR}/oxu/framework/status.hpp
+    ${INCLUDE_DIR}/oxu/framework/logger.hpp
+    ${INCLUDE_DIR}/oxu/framework/window.hpp
 
     #core/threading/
-    ${INCLUDE_DIR}/oxu/core/threading/thread.hpp
+    ${INCLUDE_DIR}/oxu/framework/threading/thread.hpp
 
-    ${INCLUDE_DIR}/oxu/core/threading/pipeline/request.hpp
-    ${INCLUDE_DIR}/oxu/core/threading/pipeline/pipeline.hpp
+    ${INCLUDE_DIR}/oxu/framework/threading/request.hpp
+    ${INCLUDE_DIR}/oxu/framework/threading/pipeline.hpp
 
     #graphics/
-    ${INCLUDE_DIR}/oxu/graphics/handler.hpp
-    ${INCLUDE_DIR}/oxu/graphics/renderer.hpp
-    ${INCLUDE_DIR}/oxu/graphics/texture.hpp
-    ${INCLUDE_DIR}/oxu/graphics/genericBackend.hpp
-
-    #graphics/utils/
-    ${INCLUDE_DIR}/oxu/graphics/utils/png.hpp
+    ${INCLUDE_DIR}/oxu/framework/graphics/handler.hpp
+    ${INCLUDE_DIR}/oxu/framework/graphics/renderer.hpp
+    ${INCLUDE_DIR}/oxu/framework/graphics/texture.hpp
+    ${INCLUDE_DIR}/oxu/framework/graphics/genericBackend.hpp
+    ${INCLUDE_DIR}/oxu/framework/graphics/png.hpp
 
     #graphics/opengl/
-    ${INCLUDE_DIR}/oxu/graphics/opengl/core.hpp
-    ${INCLUDE_DIR}/oxu/graphics/opengl/backend.hpp
-    ${INCLUDE_DIR}/oxu/graphics/opengl/shader.hpp
-    ${INCLUDE_DIR}/oxu/graphics/opengl/vertexBuffer.hpp
-    ${INCLUDE_DIR}/oxu/graphics/opengl/indexBuffer.hpp
-    ${INCLUDE_DIR}/oxu/graphics/opengl/vertexArrayObject.hpp
-    ${INCLUDE_DIR}/oxu/graphics/opengl/vertexLayout.hpp
-    ${INCLUDE_DIR}/oxu/graphics/opengl/texture.hpp
+    ${INCLUDE_DIR}/oxu/framework/graphics/opengl/core.hpp
+    ${INCLUDE_DIR}/oxu/framework/graphics/opengl/backend.hpp
+    ${INCLUDE_DIR}/oxu/framework/graphics/opengl/shader.hpp
+    ${INCLUDE_DIR}/oxu/framework/graphics/opengl/vertexBuffer.hpp
+    ${INCLUDE_DIR}/oxu/framework/graphics/opengl/indexBuffer.hpp
+    ${INCLUDE_DIR}/oxu/framework/graphics/opengl/vertexArrayObject.hpp
+    ${INCLUDE_DIR}/oxu/framework/graphics/opengl/vertexLayout.hpp
+    ${INCLUDE_DIR}/oxu/framework/graphics/opengl/texture.hpp
 
     #audio/
-    ${INCLUDE_DIR}/oxu/audio/handler.hpp
-    ${INCLUDE_DIR}/oxu/audio/player.hpp
-    ${INCLUDE_DIR}/oxu/audio/sound.hpp
+    ${INCLUDE_DIR}/oxu/framework/audio/handler.hpp
 
     #input/
     ${INCLUDE_DIR}/oxu/input/handler.hpp
 
     #utils/
-    ${INCLUDE_DIR}/oxu/utils/timer.hpp
-    ${INCLUDE_DIR}/oxu/utils/vector2.hpp
+    ${INCLUDE_DIR}/oxu/framework/utils/timer.hpp
+    ${INCLUDE_DIR}/oxu/framework/utils/vector2.hpp
 
     #beatmap/
     ${INCLUDE_DIR}/oxu/beatmap/beatmap.hpp
@@ -106,45 +104,42 @@ set(OXU_SRC
     ${SRC_DIR}/game.cpp
 
     #core/
-    ${SRC_DIR}/core/status.cpp
     ${SRC_DIR}/core/fs.cpp
-    ${SRC_DIR}/core/logger.cpp
-    ${SRC_DIR}/core/window.cpp
+    ${SRC_DIR}/framework/framework.cpp
+    ${SRC_DIR}/framework/status.cpp
+    ${SRC_DIR}/framework/logger.cpp
+    ${SRC_DIR}/framework/window.cpp
 
-    #core/threading/
-    ${SRC_DIR}/core/threading/thread.cpp
+    #framework/threading/
+    ${SRC_DIR}/framework/threading/thread.cpp
 
-    ${SRC_DIR}/core/threading/pipeline/request.cpp
-    ${SRC_DIR}/core/threading/pipeline/pipeline.cpp
+    ${SRC_DIR}/framework/threading/request.cpp
+    ${SRC_DIR}/framework/threading/pipeline.cpp
 
-    # graphics/
-    ${SRC_DIR}/graphics/handler.cpp
-    ${SRC_DIR}/graphics/renderer.cpp
-    ${SRC_DIR}/graphics/texture.cpp
+    # framework/graphics/
+    ${SRC_DIR}/framework/graphics/handler.cpp
+    ${SRC_DIR}/framework/graphics/renderer.cpp
+    ${SRC_DIR}/framework/graphics/texture.cpp
+    ${SRC_DIR}/framework/graphics/png.cpp
 
-    #graphics/utils/
-    ${SRC_DIR}/graphics/utils/png.cpp
+    #framework/graphics/opengl/
+    ${SRC_DIR}/framework/graphics/opengl/core.cpp
+    ${SRC_DIR}/framework/graphics/opengl/backend.cpp
+    ${SRC_DIR}/framework/graphics/opengl/shader.cpp
+    ${SRC_DIR}/framework/graphics/opengl/vertexBuffer.cpp
+    ${SRC_DIR}/framework/graphics/opengl/indexBuffer.cpp
+    ${SRC_DIR}/framework/graphics/opengl/vertexArrayObject.cpp
+    ${SRC_DIR}/framework/graphics/opengl/vertexLayout.cpp
+    ${SRC_DIR}/framework/graphics/opengl/texture.cpp
 
-    #graphics/opengl/
-    ${SRC_DIR}/graphics/opengl/core.cpp
-    ${SRC_DIR}/graphics/opengl/backend.cpp
-    ${SRC_DIR}/graphics/opengl/shader.cpp
-    ${SRC_DIR}/graphics/opengl/vertexBuffer.cpp
-    ${SRC_DIR}/graphics/opengl/indexBuffer.cpp
-    ${SRC_DIR}/graphics/opengl/vertexArrayObject.cpp
-    ${SRC_DIR}/graphics/opengl/vertexLayout.cpp
-    ${SRC_DIR}/graphics/opengl/texture.cpp
-
-    #audio/
-    ${SRC_DIR}/audio/handler.cpp
-    ${SRC_DIR}/audio/player.cpp
-    ${SRC_DIR}/audio/sound.cpp
+    #framework/audio/
+    ${SRC_DIR}/framework/audio/handler.cpp
 
     #input/
     ${SRC_DIR}/input/handler.cpp
 
-    #utils/
-    ${SRC_DIR}/utils/timer.cpp
+    #framework/utils/
+    ${SRC_DIR}/framework/utils/timer.cpp
 
     #beatmap/
     ${SRC_DIR}/beatmap/beatmap.cpp

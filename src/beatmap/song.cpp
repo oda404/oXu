@@ -1,17 +1,18 @@
 
 #include<filesystem>
 #include<oxu/beatmap/song.hpp>
-#include<oxu/core/logger.hpp>
+#include<oxu/framework/logger.hpp>
 
 namespace oxu
 {
+
+using namespace framework;
+
     Song::Song(
-        const window::Window &window,
         const std::string &path
     ):
     m_path(path), 
-    m_name(path.substr(path.find_last_of('/') + 1, path.size() - 1)),
-    mr_window(window)
+    m_name(path.substr(path.find_last_of('/') + 1, path.size() - 1))
     {
         OXU_LOG_DEBUG("Found song {}", m_name);
         enumerateBeatmaps();

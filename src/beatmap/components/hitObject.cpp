@@ -3,6 +3,9 @@
 
 namespace oxu
 {
+
+using namespace framework;
+
     ApproachCircle::ApproachCircle(const Vector2<float> &pos, const Vector2<float> &size):
     m_pos(pos), m_size(size)
     {

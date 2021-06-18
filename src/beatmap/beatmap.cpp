@@ -2,14 +2,17 @@
 #include<fstream>
 #include<mutex>
 #include<oxu/beatmap/beatmap.hpp>
-#include<oxu/core/window.hpp>
+#include<oxu/framework/window.hpp>
 #include<oxu/beatmap/beatmapParser.hpp>
 #include<oxu/beatmap/beatmapParser.hpp>
 #include<oxu/beatmap/components/playField.hpp>
-#include<oxu/core/logger.hpp>
+#include<oxu/framework/logger.hpp>
 
 namespace oxu
 {
+
+using namespace framework;
+
     static std::mutex c_beatmap_mtx;
 
     static float circle_size_to_px(float circle_size)
@@ -190,7 +193,7 @@ namespace oxu
         approach_rate_to_ms(m_difficulty.approachRate);
 
         m_difficulty.circleSizePx = 
-        circle_size_to_px(m_difficulty.circleSize) * window::get_oxu_px();
+        circle_size_to_px(m_difficulty.circleSize) * 480; // FIXME
     }
 
     void Beatmap::loadHitObjects()

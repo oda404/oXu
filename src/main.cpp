@@ -10,40 +10,23 @@ bruh moment #2
 #endif //__linux__
 
 #include<iostream>
-#include<cctype>
 #include<oxu/game.hpp>
-#include<oxu/core/status.hpp>
-#include<oxu/core/logger.hpp>
-#include<oxu/utils/vector2.hpp>
+#include<oxu/framework/status.hpp>
+#include<oxu/framework/logger.hpp>
+#include<oxu/framework/utils/vector2.hpp>
 #include<argx/argx.h>
 
-/*
-Variables prefixes:
-	p_ - pointer
-	c_ - from the same compilation unit
-	m_ - member variable
-Variable suffixes:
-	_p - parameter
-*/
+#define DEFAULT_CONFIG_DIR_PATH "/home/" + std::string(getlogin()) + "/.config/oxu"
+#define DEFAULT_WINDOW_SIZE { 800, 600 }
 
-static std::string get_user_name()
-{
-	char buf[USERNAME_MAX_LEN];
-	getlogin_r(buf, USERNAME_MAX_LEN);
-	return std::string(buf);
-}
-
-#define DEFAULT_CONFIG_DIR_PATH "/home/" + get_user_name() + "/.config/oxu"
-#define DEFAULT_WINDOW_SIZE oxu::Vector2<std::uint16_t>({ 800, 600 })
-
-static oxu::Vector2<std::uint16_t>
+static oxu::framework::Vector2<std::uint16_t>
 parse_window_size_arg(const std::string &arg)
 {
 	std::size_t split_i = arg.find("x");
 	if(split_i == std::string::npos)
 		return DEFAULT_WINDOW_SIZE;
 	
-	oxu::Vector2<std::uint16_t> ret;
+	oxu::framework::Vector2<std::uint16_t> ret;
 
 	const std::string x = arg.substr(0, split_i).c_str();
 	const std::string y = arg.substr(split_i + 1).c_str();
@@ -60,7 +43,6 @@ parse_window_size_arg(const std::string &arg)
 
 	return ret;
 }
-
 
 int main(int argc, char **argv)
 {
@@ -113,14 +95,14 @@ int main(int argc, char **argv)
 
 	oxu::init(config);
 
-	if(oxu::status::get() == oxu::status::OK)
+	if(oxu::framework::status::get() == oxu::framework::status::OK)
 	{
 		OXU_LOG_INFO("Exiting gracefully.");
 	}
 	else
 	{
-		OXU_LOG_INFO("Multiple memory leaks probably happened. exit code is {}", oxu::status::get());
+		OXU_LOG_INFO("Multiple memory leaks probably happened. exit code is {}", oxu::framework::status::get());
 	}
 
-	return oxu::status::get();
+	return oxu::framework::status::get();
 }

@@ -3,6 +3,9 @@
 
 namespace oxu
 {
+
+using namespace framework;
+
     Slider::Slider(
         const ObjectInfo &obj_info_p,
         const SliderInfo &slider_info_p,

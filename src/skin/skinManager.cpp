@@ -4,10 +4,12 @@
 
 #include<filesystem>
 #include<oxu/skin/skinManager.hpp>
-#include<oxu/core/logger.hpp>
+#include<oxu/framework/logger.hpp>
 
 namespace oxu
 {
+using namespace framework;
+
     SkinManager::SkinManager(const std::string &config_dir_path):
     m_skins_dir_path(
         std::filesystem::path(config_dir_path) / "skins"

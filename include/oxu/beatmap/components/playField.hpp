@@ -3,19 +3,19 @@
 
 #pragma once
 
-#include<oxu/utils/vector2.hpp>
+#include<oxu/framework/utils/vector2.hpp>
 
 namespace oxu
 {
 	class PlayField
 	{
 	private:
-		Vector2<float> startPoint;
+		framework::Vector2<float> startPoint;
 		
 	public:
 		PlayField();
 
-		inline const Vector2<float> &getStartPoint() const
+		inline const framework::Vector2<float> &getStartPoint() const
 		{
 			return startPoint;
 		}

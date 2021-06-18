@@ -1,8 +1,8 @@
 
 #include<oxu/beatmap/components/hitCircle.hpp>
 #include<oxu/skin/config.hpp>
-#include<oxu/core/logger.hpp>
-#include<oxu/graphics/renderer.hpp>
+#include<oxu/framework/logger.hpp>
+#include<oxu/framework/graphics/renderer.hpp>
 
 #define FADE_IN_MULT 10.5f
 #define FADE_OUT_MULT 7.5f
@@ -10,6 +10,9 @@
 
 namespace oxu
 {
+
+using namespace framework;
+
     HitCircle::HitCircle(
         const ObjectInfo &obj_info_p,
         const Difficulty &difficulty_p

@@ -5,7 +5,7 @@
 
 #include<oxu/beatmap/sections/difficulty.hpp>
 #include<oxu/beatmap/components/hitCircle.hpp>
-#include<oxu/utils/vector2.hpp>
+#include<oxu/framework/utils/vector2.hpp>
 
 namespace oxu
 {
@@ -19,7 +19,7 @@ namespace oxu
     struct SliderInfo
     {
         SliderCurveType curve_type;
-        std::vector<Vector2<float>> curve_points;
+        std::vector<framework::Vector2<float>> curve_points;
         std::uint16_t slides;
         double length;
         /* edge sounds && edge sets */
@@ -28,7 +28,7 @@ namespace oxu
     class Slider : public HitCircle
     {
     private:
-        std::vector<Vector2<float>> m_curve_points;
+        std::vector<framework::Vector2<float>> m_curve_points;
         SliderCurveType m_curve_type;
         std::uint16_t m_slides;
         double m_length;

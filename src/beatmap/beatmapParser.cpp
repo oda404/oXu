@@ -2,16 +2,19 @@
 #include<sstream>
 #include<unordered_map>
 #include<oxu/beatmap/beatmapParser.hpp>
-#include<oxu/core/window.hpp>
+#include<oxu/framework/window.hpp>
 #include<oxu/beatmap/components/types.hpp>
 #include<oxu/beatmap/components/hitCircle.hpp>
 #include<oxu/beatmap/components/slider.hpp>
-#include<oxu/core/logger.hpp>
+#include<oxu/framework/logger.hpp>
 
 #define UI unsigned int
 
 namespace oxu
 {
+
+using namespace framework;
+
     static void strip_outer_whitespaces(std::string &str)
     {
         while(str[0] == ' ')
@@ -603,7 +606,7 @@ namespace oxu
 
         /* scale the position */
         obj_info.position = 
-        playField.getStartPoint() + obj_info.position * window::get_oxu_px();
+        playField.getStartPoint() + obj_info.position * 480; // FIXME
 
         const ObjectType parsed_obj_type = parse_hit_obj_type(obj_info.type);
 

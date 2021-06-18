@@ -4,7 +4,7 @@
 
 #include<string>
 
-#include<oxu/graphics/texture.hpp>
+#include<oxu/framework/graphics/texture.hpp>
 #include<oxu/skin/config.hpp>
 
 namespace oxu
@@ -14,12 +14,15 @@ namespace oxu
     private:
         std::string path;
         std::string name;
-        graphics::Texture textures[MAX_TEX_COUNT];
+        framework::graphics::Texture textures[MAX_TEX_COUNT];
         SDL_Cursor *customCursor = NULL;
 
     public:
         Skin(const std::string &path_p);
-        const graphics::Texture &getTexture(uint8_t texEnum) const;
+
+        const framework::graphics::Texture 
+        &getTexture(uint8_t texEnum) const;
+        
         void setCursor();
         /* Required the renderer to be initiated */
         void loadTextures();
