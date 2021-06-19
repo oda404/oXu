@@ -10,7 +10,7 @@ func;\
 {\
 unsigned int err;\
 if(glHasError(err)) {\
-    OXU_LOG_ERR_EXT("[OpenGL] Error: {}", err);\
+    OXU_LOG_ERROR_EXT("[OpenGL] Error: {}", err);\
 }\
 }
 
@@ -20,7 +20,7 @@ func;\
 {\
 unsigned int err;\
 if(glHasError(err)) {\
-    OXU_LOG_ERR_EXT("[OpenGL] Error: {}", err);\
+    OXU_LOG_ERROR_EXT("[OpenGL] Error: {}", err);\
     abort();\
 }\
 }

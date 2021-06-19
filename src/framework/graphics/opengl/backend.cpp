@@ -51,7 +51,7 @@ using namespace framework;
 
         if(!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress))
         {
-            OXU_LOG_ERR("Failed to initialize glad");
+            OXU_LOG_ERROR("Failed to initialize glad");
             return false;
         }
 

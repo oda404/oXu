@@ -38,7 +38,7 @@ using namespace framework;
             break;
 
         default:
-            OXU_LOG_ERR("Tried to init renderer with unknown enum {}", backend);
+            OXU_LOG_ERROR("Tried to init renderer with unknown enum {}", backend);
             return false;
         }
 

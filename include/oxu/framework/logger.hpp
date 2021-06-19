@@ -3,45 +3,48 @@
 
 #pragma once
 
+#include<string>
 #include<spdlog/spdlog.h>
-#include<spdlog/sinks/sink.h>
 
 namespace oxu::framework::logger
 {
-    void init();
 
-#define SINK_ON(e) spdlog::get("oxuLogger")->sinks()[e - 1]->set_level(e);
-#define SINK_OFF(e) spdlog::get("oxuLogger")->sinks()[e - 1]->set_level(spdlog::level::off);
+void init();
 
-#define OXU_LOG_INFO(form, ...) SINK_ON(spdlog::level::info)\
-                    spdlog::get("oxuLogger")->info(form, ##__VA_ARGS__);\
-                    SINK_OFF(spdlog::level::info)
+#define OXU_LOG_DEBUG(fmt, ...) \
+::spdlog::get("oxulogger")->debug( \
+    "[DEBUG] " + std::string(fmt), \
+    ##__VA_ARGS__ \
+)
 
-#define OXU_LOG_WARN(form, ...) SINK_ON(spdlog::level::warn)\
-                    spdlog::get("oxuLogger")->warn(form, ##__VA_ARGS__);\
-                    SINK_OFF(spdlog::level::warn)
+#define OXU_LOG_INFO(fmt, ...) \
+::spdlog::get("oxulogger")->info( \
+    "[INFO] " + std::string(fmt), \
+    ##__VA_ARGS__ \
+)
 
-#define OXU_LOG_ERR(form, ...) SINK_ON(spdlog::level::err)\
-                    spdlog::get("oxuLogger")->error(form, ##__VA_ARGS__);\
-                    SINK_OFF(spdlog::level::err)
+#define OXU_LOG_WARN(fmt, ...) \
+::spdlog::get("oxulogger")->warn( \
+    "[WARN] " + std::string(fmt), \
+    ##__VA_ARGS__ \
+)
 
-#define OXU_LOG_DEBUG(form, ...) SINK_ON(spdlog::level::debug)\
-                    spdlog::get("oxuLogger")->debug(form, ##__VA_ARGS__);\
-                    SINK_OFF(spdlog::level::debug)
+#define OXU_LOG_ERROR(fmt, ...) \
+::spdlog::get("oxulogger")->error( \
+    "[ERROR] " + std::string(fmt), \
+    ##__VA_ARGS__ \
+)
 
-#define OXU_LOG_INFO_EXT(form, ...) SINK_ON(spdlog::level::info)\
-                        spdlog::get("oxuLogger")->info("From [" + std::string(__FILE__) + "] in [" + std::string(__PRETTY_FUNCTION__) + "]: " + form, ##__VA_ARGS__);\
-                        SINK_OFF(spdlog::level::info)
+#define OXU_LOG_DEBUG_EXT(fmt, ...) \
+OXU_LOG_DEBUG("[" + std::string(__PRETTY_FUNCTION__) + "] " + fmt, ##__VA_ARGS__)
 
-#define OXU_LOG_WARN_EXT(form, ...) SINK_ON(spdlog::level::warn)\
-                        spdlog::get("oxuLogger")->warn("From [" + std::string(__FILE__) + "] in [" + std::string(__PRETTY_FUNCTION__) + "]: " + form, ##__VA_ARGS__);\
-                        SINK_OFF(spdlog::level::warn)
+#define OXU_LOG_INFO_EXT(fmt, ...) \
+OXU_LOG_INFO("[" + std::string(__PRETTY_FUNCTION__) + "] " + fmt, ##__VA_ARGS__)
 
-#define OXU_LOG_ERR_EXT(form, ...) SINK_ON(spdlog::level::err)\
-                        spdlog::get("oxuLogger")->error("From [" + std::string(__FILE__) + "] in [" + std::string(__PRETTY_FUNCTION__) + "]: " + form, ##__VA_ARGS__);\
-                        SINK_OFF(spdlog::level::err)
+#define OXU_LOG_WARN_EXT(fmt, ...) \
+OXU_LOG_WARN("[" + std::string(__PRETTY_FUNCTION__) + "] " + fmt, ##__VA_ARGS__)
 
-#define OXU_LOG_DEBUG_EXT(form, ...) SINK_ON(spdlog::level::debug)\
-                        spdlog::get("oxuLogger")->debug("From [" + std::string(__FILE__) + "] in [" + std::string(__PRETTY_FUNCTION__) + "]: " + form, ##__VA_ARGS__);\
-                        SINK_OFF(spdlog::level::debug)
+#define OXU_LOG_ERROR_EXT(fmt, ...) \
+OXU_LOG_ERROR("[" + std::string(__PRETTY_FUNCTION__) + "] " + fmt, ##__VA_ARGS__)
+
 }

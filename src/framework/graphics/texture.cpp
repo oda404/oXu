@@ -30,7 +30,7 @@ using namespace framework;
             m_GL_tex = new opengl::Texture(path);
             break;
         default:
-            OXU_LOG_ERR("Tried to load a texture but current backend {} is unknown", current_backend_enum);
+            OXU_LOG_ERROR("Tried to load a texture but current backend {} is unknown", current_backend_enum);
             return false;
         }
 
