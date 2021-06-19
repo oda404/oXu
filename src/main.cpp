@@ -1,13 +1,6 @@
 // Copyright (c) Olaru Alexandru <olarualexandru404@gmail.com>
 // Licensed under the MIT license found in the LICENSE file in the root of this repository.
 
-#if defined(__linux__)
-#include<unistd.h>
-#include<pwd.h>
-#elif defined(_WIN32)
-bruh moment #2
-#endif //__linux__
-
 #include<iostream>
 #include<oxu/game.hpp>
 #include<oxu/game_config.hpp>
