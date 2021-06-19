@@ -63,7 +63,7 @@ using namespace framework;
 
         namespace stdfs = std::filesystem;
 
-        c_shaders.emplace_back(stdfs::path(configDirPath) / "res/shaders/tex.glsl");
+        c_shaders.emplace_back(stdfs::path(configDirPath) / "shaders/tex.glsl");
 
         return true;
     }

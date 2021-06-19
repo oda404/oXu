@@ -55,9 +55,7 @@ static void game_loop(
     }
 }
 
-static void clean(
-    SDL_Window *p_game_window_p
-)
+static void clean()
 {
     graphics::handler::shut_down();
     audio::handler::shutDown();
@@ -69,11 +67,6 @@ bool init(const Config &config)
 {
     logger::init();
 
-    if(!fs::is_config_dir_valid(config.configDirPath))
-    {
-        fs::validate_config_dir(config.configDirPath);
-    }
-
     framework::init();
 
     uint32_t flags = (
@@ -81,14 +74,12 @@ bool init(const Config &config)
         window::InitFlags::SHOWN
     );
 
-    if(!window::init("oxu", config.screenSize, flags))
+    if(!window::init("oxu", config.window_size, flags))
     {
         return false;
     }
 
-    window::set_window_size(config.screenSize);
-
-    SongManager song_manager(config.configDirPath);
+    SongManager song_manager(config.songs_dir_path);
     song_manager.enumerateSongs();
     song_manager.setCurrentSong(0);
     song_manager.setCurrentBeatmap(0);
@@ -97,7 +88,7 @@ bool init(const Config &config)
         song_manager.getCurrentBeatmap()->loadAllSections();
     }
 
-    SkinManager skin_manager(config.configDirPath);
+    SkinManager skin_manager(config.skins_dir_path);
     skin_manager.enumerateSkins();
     skin_manager.setCurrentSkin(0);
 
@@ -107,7 +98,7 @@ bool init(const Config &config)
         p_game_window, 
         &song_manager, 
         &skin_manager,
-        config.configDirPath
+        config.resources_dir_path
     );
     audio::handler::init();
 
@@ -116,7 +107,7 @@ bool init(const Config &config)
 
     game_loop(song_manager, skin_manager, this_thread);
 
-    clean(p_game_window);
+    clean();
 
     return true;
 }

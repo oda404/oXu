@@ -12,7 +12,7 @@ using namespace framework;
         const std::string &config_dir_path
     ):
     m_songs_dir_path(
-        std::filesystem::path(config_dir_path) / "songs"
+        std::filesystem::path(config_dir_path)
     )
     {
 

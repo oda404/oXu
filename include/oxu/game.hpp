@@ -6,12 +6,20 @@
 namespace oxu
 {
 
-    struct Config
-    {
-        std::string configDirPath;
-        framework::Vector2<std::uint16_t> screenSize;
-    };
+#define DEFAULT_RES_DIR   "/home/" + std::string(getlogin()) + "/.config/oxu/res"
+#define DEFAULT_SONGS_DIR "/home/" + std::string(getlogin()) + "/.config/oxu/songs"
+#define DEFAULT_SKINS_DIR "/home/" + std::string(getlogin()) + "/.config/oxu/skins"
+#define DEFAULT_WINDOW_SIZE { 800, 600 }
 
-    /* Sets up stuff idk */
-    bool init(const Config &config);
+struct Config
+{
+    std::string resources_dir_path;
+    std::string songs_dir_path;
+    std::string skins_dir_path;
+    framework::Vector2<std::uint16_t> window_size;
+};
+
+/* Starts the game. */
+bool init(const Config &config);
+
 }

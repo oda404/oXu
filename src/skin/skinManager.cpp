@@ -12,7 +12,7 @@ using namespace framework;
 
     SkinManager::SkinManager(const std::string &config_dir_path):
     m_skins_dir_path(
-        std::filesystem::path(config_dir_path) / "skins"
+        std::filesystem::path(config_dir_path)
     )
     {
 
