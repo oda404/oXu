@@ -10,7 +10,9 @@ bruh moment #2
 #endif //__linux__
 
 #include<iostream>
+#include<cstdlib>
 #include<oxu/game.hpp>
+#include<oxu/game_config.hpp>
 #include<oxu/framework/status.hpp>
 #include<oxu/framework/logger.hpp>
 #include<oxu/framework/utils/vector2.hpp>
@@ -21,7 +23,7 @@ parse_window_size_arg(const std::string &arg)
 {
 	std::size_t split_i = arg.find("x");
 	if(split_i == std::string::npos)
-		return DEFAULT_WINDOW_SIZE;
+		return oxu::GameConfig::DEFAULT_WINDOW_SIZE;
 	
 	oxu::framework::Vector2<std::uint16_t> ret;
 
@@ -35,7 +37,7 @@ parse_window_size_arg(const std::string &arg)
 	}
 	catch(...)
 	{
-		return DEFAULT_WINDOW_SIZE;
+		return oxu::GameConfig::DEFAULT_WINDOW_SIZE;
 	}
 
 	return ret;
@@ -63,25 +65,25 @@ int main(int argc, char **argv)
 		return 0;
 	}
 
-	oxu::Config config;
+	oxu::GameConfig config;
 	std::string tmp;
 
 	argx.arg_val_get("window-size", tmp);
 	config.window_size = parse_window_size_arg(tmp);
 
-	if(argx.arg_val_get("res-dir", config.resources_dir_path) != 0)
+	if(argx.arg_val_get("res-dir", config.resources_dir) != 0)
 	{
-		config.resources_dir_path = DEFAULT_RES_DIR;
+		config.resources_dir = oxu::GameConfig::DEFAULT_RESOURCES_DIR;
 	}
 
-	if(argx.arg_val_get("songs-dir", config.songs_dir_path) != 0)
+	if(argx.arg_val_get("songs-dir", config.songs_dir) != 0)
 	{
-		config.songs_dir_path = DEFAULT_SONGS_DIR;
+		config.songs_dir = oxu::GameConfig::DEFAULT_SONGS_DIR;
 	}
 
-	if(argx.arg_val_get("skins-dir", config.skins_dir_path) != 0)
+	if(argx.arg_val_get("skins-dir", config.skins_dir) != 0)
 	{
-		config.skins_dir_path = DEFAULT_SKINS_DIR;
+		config.skins_dir = oxu::GameConfig::DEFAULT_SKINS_DIR;
 	}
 
 	oxu::init(config);

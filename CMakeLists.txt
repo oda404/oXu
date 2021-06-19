@@ -29,6 +29,7 @@ add_subdirectory(vendor/spdlog)
 add_subdirectory(vendor/argx)
 
 set(OXU_HEADERS
+    ${INCLUDE_DIR}/oxu/game_config.hpp
     ${INCLUDE_DIR}/oxu/game.hpp
 
     ${INCLUDE_DIR}/oxu/framework/framework.hpp
@@ -97,6 +98,7 @@ set(OXU_HEADERS
 )
 
 set(OXU_SRC
+    ${SRC_DIR}/game_config.cpp
     ${SRC_DIR}/main.cpp
     ${SRC_DIR}/game.cpp
 

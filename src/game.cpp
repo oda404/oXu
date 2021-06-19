@@ -16,6 +16,7 @@ namespace oxu
 
 using namespace framework;
 using namespace framework::threading;
+namespace stdfs = std::filesystem;
 
 static void game_loop(
     SongManager &song_manager_p,
@@ -62,7 +63,7 @@ static void clean()
     framework::destroy();
 }
 
-bool init(const Config &config)
+bool init(const GameConfig &config)
 {
     framework::init();
 
@@ -76,7 +77,7 @@ bool init(const Config &config)
         return false;
     }
 
-    SongManager song_manager(config.songs_dir_path);
+    SongManager song_manager(config.songs_dir);
     song_manager.enumerateSongs();
     song_manager.setCurrentSong(0);
     song_manager.setCurrentBeatmap(0);
@@ -85,7 +86,7 @@ bool init(const Config &config)
         song_manager.getCurrentBeatmap()->loadAllSections();
     }
 
-    SkinManager skin_manager(config.skins_dir_path);
+    SkinManager skin_manager(config.skins_dir);
     skin_manager.enumerateSkins();
     skin_manager.setCurrentSkin(0);
 
@@ -95,7 +96,7 @@ bool init(const Config &config)
         p_game_window, 
         &song_manager, 
         &skin_manager,
-        config.resources_dir_path
+        config.resources_dir
     );
     audio::handler::init();
 
