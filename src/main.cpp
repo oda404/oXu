@@ -25,8 +25,8 @@ parse_window_size_arg(const std::string &arg)
 	
 	oxu::framework::Vector2<std::uint16_t> ret;
 
-	const std::string x = arg.substr(0, split_i).c_str();
-	const std::string y = arg.substr(split_i + 1).c_str();
+	const std::string x = arg.substr(0, split_i);
+	const std::string y = arg.substr(split_i + 1);
 
 	try
 	{
