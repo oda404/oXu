@@ -47,12 +47,12 @@ int main(int argc, char **argv)
 
 	argx.arg_add("help",        "-h", "--help",        "Show this message and exit.", true);
 	argx.arg_add("res-dir",     "-r", "--res-dir",     "Resources directory path.", false);
-	argx.arg_add("songs-dir",   "-S", "--songs-dir",   "Beatmaps directory path", false);
+	argx.arg_add("songs-dir",   "-S", "--songs-dir",   "Beatmaps directory path.", false);
 	argx.arg_add("skins-dir",   "-s", "--skins-dir",   "Skins directory path.", false);
-	argx.arg_add("window-size", "-w", "--window-size", "Window size in the format of <width>x<height>", false);
+	argx.arg_add("window-size", "-w", "--window-size", "Window size in the format of <width>x<height>.", false);
 	argx.help_msg_gen(
 		"Usage: oxu [options]", 
-		"Starts the oxu client."
+		"Starts the oxu client.\n\nOptions:"
 	);
 
 	argx.args_parse(argv, argc);
