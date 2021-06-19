@@ -31,9 +31,6 @@ add_subdirectory(vendor/argx)
 set(OXU_HEADERS
     ${INCLUDE_DIR}/oxu/game.hpp
 
-    #core/
-    ${INCLUDE_DIR}/oxu/core/fs.hpp
-
     ${INCLUDE_DIR}/oxu/framework/framework.hpp
     ${INCLUDE_DIR}/oxu/framework/status.hpp
     ${INCLUDE_DIR}/oxu/framework/logger.hpp
@@ -104,7 +101,6 @@ set(OXU_SRC
     ${SRC_DIR}/game.cpp
 
     #core/
-    ${SRC_DIR}/core/fs.cpp
     ${SRC_DIR}/framework/framework.cpp
     ${SRC_DIR}/framework/status.cpp
     ${SRC_DIR}/framework/logger.cpp
