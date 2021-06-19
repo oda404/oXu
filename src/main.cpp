@@ -10,7 +10,6 @@ bruh moment #2
 #endif //__linux__
 
 #include<iostream>
-#include<cstdlib>
 #include<oxu/game.hpp>
 #include<oxu/game_config.hpp>
 #include<oxu/framework/status.hpp>
