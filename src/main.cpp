@@ -14,10 +14,7 @@ bruh moment #2
 #include<oxu/framework/status.hpp>
 #include<oxu/framework/logger.hpp>
 #include<oxu/framework/utils/vector2.hpp>
-#include<argx/argx.h>
-
-#define DEFAULT_CONFIG_DIR_PATH "/home/" + std::string(getlogin()) + "/.config/oxu"
-#define DEFAULT_WINDOW_SIZE { 800, 600 }
+#include<argx/argx.hpp>
 
 static oxu::framework::Vector2<std::uint16_t>
 parse_window_size_arg(const std::string &arg)
@@ -46,52 +43,46 @@ parse_window_size_arg(const std::string &arg)
 
 int main(int argc, char **argv)
 {
-	Argx argx;
-	argx_init(&argx);
+	argx::Argx argx;
 
-	argx_arg_add("help", "-h", "--help", "Show this message and exit.", true, &argx);
-	argx_arg_add("config-dir-path", "-c", "--config-dir-path", "Path to the oxu config directory.", false, &argx);
-	argx_arg_add("window-size", "-w", "--window-size", "Window size in the format of <width>x<height>.", false, &argx);
-	argx_help_msg_gen("Usage: oxu [options]", "Starts the oxu client.", &argx);
+	argx.arg_add("help",        "-h", "--help",        "Show this message and exit.", true);
+	argx.arg_add("res-dir",     "-r", "--res-dir",     "Resources directory path.", false);
+	argx.arg_add("songs-dir",   "-S", "--songs-dir",   "Beatmaps directory path", false);
+	argx.arg_add("skins-dir",   "-s", "--skins-dir",   "Skins directory path.", false);
+	argx.arg_add("window-size", "-w", "--window-size", "Window size in the format of <width>x<height>", false);
+	argx.help_msg_gen(
+		"Usage: oxu [options]", 
+		"Starts the oxu client."
+	);
 
-	argx_args_parse(argv, argc, &argx);
+	argx.args_parse(argv, argc);
 
-	if(argx_arg_present("help", &argx))
+	if(argx.arg_present("help"))
 	{
-		std::cout << argx_help_msg_get(&argx);
-		argx_destroy(&argx);
+		std::cout << argx.help_msg_get();
 		return 0;
 	}
 
 	oxu::Config config;
-	size_t arg_len = 0;
-	char *arg_str = nullptr;
+	std::string tmp;
 
-	if(argx_arg_get_str_len("window-size", &arg_len, &argx) == ARGX_GET_OK)
+	argx.arg_val_get("window-size", tmp);
+	config.window_size = parse_window_size_arg(tmp);
+
+	if(argx.arg_val_get("res-dir", config.resources_dir_path) != 0)
 	{
-		arg_str = new char[arg_len + 1];
-		argx_arg_get_str("window-size", arg_str, &argx);
-		config.screenSize = parse_window_size_arg(arg_str);
-		delete[] arg_str;
-	}
-	else
-	{
-		config.screenSize = DEFAULT_WINDOW_SIZE;
+		config.resources_dir_path = DEFAULT_RES_DIR;
 	}
 
-	if(argx_arg_get_str_len("config-dir-path", &arg_len, &argx) == ARGX_GET_OK)
+	if(argx.arg_val_get("songs-dir", config.songs_dir_path) != 0)
 	{
-		arg_str = new char[arg_len + 1];
-		argx_arg_get_str("config-dir-path", arg_str, &argx);
-		config.configDirPath = arg_str;
-		delete[] arg_str;
-	}
-	else
-	{
-		config.configDirPath = DEFAULT_CONFIG_DIR_PATH;
+		config.songs_dir_path = DEFAULT_SONGS_DIR;
 	}
 
-	argx_destroy(&argx);
+	if(argx.arg_val_get("skins-dir", config.skins_dir_path) != 0)
+	{
+		config.skins_dir_path = DEFAULT_SKINS_DIR;
+	}
 
 	oxu::init(config);
 
