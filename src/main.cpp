@@ -2,7 +2,6 @@
 // Licensed under the MIT license found in the LICENSE file in the root of this repository.
 
 #if defined(__linux__)
-#define USERNAME_MAX_LEN 50
 #include<unistd.h>
 #include<pwd.h>
 #elif defined(_WIN32)
