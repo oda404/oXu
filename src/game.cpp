@@ -64,8 +64,6 @@ static void clean()
 
 bool init(const Config &config)
 {
-    logger::init();
-
     framework::init();
 
     uint32_t flags = (
