@@ -32,6 +32,7 @@ set(OXU_HEADERS
     ${INCLUDE_DIR}/oxu/game_config.hpp
     ${INCLUDE_DIR}/oxu/game.hpp
 
+    ${INCLUDE_DIR}/oxu/framework/fs.hpp
     ${INCLUDE_DIR}/oxu/framework/framework.hpp
     ${INCLUDE_DIR}/oxu/framework/status.hpp
     ${INCLUDE_DIR}/oxu/framework/logger.hpp
@@ -102,6 +103,7 @@ set(OXU_SRC
     ${SRC_DIR}/game.cpp
 
     #core/
+    ${SRC_DIR}/framework/fs.cpp
     ${SRC_DIR}/framework/framework.cpp
     ${SRC_DIR}/framework/status.cpp
     ${SRC_DIR}/framework/logger.cpp
