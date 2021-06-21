@@ -96,7 +96,7 @@ bool init(const GameConfig &config)
         p_game_window, 
         &song_manager, 
         &skin_manager,
-        config.resources_dir
+        config.res_dir
     );
     audio::handler::init();
 
