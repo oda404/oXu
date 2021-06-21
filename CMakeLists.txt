@@ -98,7 +98,6 @@ set(OXU_HEADERS
 )
 
 set(OXU_SRC
-    ${SRC_DIR}/game_config.cpp
     ${SRC_DIR}/main.cpp
     ${SRC_DIR}/game.cpp
 
