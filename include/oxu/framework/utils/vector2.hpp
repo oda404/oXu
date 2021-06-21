@@ -14,15 +14,15 @@ namespace oxu::framework
     public:
         T x, y;
 
-        Vector2()
+        constexpr Vector2()
         {
 
         }
 
-        Vector2(const T &x, const T &y)
+        constexpr Vector2(const T &x, const T &y)
+        :x(x), y(y)
         {
-            this->x = x;
-            this->y = y;
+            
         }
 
         /* Sets the x, y values of the vector to the specified ones. */
@@ -33,13 +33,13 @@ namespace oxu::framework
         }
 
         /* Returns the vector's length(magnitude). */
-        float getLength() const
+        constexpr float getLength() const
         {
             return static_cast<float>(std::sqrt(x * x + y * y));
         }
 
         /* Returns the vector's length(magnitude) squared. */
-        float getLengthSquared() const
+        constexpr float getLengthSquared() const
         {
             return static_cast<float>(x * x + y * y);
         }
@@ -51,7 +51,7 @@ namespace oxu::framework
         }
 
         /* Returns a normalized version of the vector. This doesn't modify the base vector */
-        Vector2<T> normalized() const
+        constexpr Vector2<T> normalized() const
         {
             Vector2<T> result = *this;
             result /= this->getLength();
@@ -70,7 +70,7 @@ namespace oxu::framework
         }
 
         /* Returns a clamped version of the vector. This doesn't modify the base vector */
-        Vector2<T> clamped(const T &min, const T &max) const
+        constexpr Vector2<T> clamped(const T &min, const T &max) const
         {
             Vector2<T> result = *this;
 
@@ -83,13 +83,13 @@ namespace oxu::framework
             return result;
         }
 
-        static Vector2<T> lerp(const Vector2<T> &start, const Vector2<T> &end, const float &t)
+        constexpr static Vector2<T> lerp(const Vector2<T> &start, const Vector2<T> &end, const float &t)
         {
             return start * (1 - t) + end * t;
         }
 
         /* Returns the vector formatted as a string */
-        std::string toString() const
+        constexpr std::string toString() const
         {
             std::string result = "(" + std::to_string(x) + ", " + std::to_string(y) + ")";
             return result;
@@ -101,7 +101,7 @@ namespace oxu::framework
             y += v.y;
         }
 
-        Vector2<T> operator+(const Vector2<T> &v) const
+        constexpr Vector2<T> operator+(const Vector2<T> &v) const
         {
             Vector2<T> result = *this;
             result += v;
@@ -115,7 +115,7 @@ namespace oxu::framework
             y += n;
         }
 
-        Vector2<T> operator+(const T &n) const
+        constexpr Vector2<T> operator+(const T &n) const
         {
             Vector2<T> out = *this;
 
@@ -131,7 +131,7 @@ namespace oxu::framework
             y -= v.y;
         }
 
-        Vector2<T> operator-(const Vector2<T> &v) const
+        constexpr Vector2<T> operator-(const Vector2<T> &v) const
         {
             Vector2<T> result = *this;
             result -= v;
@@ -145,7 +145,7 @@ namespace oxu::framework
             y *= n;
         }
 
-        Vector2<T> operator*(const T &n) const
+        constexpr Vector2<T> operator*(const T &n) const
         {
             Vector2<T> result = *this;
             result *= n;
@@ -159,7 +159,7 @@ namespace oxu::framework
             y /= n;
         }
 
-        Vector2<T> operator/(const T &n) const
+        constexpr Vector2<T> operator/(const T &n) const
         {
             Vector2<T> result = *this;
             result /= n;
@@ -167,12 +167,12 @@ namespace oxu::framework
             return result;
         }
 
-        bool operator==(const Vector2<T> &v) const
+        constexpr bool operator==(const Vector2<T> &v) const
         {
             return x == v.x && y == v.y;
         }
 
-        bool operator!=(const Vector2<T> &v) const
+        constexpr bool operator!=(const Vector2<T> &v) const
         {
             return !(*this == v);
         }
