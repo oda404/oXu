@@ -7,6 +7,7 @@
 #include<oxu/framework/status.hpp>
 #include<oxu/framework/logger.hpp>
 #include<oxu/framework/utils/vector2.hpp>
+#include<oxu/framework/fs.hpp>
 #include<argx/argx.hpp>
 
 static oxu::framework::Vector2<std::uint16_t>
@@ -76,6 +77,11 @@ int main(int argc, char **argv)
 	{
 		config.skins_dir = oxu::GameConfig::default_skins_dir;
 	}
+
+	namespace oxufs = oxu::framework::fs;
+	config.res_dir   = oxufs::path_resolve_homedir(config.res_dir);
+	config.songs_dir = oxufs::path_resolve_homedir(config.songs_dir);
+	config.skins_dir = oxufs::path_resolve_homedir(config.skins_dir);
 
 	oxu::init(config);
 
