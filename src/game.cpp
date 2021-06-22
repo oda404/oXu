@@ -7,6 +7,7 @@
 #include<oxu/framework/audio/handler.hpp>
 #include<oxu/framework/threading/thread.hpp>
 #include<oxu/framework/framework.hpp>
+#include<oxu/framework/fs.hpp>
 #include<oxu/game.hpp>
 #include<oxu/skin/skinManager.hpp>
 #include<oxu/beatmap/songManager.hpp>
@@ -16,6 +17,7 @@ namespace oxu
 
 using namespace framework;
 using namespace framework::threading;
+namespace oxufs = oxu::framework::fs;
 namespace stdfs = std::filesystem;
 
 static void game_loop(
@@ -71,6 +73,13 @@ bool init(const GameConfig &config)
     {
         return false;
     }
+
+    if(!oxufs::dir_create(config.res_dir))
+        OXU_LOG_WARN("Couldn't create [{}] are you privileged ?", config.res_dir);
+    if(!oxufs::dir_create(config.skins_dir))
+        OXU_LOG_WARN("Couldn't create [{}] are you privileged ?", config.skins_dir);
+    if(!oxufs::dir_create(config.songs_dir))
+        OXU_LOG_WARN("Couldn't create [{}] are you privileged ?", config.songs_dir);
 
     SongManager song_manager(config.songs_dir);
     song_manager.enumerate_songs();
