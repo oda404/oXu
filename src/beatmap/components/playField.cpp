@@ -11,17 +11,28 @@ namespace oxu
 using namespace framework;
 
 PlayField::PlayField()
-    : m_oxu_px(window::get_window_size().y / 480.f)
 {
-    startPoint = { 
-        window::get_window_size().x / 2.f - 256.f * m_oxu_px, // FIXME 
-        window::get_window_size().y / 2.f - 192.f * m_oxu_px  // FIXME
-    };
+    calculate();
+}
+
+const framework::Vector2<float> &PlayField::get_start_point() const
+{
+    return m_start_point;
 }
 
 const float &PlayField::get_oxu_px() const
 {
     return m_oxu_px;
+}
+
+void PlayField::calculate()
+{
+    m_oxu_px = window::get_window_size().y / 480.f;
+
+    m_start_point = { 
+        window::get_window_size().x / 2.f - 256.f * m_oxu_px, // FIXME 
+        window::get_window_size().y / 2.f - 192.f * m_oxu_px  // FIXME
+    };
 }
 
 }
