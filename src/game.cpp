@@ -26,7 +26,7 @@ static void game_loop(
 {
     SDL_Event sdl_event;
     bool window_open = true;
-    Beatmap *p_current_beatmap = song_manager_p.getCurrentBeatmap();
+    Beatmap *p_current_beatmap = song_manager_p.get_current_beatmap();
     if(p_current_beatmap)
     {
         p_current_beatmap->start();
@@ -73,12 +73,12 @@ bool init(const GameConfig &config)
     }
 
     SongManager song_manager(config.songs_dir);
-    song_manager.enumerateSongs();
-    song_manager.setCurrentSong(0);
-    song_manager.setCurrentBeatmap(0);
-    if(song_manager.getCurrentBeatmap())
+    song_manager.enumerate_songs();
+    song_manager.set_current_song(0);
+    song_manager.set_current_beatmap(0);
+    if(song_manager.get_current_beatmap())
     {
-        song_manager.getCurrentBeatmap()->loadAllSections();
+        song_manager.get_current_beatmap()->loadAllSections();
     }
 
     SkinManager skin_manager(config.skins_dir);

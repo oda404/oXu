@@ -22,7 +22,7 @@ using namespace framework::threading;
     static void start_thread()
     {
         Request request;
-        Beatmap *p_current_beatmap = cp_song_manager->getCurrentBeatmap();
+        Beatmap *p_current_beatmap = cp_song_manager->get_current_beatmap();
 
         while(true)
         {
