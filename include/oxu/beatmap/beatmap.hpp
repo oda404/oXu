@@ -11,7 +11,7 @@
 #include<oxu/beatmap/sections/editor.hpp>
 #include<oxu/beatmap/sections/metadata.hpp>
 #include<oxu/beatmap/sections/difficulty.hpp>
-
+#include<oxu/beatmap/components/playField.hpp>
 #include<oxu/skin/skin.hpp>
 #include<oxu/beatmap/components/hitObject.hpp>
 
@@ -32,6 +32,7 @@ namespace oxu
         Editor m_editor;
         Metadata m_metadata;
         Difficulty m_difficulty;
+        PlayField m_playfield;
 
     public:
         Beatmap(const std::string &path_p);
