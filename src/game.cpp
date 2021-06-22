@@ -67,12 +67,7 @@ bool init(const GameConfig &config)
 {
     framework::init();
 
-    uint32_t flags = (
-        window::InitFlags::OPENGL |
-        window::InitFlags::SHOWN
-    );
-
-    if(!window::init("oxu", config.window_size, flags))
+    if(!window::init("oxu", config.window_size))
     {
         return false;
     }

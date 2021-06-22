@@ -13,20 +13,11 @@ static SDL_Window *g_sdl_window = nullptr;
 
 bool window::init(
     const std::string  &name,
-    const Vector2<std::uint16_t> &size,
-    const std::uint32_t          &flags
+    const Vector2<std::uint16_t> &size
 )
 {
-    std::uint32_t nativeflags = 0;
-
-    if(flags & InitFlags::OPENGL)
-        nativeflags |= SDL_WINDOW_OPENGL;
-    if(flags & InitFlags::SHOWN)
-        nativeflags |= SDL_WINDOW_SHOWN;
-    if(flags & InitFlags::FULLSCREEN)
-        nativeflags |= SDL_WINDOW_FULLSCREEN;
-    if(flags & InitFlags::HIDDEN)
-        nativeflags |= SDL_WINDOW_HIDDEN;
+    std::uint32_t flags = 
+    SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
     g_sdl_window = SDL_CreateWindow(
         name.c_str(),
@@ -34,7 +25,7 @@ bool window::init(
         SDL_WINDOWPOS_CENTERED,
         size.x,
         size.y,
-        nativeflags
+        flags
     );
     
     if(!g_sdl_window)

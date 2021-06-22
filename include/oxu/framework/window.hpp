@@ -18,8 +18,7 @@ enum InitFlags
 
 bool init(
     const std::string  &name,
-    const Vector2<std::uint16_t> &size,
-    const std::uint32_t          &flags
+    const Vector2<std::uint16_t> &size
 );
 void destroy();
 
