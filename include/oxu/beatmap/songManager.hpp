@@ -21,7 +21,7 @@ public:
         const std::string &songs_dir
     );
     /** 
-     * Sets the songs directory. Also clears any previosly enumerated songs. 
+     * Sets the songs directory. Also clears any previously enumerated songs. 
      */
     void set_songs_dir(const std::string &path);
     /**
@@ -29,18 +29,18 @@ public:
      */
     std::string get_songs_dir() const;
     /** 
-     * Enumeartes and registers all of the songs.
+     * Enumerates and registers all of the songs.
      * @return false if no songs were found, true otherwise. 
      */
     bool enumerate_songs();
     /**
      * Sets the current song.
-     * @return true if succesfull, false if index doesn't exist.
+     * @return true if successfull, false if index doesn't exist.
      */
     bool set_current_song(size_t index);
     /**
      * Sets the current song.
-     * @return true if succesull, false if name doesn't exist.
+     * @return true if successfull, false if name doesn't exist.
      */
     bool set_current_song(const std::string &name);
     /**
