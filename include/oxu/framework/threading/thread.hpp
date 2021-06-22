@@ -9,38 +9,57 @@
 
 namespace oxu::framework::threading
 {
-    using sys_clock = std::chrono::system_clock;
-    using sys_clock_time_point = std::chrono::system_clock::time_point;
-    using milliseconds = std::chrono::milliseconds;
 
-    struct Thread
-    {
-    private:
-        std::thread m_thread;
-        double m_delta = 0.0;
-        std::uint16_t m_max_fps = 0;
-        std::uint16_t m_max_fps_ratio = 0;
-        std::uint16_t m_current_fps = 0;
-        
-        sys_clock_time_point m_next_frame;
-        sys_clock_time_point m_last_frame;
+struct Thread
+{
+private:
+    std::thread m_thread;
+    double m_delta = 0.0;
+    std::uint16_t m_max_fps = 0;
+    std::uint16_t m_max_fps_ratio = 0;
+    std::uint16_t m_fps = 0;
+    
+    std::chrono::system_clock::time_point m_next_frame;
+    std::chrono::system_clock::time_point m_last_frame;
 
-        void calculateDelta();
-        void calculateFPS();
+    void calculate_delta();
+    void calculate_fps();
 
-    public:
-        Pipeline pipeline;
-        std::atomic<bool> doneInit = false;
+public:
+    Pipeline pipeline;
+    std::atomic<bool> doneInit = false;
 
-        void start(std::function<void()> entryPoint);
-        void start();
-        void join();
-        /* cap the fps to whatever was set with setMaxFPS */
-        void capFPS();
-        void setMaxFPS(const uint16_t &maxFPS);
-        const double &getDelta() const;
-        const std::uint16_t &getCurrentFPS() const;
-        /* returns the std::thread */
-        const std::thread &getThread() const;
-    };
+    /** Starts the thread using the given entrypoint. */
+    void start(std::function<void()> entryPoint);
+    /**
+     * This function doesn't actually make use of std::thread
+     * and doesn't spawn a new thread.
+     * It's more of an init for using fps capping/delta.
+    */
+    void start();
+    /**
+     * The same as get_native_thread.join().
+    */
+    void join();
+    /**
+     * Sleep until maxfps is matched.
+    */
+    void cap_fps();
+    void set_max_fps(const uint16_t &maxfps);
+    /**
+     * @return the time delta beetwen the current and last frame.
+    */
+    const double &get_delta() const;
+    /**
+     * @return the current fps.
+    */
+    const std::uint16_t &get_fps() const;
+    const std::uint16_t &get_max_fps() const;
+
+    /**
+     * @return the std::thread object associated with this Thread. 
+    */
+    std::thread &get_native_thread();
+};
+
 }
