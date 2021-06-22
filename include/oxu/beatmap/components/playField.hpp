@@ -11,9 +11,12 @@ namespace oxu
 	{
 	private:
 		framework::Vector2<float> startPoint;
+		float m_oxu_px;
 		
 	public:
 		PlayField();
+
+		const float &get_oxu_px() const;
 
 		inline const framework::Vector2<float> &getStartPoint() const
 		{
