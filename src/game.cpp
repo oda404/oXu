@@ -94,10 +94,7 @@ bool init(const GameConfig &config)
     skin_manager.enumerate_skins();
     skin_manager.set_current_skin(0);
 
-    SDL_Window *p_game_window = window::get_native_window();
-
     graphics::handler::init(
-        p_game_window, 
         &song_manager, 
         &skin_manager,
         config.res_dir

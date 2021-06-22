@@ -17,11 +17,12 @@ available hit objects.
 
 namespace oxu::framework::graphics::handler
 {
-    void init(
-        SDL_Window *window_p, 
-        SongManager *songManager_p, 
-        SkinManager *skinManager_p,
-        std::string config_dir_path_p
-    );
-    void shut_down();
+
+void init(
+    SongManager *songManager_p, 
+    SkinManager *skinManager_p,
+    std::string config_dir_path_p
+);
+void shut_down();
+
 }

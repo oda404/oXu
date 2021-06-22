@@ -15,7 +15,6 @@ using namespace framework;
 using namespace framework::threading;
 
     static Thread c_this_thread;
-    static SDL_Window *cp_game_window = nullptr;
     static SongManager *cp_song_manager;
     static SkinManager *cp_skin_manager;
 
@@ -53,7 +52,6 @@ using namespace framework::threading;
         /* Initiate the renderer here because it needs the new thread context */
         if(
             !renderer::init(
-                cp_game_window, 
                 renderer::Backends::OPENGL,
                 config_dir_path_p
             )
@@ -74,7 +72,6 @@ using namespace framework::threading;
     }
 
     void init(
-        SDL_Window *window_p, 
         SongManager *songManager_p, 
         SkinManager *skinManager_p,
         std::string config_dir_path_p
@@ -82,7 +79,6 @@ using namespace framework::threading;
     {
         cp_song_manager = songManager_p;
         cp_skin_manager = skinManager_p;
-        cp_game_window = window_p;
 
         c_this_thread.setMaxFPS(240);
         /* paranoia */
