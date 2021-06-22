@@ -48,11 +48,11 @@ SDL_Window *window::get_native_window()
     return g_sdl_window;
 }
 
-Vector2<std::uint16_t> window::get_window_size()
+Vector2<int> window::get_window_size()
 {
-    Vector2<std::uint16_t> ret;
+    Vector2<int> ret;
     if(g_sdl_window)
-        SDL_GetWindowSize(g_sdl_window, (int *)&ret.x, (int *)&ret.y);
+        SDL_GetWindowSize(g_sdl_window, &ret.x, &ret.y);
     return ret;
 }
 

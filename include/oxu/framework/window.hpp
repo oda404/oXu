@@ -24,6 +24,6 @@ void destroy();
 
 SDL_Window *get_native_window();
 void set_window_size(const Vector2<std::uint16_t> &size);
-Vector2<std::uint16_t> get_window_size(); 
+Vector2<int> get_window_size(); 
 
 }
