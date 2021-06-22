@@ -37,14 +37,14 @@ using namespace framework::threading;
                 }
             }
 
-            Renderer::clear();
+            renderer::clear();
 
             if(p_current_beatmap)
             {
                 p_current_beatmap->renderObjects(*cp_skin_manager->get_current_skin());
             }
 
-            Renderer::render();
+            renderer::render();
         }
     }
 
@@ -52,9 +52,9 @@ using namespace framework::threading;
     {
         /* Initiate the renderer here because it needs the new thread context */
         if(
-            !Renderer::init(
+            !renderer::init(
                 cp_game_window, 
-                Renderer::Backends::OPENGL,
+                renderer::Backends::OPENGL,
                 config_dir_path_p
             )
         )
@@ -101,6 +101,6 @@ using namespace framework::threading;
     {
         c_this_thread.pipeline.makeRequest(Graphics::HALT_THREAD);
         c_this_thread.join();
-        Renderer::destroy();
+        renderer::destroy();
     }
 }

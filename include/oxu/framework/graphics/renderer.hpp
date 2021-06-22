@@ -7,7 +7,7 @@
 #include<oxu/framework/utils/vector2.hpp>
 #include<oxu/framework/graphics/texture.hpp>
 
-namespace oxu::framework::graphics::Renderer
+namespace oxu::framework::graphics::renderer
 {
     enum Backends
     {

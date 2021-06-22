@@ -6,6 +6,7 @@
 namespace oxu::framework::graphics
 {
 using namespace framework;
+using namespace renderer;
 
     Texture::Texture(const std::string &path)
     {
@@ -21,7 +22,6 @@ using namespace framework;
 
     bool Texture::load(const std::string &path)
     {
-        using namespace Renderer;
         std::uint8_t current_backend_enum = get_current_backend_enum();
 
         switch(current_backend_enum)

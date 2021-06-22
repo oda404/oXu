@@ -5,7 +5,7 @@
 #include<oxu/framework/graphics/opengl/backend.hpp>
 #include<oxu/framework/graphics/genericBackend.hpp>
 
-namespace oxu::framework::graphics::Renderer
+namespace oxu::framework::graphics::renderer
 {
 
 using namespace framework;

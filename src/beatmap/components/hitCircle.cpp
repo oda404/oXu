@@ -51,13 +51,13 @@ using namespace framework;
 
     void HitCircle::render(const Skin &skin_p)
     {
-        graphics::Renderer::copy_texture(
+        graphics::renderer::copy_texture(
             mx_pos, 
             mx_size, 
             skin_p.getTexture(Tex::HIT_CIRCLE),
             mx_alpha
         );
-        graphics::Renderer::copy_texture(
+        graphics::renderer::copy_texture(
             mx_pos, 
             mx_size, 
             skin_p.getTexture(Tex::HIT_CIRCLE_OVERLAY),
@@ -66,7 +66,7 @@ using namespace framework;
         
         if(m_can_be_hit)
         {
-            graphics::Renderer::copy_texture(
+            graphics::renderer::copy_texture(
                 mxp_approach_circle->getPosition(), 
                 mxp_approach_circle->getSize(), 
                 skin_p.getTexture(Tex::APPROACH_CIRCLE),
