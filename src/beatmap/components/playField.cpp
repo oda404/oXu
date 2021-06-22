@@ -30,8 +30,8 @@ void PlayField::calculate()
     m_oxu_px = window::get_window_size().y / 480.f;
 
     m_start_point = { 
-        window::get_window_size().x / 2.f - 256.f * m_oxu_px, // FIXME 
-        window::get_window_size().y / 2.f - 192.f * m_oxu_px  // FIXME
+        window::get_window_size().x / 2.f - 256.f * m_oxu_px, 
+        window::get_window_size().y / 2.f - 192.f * m_oxu_px 
     };
 }
 
