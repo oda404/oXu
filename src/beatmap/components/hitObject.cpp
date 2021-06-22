@@ -59,6 +59,11 @@ using namespace framework;
         );
     }
 
+    HitObject::~HitObject()
+    {
+        
+    }
+
     double HitObject::getApproachCircleDonePercentage()
     {
         return mxp_approach_circle->m_lerp_t * 100.f;

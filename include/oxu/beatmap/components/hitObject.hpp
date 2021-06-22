@@ -69,6 +69,7 @@ namespace oxu
             const ObjectInfo &obj_info_p,
             const Difficulty &difficulty_p
         );
+        virtual ~HitObject() = 0;
 
         virtual void update(const double &delta, const Difficulty &difficulty) = 0;
         virtual void render(const Skin &skin) = 0;
