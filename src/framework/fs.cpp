@@ -27,4 +27,21 @@ std::string canonical(std::string path)
     return path;
 }
 
+bool dir_create(const std::string &path)
+{
+    if(!stdfs::exists(path))
+    {
+        try
+        {
+            stdfs::create_directory(path);
+        }
+        catch(...)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 }
