@@ -14,7 +14,7 @@ using namespace framework::threading;
         Request l_request;
         while(true)
         {
-            c_selfThread.capFPS();
+            c_selfThread.cap_fps();
 
             while(c_selfThread.pipeline.pollRequest(l_request))
             {
@@ -38,7 +38,7 @@ using namespace framework::threading;
 
     void init()
     {
-        c_selfThread.setMaxFPS(1000);
+        c_selfThread.set_max_fps(1000);
         c_selfThread.doneInit = false;
         c_selfThread.start([] { initThread(); });
         while(!c_selfThread.doneInit);

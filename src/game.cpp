@@ -37,11 +37,11 @@ static void game_loop(
     this_thread_p.start();
     while(window_open)
     {
-        this_thread_p.capFPS();
+        this_thread_p.cap_fps();
 
         if(p_current_beatmap)
         {
-            p_current_beatmap->updateObjects(this_thread_p.getDelta());
+            p_current_beatmap->updateObjects(this_thread_p.get_delta());
         }
 
         /* Window event handling */
@@ -102,7 +102,7 @@ bool init(const GameConfig &config)
     audio::handler::init();
 
     Thread this_thread;
-    this_thread.setMaxFPS(1000);
+    this_thread.set_max_fps(1000);
 
     game_loop(song_manager, skin_manager, this_thread);
 

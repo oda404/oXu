@@ -25,7 +25,7 @@ using namespace framework::threading;
 
         while(true)
         {
-            c_this_thread.capFPS();
+            c_this_thread.cap_fps();
             
             while(c_this_thread.pipeline.pollRequest(request))
             {
@@ -80,7 +80,7 @@ using namespace framework::threading;
         cp_song_manager = songManager_p;
         cp_skin_manager = skinManager_p;
 
-        c_this_thread.setMaxFPS(240);
+        c_this_thread.set_max_fps(240);
         /* paranoia */
         c_this_thread.doneInit = false;
         c_this_thread.start(
