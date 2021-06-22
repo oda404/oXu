@@ -606,7 +606,8 @@ using namespace framework;
 
         /* scale the position */
         obj_info.position = 
-        playField.getStartPoint() + obj_info.position * 480; // FIXME
+            playField.get_start_point() + obj_info.position * 
+            playField.get_oxu_px();
 
         const ObjectType parsed_obj_type = parse_hit_obj_type(obj_info.type);
 

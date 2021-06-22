@@ -6,6 +6,8 @@
 #include<oxu/beatmap/beatmapParser.hpp>
 #include<oxu/beatmap/beatmapParser.hpp>
 #include<oxu/beatmap/components/playField.hpp>
+#include<oxu/framework/graphics/renderer.hpp>
+#include<oxu/framework/graphics/texture.hpp>
 #include<oxu/framework/logger.hpp>
 
 namespace oxu
@@ -193,7 +195,7 @@ using namespace framework;
         approach_rate_to_ms(m_difficulty.approachRate);
 
         m_difficulty.circleSizePx = 
-        circle_size_to_px(m_difficulty.circleSize) * 480; // FIXME
+        circle_size_to_px(m_difficulty.circleSize) * m_playfield.get_oxu_px();
     }
 
     void Beatmap::loadHitObjects()
@@ -208,8 +210,6 @@ using namespace framework;
         std::string line;
         Section section = Section::INVALID;
 
-        PlayField p;
-
         while(std::getline(beatmap_file, line))
         {
             if(line[0] == '[')
@@ -223,7 +223,7 @@ using namespace framework;
                 parse_and_set_hit_object(
                     line, 
                     m_hit_objs,
-                    p,
+                    m_playfield,
                     m_difficulty
                 );
             }
