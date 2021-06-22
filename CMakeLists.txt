@@ -24,6 +24,16 @@ set(CMAKE_CXX_FLAGS
     -fstack-protector-strong"
 )
 
+find_library(SDL2_LIB NAMES SDL2 PATHS /usr/lib /lib)
+if("${SDL2_LIB}" STREQUAL "SDL2_LIB-NOTFOUND")
+    message(FATAL_ERROR "SDL2 was not found.")
+endif()
+
+find_library(PNG_LIB NAMES png PATHS /usr/lib /lib)
+if("${PNG_LIB}" STREQUAL "PNG_LIB-NOTFOUND")
+    message(FATAL_ERROR "PNG was not found.")
+endif()
+
 add_subdirectory(vendor/glad)
 add_subdirectory(vendor/spdlog)
 add_subdirectory(vendor/argx)
