@@ -1,5 +1,6 @@
 
 #include<oxu/framework/fs.hpp>
+#include<filesystem>
 #include<cstdlib>
 #include<iostream>
 #include<unistd.h>
@@ -8,7 +9,9 @@
 namespace oxu::framework::fs
 {
 
-std::string path_resolve_homedir(std::string path)
+namespace stdfs = std::filesystem;
+
+std::string canonical(std::string path)
 {
     if(!path.size())
         return "";
@@ -18,6 +21,8 @@ std::string path_resolve_homedir(std::string path)
         path.erase(path.begin());
         path = "/home/" + std::string(getlogin()) + path;
     }
+
+    path = stdfs::weakly_canonical(path);
 
     return path;
 }

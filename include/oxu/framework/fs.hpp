@@ -7,8 +7,8 @@ namespace oxu::framework::fs
 {
 
 #if defined(__linux__)
-/* Resolves '~' to the user's home directory. */
-std::string path_resolve_homedir(std::string path);
+/* Canonicalizes the path but also resolves '~' to the user's home directory. */
+std::string canonical(std::string path);
 #endif
 
 }
