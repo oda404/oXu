@@ -36,4 +36,5 @@
 #songs folder
 songs
 
-build
+build/*
+!build/.gitkeep
