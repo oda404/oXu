@@ -89,7 +89,7 @@ namespace oxu::framework
         }
 
         /* Returns the vector formatted as a string */
-        constexpr std::string toString() const
+        std::string toString() const
         {
             std::string result = "(" + std::to_string(x) + ", " + std::to_string(y) + ")";
             return result;
