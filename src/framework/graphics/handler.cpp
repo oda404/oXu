@@ -41,7 +41,7 @@ using namespace framework::threading;
 
             if(p_current_beatmap)
             {
-                p_current_beatmap->renderObjects(*cp_skin_manager->getCurrentSkin());
+                p_current_beatmap->renderObjects(*cp_skin_manager->get_current_skin());
             }
 
             Renderer::render();
@@ -63,10 +63,10 @@ using namespace framework::threading;
             return;
         }
 
-        if(cp_skin_manager->getCurrentSkin())
+        if(cp_skin_manager->get_current_skin())
         {
-            cp_skin_manager->getCurrentSkin()->setCursor();
-            cp_skin_manager->getCurrentSkin()->loadTextures();
+            cp_skin_manager->get_current_skin()->setCursor();
+            cp_skin_manager->get_current_skin()->loadTextures();
         }
 
         c_this_thread.doneInit = true;

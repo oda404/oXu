@@ -82,8 +82,8 @@ bool init(const GameConfig &config)
     }
 
     SkinManager skin_manager(config.skins_dir);
-    skin_manager.enumerateSkins();
-    skin_manager.setCurrentSkin(0);
+    skin_manager.enumerate_skins();
+    skin_manager.set_current_skin(0);
 
     SDL_Window *p_game_window = window::get_native_window();
 
