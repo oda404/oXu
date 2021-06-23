@@ -2,6 +2,7 @@
 #include<oxu/framework/graphics/png.hpp>
 #include<stdio.h>
 #include<oxu/framework/logger.hpp>
+#include<oxu/framework/ignore_ret.hpp>
 
 #if __has_include("libpng/png.h")
     #include<libpng/png.h>
@@ -19,7 +20,7 @@ using namespace framework;
     static void custom_png_read_func(png_structp l_pngStruct, unsigned char* buffer, std::size_t count)
     {
         FILE *file = reinterpret_cast<FILE*>(png_get_io_ptr(l_pngStruct));
-        fread(buffer, sizeof(unsigned char), count, file);
+        IGNORE_RET(fread(buffer, sizeof(unsigned char), count, file));
     }
 
     Png::Png() {  }
@@ -70,7 +71,9 @@ using namespace framework;
 
         /* read the header and fseek ahead of it */
         unsigned char header[PNG_SIG_BYTES_CNT] = {0};
-        fread(header, sizeof(unsigned char), PNG_SIG_BYTES_CNT, file);
+        
+        IGNORE_RET(fread(header, sizeof(unsigned char),  PNG_SIG_BYTES_CNT, file));
+
         fseek(file, PNG_SIG_BYTES_CNT * sizeof(unsigned char), SEEK_SET);
 
         if(png_sig_cmp(header, 0, PNG_SIG_BYTES_CNT))
