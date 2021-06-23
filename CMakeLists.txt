@@ -55,7 +55,6 @@ set(OXU_HEADERS
     ${INCLUDE_DIR}/oxu/framework/threading/pipeline.hpp
 
     #graphics/
-    ${INCLUDE_DIR}/oxu/framework/graphics/handler.hpp
     ${INCLUDE_DIR}/oxu/framework/graphics/renderer.hpp
     ${INCLUDE_DIR}/oxu/framework/graphics/texture.hpp
     ${INCLUDE_DIR}/oxu/framework/graphics/genericBackend.hpp
@@ -70,12 +69,6 @@ set(OXU_HEADERS
     ${INCLUDE_DIR}/oxu/framework/graphics/opengl/vertexArrayObject.hpp
     ${INCLUDE_DIR}/oxu/framework/graphics/opengl/vertexLayout.hpp
     ${INCLUDE_DIR}/oxu/framework/graphics/opengl/texture.hpp
-
-    #audio/
-    ${INCLUDE_DIR}/oxu/framework/audio/handler.hpp
-
-    #input/
-    ${INCLUDE_DIR}/oxu/input/handler.hpp
 
     #utils/
     ${INCLUDE_DIR}/oxu/framework/utils/timer.hpp
@@ -126,7 +119,6 @@ set(OXU_SRC
     ${SRC_DIR}/framework/threading/pipeline.cpp
 
     # framework/graphics/
-    ${SRC_DIR}/framework/graphics/handler.cpp
     ${SRC_DIR}/framework/graphics/renderer.cpp
     ${SRC_DIR}/framework/graphics/texture.cpp
     ${SRC_DIR}/framework/graphics/png.cpp
@@ -140,12 +132,6 @@ set(OXU_SRC
     ${SRC_DIR}/framework/graphics/opengl/vertexArrayObject.cpp
     ${SRC_DIR}/framework/graphics/opengl/vertexLayout.cpp
     ${SRC_DIR}/framework/graphics/opengl/texture.cpp
-
-    #framework/audio/
-    ${SRC_DIR}/framework/audio/handler.cpp
-
-    #input/
-    ${SRC_DIR}/input/handler.cpp
 
     #framework/utils/
     ${SRC_DIR}/framework/utils/timer.cpp

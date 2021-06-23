@@ -3,8 +3,6 @@
 #include<oxu/framework/logger.hpp>
 #include<oxu/framework/status.hpp>
 #include<oxu/framework/window.hpp>
-#include<oxu/framework/graphics/handler.hpp>
-#include<oxu/framework/audio/handler.hpp>
 #include<oxu/framework/threading/thread.hpp>
 #include<oxu/framework/framework.hpp>
 #include<oxu/framework/graphics/renderer.hpp>
