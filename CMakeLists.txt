@@ -47,10 +47,10 @@ set(OXU_HEADERS
     ${INCLUDE_DIR}/oxu/framework/status.hpp
     ${INCLUDE_DIR}/oxu/framework/logger.hpp
     ${INCLUDE_DIR}/oxu/framework/window.hpp
+    ${INCLUDE_DIR}/oxu/framework/ignore_ret.hpp
 
     #core/threading/
     ${INCLUDE_DIR}/oxu/framework/threading/thread.hpp
-
     ${INCLUDE_DIR}/oxu/framework/threading/request.hpp
     ${INCLUDE_DIR}/oxu/framework/threading/pipeline.hpp
 
