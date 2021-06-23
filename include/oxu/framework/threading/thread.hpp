@@ -16,11 +16,11 @@ private:
     std::thread m_thread;
     double m_delta = 0.0;
     std::uint16_t m_max_fps = 0;
-    std::uint16_t m_max_fps_ratio = 0;
     std::uint16_t m_fps = 0;
-    
-    std::chrono::system_clock::time_point m_next_frame;
-    std::chrono::system_clock::time_point m_last_frame;
+
+    std::chrono::duration<uint64_t, std::milli> m_sleep_frames;
+    std::chrono::system_clock::time_point m_nextframe;
+    std::chrono::system_clock::time_point m_lastframe;
 
     void calculate_delta();
     void calculate_fps();

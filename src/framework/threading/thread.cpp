@@ -7,26 +7,18 @@ namespace oxu::framework::threading
 /* I realy hate using namespace std. */
 namespace chrono = std::chrono;
 
-void Thread::calculate_delta()
-{   
-    m_delta = chrono::duration_cast<chrono::milliseconds>(
-        m_next_frame - m_last_frame
-    ).count() / 1000.0;
-}
-
-void Thread::calculate_fps()
-{
-
-}
-
 void Thread::cap_fps()
 {
-    std::this_thread::sleep_until(m_next_frame);
-    m_last_frame = m_next_frame;
-    m_next_frame += chrono::milliseconds(m_max_fps_ratio);
+    std::this_thread::sleep_until(m_nextframe);
 
-    calculate_delta();
-    calculate_fps();
+    auto now = chrono::system_clock::now();
+
+    m_delta = chrono::duration<double, std::ratio<1>>(
+        now - m_lastframe
+    ).count();
+
+    m_lastframe = now;
+    m_nextframe = now + m_sleep_frames;
 }
 
 void Thread::start(std::function<void()> entryPoint)
@@ -37,14 +29,14 @@ void Thread::start(std::function<void()> entryPoint)
 
 void Thread::start()
 {
-    m_next_frame = chrono::system_clock::now();
-    m_last_frame = m_next_frame;
+    m_nextframe = chrono::system_clock::now();
+    m_lastframe = m_nextframe - m_sleep_frames;
 }
 
 void Thread::set_max_fps(const uint16_t &maxfps)
 {
     m_max_fps = maxfps;
-    m_max_fps_ratio = 1000 / m_max_fps;
+    m_sleep_frames = chrono::duration<uint64_t, std::milli>(1000 / maxfps);
 }
 
 void Thread::join()
