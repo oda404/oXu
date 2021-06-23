@@ -22,15 +22,16 @@ using namespace renderer;
 
     bool Texture::load(const std::string &path)
     {
-        std::uint8_t current_backend_enum = get_current_backend_enum();
+        BackendType backend_type = 
+        renderer::get_backend_type();
 
-        switch(current_backend_enum)
+        switch(backend_type)
         {
-        case Backends::OPENGL:
+        case BackendType::OPENGL:
             m_GL_tex = new opengl::Texture(path);
             break;
         default:
-            OXU_LOG_ERROR("Tried to load a texture but current backend {} is unknown", current_backend_enum);
+            OXU_LOG_ERROR("Tried to load a texture but current backend {} is unknown", backend_type);
             return false;
         }
 

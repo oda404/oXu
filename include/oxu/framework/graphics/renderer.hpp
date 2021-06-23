@@ -10,14 +10,14 @@
 namespace oxu::framework::graphics::renderer
 {
     
-enum Backends
+enum class BackendType
 {
     OPENGL
 };
 
-std::uint8_t get_current_backend_enum();
+BackendType get_backend_type();
 bool init(
-    std::uint8_t backend,
+    BackendType backend_type,
     std::string config_dir_path
 );
 void destroy();

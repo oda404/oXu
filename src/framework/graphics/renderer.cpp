@@ -12,36 +12,37 @@ namespace oxu::framework::graphics::renderer
 
 using namespace framework;
 
-static GenericBackend
-*cp_current_backend = nullptr;
-static std::uint8_t 
-c_current_backend_enum;
+static GenericBackend *g_backend = nullptr;
+static BackendType g_backend_type;
 
-std::uint8_t get_current_backend_enum()
+BackendType get_backend_type()
 {
-    return c_current_backend_enum;
+    return g_backend_type;
 }
 
 bool init(
-    std::uint8_t backend,
+    BackendType backend_type,
     std::string config_dir_path
 )
 {
-    c_current_backend_enum = backend;
+    g_backend_type = backend_type;
 
-    switch(backend)
+    switch(g_backend_type)
     {
-    case Backends::OPENGL:
+    case BackendType::OPENGL:
         destroy();
-        cp_current_backend = new opengl::Backend();
+        g_backend = new opengl::Backend();
         break;
 
     default:
-        OXU_LOG_ERROR("Tried to init renderer with unknown enum {}", backend);
+        OXU_LOG_ERROR("Unknown backend type {}", g_backend_type);
         return false;
     }
 
-    return cp_current_backend->init(
+    if(!g_backend)
+        return false;
+
+    return g_backend->init(
         window::get_native_window(), 
         config_dir_path
     );
@@ -49,21 +50,21 @@ bool init(
 
 void destroy()
 {
-    if(cp_current_backend)
+    if(g_backend)
     {
-        delete cp_current_backend;
-        cp_current_backend = nullptr;
+        delete g_backend;
+        g_backend = nullptr;
     }
 }
 
 void clear()
 {
-    cp_current_backend->clear();
+    g_backend->clear();
 }
 
 void render()
 {
-    cp_current_backend->render(
+    g_backend->render(
         window::get_native_window()
     );
 }
@@ -75,7 +76,7 @@ void copy_texture(
     float alpha
 )
 {
-    cp_current_backend->copy_texture(position, size, tex, alpha);
+    g_backend->copy_texture(position, size, tex, alpha);
 }
 
 }

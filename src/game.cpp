@@ -42,7 +42,7 @@ bool init(const GameConfig &config)
     if(!window::init("oxu", config.window_size))
         return false;
 
-    if(!renderer::init(renderer::OPENGL, config.res_dir))
+    if(!renderer::init(renderer::BackendType::OPENGL, config.res_dir))
         return false;
 
     SongManager song_manager(config.songs_dir);
