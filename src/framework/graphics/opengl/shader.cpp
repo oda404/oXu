@@ -5,6 +5,7 @@
 #include<sstream>
 #include<oxu/framework/graphics/opengl/shader.hpp>
 #include<oxu/framework/graphics/opengl/core.hpp>
+#include<oxu/framework/graphics/shader_type.hpp>
 #include<oxu/framework/logger.hpp>
 
 #define FILE_BUFF_MAX_SIZE 64
@@ -13,12 +14,6 @@ namespace oxu::framework::graphics::opengl
 {
     
 using namespace framework;
-
-    enum ShaderTypes
-    {
-        VERTEX = 0,
-        FRAGMENT = 1,
-    };
 
     static int parse_shaders(const std::string &path, ShadersInfo &sInfo)
     {
@@ -31,8 +26,7 @@ using namespace framework;
         }
 
         char buff[FILE_BUFF_MAX_SIZE];
-        int8_t currentShader = -1;
-        std::stringstream ss[2];
+        ShaderType currentShader = ShaderType::INVALID;
 
         while(fgets(buff, FILE_BUFF_MAX_SIZE, file))
         {
@@ -40,23 +34,32 @@ using namespace framework;
             {
                 if(strstr(buff, "//VERTEX_SHADER"))
                 {
-                    currentShader = ShaderTypes::VERTEX;
+                    currentShader = ShaderType::GL_VERTEX;
                 }
                 else if(strstr(buff, "//FRAGMENT_SHADER"))
                 {
-                    currentShader = ShaderTypes::FRAGMENT;
+                    currentShader = ShaderType::GL_FRAGMENT;
                 }
             }
-            else if(currentShader > -1)
+            else if(currentShader != ShaderType::INVALID)
             {
-                ss[currentShader] << buff;
+                switch(currentShader)
+                {
+                case ShaderType::GL_VERTEX:
+                    sInfo.vertexSource += buff;
+                    break;
+                case ShaderType::GL_FRAGMENT:
+                    sInfo.fragmentSource += buff;
+                    break;
+
+                default:
+                    __builtin_unreachable();
+                    break;
+                }
             }
         }
 
         fclose(file);
-
-        sInfo.vertexSource = ss[ShaderTypes::VERTEX].str();
-        sInfo.fragmentSource = ss[ShaderTypes::FRAGMENT].str();
 
         return 0;
     }

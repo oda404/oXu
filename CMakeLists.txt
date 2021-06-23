@@ -59,6 +59,7 @@ set(OXU_HEADERS
     ${INCLUDE_DIR}/oxu/framework/graphics/texture.hpp
     ${INCLUDE_DIR}/oxu/framework/graphics/genericBackend.hpp
     ${INCLUDE_DIR}/oxu/framework/graphics/png.hpp
+    ${INCLUDE_DIR}/oxu/framework/graphics/shader_type.hpp
 
     #graphics/opengl/
     ${INCLUDE_DIR}/oxu/framework/graphics/opengl/core.hpp
@@ -69,6 +70,7 @@ set(OXU_HEADERS
     ${INCLUDE_DIR}/oxu/framework/graphics/opengl/vertexArrayObject.hpp
     ${INCLUDE_DIR}/oxu/framework/graphics/opengl/vertexLayout.hpp
     ${INCLUDE_DIR}/oxu/framework/graphics/opengl/texture.hpp
+    ${INCLUDE_DIR}/oxu/framework/graphics/opengl/shader_type.hpp
 
     #utils/
     ${INCLUDE_DIR}/oxu/framework/utils/timer.hpp
